@@ -7,8 +7,24 @@
     tools:context="crypto.soft.cryptongy.HomeActivity">
 
     <Button
+        android:id="@+id/btnSetting"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Open Account"
-        android:onClick="onButtonClicked"/>
+        android:layout_height="wrap_content"
+        android:text="Setting"
+        android:onClick="openSetting"/>
+
+    <Button
+        android:id="@+id/btnAbout"
+        android:layout_below="@+id/btnSetting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="AboutUs"
+        android:onClick="openAboutUs"/>
+
+    <Button
+        android:layout_below="@+id/btnAbout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Account"
+        android:onClick="openAccount"/>
 </RelativeLayout>

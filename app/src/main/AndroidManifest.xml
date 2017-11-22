@@ -18,6 +18,8 @@
             </intent-filter>
         </activity>
         <activity android:name="crypto.soft.cryptongy.feature.account.AccountActivity"></activity>
+        <activity android:name="crypto.soft.cryptongy.feature.aboutUs.AboutUsActivity" />
+        <activity android:name="crypto.soft.cryptongy.feature.setting.SettingActivity"></activity>
     </application>
 
 </manifest>

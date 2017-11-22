@@ -8,4 +8,6 @@
     <color name="acc_text_edt">#333333</color>
     <color name="acc_btn_color">#FFFFFF</color>
     <color name="colorPrimaryPressed">#07918c</color>
+    <color name="setting_text">#000000</color>
+    <color name="about_sub_title">#FFFFFF</color>
 </resources>

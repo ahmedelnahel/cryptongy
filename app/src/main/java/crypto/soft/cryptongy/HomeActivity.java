@@ -5,7 +5,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import crypto.soft.cryptongy.feature.aboutUs.AboutUsActivity;
 import crypto.soft.cryptongy.feature.account.AccountActivity;
+import crypto.soft.cryptongy.feature.setting.SettingActivity;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -15,7 +17,15 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
     }
 
-    public void onButtonClicked(View view){
+    public void openSetting(View view){
+        startActivity(new Intent(this, SettingActivity.class));
+    }
+
+    public void openAboutUs(View view){
+        startActivity(new Intent(this, AboutUsActivity.class));
+    }
+
+    public void openAccount(View view){
         startActivity(new Intent(this, AccountActivity.class));
     }
 }

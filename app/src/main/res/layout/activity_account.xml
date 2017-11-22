@@ -22,7 +22,7 @@
             android:layout_alignParentTop="true"
             android:background="@color/colorPrimary" />
 
-        <crypto.soft.feature.account.shared.customView.CalTextView
+        <crypto.soft.cryptongy.feature.shared.customView.CalTextView
             android:id="@+id/txtEmpty"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

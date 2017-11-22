@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="crypto.soft.cryptongy.feature.setting.SettingActivity">
+
+    <include
+        android:id="@+id/include"
+        layout="@layout/toolbar_account" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/account_bg"
+            android:layout_alignParentTop="true"
+            android:background="@color/colorPrimary" />
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            app:cardBackgroundColor="#FFFFFF"
+            app:cardCornerRadius="3dp"
+            app:cardUseCompatPadding="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingTop="18dp"
+                android:paddingBottom="18dp">
+
+                <crypto.soft.cryptongy.feature.shared.customView.CalTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="18dp"
+                    android:layout_marginRight="18dp"
+                    android:textSize="@dimen/setting_text"
+                    android:text="@string/setting_notification"
+                    android:textColor="@color/setting_text" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="14dp"
+                    android:background="@color/setting_text" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="18dp"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginRight="40dp">
+
+                    <crypto.soft.cryptongy.feature.shared.customView.CalTextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/setting_text"
+                        android:text="@string/setting_vibrate"
+                        android:textColor="@color/setting_text" />
+
+                    <ToggleButton
+                        android:id="@+id/tgbVibration"
+                        android:layout_width="54dp"
+                        android:layout_height="20dp"
+                        android:background="@drawable/ic_setting_toggle"
+                        android:textOn=""
+                        android:textOff=""/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="18dp"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginRight="40dp"
+                    android:layout_marginBottom="18dp">
+
+                    <crypto.soft.cryptongy.feature.shared.customView.CalTextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/setting_text"
+                        android:text="@string/setting_sound"
+                        android:textColor="@color/setting_text" />
+
+                    <ToggleButton
+                        android:id="@+id/tgbSound"
+                        android:layout_width="54dp"
+                        android:layout_height="20dp"
+                        android:background="@drawable/ic_setting_toggle"
+                        android:textOn=""
+                        android:textOff=""/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+    </RelativeLayout>
+
+</LinearLayout>
