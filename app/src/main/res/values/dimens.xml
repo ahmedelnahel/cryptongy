@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="account_bg">150dp</dimen>
+    <dimen name="account_card_radius">3dp</dimen>
+    <dimen name="account_text">14sp</dimen>
+    <dimen name="account_icon">40dp</dimen>
+    <dimen name="account_edit_height">46dp</dimen>
+    <dimen name="account_btn_text">16sp</dimen>
+    <dimen name="account_no_data">15sp</dimen>
+    <dimen name="account_radio_text">13sp</dimen>
+</resources>

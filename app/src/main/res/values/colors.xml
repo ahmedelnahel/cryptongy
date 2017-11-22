@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#00BCB5</color>
+    <color name="colorPrimaryDark">#00BCB5</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="acc_line">#CCCCCC</color>
+    <color name="acc_text">#666666</color>
+    <color name="acc_text_edt">#333333</color>
+    <color name="acc_btn_color">#FFFFFF</color>
+    <color name="colorPrimaryPressed">#07918c</color>
+</resources>

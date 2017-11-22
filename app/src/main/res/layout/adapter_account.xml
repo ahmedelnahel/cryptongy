@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="@dimen/account_card_radius"
+    app:cardUseCompatPadding="true">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <crypto.soft.cryptongy.feature.account.shared.customView.CalTextView
+            android:id="@+id/txtExchange"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginRight="8dp"
+            android:layout_marginLeft="10dp"
+            android:paddingTop="8dp"
+            android:text="@string/acc_exchange"
+            android:textSize="@dimen/account_text"
+            android:textColor="@color/acc_text"/>
+
+        <crypto.soft.cryptongy.feature.shared.customView.CalTextView
+            android:id="@+id/txtLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/txtExchange"
+            android:layout_below="@+id/txtExchange"
+            android:layout_marginTop="15dp"
+            android:textColor="@color/acc_text"
+            android:text="@string/acc_level"
+            android:textSize="@dimen/account_text" />
+
+        <crypto.soft.cryptongy.feature.shared.customView.CalTextView
+            android:id="@+id/txtApiKey"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/txtExchange"
+            android:layout_below="@+id/txtLabel"
+            android:paddingBottom="8dp"
+            android:layout_marginTop="15dp"
+            android:textColor="@color/acc_text"
+            android:text="@string/acc_apiKey"
+            android:textSize="@dimen/account_text" />
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_alignTop="@+id/txtExchange"
+            android:layout_marginLeft="8dp"
+            android:layout_toEndOf="@+id/txtExchange"
+            android:layout_alignBottom="@id/txtApiKey"
+            android:background="@color/acc_line" />
+
+        <ImageView
+            android:id="@+id/imgDelete"
+            android:layout_width="@dimen/account_icon"
+            android:layout_height="@dimen/account_icon"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="32dp"
+            app:srcCompat="@drawable/ic_delete" />
+
+        <ImageView
+            android:id="@+id/imgEdit"
+            android:layout_width="@dimen/account_icon"
+            android:layout_height="@dimen/account_edit_height"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:paddingBottom="6dp"
+            android:layout_marginEnd="8dp"
+            app:srcCompat="@drawable/ic_edit" />
+
+        <crypto.soft.cryptongy.feature.shared.customView.CalTextView
+            android:id="@+id/edtExchange"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="32dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="8dp"
+            android:layout_toRightOf="@+id/view"
+            android:layout_alignBottom="@+id/txtExchange"
+            android:background="@null"
+            android:inputType="textPersonName"
+            android:textColor="@color/acc_text_edt"
+            android:text="Name"
+            android:layout_toLeftOf="@+id/imgDelete"
+            android:textSize="@dimen/account_text" />
+
+        <View
+            android:id="@+id/view2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignRight="@+id/edtExchange"
+            android:layout_toRightOf="@+id/view"
+            android:layout_below="@+id/edtExchange"
+            android:layout_marginTop="7dp"
+            android:background="@color/acc_line" />
+
+        <crypto.soft.cryptongy.feature.shared.customView.CalTextView
+            android:id="@+id/edtLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:background="@null"
+            android:inputType="textPersonName"
+            android:layout_alignRight="@+id/edtExchange"
+            android:layout_alignBottom="@id/txtLabel"
+            android:layout_alignLeft="@+id/edtExchange"
+            android:layout_below="@+id/view2"
+            android:textColor="@color/acc_text_edt"
+            android:text="Name"
+            android:textSize="@dimen/account_text"/>
+
+        <View
+            android:id="@+id/view3"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignRight="@+id/edtLabel"
+            android:layout_toRightOf="@+id/view"
+            android:layout_below="@+id/edtLabel"
+            android:layout_marginTop="7dp"
+            android:background="@color/acc_line" />
+
+        <crypto.soft.cryptongy.feature.shared.customView.CalTextView
+            android:id="@+id/edtApiKey"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:background="@null"
+            android:inputType="textPersonName"
+            android:layout_alignRight="@+id/edtExchange"
+            android:layout_alignLeft="@+id/edtExchange"
+            android:layout_alignBaseline="@id/txtApiKey"
+            android:textColor="@color/acc_text_edt"
+            android:layout_below="@+id/view3"
+            android:text="Name"
+            android:textSize="@dimen/account_text"/>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentTop="true"
+            android:background="@color/acc_line" />
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

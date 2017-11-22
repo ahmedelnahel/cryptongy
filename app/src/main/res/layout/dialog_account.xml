@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="38dp"
+        app:cardBackgroundColor="#FFFFFF"
+        app:cardElevation="0dp"
+        app:cardUseCompatPadding="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="15dp"
+            android:paddingLeft="18dp"
+            android:paddingRight="18dp"
+            android:paddingTop="35dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_edit_bg"
+                android:paddingBottom="7dp"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:paddingTop="7dp">
+
+                <Spinner
+                    android:id="@+id/spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <crypto.soft.cryptongy.feature.shared.customView.CalEditText
+                android:id="@+id/edtApiKey"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_edit_bg"
+                android:hint="API Key"
+                android:paddingBottom="10dp"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:paddingTop="10dp"
+                android:layout_marginTop="8dp"
+                android:textColor="@color/acc_text_edt"
+                android:textSize="@dimen/account_text" />
+
+            <crypto.soft.cryptongy.feature.shared.customView.CalEditText
+                android:id="@+id/edtSecret"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/ic_edit_bg"
+                android:hint="Secret"
+                android:paddingBottom="10dp"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:paddingTop="10dp"
+                android:textColor="@color/acc_text_edt"
+                android:textSize="@dimen/account_text" />
+
+            <RadioGroup
+                android:id="@+id/rdgLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/rdbRead"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:textSize="@dimen/account_radio_text"
+                    android:singleLine="true"
+                    android:text="Read" />
+
+                <RadioButton
+                    android:id="@+id/rdbTrade"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:textSize="@dimen/account_radio_text"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:text="Trade" />
+
+                <RadioButton
+                    android:id="@+id/rdbWithdraw"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:textSize="@dimen/account_radio_text"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:text="Withdraw" />
+
+            </RadioGroup>
+
+            <crypto.soft.cryptongy.feature.shared.customView.CalButton
+                android:id="@+id/btnAdd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/ic_btn_bg"
+                android:text="@string/acc_btn_add"
+                android:textAllCaps="false"
+                android:textColor="@color/acc_btn_color"
+                android:textSize="@dimen/account_btn_text" />
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/ic_circle">
+
+        <ImageView
+            android:id="@+id/imgTopImage"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="5dp"
+            android:src="@drawable/ic_add_bg" />
+    </FrameLayout>
+
+</RelativeLayout>

@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">cryptongy</string>
+    <string name="account">Accounts</string>
+    <string name="acc_exchange">Exchange</string>
+    <string name="acc_level">Level</string>
+    <string name="acc_apiKey">API Key</string>
+    <string name="add">add</string>
+    <string name="acc_btn_add">Add</string>
+</resources>
