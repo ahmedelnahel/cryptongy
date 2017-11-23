@@ -94,12 +94,13 @@
                     android:background="@color/colorPrimary" />
 
                 <crypto.soft.cryptongy.feature.shared.customView.CabTextView
-                    android:layout_width="132dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="37dp"
                     android:gravity="center_vertical"
                     android:layout_marginTop="20dp"
                     android:background="@drawable/ic_about_corner"
                     android:paddingLeft="23dp"
+                    android:paddingRight="15dp"
                     android:text="@string/about_app"
                     android:textColor="@color/about_sub_title"
                     android:textSize="@dimen/about_sub_title" />
