@@ -11,4 +11,6 @@
     <color name="setting_text">#000000</color>
     <color name="about_sub_title">#FFFFFF</color>
     <color name="colorBg">#f3f3f9</color>
+    <color name="order_secondary">#efefef</color>
+    <color name="order_primary">#FFFFFF</color>
 </resources>

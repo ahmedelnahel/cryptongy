@@ -19,4 +19,6 @@
     <string name="about_future">Future Work</string>
     <string name="about_future1">Withdraw deposit</string>
     <string name="about_future2">More advanced trade</string>
+    <string name="setting">settings</string>
+    <string name="order">Orders</string>
 </resources>

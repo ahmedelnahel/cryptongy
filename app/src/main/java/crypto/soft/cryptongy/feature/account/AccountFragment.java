@@ -77,11 +77,6 @@ public class AccountFragment extends MvpFragment<AccountView, AccountePresenter>
 
     @Override
     public void initToolbar() {
-        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
-
         TextView txtTitle = getActivity().findViewById(R.id.txtTitle);
         txtTitle.setText(R.string.account);
     }

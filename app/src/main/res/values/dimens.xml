@@ -15,4 +15,5 @@
     <dimen name="about_bottom">14sp</dimen>
     <dimen name="about_sub">16dp</dimen>
     <dimen name="about_icon_top">8dp</dimen>
+    <dimen name="order_icon">31dp</dimen>
 </resources>
