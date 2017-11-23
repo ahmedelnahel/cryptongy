@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableRow xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="46dp"
+    android:background="@color/orderSub"
+    android:orientation="horizontal">
+
+    <crypto.soft.cryptongy.feature.shared.customView.CalTextView
+        android:id="@+id/txtType"
+        android:gravity="center"
+        android:textColor="@color/order_tbl_sub"
+        android:textSize="@dimen/order_tbl_sub" />
+
+    <crypto.soft.cryptongy.feature.shared.customView.CalTextView
+        android:id="@+id/txtQuantity"
+        android:gravity="center"
+        android:textColor="@color/order_tbl_sub"
+        android:textSize="@dimen/order_tbl_sub" />
+
+    <crypto.soft.cryptongy.feature.shared.customView.CalTextView
+        android:id="@+id/txtRate"
+        android:gravity="center"
+        android:textColor="@color/order_tbl_sub"
+        android:textSize="@dimen/order_tbl_sub" />
+
+    <crypto.soft.cryptongy.feature.shared.customView.CalTextView
+        android:id="@+id/txtTime"
+        android:gravity="center"
+        android:textColor="@color/order_tbl_sub"
+        android:textSize="@dimen/order_tbl_sub" />
+
+</TableRow>

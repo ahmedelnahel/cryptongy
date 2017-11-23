@@ -13,4 +13,8 @@
     <color name="colorBg">#f3f3f9</color>
     <color name="order_secondary">#efefef</color>
     <color name="order_primary">#FFFFFF</color>
+    <color name="order_secondary2">#3a3a3a</color>
+    <color name="order_tbl_title">#f3f3f3</color>
+    <color name="order_tbl_sub">#231f20</color>
+    <color name="orderSub">#FFFFFF</color>
 </resources>

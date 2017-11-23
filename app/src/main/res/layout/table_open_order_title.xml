@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableRow xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="15dp"
+    android:paddingBottom="15dp"
+    android:background="@color/colorPrimary"
+    android:orientation="horizontal">
+
+    <crypto.soft.cryptongy.feature.shared.customView.MspTextView
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="Type"
+        android:textColor="@color/order_tbl_title"
+        android:textSize="@dimen/order_tbl_title" />
+
+    <crypto.soft.cryptongy.feature.shared.customView.MspTextView
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="Coin"
+        android:textColor="@color/order_tbl_title"
+        android:textSize="@dimen/order_tbl_title" />
+
+    <crypto.soft.cryptongy.feature.shared.customView.MspTextView
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="Quantity"
+        android:textColor="@color/order_tbl_title"
+        android:textSize="@dimen/order_tbl_title" />
+
+    <crypto.soft.cryptongy.feature.shared.customView.MspTextView
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="Rate"
+        android:textColor="@color/order_tbl_title"
+        android:textSize="@dimen/order_tbl_title" />
+
+    <crypto.soft.cryptongy.feature.shared.customView.MspTextView
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="Time"
+        android:textColor="@color/order_tbl_title"
+        android:textSize="@dimen/order_tbl_title" />
+
+    <crypto.soft.cryptongy.feature.shared.customView.MspTextView
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="Action"
+        android:textColor="@color/order_tbl_title"
+        android:textSize="@dimen/order_tbl_title" />
+
+</TableRow>

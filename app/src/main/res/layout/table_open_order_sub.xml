@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableRow xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="7dp"
+    android:paddingBottom="7dp"
+    android:background="@color/orderSub"
+    android:orientation="horizontal">
+
+    <crypto.soft.cryptongy.feature.shared.customView.CalTextView
+        android:id="@+id/txtType"
+        android:gravity="center"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:padding="@dimen/order_tbl_sub_pad"
+        android:textColor="@color/order_tbl_sub"
+        android:textSize="@dimen/order_tbl_sub" />
+
+    <crypto.soft.cryptongy.feature.shared.customView.CalTextView
+        android:id="@+id/txtCoin"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:padding="@dimen/order_tbl_sub_pad"
+        android:textColor="@color/order_tbl_sub"
+        android:textSize="@dimen/order_tbl_sub" />
+
+    <crypto.soft.cryptongy.feature.shared.customView.CalTextView
+        android:id="@+id/txtQuantity"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:padding="@dimen/order_tbl_sub_pad"
+        android:textColor="@color/order_tbl_sub"
+        android:textSize="@dimen/order_tbl_sub" />
+
+    <crypto.soft.cryptongy.feature.shared.customView.CalTextView
+        android:id="@+id/txtRate"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:textColor="@color/order_tbl_sub"
+        android:textSize="@dimen/order_tbl_sub" />
+
+    <crypto.soft.cryptongy.feature.shared.customView.CalTextView
+        android:id="@+id/txtTime"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:padding="@dimen/order_tbl_sub_pad"
+        android:textColor="@color/order_tbl_sub"
+        android:textSize="@dimen/order_tbl_sub" />
+
+    <crypto.soft.cryptongy.feature.shared.customView.CalTextView
+        android:id="@+id/txtAction"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:padding="@dimen/order_tbl_sub_pad"
+        android:textColor="@color/order_tbl_sub"
+        android:textSize="@dimen/order_tbl_sub" />
+
+</TableRow>
