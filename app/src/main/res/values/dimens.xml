@@ -10,9 +10,9 @@
     <dimen name="account_radio_text">13sp</dimen>
     <dimen name="setting_text">20sp</dimen>
     <dimen name="about_text">15sp</dimen>
-    <dimen name="about_sub_title">19sp</dimen>
-    <dimen name="about_title">20sp</dimen>
+    <dimen name="about_sub_title">18sp</dimen>
+    <dimen name="about_title">18sp</dimen>
     <dimen name="about_bottom">14sp</dimen>
-    <dimen name="about_sub">15dp</dimen>
+    <dimen name="about_sub">16dp</dimen>
     <dimen name="about_icon_top">8dp</dimen>
 </resources>

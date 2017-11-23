@@ -5,11 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:fillViewport="true"
     tools:context="crypto.soft.cryptongy.feature.aboutUs.AboutUsActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="#f3f3f9">
 
         <View
             android:layout_width="match_parent"
@@ -40,23 +42,22 @@
 
         <ImageView
             android:id="@+id/imgIcon"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:src="@drawable/about_us_icon" />
 
         <crypto.soft.cryptongy.feature.shared.customView.CalTextView
             android:id="@+id/txtTitle"
-            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+            android:textSize="15dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/imgIcon"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="9dp"
             android:text="About Us"
             android:textColor="#FFFFFF" />
-
 
         <android.support.v7.widget.CardView
             android:id="@+id/cardView"
@@ -65,7 +66,7 @@
             android:layout_below="@+id/txtTitle"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="27dp"
             app:cardBackgroundColor="#FFFFFF"
             app:cardCornerRadius="3dp"
             app:cardUseCompatPadding="true">
@@ -74,13 +75,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:paddingBottom="18dp"
-                android:paddingTop="18dp">
+                android:paddingBottom="23dp"
+                android:paddingTop="23dp">
 
-                <crypto.soft.cryptongy.feature.shared.customView.CabTextView
+                <crypto.soft.cryptongy.feature.shared.customView.MspTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="12dp"
+                    android:layout_marginLeft="23dp"
                     android:layout_marginRight="13dp"
                     android:text="@string/about_title"
                     android:textColor="@color/colorPrimary"
@@ -89,18 +90,16 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1px"
-                    android:layout_marginTop="18dp"
+                    android:layout_marginTop="20dp"
                     android:background="@color/colorPrimary" />
 
                 <crypto.soft.cryptongy.feature.shared.customView.CabTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="18dp"
+                    android:layout_width="132dp"
+                    android:layout_height="37dp"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="20dp"
                     android:background="@drawable/ic_about_corner"
-                    android:paddingBottom="6dp"
-                    android:paddingTop="6dp"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="15dp"
+                    android:paddingLeft="23dp"
                     android:text="@string/about_app"
                     android:textColor="@color/about_sub_title"
                     android:textSize="@dimen/about_sub_title" />
@@ -108,14 +107,14 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="40dp"
+                    android:layout_marginLeft="60dp"
                     android:layout_marginRight="30dp"
-                    android:layout_marginTop="@dimen/about_sub"
+                    android:layout_marginTop="23dp"
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_width="8dp"
-                        android:layout_height="8dp"
+                        android:layout_width="9dp"
+                        android:layout_height="9dp"
                         android:layout_marginRight="8dp"
                         android:layout_marginTop="@dimen/about_icon_top"
                         android:background="@drawable/ic_green_circle" />
@@ -133,14 +132,14 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="40dp"
+                    android:layout_marginLeft="60dp"
                     android:layout_marginRight="30dp"
                     android:layout_marginTop="@dimen/about_sub"
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_width="8dp"
-                        android:layout_height="8dp"
+                        android:layout_width="9dp"
+                        android:layout_height="9dp"
                         android:layout_marginRight="8dp"
                         android:layout_marginTop="@dimen/about_icon_top"
                         android:background="@drawable/ic_green_circle" />
@@ -158,14 +157,14 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="40dp"
+                    android:layout_marginLeft="60dp"
                     android:layout_marginRight="30dp"
                     android:layout_marginTop="@dimen/about_sub"
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_width="8dp"
-                        android:layout_height="8dp"
+                        android:layout_width="9dp"
+                        android:layout_height="9dp"
                         android:layout_marginRight="8dp"
                         android:layout_marginTop="@dimen/about_icon_top"
                         android:background="@drawable/ic_green_circle" />
@@ -184,14 +183,14 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="40dp"
+                    android:layout_marginLeft="60dp"
                     android:layout_marginRight="30dp"
                     android:layout_marginTop="@dimen/about_sub"
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_width="8dp"
-                        android:layout_height="8dp"
+                        android:layout_width="9dp"
+                        android:layout_height="9dp"
                         android:layout_marginRight="8dp"
                         android:layout_marginTop="@dimen/about_icon_top"
                         android:background="@drawable/ic_green_circle" />
@@ -209,13 +208,12 @@
 
                 <crypto.soft.cryptongy.feature.shared.customView.CabTextView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="18dp"
-                    android:background="@drawable/ic_about_corner"
-                    android:paddingBottom="6dp"
-                    android:paddingTop="6dp"
-                    android:paddingLeft="8dp"
+                    android:layout_height="37dp"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="23dp"
                     android:paddingRight="15dp"
+                    android:background="@drawable/ic_about_corner"
+                    android:paddingLeft="23dp"
                     android:text="@string/about_future"
                     android:textColor="@color/about_sub_title"
                     android:textSize="@dimen/about_sub_title" />
@@ -223,14 +221,14 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="40dp"
+                    android:layout_marginLeft="60dp"
                     android:layout_marginRight="30dp"
-                    android:layout_marginTop="@dimen/about_sub"
+                    android:layout_marginTop="23dp"
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_width="8dp"
-                        android:layout_height="8dp"
+                        android:layout_width="9dp"
+                        android:layout_height="9dp"
                         android:layout_marginRight="8dp"
                         android:layout_marginTop="@dimen/about_icon_top"
                         android:background="@drawable/ic_green_circle" />
@@ -249,14 +247,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
-                    android:layout_marginLeft="40dp"
+                    android:layout_marginLeft="60dp"
                     android:layout_marginRight="30dp"
                     android:layout_marginTop="@dimen/about_sub"
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_width="8dp"
-                        android:layout_height="8dp"
+                        android:layout_width="9dp"
+                        android:layout_height="9dp"
                         android:layout_marginRight="8dp"
                         android:layout_marginTop="@dimen/about_icon_top"
                         android:background="@drawable/ic_green_circle" />
@@ -281,7 +279,7 @@
             android:layout_below="@id/cardView"
             android:layout_marginLeft="13dp"
             android:layout_marginRight="13dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="15dp"
             android:textSize="@dimen/about_bottom"
             android:textColor="@color/setting_text"
             android:text="All trade communication is direct to the exchange with no intermediate servers." />
