@@ -1,4 +1,4 @@
-package crypto.soft.cryptongy.json.market;
+package crypto.soft.cryptongy.feature.shared.json.market;
 
 import java.util.HashMap;
 import java.util.List;

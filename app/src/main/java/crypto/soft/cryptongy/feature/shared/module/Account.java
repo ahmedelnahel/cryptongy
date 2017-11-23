@@ -1,4 +1,4 @@
-package crypto.soft.cryptongy.feature.account.module;
+package crypto.soft.cryptongy.feature.shared.module;
 
 
 import io.realm.RealmObject;

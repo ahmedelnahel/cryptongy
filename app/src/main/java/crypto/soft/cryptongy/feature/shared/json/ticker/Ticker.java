@@ -1,4 +1,5 @@
-package crypto.soft.cryptongy.json.openorder;
+
+package crypto.soft.cryptongy.feature.shared.json.ticker;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
@@ -8,26 +9,24 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-        "success",
-        "message",
-        "result"
+    "success",
+    "message",
+    "result"
 })
-public class OpenOrder {
+public class Ticker {
 
     @JsonProperty("success")
     private Boolean success;
     @JsonProperty("message")
     private String message;
     @JsonProperty("result")
-    private List<Result> result = null;
+    private Result result;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
-    @JsonIgnore
     private String json;
 
     public String getJson() {
@@ -37,7 +36,6 @@ public class OpenOrder {
     public void setJson(String json) {
         this.json = json;
     }
-
     @JsonProperty("success")
     public Boolean getSuccess() {
         return success;
@@ -59,12 +57,12 @@ public class OpenOrder {
     }
 
     @JsonProperty("result")
-    public List<Result> getResult() {
+    public Result getResult() {
         return result;
     }
 
     @JsonProperty("result")
-    public void setResult(List<Result> result) {
+    public void setResult(Result result) {
         this.result = result;
     }
 

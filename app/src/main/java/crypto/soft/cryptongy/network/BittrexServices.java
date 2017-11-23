@@ -1,20 +1,18 @@
-package crypto.soft.cryptongy.bittrex;
+package crypto.soft.cryptongy.network;
 
 import android.util.Log;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
-import java.util.HashMap;
 
-import crypto.soft.cryptongy.common.RESTUtil;
-import crypto.soft.cryptongy.json.action.Cancel;
-import crypto.soft.cryptongy.json.market.MarketSummaries;
-import crypto.soft.cryptongy.json.marketsummary.MarketSummary;
-import crypto.soft.cryptongy.json.openorder.OpenOrder;
-import crypto.soft.cryptongy.json.orderhistory.OrderHistory;
-import crypto.soft.cryptongy.json.ticker.Ticker;
-import crypto.soft.cryptongy.json.wallet.Wallet;
+import crypto.soft.cryptongy.feature.shared.json.action.Cancel;
+import crypto.soft.cryptongy.feature.shared.json.market.MarketSummaries;
+import crypto.soft.cryptongy.feature.shared.json.marketsummary.MarketSummary;
+import crypto.soft.cryptongy.feature.shared.json.openorder.OpenOrder;
+import crypto.soft.cryptongy.feature.shared.json.orderhistory.OrderHistory;
+import crypto.soft.cryptongy.feature.shared.json.ticker.Ticker;
+import crypto.soft.cryptongy.feature.shared.json.wallet.Wallet;
 
 /**
  * Created by noni on 26/10/2017.

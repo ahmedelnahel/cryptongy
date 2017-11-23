@@ -5,7 +5,7 @@ import com.hannesdorfmann.mosby.mvp.MvpView;
 import java.util.List;
 
 
-import crypto.soft.cryptongy.feature.account.module.Account;
+import crypto.soft.cryptongy.feature.shared.module.Account;
 
 /**
  * Created by tseringwongelgurung on 11/19/17.

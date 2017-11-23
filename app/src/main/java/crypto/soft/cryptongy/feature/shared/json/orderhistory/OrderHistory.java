@@ -1,4 +1,4 @@
-package crypto.soft.cryptongy.json.orderhistory;
+package crypto.soft.cryptongy.feature.shared.json.orderhistory;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
