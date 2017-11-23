@@ -1,30 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_home"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="crypto.soft.cryptongy.feature.home.HomeActivity">
 
-    <Button
-        android:id="@+id/btnSetting"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Setting"
-        android:onClick="openSetting"/>
+    <include
+        android:id="@+id/include"
+        layout="@layout/toolbar_account" />
 
-    <Button
-        android:id="@+id/btnAbout"
-        android:layout_below="@+id/btnSetting"
+    <FrameLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="AboutUs"
-        android:onClick="openAboutUs"/>
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
-    <Button
-        android:layout_below="@+id/btnAbout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Account"
-        android:onClick="openAccount"/>
-</RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/btnSetting"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="openSetting"
+                android:text="Setting" />
+
+            <Button
+                android:id="@+id/btnAbout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/btnSetting"
+                android:onClick="openAboutUs"
+                android:text="AboutUs" />
+
+            <Button
+                android:id="@+id/btnAccount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/btnAbout"
+                android:onClick="openAccount"
+                android:text="Account" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/btnAccount"
+                android:onClick="openOrder"
+                android:text="Order" />
+        </RelativeLayout>
+    </FrameLayout>
+</LinearLayout>
