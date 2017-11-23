@@ -1,4 +1,4 @@
-package crypto.soft.cryptongy.json.openorder;
+package crypto.soft.cryptongy.feature.shared.json.orderhistory;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
@@ -12,72 +12,53 @@ import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-        "Uuid",
         "OrderUuid",
         "Exchange",
+        "TimeStamp",
         "OrderType",
+        "Limit",
         "Quantity",
         "QuantityRemaining",
-        "Limit",
-        "CommissionPaid",
+        "Commission",
         "Price",
         "PricePerUnit",
-        "Opened",
-        "Closed",
-        "CancelInitiated",
-        "ImmediateOrCancel",
         "IsConditional",
         "Condition",
-        "ConditionTarget"
+        "ConditionTarget",
+        "ImmediateOrCancel"
 })
 public class Result {
 
-    @JsonProperty("Uuid")
-    private Object uuid;
     @JsonProperty("OrderUuid")
     private String orderUuid;
     @JsonProperty("Exchange")
     private String exchange;
+    @JsonProperty("TimeStamp")
+    private String timeStamp;
     @JsonProperty("OrderType")
     private String orderType;
+    @JsonProperty("Limit")
+    private Double limit;
     @JsonProperty("Quantity")
     private Double quantity;
     @JsonProperty("QuantityRemaining")
     private Double quantityRemaining;
-    @JsonProperty("Limit")
-    private Double limit;
-    @JsonProperty("CommissionPaid")
-    private Double commissionPaid;
+    @JsonProperty("Commission")
+    private Double commission;
     @JsonProperty("Price")
     private Double price;
     @JsonProperty("PricePerUnit")
-    private Object pricePerUnit;
-    @JsonProperty("Opened")
-    private String opened;
-    @JsonProperty("Closed")
-    private Object closed;
-    @JsonProperty("CancelInitiated")
-    private Boolean cancelInitiated;
-    @JsonProperty("ImmediateOrCancel")
-    private Boolean immediateOrCancel;
+    private Double pricePerUnit;
     @JsonProperty("IsConditional")
     private Boolean isConditional;
     @JsonProperty("Condition")
     private Object condition;
     @JsonProperty("ConditionTarget")
     private Object conditionTarget;
+    @JsonProperty("ImmediateOrCancel")
+    private Boolean immediateOrCancel;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
-
-    @JsonProperty("Uuid")
-    public Object getUuid() {
-        return uuid;
-    }
-
-    @JsonProperty("Uuid")
-    public void setUuid(Object uuid) {
-        this.uuid = uuid;
-    }
 
     @JsonProperty("OrderUuid")
     public String getOrderUuid() {
@@ -99,6 +80,16 @@ public class Result {
         this.exchange = exchange;
     }
 
+    @JsonProperty("TimeStamp")
+    public String getTimeStamp() {
+        return timeStamp;
+    }
+
+    @JsonProperty("TimeStamp")
+    public void setTimeStamp(String timeStamp) {
+        this.timeStamp = timeStamp;
+    }
+
     @JsonProperty("OrderType")
     public String getOrderType() {
         return orderType;
@@ -107,6 +98,16 @@ public class Result {
     @JsonProperty("OrderType")
     public void setOrderType(String orderType) {
         this.orderType = orderType;
+    }
+
+    @JsonProperty("Limit")
+    public Double getLimit() {
+        return limit;
+    }
+
+    @JsonProperty("Limit")
+    public void setLimit(Double limit) {
+        this.limit = limit;
     }
 
     @JsonProperty("Quantity")
@@ -129,24 +130,14 @@ public class Result {
         this.quantityRemaining = quantityRemaining;
     }
 
-    @JsonProperty("Limit")
-    public Double getLimit() {
-        return limit;
+    @JsonProperty("Commission")
+    public Double getCommission() {
+        return commission;
     }
 
-    @JsonProperty("Limit")
-    public void setLimit(Double limit) {
-        this.limit = limit;
-    }
-
-    @JsonProperty("CommissionPaid")
-    public Double getCommissionPaid() {
-        return commissionPaid;
-    }
-
-    @JsonProperty("CommissionPaid")
-    public void setCommissionPaid(Double commissionPaid) {
-        this.commissionPaid = commissionPaid;
+    @JsonProperty("Commission")
+    public void setCommission(Double commission) {
+        this.commission = commission;
     }
 
     @JsonProperty("Price")
@@ -160,53 +151,13 @@ public class Result {
     }
 
     @JsonProperty("PricePerUnit")
-    public Object getPricePerUnit() {
+    public Double getPricePerUnit() {
         return pricePerUnit;
     }
 
     @JsonProperty("PricePerUnit")
-    public void setPricePerUnit(Object pricePerUnit) {
+    public void setPricePerUnit(Double pricePerUnit) {
         this.pricePerUnit = pricePerUnit;
-    }
-
-    @JsonProperty("Opened")
-    public String getOpened() {
-        return opened;
-    }
-
-    @JsonProperty("Opened")
-    public void setOpened(String opened) {
-        this.opened = opened;
-    }
-
-    @JsonProperty("Closed")
-    public Object getClosed() {
-        return closed;
-    }
-
-    @JsonProperty("Closed")
-    public void setClosed(Object closed) {
-        this.closed = closed;
-    }
-
-    @JsonProperty("CancelInitiated")
-    public Boolean getCancelInitiated() {
-        return cancelInitiated;
-    }
-
-    @JsonProperty("CancelInitiated")
-    public void setCancelInitiated(Boolean cancelInitiated) {
-        this.cancelInitiated = cancelInitiated;
-    }
-
-    @JsonProperty("ImmediateOrCancel")
-    public Boolean getImmediateOrCancel() {
-        return immediateOrCancel;
-    }
-
-    @JsonProperty("ImmediateOrCancel")
-    public void setImmediateOrCancel(Boolean immediateOrCancel) {
-        this.immediateOrCancel = immediateOrCancel;
     }
 
     @JsonProperty("IsConditional")
@@ -237,6 +188,16 @@ public class Result {
     @JsonProperty("ConditionTarget")
     public void setConditionTarget(Object conditionTarget) {
         this.conditionTarget = conditionTarget;
+    }
+
+    @JsonProperty("ImmediateOrCancel")
+    public Boolean getImmediateOrCancel() {
+        return immediateOrCancel;
+    }
+
+    @JsonProperty("ImmediateOrCancel")
+    public void setImmediateOrCancel(Boolean immediateOrCancel) {
+        this.immediateOrCancel = immediateOrCancel;
     }
 
     @JsonAnyGetter

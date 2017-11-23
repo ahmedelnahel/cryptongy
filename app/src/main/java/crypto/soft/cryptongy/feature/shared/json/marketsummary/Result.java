@@ -1,5 +1,5 @@
 
-package crypto.soft.cryptongy.json.marketsummary;
+package crypto.soft.cryptongy.feature.shared.json.marketsummary;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;

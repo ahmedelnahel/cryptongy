@@ -1,4 +1,4 @@
-package crypto.soft.cryptongy.json.wallet;
+package crypto.soft.cryptongy.feature.shared.json.wallet;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;

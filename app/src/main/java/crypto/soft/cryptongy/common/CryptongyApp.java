@@ -2,7 +2,7 @@ package crypto.soft.cryptongy.common;
 
 import android.app.Application;
 
-import crypto.soft.cryptongy.feature.account.module.Account;
+import crypto.soft.cryptongy.feature.shared.module.Account;
 
 /**
  * Created by noni on 19/11/2017.
@@ -11,7 +11,7 @@ import crypto.soft.cryptongy.feature.account.module.Account;
 public class CryptongyApp extends Application {
     double usdt_btc;
     double usdt_eth;
-Account readAccount;
+    Account readAccount;
     Account tradeAccount;
     Account withdrawAccount;
     Setting settings;

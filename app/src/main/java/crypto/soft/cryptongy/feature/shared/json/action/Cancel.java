@@ -1,5 +1,5 @@
 
-package crypto.soft.cryptongy.json.action;
+package crypto.soft.cryptongy.feature.shared.json.action;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;

@@ -19,7 +19,7 @@ import java.util.List;
 import io.realm.Realm;
 import io.realm.RealmQuery;
 import crypto.soft.cryptongy.R;
-import crypto.soft.cryptongy.feature.account.module.Account;
+import crypto.soft.cryptongy.feature.shared.module.Account;
 import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
 
 /**

@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <crypto.soft.cryptongy.feature.account.shared.customView.CalTextView
+        <crypto.soft.cryptongy.feature.shared.customView.CalTextView
             android:id="@+id/txtExchange"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
