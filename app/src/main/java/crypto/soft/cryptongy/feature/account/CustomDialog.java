@@ -142,7 +142,8 @@ public class CustomDialog {
         buttonOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dialogListner.onOkClicked();
+                if (dialogListner != null)
+                    dialogListner.onOkClicked();
                 originalDialog.dismiss();
             }
         });

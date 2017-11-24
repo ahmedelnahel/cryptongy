@@ -23,4 +23,12 @@ public interface OrderView extends MvpView {
     void setOpenOrders(OpenOrder openOrders);
 
     void setOrderHistory(OrderHistory orderHistory);
+
+    void showLoading();
+
+    void hideLoading();
+
+    void showEmptyView();
+
+    void hideEmptyView();
 }

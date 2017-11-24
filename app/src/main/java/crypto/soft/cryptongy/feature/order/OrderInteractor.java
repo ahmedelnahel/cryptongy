@@ -7,7 +7,9 @@ import java.io.IOException;
 import crypto.soft.cryptongy.feature.shared.json.openorder.OpenOrder;
 import crypto.soft.cryptongy.feature.shared.json.orderhistory.OrderHistory;
 import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
+import crypto.soft.cryptongy.feature.shared.module.Account;
 import crypto.soft.cryptongy.network.BittrexServices;
+import io.realm.Realm;
 
 /**
  * Created by tseringwongelgurung on 11/24/17.
@@ -30,7 +32,10 @@ public class OrderInteractor {
             @Override
             protected void onPostExecute(OpenOrder openOrder) {
                 super.onPostExecute(openOrder);
-                listner.onComplete(openOrder);
+                if (openOrder == null)
+                    listner.onFail("Failed to fetch data");
+                else
+                    listner.onComplete(openOrder);
             }
         }.execute();
     }
@@ -51,8 +56,25 @@ public class OrderInteractor {
             @Override
             protected void onPostExecute(OrderHistory orderHistory) {
                 super.onPostExecute(orderHistory);
-                listner.onComplete(orderHistory);
+                if (orderHistory == null)
+                    listner.onFail("Failed to fetch data");
+                else
+                    listner.onComplete(orderHistory);
             }
         }.execute();
+    }
+
+    public void getAccount(OnFinishListner<Account> listner) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.beginTransaction();
+        Account accountDb = realm.where(Account.class).equalTo("label", "Read").findFirst();
+        if (accountDb != null) {
+            Account account = realm.copyFromRealm(accountDb);
+            listner.onComplete(account);
+            realm.commitTransaction();
+        } else {
+            realm.commitTransaction();
+            listner.onFail("No api key available");
+        }
     }
 }

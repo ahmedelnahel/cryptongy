@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
@@ -25,6 +26,7 @@ import crypto.soft.cryptongy.R;
 import crypto.soft.cryptongy.feature.shared.json.openorder.OpenOrder;
 import crypto.soft.cryptongy.feature.shared.json.openorder.Result;
 import crypto.soft.cryptongy.feature.shared.json.orderhistory.OrderHistory;
+import crypto.soft.cryptongy.utils.ProgressDialogFactory;
 
 /**
  * Created by tseringwongelgurung on 11/23/17.
@@ -36,7 +38,8 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implem
 
     private TableLayout tblOpenOrders, tblOrderHistory;
 
-    private TextView txtCalculation, txtLevel, txtOpenOrder, txtOrderHistory;
+    private LinearLayout lnlContainer;
+    private TextView txtCalculation, txtLevel, txtOpenOrder, txtOrderHistory, txtEmpty;
     private ImageView imgSync, imgAccSetting;
 
     @Nullable
@@ -94,6 +97,9 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implem
 
         txtOpenOrder = view.findViewById(R.id.txtOpen);
         txtOrderHistory = view.findViewById(R.id.txtHistory);
+
+        txtEmpty = view.findViewById(R.id.txtEmpty);
+        lnlContainer = view.findViewById(R.id.lnlContainer);
     }
 
     @Override
@@ -188,6 +194,28 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implem
                 tblOrderHistory.addView(line);
             }
         }
+    }
+
+    @Override
+    public void showLoading() {
+        ProgressDialogFactory.getInstance(getContext(), "Fetching data Please wait.").show();
+    }
+
+    @Override
+    public void hideLoading() {
+        ProgressDialogFactory.dismiss();
+    }
+
+    @Override
+    public void showEmptyView() {
+        txtEmpty.setVisibility(View.VISIBLE);
+        lnlContainer.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void hideEmptyView() {
+        txtEmpty.setVisibility(View.GONE);
+        lnlContainer.setVisibility(View.VISIBLE);
     }
 
     @Override
