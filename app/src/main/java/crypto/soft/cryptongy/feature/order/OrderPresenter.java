@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
 import crypto.soft.cryptongy.R;
+import crypto.soft.cryptongy.feature.account.AccountFragment;
 import crypto.soft.cryptongy.feature.account.CustomDialog;
 import crypto.soft.cryptongy.feature.setting.SettingActivity;
 import crypto.soft.cryptongy.feature.shared.json.action.Cancel;
@@ -45,6 +46,7 @@ public class OrderPresenter extends MvpBasePresenter<OrderView> {
                 getData();
                 break;
             case R.id.imgAccSetting:
+                GlobalUtil.addFragment(context, new AccountFragment(), R.id.container, true);
                 break;
         }
     }
@@ -53,8 +55,10 @@ public class OrderPresenter extends MvpBasePresenter<OrderView> {
         interactor.getAccount(new OnFinishListner<Account>() {
             @Override
             public void onComplete(Account result) {
-                if (getView() != null)
+                if (getView() != null) {
                     getView().showLoading(context.getString(R.string.fetch_msg));
+                    getView().setLevel(result.getLabel());
+                }
                 openOrder = false;
                 orderHistory = false;
                 getOpenOrders();

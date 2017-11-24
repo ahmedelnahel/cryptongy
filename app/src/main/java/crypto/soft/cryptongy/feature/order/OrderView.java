@@ -10,7 +10,7 @@ import crypto.soft.cryptongy.feature.shared.json.orderhistory.OrderHistory;
  */
 
 public interface OrderView extends MvpView {
-    void initToolbar();
+    void setTitle();
 
     void findViews();
 
