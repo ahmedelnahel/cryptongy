@@ -120,6 +120,7 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implem
 
     @Override
     public void setOpenOrders(OpenOrder openOrders) {
+        tblOpenOrders.removeAllViews();
         if (openOrders == null || openOrders.getResult() == null || openOrders.getResult().isEmpty()) {
             txtOpenOrder.setVisibility(View.GONE);
             return;
@@ -129,7 +130,7 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implem
         View title = getLayoutInflater().inflate(R.layout.table_open_order_title, null);
         tblOpenOrders.addView(title);
         for (int i = 0; i < openOrders.getResult().size(); i++) {
-            Result data = openOrders.getResult().get(i);
+            final Result data = openOrders.getResult().get(i);
             View sub = getLayoutInflater().inflate(R.layout.table_open_order_sub, null);
             OpenOrderHolder holder = new OpenOrderHolder(sub);
             holder.txtType.setText(data.getOrderType());
@@ -151,6 +152,13 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implem
             holder.txtAction.setText("Cancel");
             tblOpenOrders.addView(sub);
 
+            holder.txtAction.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    presenter.cancleOrder(data.getOrderUuid());
+                }
+            });
+
             if (i < openOrders.getResult().size() - 1) {
                 View line = getLayoutInflater().inflate(R.layout.table_line, null);
                 tblOpenOrders.addView(line);
@@ -160,6 +168,7 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implem
 
     @Override
     public void setOrderHistory(OrderHistory orderHistory) {
+        tblOrderHistory.removeAllViews();
         if (orderHistory == null || orderHistory.getResult() == null || orderHistory.getResult().isEmpty()) {
             txtOrderHistory.setVisibility(View.GONE);
             return;
@@ -197,8 +206,8 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implem
     }
 
     @Override
-    public void showLoading() {
-        ProgressDialogFactory.getInstance(getContext(), "Fetching data Please wait.").show();
+    public void showLoading(String msg) {
+        ProgressDialogFactory.getInstance(getContext(), msg).show();
     }
 
     @Override

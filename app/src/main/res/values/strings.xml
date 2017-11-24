@@ -21,4 +21,6 @@
     <string name="about_future2">More advanced trade</string>
     <string name="setting">settings</string>
     <string name="order">Orders</string>
+    <string name="fetch_msg">Fetching data. Please wait.</string>
+    <string name="cancle_msg">Canceling order. Please wait.</string>
 </resources>
