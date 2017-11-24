@@ -8,6 +8,7 @@ import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 import crypto.soft.cryptongy.R;
 import crypto.soft.cryptongy.feature.setting.SettingActivity;
 import crypto.soft.cryptongy.feature.shared.json.openorder.OpenOrder;
+import crypto.soft.cryptongy.feature.shared.json.orderhistory.OrderHistory;
 import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
 
 /**
@@ -20,7 +21,7 @@ public class OrderPresenter extends MvpBasePresenter<OrderView> {
 
     public OrderPresenter(Context context) {
         this.context = context;
-        interactor=new OrderInteractor();
+        interactor = new OrderInteractor();
     }
 
     public void onOptionItemClicked(int id) {
@@ -44,8 +45,21 @@ public class OrderPresenter extends MvpBasePresenter<OrderView> {
         interactor.getOpenOrder(new OnFinishListner<OpenOrder>() {
             @Override
             public void onComplete(OpenOrder result) {
-                if (getView()!=null)
+                if (getView() != null)
                     getView().setOpenOrders(result);
+            }
+
+            @Override
+            public void onFail(String error) {
+
+            }
+        });
+
+        interactor.getOrderHistory(new OnFinishListner<OrderHistory>() {
+            @Override
+            public void onComplete(OrderHistory result) {
+                if (getView() != null)
+                    getView().setOrderHistory(result);
             }
 
             @Override

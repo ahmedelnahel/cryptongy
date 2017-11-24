@@ -12,10 +12,12 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
 
+import crypto.soft.cryptongy.feature.shared.listner.DialogListner;
 import io.realm.Realm;
 import io.realm.RealmQuery;
 import crypto.soft.cryptongy.R;
@@ -96,7 +98,7 @@ public class CustomDialog {
                 account.setSecret(secret);
                 account.setExchange(exchange);
 
-                if (isAccountUsed(account)){
+                if (isAccountUsed(account)) {
                     Toast.makeText(context, "Should have different Account type for same Exchange", Toast.LENGTH_LONG).show();
                     return;
                 }
@@ -126,5 +128,25 @@ public class CustomDialog {
             return false;
         else
             return true;
+    }
+
+    public static void showMessagePop(Context context, String msg, final DialogListner dialogListner) {
+        final android.support.v7.app.AlertDialog.Builder alertDialogBuilder = new android.support.v7.app.AlertDialog.Builder(context);
+        final View view = View.inflate(context, R.layout.error_message_layout, null);
+        TextView errorText = (TextView) view.findViewById(R.id.error_text);
+        Button buttonOk = (Button) view.findViewById(R.id.btnOk);
+        errorText.setText(msg);
+        alertDialogBuilder.setView(view);
+        final Dialog originalDialog = alertDialogBuilder.create();
+        originalDialog.getWindow().setDimAmount(0.7f);
+        buttonOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialogListner.onOkClicked();
+                originalDialog.dismiss();
+            }
+        });
+        originalDialog.setCanceledOnTouchOutside(true);
+        originalDialog.show();
     }
 }

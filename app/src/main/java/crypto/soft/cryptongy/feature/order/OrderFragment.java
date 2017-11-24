@@ -142,19 +142,52 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implem
                     holder.txtTime.setText(d);
             } else
                 holder.txtTime.setText("");
-            holder.txtAction.setText("Cancle");
+            holder.txtAction.setText("Cancel");
             tblOpenOrders.addView(sub);
 
-//            if (i < openOrders.getResult().size() - 1) {
-//                View line = getLayoutInflater().inflate(R.layout.table_line, null);
-//                tblOpenOrders.addView(line);
-//            }
+            if (i < openOrders.getResult().size() - 1) {
+                View line = getLayoutInflater().inflate(R.layout.table_line, null);
+                tblOpenOrders.addView(line);
+            }
         }
     }
 
     @Override
     public void setOrderHistory(OrderHistory orderHistory) {
+        if (orderHistory == null || orderHistory.getResult() == null || orderHistory.getResult().isEmpty()) {
+            txtOrderHistory.setVisibility(View.GONE);
+            return;
+        }
 
+        txtOrderHistory.setVisibility(View.VISIBLE);
+        View title = getLayoutInflater().inflate(R.layout.table_order_history_title, null);
+        tblOrderHistory.addView(title);
+        for (int i = 0; i < orderHistory.getResult().size(); i++) {
+            crypto.soft.cryptongy.feature.shared.json.orderhistory.Result data = orderHistory.getResult().get(i);
+            View sub = getLayoutInflater().inflate(R.layout.talbe_order_history_sub, null);
+            OrderHistoryHolder holder = new OrderHistoryHolder(sub);
+            holder.txtType.setText(data.getOrderType());
+            holder.txtQuantity.setText(String.valueOf(data.getQuantity()));
+            holder.txtRate.setText(String.valueOf(data.getPrice()));
+            String date = data.getTimeStamp();
+            if (!TextUtils.isEmpty(date)) {
+                String[] arr = date.split("T");
+                String d = arr[0];
+                String t = "";
+                if (arr.length > 1) {
+                    t = arr[1];
+                    holder.txtTime.setText(d + "\n" + t);
+                } else
+                    holder.txtTime.setText(d);
+            } else
+                holder.txtTime.setText("");
+            tblOrderHistory.addView(sub);
+
+            if (i < orderHistory.getResult().size() - 1) {
+                View line = getLayoutInflater().inflate(R.layout.table_line, null);
+                tblOrderHistory.addView(line);
+            }
+        }
     }
 
     @Override

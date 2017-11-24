@@ -6,4 +6,17 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="Progress_AppTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:textColorPrimary">#ffffffff</item>
+        <item name="android:textColor">#ffffffff</item>
+        <item name="android:background">@color/colorPrimary</item>
+    </style>
+
+    <style name="Progress_Holo" parent="@android:style/Theme.Holo.Light.Dialog">
+        <item name="android:textColor">#ffffffff</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowBackground">@color/colorPrimary</item>
+    </style>
+
 </resources>

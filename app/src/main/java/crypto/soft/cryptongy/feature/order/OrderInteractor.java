@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import java.io.IOException;
 
 import crypto.soft.cryptongy.feature.shared.json.openorder.OpenOrder;
+import crypto.soft.cryptongy.feature.shared.json.orderhistory.OrderHistory;
 import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
 import crypto.soft.cryptongy.network.BittrexServices;
 
@@ -30,6 +31,27 @@ public class OrderInteractor {
             protected void onPostExecute(OpenOrder openOrder) {
                 super.onPostExecute(openOrder);
                 listner.onComplete(openOrder);
+            }
+        }.execute();
+    }
+
+    void getOrderHistory(final OnFinishListner<OrderHistory> listner) {
+        new AsyncTask<Void, Void, OrderHistory>() {
+
+            @Override
+            protected OrderHistory doInBackground(Void... voids) {
+                try {
+                    return new BittrexServices().getOrderHistoryMock();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(OrderHistory orderHistory) {
+                super.onPostExecute(orderHistory);
+                listner.onComplete(orderHistory);
             }
         }.execute();
     }
