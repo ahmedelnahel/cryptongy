@@ -2,11 +2,6 @@ package crypto.soft.cryptongy.feature.order;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -14,7 +9,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
@@ -42,15 +36,19 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implem
     private TextView txtLevel, txtOpenOrder, txtOrderHistory, txtEmpty, txtBtc, txtUsd;
     private ImageView imgSync, imgAccSetting;
 
+    private boolean isFirst = false;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (view == null) {
             view = inflater.inflate(R.layout.fragment_order, container, false);
-            initToolbar();
             findViews();
             setClickListner();
-        }
+            isFirst = true;
+        } else
+            isFirst = false;
+        setTitle();
         return view;
     }
 
@@ -63,7 +61,10 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implem
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setHasOptionsMenu(true);
-        presenter.getData();
+        if (isFirst) {
+            isFirst = false;
+            presenter.getData();
+        }
     }
 
     @Override
@@ -79,7 +80,7 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implem
     }
 
     @Override
-    public void initToolbar() {
+    public void setTitle() {
         TextView txtTitle = getActivity().findViewById(R.id.txtTitle);
         txtTitle.setText(R.string.order);
     }
@@ -137,7 +138,7 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implem
             OpenOrderHolder holder = new OpenOrderHolder(sub);
             holder.txtType.setText(data.getOrderType());
             holder.txtCoin.setText(data.getExchange());
-            holder.txtQuantity.setText(String.valueOf(data.getQuantity()));
+            holder.txtQuantity.setText(String.valueOf(data.getQuantity())+"\n"+String.valueOf(data.getQuantityRemaining()));
             holder.txtRate.setText(String.valueOf(data.getPrice()));
             String date = data.getOpened();
             if (!TextUtils.isEmpty(date)) {

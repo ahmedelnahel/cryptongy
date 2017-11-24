@@ -2,11 +2,8 @@ package crypto.soft.cryptongy.feature.account;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -44,10 +41,10 @@ public class AccountFragment extends MvpFragment<AccountView, AccountePresenter>
         if (view == null) {
             view = inflater.inflate(R.layout.fragment_account, container, false);
             new HideKeyboard(getContext()).setupUI(view);
-            initToolbar();
             findViews();
             initRecycleView();
         }
+        setTitle();
         return view;
     }
 
@@ -76,7 +73,7 @@ public class AccountFragment extends MvpFragment<AccountView, AccountePresenter>
     }
 
     @Override
-    public void initToolbar() {
+    public void setTitle() {
         TextView txtTitle = getActivity().findViewById(R.id.txtTitle);
         txtTitle.setText(R.string.account);
     }

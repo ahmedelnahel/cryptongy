@@ -43,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:text="0 ฿"
                 android:textColor="@color/order_primary"
-                android:textSize="30sp" />
+                android:textSize="13sp" />
 
             <crypto.soft.cryptongy.feature.shared.customView.CabTextView
                 android:layout_width="wrap_content"
@@ -52,7 +52,7 @@
                 android:layout_marginRight="5dp"
                 android:text="/"
                 android:textColor="@color/order_primary"
-                android:textSize="30sp" />
+                android:textSize="13sp" />
 
             <crypto.soft.cryptongy.feature.shared.customView.CabTextView
                 android:id="@+id/txtUsd"
@@ -60,7 +60,8 @@
                 android:layout_height="wrap_content"
                 android:text="$ 0"
                 android:textColor="@color/order_primary"
-                android:textSize="30sp" />
+                android:textSize="13sp" />
+
         </LinearLayout>
 
         <crypto.soft.cryptongy.feature.shared.customView.CabTextView
@@ -71,7 +72,6 @@
             android:layout_below="@+id/lnlCalculation"
             android:layout_marginRight="24dp"
             android:layout_marginTop="10dp"
-            android:text="Read"
             android:textColor="@color/order_secondary"
             android:textSize="13sp" />
 

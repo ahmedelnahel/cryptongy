@@ -12,7 +12,7 @@ import crypto.soft.cryptongy.feature.shared.module.Account;
  */
 
 public interface AccountView extends MvpView {
-    void initToolbar();
+    void setTitle();
 
     void findViews();
 
