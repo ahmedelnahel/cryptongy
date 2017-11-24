@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorBg"
+        android:clickable="true">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/account_bg"
+            android:layout_alignParentTop="true"
+            android:background="@color/colorPrimary" />
+
+        <crypto.soft.cryptongy.feature.shared.customView.CabTextView
+            android:id="@+id/txtProfit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:text="Profit / Loss"
+            android:textColor="@color/order_secondary"
+            android:textSize="13sp" />
+
+        <crypto.soft.cryptongy.feature.shared.customView.CabTextView
+            android:id="@+id/txtCalculation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txtProfit"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="12dp"
+            android:text="20,000s    /    USD 10"
+            android:textColor="@color/order_primary"
+            android:textSize="30sp" />
+
+        <crypto.soft.cryptongy.feature.shared.customView.CabTextView
+            android:id="@+id/txtLevel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/txtCalculation"
+            android:layout_marginRight="24dp"
+            android:layout_marginTop="10dp"
+            android:text="Read"
+            android:textColor="@color/order_secondary"
+            android:textSize="13sp" />
+
+        <View
+            android:id="@+id/view1"
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:layout_alignLeft="@+id/txtLevel"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/txtLevel"
+            android:background="@color/order_primary" />
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/crvTop"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/view1"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="19dp"
+            android:background="@color/order_primary"
+            app:cardCornerRadius="3dp"
+            app:cardUseCompatPadding="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="49dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/imgSync"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/order_icon"
+                    android:layout_weight="1"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_sync" />
+
+                <ImageView
+                    android:id="@+id/imgAccSetting"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/order_icon"
+                    android:layout_weight="1"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_account_setting" />
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <crypto.soft.cryptongy.feature.shared.customView.MspTextView
+            android:id="@+id/txtEmpty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/crvTop"
+            android:layout_alignParentBottom="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:text="No data available"
+            android:textColor="@color/colorPrimary"
+            android:textSize="18sp" />
+
+        <LinearLayout
+            android:id="@+id/lnlContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/crvTop"
+            android:orientation="vertical">
+
+            <crypto.soft.cryptongy.feature.shared.customView.CabTextView
+                android:id="@+id/txtOpen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:layout_marginLeft="24dp"
+                android:layout_marginTop="21dp"
+                android:text="Open Orders"
+                android:textColor="@color/order_secondary2"
+                android:textSize="@dimen/orderListTitle"
+                android:visibility="gone" />
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/crvOpenOrders"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                app:cardCornerRadius="5dp"
+                app:cardUseCompatPadding="true">
+
+                <TableLayout
+                    android:id="@+id/tblOpenOrders"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </android.support.v7.widget.CardView>
+
+            <crypto.soft.cryptongy.feature.shared.customView.CabTextView
+                android:id="@+id/txtHistory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:layout_marginLeft="24dp"
+                android:layout_marginTop="17dp"
+                android:text="Order History"
+                android:textColor="@color/order_secondary2"
+                android:textSize="@dimen/orderListTitle"
+                android:visibility="gone" />
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/crvOrderHistory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                app:cardCornerRadius="5dp"
+                app:cardUseCompatPadding="true">
+
+                <TableLayout
+                    android:id="@+id/tblOrderHistory"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </android.support.v7.widget.CardView>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</ScrollView>

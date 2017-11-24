@@ -1,0 +1,118 @@
+package crypto.soft.cryptongy.feature.order;
+
+import android.content.Context;
+import android.content.Intent;
+
+import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
+
+import crypto.soft.cryptongy.R;
+import crypto.soft.cryptongy.feature.account.CustomDialog;
+import crypto.soft.cryptongy.feature.setting.SettingActivity;
+import crypto.soft.cryptongy.feature.shared.json.openorder.OpenOrder;
+import crypto.soft.cryptongy.feature.shared.json.orderhistory.OrderHistory;
+import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
+import crypto.soft.cryptongy.feature.shared.module.Account;
+import crypto.soft.cryptongy.utils.GlobalUtil;
+
+/**
+ * Created by tseringwongelgurung on 11/23/17.
+ */
+
+public class OrderPresenter extends MvpBasePresenter<OrderView> {
+    private Context context;
+    private OrderInteractor interactor;
+    private boolean openOrder = false, orderHistory = false;
+
+    public OrderPresenter(Context context) {
+        this.context = context;
+        interactor = new OrderInteractor();
+    }
+
+    public void onOptionItemClicked(int id) {
+        switch (id) {
+            case R.id.ic_setting:
+                context.startActivity(new Intent(context, SettingActivity.class));
+                break;
+        }
+    }
+
+    public void onClicked(int id) {
+        switch (id) {
+            case R.id.imgSync:
+                getData();
+                break;
+            case R.id.imgAccSetting:
+                break;
+        }
+    }
+
+    public void getData() {
+        interactor.getAccount(new OnFinishListner<Account>() {
+            @Override
+            public void onComplete(Account result) {
+                if (getView() != null)
+                    getView().showLoading();
+                openOrder = false;
+                orderHistory = false;
+                getOpenOrders();
+                getOrderHistory();
+            }
+
+            @Override
+            public void onFail(String error) {
+                CustomDialog.showMessagePop(context, error, null);
+                if (getView() != null)
+                    getView().showEmptyView();
+            }
+        });
+    }
+
+    public void getOrderHistory() {
+        interactor.getOrderHistory(new OnFinishListner<OrderHistory>() {
+            @Override
+            public void onComplete(OrderHistory result) {
+                if (getView() != null) {
+                    orderHistory = true;
+                    getView().hideLoading();
+                    getView().setOrderHistory(result);
+                    getView().hideEmptyView();
+                }
+            }
+
+            @Override
+            public void onFail(String error) {
+                if (getView() != null)
+                    getView().hideLoading();
+                isDataAvailable();
+            }
+        });
+    }
+
+    public void getOpenOrders() {
+        interactor.getOpenOrder(new OnFinishListner<OpenOrder>() {
+            @Override
+            public void onComplete(OpenOrder result) {
+                if (getView() != null) {
+                    openOrder = true;
+                    getView().hideLoading();
+                    getView().setOpenOrders(result);
+                    getView().hideEmptyView();
+                }
+            }
+
+            @Override
+            public void onFail(String error) {
+                if (getView() != null)
+                    getView().hideLoading();
+                isDataAvailable();
+            }
+        });
+    }
+
+    private void isDataAvailable() {
+        if (!openOrder && !orderHistory) {
+            if (getView() != null)
+                getView().showEmptyView();
+        }
+    }
+}

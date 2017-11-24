@@ -15,4 +15,9 @@
     <dimen name="about_bottom">14sp</dimen>
     <dimen name="about_sub">16dp</dimen>
     <dimen name="about_icon_top">8dp</dimen>
+    <dimen name="order_icon">31dp</dimen>
+    <dimen name="orderListTitle">12sp</dimen>
+    <dimen name="order_tbl_title">13sp</dimen>
+    <dimen name="order_tbl_sub">11sp</dimen>
+    <dimen name="order_tbl_sub_pad">5dp</dimen>
 </resources>

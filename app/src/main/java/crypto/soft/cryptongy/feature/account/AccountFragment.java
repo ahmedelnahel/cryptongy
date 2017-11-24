@@ -77,15 +77,7 @@ public class AccountFragment extends MvpFragment<AccountView, AccountePresenter>
 
     @Override
     public void initToolbar() {
-        Toolbar toolbar = view.findViewById(R.id.toolbar);
-        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-
-        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
-
-        TextView txtTitle = toolbar.findViewById(R.id.txtTitle);
+        TextView txtTitle = getActivity().findViewById(R.id.txtTitle);
         txtTitle.setText(R.string.account);
     }
 
@@ -94,6 +86,7 @@ public class AccountFragment extends MvpFragment<AccountView, AccountePresenter>
         recyclerView = view.findViewById(R.id.recycleView);
         txtEmpty = view.findViewById(R.id.txtEmpty);
     }
+
 
     @Override
     public void initRecycleView() {
