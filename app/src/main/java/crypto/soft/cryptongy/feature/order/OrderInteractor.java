@@ -77,11 +77,18 @@ public class OrderInteractor {
         Account accountDb = realm.where(Account.class).equalTo("label", "Read").findFirst();
         if (accountDb != null) {
             Account account = realm.copyFromRealm(accountDb);
+            realm.commitTransaction();
             listner.onComplete(account);
-            realm.commitTransaction();
         } else {
-            realm.commitTransaction();
-            listner.onFail("No api key available");
+            accountDb = realm.where(Account.class).equalTo("label", "Trade").findFirst();
+            if (accountDb != null) {
+                Account account = realm.copyFromRealm(accountDb);
+                realm.commitTransaction();
+                listner.onComplete(account);
+            } else {
+                realm.commitTransaction();
+                listner.onFail("No api key available");
+            }
         }
     }
 
@@ -91,8 +98,11 @@ public class OrderInteractor {
             @Override
             protected Cancel doInBackground(Void... voids) {
                 try {
+                    Thread.sleep(2000);
                     return new BittrexServices().cancelOrderMock(uuid);
                 } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 return null;

@@ -61,7 +61,7 @@ public class OrderPresenter extends MvpBasePresenter<OrderView> {
                 }
                 openOrder = false;
                 orderHistory = false;
-                getOpenOrders();
+                getOpenOrders(false);
                 getOrderHistory();
             }
 
@@ -96,7 +96,7 @@ public class OrderPresenter extends MvpBasePresenter<OrderView> {
         });
     }
 
-    public void getOpenOrders() {
+    public void getOpenOrders(final boolean isRefresh) {
         interactor.getOpenOrder(new OnFinishListner<OpenOrder>() {
             @Override
             public void onComplete(OpenOrder result) {
@@ -105,6 +105,12 @@ public class OrderPresenter extends MvpBasePresenter<OrderView> {
                     getView().hideLoading();
                     getView().setOpenOrders(result);
                     getView().hideEmptyView();
+                    if (isRefresh) {
+                        String msg = result.getMessage();
+                        if (TextUtils.isEmpty(msg))
+                            msg = "Order has been cancled successfully.";
+                        CustomDialog.showMessagePop(context, msg, null);
+                    }
                 }
             }
 
@@ -133,11 +139,7 @@ public class OrderPresenter extends MvpBasePresenter<OrderView> {
             public void onComplete(Cancel result) {
                 if (result.getSuccess()) {
                     if (getView() != null) {
-                        String msg = result.getMessage();
-                        if (TextUtils.isEmpty(msg))
-                            msg = "Order has been cancled successfully.";
-                        CustomDialog.showMessagePop(context, msg, null);
-                        getOpenOrders();
+                        getOpenOrders(true);
                     } else
                         onFail(result.getMessage());
                 }
