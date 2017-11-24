@@ -39,7 +39,7 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implem
     private TableLayout tblOpenOrders, tblOrderHistory;
 
     private LinearLayout lnlContainer;
-    private TextView txtCalculation, txtLevel, txtOpenOrder, txtOrderHistory, txtEmpty;
+    private TextView txtLevel, txtOpenOrder, txtOrderHistory, txtEmpty, txtBtc, txtUsd;
     private ImageView imgSync, imgAccSetting;
 
     @Nullable
@@ -89,7 +89,8 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implem
         tblOpenOrders = view.findViewById(R.id.tblOpenOrders);
         tblOrderHistory = view.findViewById(R.id.tblOrderHistory);
 
-        txtCalculation = view.findViewById(R.id.txtCalculation);
+        txtBtc = view.findViewById(R.id.txtBtc);
+        txtUsd = view.findViewById(R.id.txtUsd);
         txtLevel = view.findViewById(R.id.txtLevel);
 
         imgSync = view.findViewById(R.id.imgSync);
@@ -109,8 +110,9 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implem
     }
 
     @Override
-    public void setCalculation(String calculation) {
-        txtCalculation.setText(calculation);
+    public void setCalculation(String btc, String usd) {
+        txtUsd.setText(usd);
+        txtBtc.setText(btc);
     }
 
     @Override
@@ -120,6 +122,7 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implem
 
     @Override
     public void setOpenOrders(OpenOrder openOrders) {
+        tblOpenOrders.removeAllViews();
         if (openOrders == null || openOrders.getResult() == null || openOrders.getResult().isEmpty()) {
             txtOpenOrder.setVisibility(View.GONE);
             return;
@@ -129,7 +132,7 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implem
         View title = getLayoutInflater().inflate(R.layout.table_open_order_title, null);
         tblOpenOrders.addView(title);
         for (int i = 0; i < openOrders.getResult().size(); i++) {
-            Result data = openOrders.getResult().get(i);
+            final Result data = openOrders.getResult().get(i);
             View sub = getLayoutInflater().inflate(R.layout.table_open_order_sub, null);
             OpenOrderHolder holder = new OpenOrderHolder(sub);
             holder.txtType.setText(data.getOrderType());
@@ -151,6 +154,13 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implem
             holder.txtAction.setText("Cancel");
             tblOpenOrders.addView(sub);
 
+            holder.txtAction.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    presenter.cancleOrder(data.getOrderUuid());
+                }
+            });
+
             if (i < openOrders.getResult().size() - 1) {
                 View line = getLayoutInflater().inflate(R.layout.table_line, null);
                 tblOpenOrders.addView(line);
@@ -160,6 +170,7 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implem
 
     @Override
     public void setOrderHistory(OrderHistory orderHistory) {
+        tblOrderHistory.removeAllViews();
         if (orderHistory == null || orderHistory.getResult() == null || orderHistory.getResult().isEmpty()) {
             txtOrderHistory.setVisibility(View.GONE);
             return;
@@ -175,7 +186,7 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implem
             holder.txtType.setText(data.getOrderType());
             holder.txtQuantity.setText(String.valueOf(data.getQuantity()));
             holder.txtRate.setText(String.valueOf(data.getPrice()));
-            String date = data.getTimeStamp();
+            String date = data.getOpened();
             if (!TextUtils.isEmpty(date)) {
                 String[] arr = date.split("T");
                 String d = arr[0];
@@ -197,8 +208,8 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implem
     }
 
     @Override
-    public void showLoading() {
-        ProgressDialogFactory.getInstance(getContext(), "Fetching data Please wait.").show();
+    public void showLoading(String msg) {
+        ProgressDialogFactory.getInstance(getContext(), msg).show();
     }
 
     @Override

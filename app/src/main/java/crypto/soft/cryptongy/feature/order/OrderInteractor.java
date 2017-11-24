@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 
 import java.io.IOException;
 
+import crypto.soft.cryptongy.feature.shared.json.action.Cancel;
 import crypto.soft.cryptongy.feature.shared.json.openorder.OpenOrder;
 import crypto.soft.cryptongy.feature.shared.json.orderhistory.OrderHistory;
 import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
@@ -22,8 +23,11 @@ public class OrderInteractor {
             @Override
             protected OpenOrder doInBackground(Void... voids) {
                 try {
+                    Thread.sleep(2000);
                     return new BittrexServices().getOpnOrdersMock();
                 } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 return null;
@@ -46,8 +50,11 @@ public class OrderInteractor {
             @Override
             protected OrderHistory doInBackground(Void... voids) {
                 try {
+                    Thread.sleep(2000);
                     return new BittrexServices().getOrderHistoryMock();
                 } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 return null;
@@ -76,5 +83,30 @@ public class OrderInteractor {
             realm.commitTransaction();
             listner.onFail("No api key available");
         }
+    }
+
+    public void cancleOrder(final String uuid, final OnFinishListner<Cancel> listner) {
+        new AsyncTask<Void, Void, Cancel>() {
+
+            @Override
+            protected Cancel doInBackground(Void... voids) {
+                try {
+                    return new BittrexServices().cancelOrderMock(uuid);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Cancel cancel) {
+                super.onPostExecute(cancel);
+                if (cancel == null)
+                    listner.onFail("Failed to cancle data");
+                else
+                    listner.onComplete(cancel);
+            }
+        }.execute();
+
     }
 }
