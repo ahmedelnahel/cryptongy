@@ -23,8 +23,11 @@ public class OrderInteractor {
             @Override
             protected OpenOrder doInBackground(Void... voids) {
                 try {
+                    Thread.sleep(2000);
                     return new BittrexServices().getOpnOrdersMock();
                 } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 return null;
@@ -47,8 +50,11 @@ public class OrderInteractor {
             @Override
             protected OrderHistory doInBackground(Void... voids) {
                 try {
+                    Thread.sleep(2000);
                     return new BittrexServices().getOrderHistoryMock();
                 } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 return null;

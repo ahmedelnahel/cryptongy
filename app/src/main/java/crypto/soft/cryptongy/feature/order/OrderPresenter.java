@@ -175,7 +175,9 @@ public class OrderPresenter extends MvpBasePresenter<OrderView> {
             }
         }
         double calculation = buy - sell;
+
         if (getView() != null)
-            getView().setCalculation(String.valueOf(calculation) + "s", "USD 10");
+            getView().setCalculation(String.valueOf(GlobalUtil.formatNumber(calculation, "#.########") + "฿"),
+                    "$" + String.valueOf(GlobalUtil.formatNumber(GlobalUtil.convertBtcToUsd(calculation), "#.####")));
     }
 }

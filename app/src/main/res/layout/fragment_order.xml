@@ -41,15 +41,15 @@
                 android:id="@+id/txtBtc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="20,000s"
+                android:text="0 ฿"
                 android:textColor="@color/order_primary"
                 android:textSize="30sp" />
 
             <crypto.soft.cryptongy.feature.shared.customView.CabTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="18dp"
-                android:layout_marginRight="32dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
                 android:text="/"
                 android:textColor="@color/order_primary"
                 android:textSize="30sp" />
@@ -58,7 +58,7 @@
                 android:id="@+id/txtUsd"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="USD 10"
+                android:text="$ 0"
                 android:textColor="@color/order_primary"
                 android:textSize="30sp" />
         </LinearLayout>
@@ -102,21 +102,35 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <ImageView
-                    android:id="@+id/imgSync"
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="@dimen/order_icon"
-                    android:layout_weight="1"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/ic_sync" />
+                    android:gravity="center"
+                    android:layout_weight="1">
 
-                <ImageView
-                    android:id="@+id/imgAccSetting"
+                    <ImageView
+                        android:id="@+id/imgSync"
+                        android:layout_width="@dimen/order_icon"
+                        android:layout_height="@dimen/order_icon"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_sync" />
+
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="@dimen/order_icon"
-                    android:layout_weight="1"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/ic_account_setting" />
+                    android:gravity="center"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/imgAccSetting"
+                        android:layout_width="@dimen/order_icon"
+                        android:layout_height="@dimen/order_icon"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_account_setting" />
+
+                </LinearLayout>
 
             </LinearLayout>
 

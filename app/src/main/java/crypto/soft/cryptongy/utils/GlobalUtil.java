@@ -6,6 +6,10 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.Locale;
+
 import io.realm.Realm;
 
 /**
@@ -13,8 +17,8 @@ import io.realm.Realm;
  */
 
 public class GlobalUtil {
-    public static void showToast(String msg, Context context){
-        Toast.makeText(context,msg,Toast.LENGTH_SHORT).show();
+    public static void showToast(String msg, Context context) {
+        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
     }
 
     public static int getNextKey(Realm realm, Class cls, String id) {
@@ -33,5 +37,16 @@ public class GlobalUtil {
             transaction.addToBackStack(null);
 
         transaction.commit();
+    }
+
+    public static double formatNumber(double longval, String pattern) {
+        DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
+        formatter.applyPattern(pattern);
+        double data = Double.parseDouble(formatter.format(longval));
+        return data;
+    }
+
+    public static double convertBtcToUsd(double btc) {
+        return btc * 8100;
     }
 }
