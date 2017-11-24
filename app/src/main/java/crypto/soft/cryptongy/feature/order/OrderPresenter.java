@@ -12,6 +12,7 @@ import crypto.soft.cryptongy.feature.setting.SettingActivity;
 import crypto.soft.cryptongy.feature.shared.json.action.Cancel;
 import crypto.soft.cryptongy.feature.shared.json.openorder.OpenOrder;
 import crypto.soft.cryptongy.feature.shared.json.orderhistory.OrderHistory;
+import crypto.soft.cryptongy.feature.shared.json.orderhistory.Result;
 import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
 import crypto.soft.cryptongy.feature.shared.module.Account;
 import crypto.soft.cryptongy.utils.GlobalUtil;
@@ -77,6 +78,7 @@ public class OrderPresenter extends MvpBasePresenter<OrderView> {
                     orderHistory = true;
                     getView().hideLoading();
                     getView().setOrderHistory(result);
+                    calculateProfit(result);
                     getView().hideEmptyView();
                 }
             }
@@ -144,5 +146,36 @@ public class OrderPresenter extends MvpBasePresenter<OrderView> {
                 CustomDialog.showMessagePop(context, error, null);
             }
         });
+    }
+
+    private void calculateProfit(OrderHistory history) {
+        if (history == null || history.getResult() == null || history.getResult().size() == 0)
+            return;
+        double sell = 0d, buy = 0d;
+
+        for (Result data : history.getResult()) {
+            if (data.getOrderType().toLowerCase().equals("limit_sell") ||
+                    data.getOrderType().toLowerCase().equals("conditional_sell")) {
+                if (data.getLimit() != null) {
+                    if (data.getQuantity() != null)
+                        sell += data.getQuantity().doubleValue() * data.getLimit().doubleValue();
+                    else
+                        sell = data.getLimit().doubleValue();
+
+                }
+            } else if (data.getOrderType().toLowerCase().equals("limit_buy") ||
+                    data.getOrderType().toLowerCase().equals("conditional_buy")) {
+                if (data.getLimit() != null) {
+                    if (data.getQuantity() != null)
+                        buy += data.getQuantity().doubleValue() * data.getLimit().doubleValue();
+                    else
+                        buy = data.getLimit().doubleValue();
+
+                }
+            }
+        }
+        double calculation = buy - sell;
+        if (getView() != null)
+            getView().setCalculation(String.valueOf(calculation) + "s", "USD 10");
     }
 }

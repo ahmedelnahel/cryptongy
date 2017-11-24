@@ -22,6 +22,7 @@ import java.util.Map;
         "Commission",
         "Price",
         "PricePerUnit",
+        "Opened",
         "IsConditional",
         "Condition",
         "ConditionTarget",
@@ -49,6 +50,8 @@ public class Result {
     private Double price;
     @JsonProperty("PricePerUnit")
     private Double pricePerUnit;
+    @JsonProperty("Opened")
+    private String opened;
     @JsonProperty("IsConditional")
     private Boolean isConditional;
     @JsonProperty("Condition")
@@ -158,6 +161,16 @@ public class Result {
     @JsonProperty("PricePerUnit")
     public void setPricePerUnit(Double pricePerUnit) {
         this.pricePerUnit = pricePerUnit;
+    }
+
+    @JsonProperty("Opened")
+    public String getOpened() {
+        return opened;
+    }
+
+    @JsonProperty("Opened")
+    public void setOpened(String opened) {
+        this.opened = opened;
     }
 
     @JsonProperty("IsConditional")

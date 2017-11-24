@@ -39,7 +39,7 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implem
     private TableLayout tblOpenOrders, tblOrderHistory;
 
     private LinearLayout lnlContainer;
-    private TextView txtCalculation, txtLevel, txtOpenOrder, txtOrderHistory, txtEmpty;
+    private TextView txtLevel, txtOpenOrder, txtOrderHistory, txtEmpty, txtBtc, txtUsd;
     private ImageView imgSync, imgAccSetting;
 
     @Nullable
@@ -89,7 +89,8 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implem
         tblOpenOrders = view.findViewById(R.id.tblOpenOrders);
         tblOrderHistory = view.findViewById(R.id.tblOrderHistory);
 
-        txtCalculation = view.findViewById(R.id.txtCalculation);
+        txtBtc = view.findViewById(R.id.txtBtc);
+        txtUsd = view.findViewById(R.id.txtUsd);
         txtLevel = view.findViewById(R.id.txtLevel);
 
         imgSync = view.findViewById(R.id.imgSync);
@@ -109,8 +110,9 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implem
     }
 
     @Override
-    public void setCalculation(String calculation) {
-        txtCalculation.setText(calculation);
+    public void setCalculation(String btc, String usd) {
+        txtUsd.setText(usd);
+        txtBtc.setText(btc);
     }
 
     @Override
@@ -184,7 +186,7 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implem
             holder.txtType.setText(data.getOrderType());
             holder.txtQuantity.setText(String.valueOf(data.getQuantity()));
             holder.txtRate.setText(String.valueOf(data.getPrice()));
-            String date = data.getTimeStamp();
+            String date = data.getOpened();
             if (!TextUtils.isEmpty(date)) {
                 String[] arr = date.split("T");
                 String d = arr[0];

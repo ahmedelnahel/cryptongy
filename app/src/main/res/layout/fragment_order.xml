@@ -28,23 +28,47 @@
             android:textColor="@color/order_secondary"
             android:textSize="13sp" />
 
-        <crypto.soft.cryptongy.feature.shared.customView.CabTextView
-            android:id="@+id/txtCalculation"
+        <LinearLayout
+            android:id="@+id/lnlCalculation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/txtProfit"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="12dp"
-            android:text="20,000s    /    USD 10"
-            android:textColor="@color/order_primary"
-            android:textSize="30sp" />
+            android:orientation="horizontal">
+
+            <crypto.soft.cryptongy.feature.shared.customView.CabTextView
+                android:id="@+id/txtBtc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="20,000s"
+                android:textColor="@color/order_primary"
+                android:textSize="30sp" />
+
+            <crypto.soft.cryptongy.feature.shared.customView.CabTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="18dp"
+                android:layout_marginRight="32dp"
+                android:text="/"
+                android:textColor="@color/order_primary"
+                android:textSize="30sp" />
+
+            <crypto.soft.cryptongy.feature.shared.customView.CabTextView
+                android:id="@+id/txtUsd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="USD 10"
+                android:textColor="@color/order_primary"
+                android:textSize="30sp" />
+        </LinearLayout>
 
         <crypto.soft.cryptongy.feature.shared.customView.CabTextView
             android:id="@+id/txtLevel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_below="@+id/txtCalculation"
+            android:layout_below="@+id/lnlCalculation"
             android:layout_marginRight="24dp"
             android:layout_marginTop="10dp"
             android:text="Read"
@@ -102,8 +126,8 @@
             android:id="@+id/txtEmpty"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/crvTop"
             android:layout_alignParentBottom="true"
+            android:layout_below="@+id/crvTop"
             android:gravity="center"
             android:orientation="vertical"
             android:text="No data available"
