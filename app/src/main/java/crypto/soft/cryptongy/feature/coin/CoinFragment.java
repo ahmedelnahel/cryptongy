@@ -93,8 +93,6 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
 
     @Override
     public void setTitle() {
-        TextView txtTitle = getActivity().findViewById(R.id.txtTitle);
-        txtTitle.setText(R.string.order);
     }
 
     @Override
