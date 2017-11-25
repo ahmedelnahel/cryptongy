@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/baseView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_back"
+    android:fitsSystemWindows="true">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/app_bar_height"
+        android:fitsSystemWindows="true"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/toolbar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            app:contentScrim="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:toolbarId="@+id/toolbar">
+
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <include layout="@layout/wallet_details" />
+
+
+    <LinearLayout
+        android:id="@+id/linlaySummary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+        <crypto.soft.cryptongy.feature.shared.customView.CalTextView
+            android:id="@+id/txtTitle"
+            android:textSize="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/imgIcon"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="9dp"
+            android:text="Wallet"
+            android:textColor="#FFFFFF" />
+        <TextView
+            style="@style/textStyle"
+            android:tag="fonts/calibrib.ttf"
+            android:text="@string/str_total" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tvBTC"
+                style="@style/textStyle"
+                android:layout_alignParentTop="true"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:tag="fonts/calibrib.ttf"
+                android:text="@string/str_btc_sign"
+                android:textSize="@dimen/small_text_size" />
+
+            <TextView
+                android:id="@+id/tvBTCValue"
+                style="@style/textStyle"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@id/tvBTC"
+                android:layout_toRightOf="@id/tvBTC"
+                android:tag="fonts/calibrib.ttf"
+                android:text="0.00"
+                android:textSize="@dimen/text_size_large" />
+
+            <TextView
+                android:id="@+id/tvSlash"
+                style="@style/textStyle"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_toEndOf="@id/tvBTCValue"
+                android:layout_toRightOf="@id/tvBTCValue"
+                android:text="/"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvDollar"
+                style="@style/textStyle"
+                android:layout_alignParentTop="true"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_toEndOf="@id/tvSlash"
+                android:layout_toRightOf="@id/tvSlash"
+                android:tag="fonts/calibrib.ttf"
+                android:text="$"
+                android:textSize="@dimen/small_text_size" />
+
+            <TextView
+                android:id="@+id/tvDollarValue"
+                style="@style/textStyle"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@id/tvDollar"
+                android:layout_toRightOf="@id/tvDollar"
+                android:tag="fonts/calibrib.ttf"
+                android:text="0.00"
+                android:textSize="@dimen/text_size_large" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|right"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/textStyle"
+                android:layout_gravity="end"
+                android:layout_marginEnd="30dp"
+                android:layout_marginRight="30dp"
+                android:tag="fonts/calibrib.ttf"
+                android:text="@string/str_read"
+                android:textSize="@dimen/small_text_size" />
+
+            <View style="@style/viewstyle" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linlayOperationButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fragment_layout_margin"
+        android:background="@drawable/bg_spinner"
+        android:padding="0dp"
+        android:weightSum="2"
+        app:layout_anchor="@id/app_bar"
+        app:layout_anchorGravity="bottom">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/ivRefresh"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="7dp"
+                android:src="@mipmap/ic_refresh" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center">
+
+
+            <ImageView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="7dp"
+                android:src="@mipmap/ic_key" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+</android.support.design.widget.CoordinatorLayout>
