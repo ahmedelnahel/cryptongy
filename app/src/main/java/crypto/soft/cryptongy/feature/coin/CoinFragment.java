@@ -1,4 +1,4 @@
-package crypto.soft.cryptongy.feature.order;
+package crypto.soft.cryptongy.feature.coin;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,24 +16,32 @@ import android.widget.TextView;
 
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+
 import crypto.soft.cryptongy.R;
+import crypto.soft.cryptongy.feature.order.OpenOrderHolder;
+import crypto.soft.cryptongy.feature.order.OrderHistoryHolder;
+import crypto.soft.cryptongy.feature.shared.json.market.MarketSummaries;
+import crypto.soft.cryptongy.feature.shared.json.marketsummary.MarketSummary;
 import crypto.soft.cryptongy.feature.shared.json.openorder.OpenOrder;
 import crypto.soft.cryptongy.feature.shared.json.openorder.Result;
 import crypto.soft.cryptongy.feature.shared.json.orderhistory.OrderHistory;
 import crypto.soft.cryptongy.utils.ProgressDialogFactory;
 
 /**
- * Created by tseringwongelgurung on 11/23/17.
+ * Created by tseringwongelgurung on 11/25/17.
  */
 
-public class OrderFragment extends MvpFragment<OrderView, OrderPresenter<OrderView>> implements OrderView,
-        View.OnClickListener {
+public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implements CoinView
+        , View.OnClickListener {
     private View view;
 
-    private TableLayout tblOpenOrders, tblOrderHistory;
+    private TableLayout tblOpenOrders, tblOrderHistory, tblMarketTrade;
 
     private LinearLayout lnlContainer;
-    private TextView txtLevel, txtOpenOrder, txtOrderHistory, txtEmpty, txtBtc, txtUsd;
+    private TextView txtLevel, txtOpenOrder, txtOrderHistory, txtEmpty, txtBtc, txtUsd, txtMarket;
+    TextView lastValuInfo_TXT, BidvalueInfo_TXT, Highvalue_Txt, ASKvalu_TXT, LowvalueInfo_TXT, VolumeValue_Txt, HoldingValue_Txt, lastComp_txt;
     private ImageView imgSync, imgAccSetting;
 
     private boolean isFirst = false;
@@ -42,7 +50,7 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter<OrderVi
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (view == null) {
-            view = inflater.inflate(R.layout.fragment_order, container, false);
+            view = inflater.inflate(R.layout.fragment_coin, container, false);
             findViews();
             setClickListner();
             isFirst = true;
@@ -53,8 +61,8 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter<OrderVi
     }
 
     @Override
-    public OrderPresenter createPresenter() {
-        return new OrderPresenter(getContext());
+    public CoinPresenter createPresenter() {
+        return new CoinPresenter(getContext());
     }
 
     @Override
@@ -89,6 +97,7 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter<OrderVi
     public void findViews() {
         tblOpenOrders = view.findViewById(R.id.tblOpenOrders);
         tblOrderHistory = view.findViewById(R.id.tblOrderHistory);
+        tblMarketTrade = view.findViewById(R.id.tblMarketTrade);
 
         txtBtc = view.findViewById(R.id.txtBtc);
         txtUsd = view.findViewById(R.id.txtUsd);
@@ -99,9 +108,18 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter<OrderVi
 
         txtOpenOrder = view.findViewById(R.id.txtOpen);
         txtOrderHistory = view.findViewById(R.id.txtHistory);
+        txtMarket = view.findViewById(R.id.txtMarket);
 
         txtEmpty = view.findViewById(R.id.txtEmpty);
         lnlContainer = view.findViewById(R.id.lnlContainer);
+
+
+        lastValuInfo_TXT = view.findViewById(R.id.LastValue_Id);
+        BidvalueInfo_TXT = view.findViewById(R.id.BidValue_Id);
+        Highvalue_Txt = view.findViewById(R.id.HighValue_Id);
+        ASKvalu_TXT = view.findViewById(R.id.AskValue_Id);
+        LowvalueInfo_TXT = view.findViewById(R.id.LowValue_Id);
+        VolumeValue_Txt = view.findViewById(R.id.VolumeValue_Id);
     }
 
     @Override
@@ -204,6 +222,49 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter<OrderVi
             if (i < orderHistory.getResult().size() - 1) {
                 View line = getLayoutInflater().inflate(R.layout.table_line, null);
                 tblOrderHistory.addView(line);
+            }
+        }
+    }
+
+    @Override
+    public void setMarketSummary(MarketSummary summary) {
+        if (summary != null) {
+            crypto.soft.cryptongy.feature.shared.json.marketsummary.Result result = summary.getResult().get(0);
+            NumberFormat formatter = new DecimalFormat("#0.00000000");
+            lastValuInfo_TXT.setText(String.valueOf(formatter.format((result.getLast()))));
+            BidvalueInfo_TXT.setText(String.valueOf(formatter.format(result.getBid())));
+            ASKvalu_TXT.setText(String.valueOf(formatter.format(result.getAsk())));
+            Highvalue_Txt.setText(String.valueOf(formatter.format(result.getHigh())));
+            VolumeValue_Txt.setText(String.valueOf(formatter.format(result.getVolume())));
+            LowvalueInfo_TXT.setText(String.valueOf(formatter.format(result.getLow())));
+        }
+    }
+
+    @Override
+    public void setMarketTrade(MarketSummaries marketSummary) {
+        tblMarketTrade.removeAllViews();
+        if (marketSummary == null || marketSummary.getResult() == null || marketSummary.getResult().isEmpty()) {
+            txtMarket.setVisibility(View.GONE);
+            return;
+        }
+
+        txtMarket.setVisibility(View.VISIBLE);
+        View title = getLayoutInflater().inflate(R.layout.table_market_trade_title, null);
+        tblMarketTrade.addView(title);
+        for (int i = 0; i < marketSummary.getResult().size(); i++) {
+            crypto.soft.cryptongy.feature.shared.json.market.Result data = marketSummary.getResult().get(i);
+            View sub = getLayoutInflater().inflate(R.layout.talbe_order_history_sub, null);
+            OrderHistoryHolder holder = new OrderHistoryHolder(sub);
+
+            holder.txtType.setText(String.valueOf(data.getAsk().doubleValue()));
+            holder.txtQuantity.setText(String.valueOf(data.getVolume().doubleValue()));
+            holder.txtRate.setText(String.valueOf(data.getBaseVolume().toString()));
+            holder.txtTime.setText(String.valueOf(data.getPrevDay().toString()));
+            tblMarketTrade.addView(sub);
+
+            if (i < marketSummary.getResult().size() - 1) {
+                View line = getLayoutInflater().inflate(R.layout.table_line, null);
+                tblMarketTrade.addView(line);
             }
         }
     }

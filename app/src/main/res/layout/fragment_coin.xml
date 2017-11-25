@@ -37,11 +37,34 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/include"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone">
+
+
+            <TextView
+                android:id="@+id/vtc_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/HorScrollView"
+                android:layout_alignStart="@+id/HorScrollView"
+                android:layout_below="@+id/include"
+                android:layout_marginLeft="14dp"
+                android:layout_marginStart="14dp"
+                android:layout_marginTop="37dp"
+                android:text="Vtc"
+                android:textColor="#000000"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+
+            <include
+                android:id="@+id/HorScrollView"
+                layout="@layout/layout_vtc_horizontal" />
 
             <include layout="@layout/table_open_order" />
 
             <include layout="@layout/table_order_history" />
+
+            <include layout="@layout/table_market_trade" />
 
         </LinearLayout>
 

@@ -1,13 +1,10 @@
 package crypto.soft.cryptongy.feature.order;
 
-import android.content.Context;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 
 import java.io.IOException;
 import java.util.List;
 
-import crypto.soft.cryptongy.common.CryptongyApp;
 import crypto.soft.cryptongy.feature.shared.json.action.Cancel;
 import crypto.soft.cryptongy.feature.shared.json.openorder.OpenOrder;
 import crypto.soft.cryptongy.feature.shared.json.orderhistory.OrderHistory;
@@ -15,7 +12,6 @@ import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
 import crypto.soft.cryptongy.feature.shared.module.Account;
 import crypto.soft.cryptongy.network.BittrexServices;
 import io.realm.Realm;
-import io.realm.RealmList;
 import io.realm.RealmResults;
 
 /**
@@ -81,7 +77,7 @@ public class OrderInteractor {
         Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
         RealmResults<Account> list = realm.where(Account.class).findAll();
-        if (list != null) {
+        if (list != null && list.size() != 0) {
             List<Account> data = realm.copyFromRealm(list);
             realm.commitTransaction();
             listner.onComplete(data);
