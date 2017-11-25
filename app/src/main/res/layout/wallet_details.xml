@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:showIn="@layout/fragment_wallet">
+
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/fragment_layout_margin"
+        android:layout_marginRight="@dimen/fragment_layout_margin"
+        android:layout_marginTop="35dp"
+        android:orientation="vertical">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_spinner">
+
+            <Spinner
+                android:tag="fonts/calibri.ttf"
+                android:layout_margin="10dp"
+                android:backgroundTint="@android:color/black"
+                android:spinnerMode="dropdown"
+                android:id="@+id/spCurrency"
+                style="@style/Widget.AppCompat.DropDownItem.Spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true" />
+        </RelativeLayout>
+
+        <android.support.v7.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:weightSum="12">
+
+            <!--android:drawableLeft="@drawable/ic_menu_camera"-->
+
+            <EditText
+                android:textCursorDrawable="@null"
+                android:drawableLeft="@mipmap/ic_search"
+                android:id="@+id/editCoinSearch"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="7dp"
+                android:layout_weight="4"
+                android:tag="fonts/myriad_pro_Italic.ttf"
+                android:background="@drawable/bg_spinner"
+                android:hint="Coin..."
+                android:singleLine="true" />
+
+            <TextView
+                android:id="@+id/tvHolding"
+                android:tag="fonts/myriad_pro_semibold.ttf"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="7dp"
+                android:layout_weight="4"
+                android:background="@drawable/bg_spinner"
+                android:gravity="center"
+                android:text="Holding"
+                android:textSize="18dp" />
+
+            <TextView
+                android:id="@+id/tvPrice"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:background="@drawable/bg_spinner"
+                android:gravity="center"
+                android:text="Price"
+                android:tag="fonts/myriad_pro_semibold.ttf"
+                android:textSize="18dp"/>
+
+
+        </android.support.v7.widget.LinearLayoutCompat>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvCoinList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="50dp"/>
+
+    </android.support.v7.widget.LinearLayoutCompat>
+
+</android.support.v4.widget.NestedScrollView>

@@ -2,14 +2,12 @@ package crypto.soft.cryptongy.feature.coin;
 
 import android.content.Context;
 
-import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
-
 import java.util.List;
 
 import crypto.soft.cryptongy.R;
 import crypto.soft.cryptongy.feature.account.CustomDialog;
 import crypto.soft.cryptongy.feature.order.OrderPresenter;
-import crypto.soft.cryptongy.feature.shared.json.market.MarketSummaries;
+import crypto.soft.cryptongy.feature.shared.json.markethistory.MarketHistory;
 import crypto.soft.cryptongy.feature.shared.json.marketsummary.MarketSummary;
 import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
 import crypto.soft.cryptongy.feature.shared.module.Account;
@@ -19,12 +17,14 @@ import crypto.soft.cryptongy.feature.shared.module.Account;
  */
 
 public class CoinPresenter extends OrderPresenter<CoinView> {
-    private boolean marketSummary = false;
+    private boolean marketSummary = false,
+            marketHistory = false;
+    ;
     private CoinInteractor coinInteractor;
 
     public CoinPresenter(Context context) {
         super(context);
-        coinInteractor=new CoinInteractor();
+        coinInteractor = new CoinInteractor();
     }
 
     @Override
@@ -40,9 +40,11 @@ public class CoinPresenter extends OrderPresenter<CoinView> {
                 openOrder = false;
                 orderHistory = false;
                 marketSummary = false;
+                marketHistory = false;
+                getMarketSummary();
+                getMarketHistory();
                 getOpenOrders(false);
                 getOrderHistory();
-                getMarketSummary();
             }
 
             @Override
@@ -50,6 +52,27 @@ public class CoinPresenter extends OrderPresenter<CoinView> {
                 CustomDialog.showMessagePop(context, error, null);
                 if (getView() != null)
                     getV().showEmptyView();
+            }
+        });
+    }
+
+    public void getMarketHistory() {
+        coinInteractor.getMarketHistory(new OnFinishListner<MarketHistory>() {
+            @Override
+            public void onComplete(MarketHistory result) {
+                if (getView() != null) {
+                    marketHistory = true;
+                    getView().hideLoading();
+                    getView().setMarketTrade(result);
+                    getView().hideEmptyView();
+                }
+            }
+
+            @Override
+            public void onFail(String error) {
+                if (getView() != null)
+                    getView().hideLoading();
+                isDataAvailable();
             }
         });
     }
@@ -77,7 +100,7 @@ public class CoinPresenter extends OrderPresenter<CoinView> {
 
     @Override
     protected void isDataAvailable() {
-        if (!openOrder && !orderHistory && !marketSummary) {
+        if (!openOrder && !orderHistory && !marketSummary & !marketHistory) {
             if (getView() != null)
                 getV().showEmptyView();
         }

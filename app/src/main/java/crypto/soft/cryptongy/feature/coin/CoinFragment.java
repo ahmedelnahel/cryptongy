@@ -9,6 +9,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
@@ -22,11 +23,13 @@ import java.text.NumberFormat;
 import crypto.soft.cryptongy.R;
 import crypto.soft.cryptongy.feature.order.OpenOrderHolder;
 import crypto.soft.cryptongy.feature.order.OrderHistoryHolder;
-import crypto.soft.cryptongy.feature.shared.json.market.MarketSummaries;
+import crypto.soft.cryptongy.feature.shared.json.markethistory.MarketHistory;
 import crypto.soft.cryptongy.feature.shared.json.marketsummary.MarketSummary;
 import crypto.soft.cryptongy.feature.shared.json.openorder.OpenOrder;
 import crypto.soft.cryptongy.feature.shared.json.openorder.Result;
 import crypto.soft.cryptongy.feature.shared.json.orderhistory.OrderHistory;
+import crypto.soft.cryptongy.utils.GlobalUtil;
+import crypto.soft.cryptongy.utils.HideKeyboard;
 import crypto.soft.cryptongy.utils.ProgressDialogFactory;
 
 /**
@@ -35,14 +38,14 @@ import crypto.soft.cryptongy.utils.ProgressDialogFactory;
 
 public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implements CoinView
         , View.OnClickListener {
-    private View view;
-
-    private TableLayout tblOpenOrders, tblOrderHistory, tblMarketTrade;
-
-    private LinearLayout lnlContainer;
-    private TextView txtLevel, txtOpenOrder, txtOrderHistory, txtEmpty, txtBtc, txtUsd, txtMarket;
     TextView lastValuInfo_TXT, BidvalueInfo_TXT, Highvalue_Txt, ASKvalu_TXT, LowvalueInfo_TXT, VolumeValue_Txt, HoldingValue_Txt, lastComp_txt;
+    private View view;
+    private TableLayout tblOpenOrders, tblOrderHistory, tblMarketTrade;
+    private LinearLayout lnlContainer;
+    private TextView txtLevel, txtOpenOrder, txtOrderHistory, txtEmpty, txtBtc, txtUsd, txtMarket, txtVtc;
     private ImageView imgSync, imgAccSetting;
+
+    private HorizontalScrollView scrollView;
 
     private boolean isFirst = false;
 
@@ -51,6 +54,7 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (view == null) {
             view = inflater.inflate(R.layout.fragment_coin, container, false);
+            new HideKeyboard(getContext()).setupUI(view);
             findViews();
             setClickListner();
             isFirst = true;
@@ -113,13 +117,14 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
         txtEmpty = view.findViewById(R.id.txtEmpty);
         lnlContainer = view.findViewById(R.id.lnlContainer);
 
-
+        txtVtc = view.findViewById(R.id.txtVtc);
         lastValuInfo_TXT = view.findViewById(R.id.LastValue_Id);
         BidvalueInfo_TXT = view.findViewById(R.id.BidValue_Id);
         Highvalue_Txt = view.findViewById(R.id.HighValue_Id);
         ASKvalu_TXT = view.findViewById(R.id.AskValue_Id);
         LowvalueInfo_TXT = view.findViewById(R.id.LowValue_Id);
         VolumeValue_Txt = view.findViewById(R.id.VolumeValue_Id);
+        scrollView = view.findViewById(R.id.HorScrollView);
     }
 
     @Override
@@ -228,6 +233,9 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
 
     @Override
     public void setMarketSummary(MarketSummary summary) {
+        txtVtc.setVisibility(View.VISIBLE);
+        scrollView.setVisibility(View.VISIBLE);
+
         if (summary != null) {
             crypto.soft.cryptongy.feature.shared.json.marketsummary.Result result = summary.getResult().get(0);
             NumberFormat formatter = new DecimalFormat("#0.00000000");
@@ -241,9 +249,9 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
     }
 
     @Override
-    public void setMarketTrade(MarketSummaries marketSummary) {
+    public void setMarketTrade(MarketHistory marketHistory) {
         tblMarketTrade.removeAllViews();
-        if (marketSummary == null || marketSummary.getResult() == null || marketSummary.getResult().isEmpty()) {
+        if (marketHistory == null || marketHistory.getResult() == null || marketHistory.getResult().isEmpty()) {
             txtMarket.setVisibility(View.GONE);
             return;
         }
@@ -251,18 +259,30 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
         txtMarket.setVisibility(View.VISIBLE);
         View title = getLayoutInflater().inflate(R.layout.table_market_trade_title, null);
         tblMarketTrade.addView(title);
-        for (int i = 0; i < marketSummary.getResult().size(); i++) {
-            crypto.soft.cryptongy.feature.shared.json.market.Result data = marketSummary.getResult().get(i);
+        for (int i = 0; i < marketHistory.getResult().size(); i++) {
+            crypto.soft.cryptongy.feature.shared.json.markethistory.Result data = marketHistory.getResult().get(i);
             View sub = getLayoutInflater().inflate(R.layout.talbe_order_history_sub, null);
             OrderHistoryHolder holder = new OrderHistoryHolder(sub);
 
-            holder.txtType.setText(String.valueOf(data.getAsk().doubleValue()));
-            holder.txtQuantity.setText(String.valueOf(data.getVolume().doubleValue()));
-            holder.txtRate.setText(String.valueOf(data.getBaseVolume().toString()));
-            holder.txtTime.setText(String.valueOf(data.getPrevDay().toString()));
+            holder.txtType.setText(String.valueOf(GlobalUtil.formatNumber(data.getTotal().doubleValue(), "#.########")));
+            holder.txtQuantity.setText(String.valueOf(data.getQuantity().doubleValue()));
+            holder.txtRate.setText(String.valueOf(GlobalUtil.formatNumber(data.getTotal().doubleValue(), "#.####")));
+
+            String date = data.getTimeStamp();
+            if (!TextUtils.isEmpty(date)) {
+                String[] arr = date.split("T");
+                String d = arr[0];
+                String t = "";
+                if (arr.length > 1) {
+                    t = arr[1];
+                    holder.txtTime.setText(d + "\n" + t);
+                } else
+                    holder.txtTime.setText(d);
+            } else
+                holder.txtTime.setText("");
             tblMarketTrade.addView(sub);
 
-            if (i < marketSummary.getResult().size() - 1) {
+            if (i < marketHistory.getResult().size() - 1) {
                 View line = getLayoutInflater().inflate(R.layout.table_line, null);
                 tblMarketTrade.addView(line);
             }

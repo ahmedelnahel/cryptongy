@@ -15,6 +15,7 @@ import crypto.soft.cryptongy.R;
 import crypto.soft.cryptongy.feature.alert.AlertFragment;
 import crypto.soft.cryptongy.feature.coin.CoinFragment;
 import crypto.soft.cryptongy.feature.shared.adapter.MainPagerAdaptor;
+import crypto.soft.cryptongy.utils.HideKeyboard;
 
 /**
  * Created by tseringwongelgurung on 11/25/17.
@@ -30,6 +31,7 @@ public class CoinHomeFragment extends MvpFragment<CoinHomeView, CoinHomePresente
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (view == null) {
             view = inflater.inflate(R.layout.fragment_coin_home, container, false);
+            new HideKeyboard(getContext()).setupUI(view);
             findViews();
             initTab();
         }

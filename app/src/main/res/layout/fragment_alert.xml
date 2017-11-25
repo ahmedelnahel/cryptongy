@@ -49,6 +49,11 @@
 
         <include
             android:id="@+id/HorScrollView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="17dp"
+            android:layout_below="@+id/vtc_txt"
+            android:layout_centerHorizontal="true"
             layout="@layout/layout_vtc_horizontal" />
 
         <LinearLayout

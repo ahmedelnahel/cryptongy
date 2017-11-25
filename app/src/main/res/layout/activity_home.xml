@@ -53,11 +53,22 @@
                 android:text="Order" />
 
             <Button
+                android:id="@+id/btnCoin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/btnOrder"
                 android:onClick="openCoinHome"
                 android:text="Coin Home" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/btnCoin"
+                android:onClick="openWallet"
+                android:text="Wallet" />
+
         </RelativeLayout>
+
     </FrameLayout>
+
 </LinearLayout>
