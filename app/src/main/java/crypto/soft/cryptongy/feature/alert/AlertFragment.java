@@ -46,7 +46,6 @@ import crypto.soft.cryptongy.network.BittrexServices;
 public class AlertFragment extends Fragment {
     ProgressBar progressBar;
     dbHandler db;
-    private int reqCode, CoinId;
     TextView lastValuInfo_TXT, BidvalueInfo_TXT, Highvalue_Txt, ASKvalu_TXT, LowvalueInfo_TXT, VolumeValue_Txt, HoldingValue_Txt, lastComp_txt;
     EditText lowComp_txt, highValueComp_txt;
     Button save_b;
@@ -63,6 +62,7 @@ public class AlertFragment extends Fragment {
     int AlarmFreq = 1;
     int checkedHigher = 1;
     int CheckedLower = 1;
+    private int reqCode, CoinId;
     private TextView lastValuInfo_Lab, BidvalueInfo_Lab, Highvalue_Lab, ASKvalu_Lab, LowvalueInfo_Lab, VolumeValue_Lab;
 
 
@@ -128,14 +128,10 @@ public class AlertFragment extends Fragment {
         ch_higher.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
+                ch_higher.setChecked(isChecked);
                 if (isChecked) {
-                    ch_higher.setChecked(false);
                     checkedHigher = 2;
-
                 } else {
-
-                    ch_higher.setChecked(true);
                     checkedHigher = 1;
                 }
             }
@@ -144,15 +140,10 @@ public class AlertFragment extends Fragment {
         ch_lower.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-
+                ch_lower.setChecked(isChecked);
                 if (isChecked) {
-                    ch_lower.setChecked(false);
                     CheckedLower = 2;
-
                 } else {
-
-                    ch_lower.setChecked(true);
                     CheckedLower = 1;
                 }
             }
