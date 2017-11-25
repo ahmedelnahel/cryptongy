@@ -50,6 +50,13 @@
                 android:layout_below="@+id/btnAccount"
                 android:onClick="openOrder"
                 android:text="Order" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/btnAccount"
+                android:onClick="openOrder"
+                android:text="Wallet" />
         </RelativeLayout>
     </FrameLayout>
 </LinearLayout>

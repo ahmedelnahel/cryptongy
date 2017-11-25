@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,7 +39,8 @@ public class Result {
     private Object uuid;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
-
+    @JsonIgnore
+    private Double price = 0.0d;
     @JsonProperty("Currency")
     public String getCurrency() {
         return currency;
@@ -118,5 +120,54 @@ public class Result {
     public void setAdditionalProperty(String name, Object value) {
         this.additionalProperties.put(name, value);
     }
+    public Double getPrice()
+    {
+        return price;
+    }
 
+    public void setPrice(Double price)
+    {
+        this.price = price;
+    }
+
+
+    public static class HoldingComparator implements Comparator<Result>
+    {
+        private boolean isAscending = true;
+
+        public HoldingComparator(boolean bIsAscending)
+        {
+            this.isAscending = bIsAscending;
+        }
+
+        @Override
+        public int compare(Result o1, Result o2)
+        {
+            if (o1.getBalance() > o2.getBalance())
+                return isAscending ? 1 : -1;
+            if (o1.getBalance() < o2.getBalance())
+                return isAscending ? -1 : 1;
+            return 0;
+        }
+
+    }
+
+    public static class PriceComparator implements Comparator<Result> {
+
+        private boolean isAscending = true;
+
+        public PriceComparator(boolean bIsAscending) {
+            this.isAscending = bIsAscending;
+        }
+
+        @Override
+        public int compare(Result o1, Result o2) {
+            if (o1.getPrice() > o2.getPrice())
+                return isAscending ? 1 : -1;
+            if (o1.getPrice() < o2.getPrice())
+                return isAscending ? -1 : 1;
+
+            return 0;
+        }
+    }
 }

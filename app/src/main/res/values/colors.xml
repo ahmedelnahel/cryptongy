@@ -17,4 +17,7 @@
     <color name="order_tbl_title">#f3f3f3</color>
     <color name="order_tbl_sub">#231f20</color>
     <color name="orderSub">#FFFFFF</color>
+    <color name="color_component">#21BDB9</color>
+    <color name="color_text">#FFF</color>
+    <color name="color_back">#F3F3F9</color>
 </resources>

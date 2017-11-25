@@ -2,11 +2,15 @@ package crypto.soft.cryptongy.feature.order;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
+import java.util.List;
+
 import crypto.soft.cryptongy.R;
+import crypto.soft.cryptongy.common.CryptongyApp;
 import crypto.soft.cryptongy.feature.account.AccountFragment;
 import crypto.soft.cryptongy.feature.account.CustomDialog;
 import crypto.soft.cryptongy.feature.setting.SettingActivity;
@@ -16,6 +20,7 @@ import crypto.soft.cryptongy.feature.shared.json.orderhistory.OrderHistory;
 import crypto.soft.cryptongy.feature.shared.json.orderhistory.Result;
 import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
 import crypto.soft.cryptongy.feature.shared.module.Account;
+import crypto.soft.cryptongy.utils.CoinApplication;
 import crypto.soft.cryptongy.utils.GlobalUtil;
 
 /**
@@ -52,12 +57,13 @@ public class OrderPresenter extends MvpBasePresenter<OrderView> {
     }
 
     public void getData() {
-        interactor.getAccount(new OnFinishListner<Account>() {
+        interactor.getAccount(new OnFinishListner<List<Account>>() {
+
             @Override
-            public void onComplete(Account result) {
+            public void onComplete(List<Account> result) {
                 if (getView() != null) {
                     getView().showLoading(context.getString(R.string.fetch_msg));
-                    getView().setLevel(result.getLabel());
+                    setAccounts(result);
                 }
                 openOrder = false;
                 orderHistory = false;
@@ -72,6 +78,31 @@ public class OrderPresenter extends MvpBasePresenter<OrderView> {
                     getView().showEmptyView();
             }
         });
+    }
+
+    public void setAccounts(List<Account> list) {
+        CoinApplication app = (CoinApplication) context.getApplicationContext();
+        boolean isRead = false, isTrade = false, isWithdraw = false;
+        for (Account account : list) {
+            if (account.getLabel().equals("Read")) {
+                app.setReadAccount(account);
+                isRead = true;
+            } else if (account.getLabel().equals("Trade")) {
+                app.setTradeAccount(account);
+                isTrade = true;
+            } else if (account.getLabel().equals("Withdraw")) {
+                app.setWithdrawAccount(account);
+                isWithdraw = true;
+            }
+        }
+        if (getView() != null)
+            if (isRead)
+                getView().setLevel("Read");
+            else if (isTrade)
+                getView().setLevel("Trade");
+            else if (isWithdraw)
+                getView().setLevel("Withdraw");
+
     }
 
     public void getOrderHistory() {

@@ -49,4 +49,15 @@ public class GlobalUtil {
     public static double convertBtcToUsd(double btc) {
         return btc * 8100;
     }
+
+    public static String round(double value, int precision)
+    {
+        int scale = (int) Math.pow(10, precision);
+        double d = (double) Math.round(value * scale) / scale;
+        if (precision == 4)
+            return new DecimalFormat("#.####").format(d);
+        else
+            return new DecimalFormat("#.#########").format(d);
+
+    }
 }
