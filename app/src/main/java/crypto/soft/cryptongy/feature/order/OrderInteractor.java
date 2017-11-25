@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import java.io.IOException;
 import java.util.List;
 
-import crypto.soft.cryptongy.common.CryptongyApp;
 import crypto.soft.cryptongy.feature.shared.json.action.Cancel;
 import crypto.soft.cryptongy.feature.shared.json.openorder.OpenOrder;
 import crypto.soft.cryptongy.feature.shared.json.orderhistory.OrderHistory;

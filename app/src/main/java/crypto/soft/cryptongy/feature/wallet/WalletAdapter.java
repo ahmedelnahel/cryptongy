@@ -11,10 +11,10 @@ import android.widget.TextView;
 import java.text.DecimalFormat;
 import java.util.List;
 
-import crypto.soft.cryptongy.common.CryptongyApp;
 import crypto.soft.cryptongy.feature.shared.json.wallet.Result;
 import crypto.soft.cryptongy.network.BittrexServices;
 
+import crypto.soft.cryptongy.utils.CoinApplication;
 import crypto.soft.cryptongy.utils.GlobalUtil;
 import crypto.soft.cryptongy.utils.ViewFontHelper;
 import crypto.soft.cryptongy.R;
@@ -95,7 +95,7 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.MyViewHold
 
         double totalBTC = (balance * bitcoinPrice);
 
-        double priceInDollar = ((CryptongyApp) activity.getApplication()).getUsdt_btc();
+        double priceInDollar = ((CoinApplication) activity.getApplication()).getUsdt_btc();
         double totalBTCInDollar = (totalBTC * priceInDollar);
 
         String holding = new DecimalFormat("#.#########").format(balance) + "\nB " + GlobalUtil.round(totalBTC, 9) + "\n$" + GlobalUtil.round(totalBTCInDollar, 4);

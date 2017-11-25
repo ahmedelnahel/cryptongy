@@ -10,7 +10,7 @@ import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 import java.util.List;
 
 import crypto.soft.cryptongy.R;
-import crypto.soft.cryptongy.common.CryptongyApp;
+
 import crypto.soft.cryptongy.feature.account.AccountFragment;
 import crypto.soft.cryptongy.feature.account.CustomDialog;
 import crypto.soft.cryptongy.feature.setting.SettingActivity;

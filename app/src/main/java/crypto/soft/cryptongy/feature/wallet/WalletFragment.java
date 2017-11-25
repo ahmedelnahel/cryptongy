@@ -26,13 +26,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import crypto.soft.cryptongy.common.CryptongyApp;
 import crypto.soft.cryptongy.feature.shared.json.market.MarketSummaries;
 import crypto.soft.cryptongy.feature.shared.json.wallet.Result;
 import crypto.soft.cryptongy.feature.shared.json.wallet.Wallet;
 import crypto.soft.cryptongy.network.BittrexServices;
 
 import crypto.soft.cryptongy.utils.AlertUtility;
+import crypto.soft.cryptongy.utils.CoinApplication;
 import crypto.soft.cryptongy.utils.GlobalUtil;
 import crypto.soft.cryptongy.utils.ViewFontHelper;
 import crypto.soft.cryptongy.R;
@@ -292,6 +292,7 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
 
             } catch (Exception e)
             {
+                e.printStackTrace();
             }
             return null;
         }
@@ -349,7 +350,7 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
             coinAdapter.notifyDataSetChanged();
 
             tvBTCValue.setText(String.valueOf(GlobalUtil.round(BTCSum, 9)));
-            tvDollarValue.setText(String.valueOf(GlobalUtil.round(BTCSum * ((CryptongyApp) getActivity().getApplication()).getUsdt_btc(), 4)));
+            tvDollarValue.setText(String.valueOf(GlobalUtil.round(BTCSum * ((CoinApplication) getActivity().getApplication()).getUsdt_btc(), 4)));
         }
 
         @Override
