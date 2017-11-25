@@ -2,8 +2,6 @@ package crypto.soft.cryptongy.feature.order;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
@@ -12,7 +10,6 @@ import com.hannesdorfmann.mosby.mvp.MvpView;
 import java.util.List;
 
 import crypto.soft.cryptongy.R;
-import crypto.soft.cryptongy.common.CryptongyApp;
 import crypto.soft.cryptongy.feature.account.AccountFragment;
 import crypto.soft.cryptongy.feature.account.CustomDialog;
 import crypto.soft.cryptongy.feature.setting.SettingActivity;
