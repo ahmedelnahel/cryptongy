@@ -236,13 +236,12 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
 
         if (summary != null) {
             crypto.soft.cryptongy.feature.shared.json.marketsummary.Result result = summary.getResult().get(0);
-            NumberFormat formatter = new DecimalFormat("#0.00000000");
-            lastValuInfo_TXT.setText(String.valueOf(formatter.format((result.getLast()))));
-            BidvalueInfo_TXT.setText(String.valueOf(formatter.format(result.getBid())));
-            ASKvalu_TXT.setText(String.valueOf(formatter.format(result.getAsk())));
-            Highvalue_Txt.setText(String.valueOf(formatter.format(result.getHigh())));
-            VolumeValue_Txt.setText(String.valueOf(formatter.format(result.getVolume())));
-            LowvalueInfo_TXT.setText(String.valueOf(formatter.format(result.getLow())));
+            lastValuInfo_TXT.setText(String.valueOf(String.format("%.6f",result.getLast().doubleValue())));
+            BidvalueInfo_TXT.setText(String.valueOf(String.format("%.6f",result.getBid().doubleValue())));
+            ASKvalu_TXT.setText(String.valueOf(String.format("%.6f",result.getAsk().doubleValue())));
+            Highvalue_Txt.setText(String.valueOf(String.format("%.6f",result.getHigh().doubleValue())));
+            VolumeValue_Txt.setText(String.valueOf(String.format("%.6f",result.getVolume().doubleValue())));
+            LowvalueInfo_TXT.setText(String.valueOf(String.format("%.6f",result.getLow().doubleValue())));
         }
     }
 

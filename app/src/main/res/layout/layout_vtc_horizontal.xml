@@ -30,6 +30,7 @@
                 android:id="@+id/LastValue_Id"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:singleLine="true"
                 android:text=""
                 android:textColor="#000000" />
 
@@ -53,6 +54,7 @@
                 android:id="@+id/BidValue_Id"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:singleLine="true"
                 android:text=""
                 android:textColor="#000000" />
 
@@ -76,6 +78,7 @@
                 android:id="@+id/AskValue_Id"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:singleLine="true"
                 android:text=""
                 android:textColor="#000000" />
 
@@ -99,6 +102,7 @@
                 android:id="@+id/HighValue_Id"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:singleLine="true"
                 android:text=""
                 android:textColor="#000000" />
 
@@ -124,6 +128,7 @@
                 android:id="@+id/LowValue_Id"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:singleLine="true"
                 android:text=""
                 android:textColor="#000000" />
         </LinearLayout>
@@ -148,6 +153,7 @@
                 android:id="@+id/VolumeValue_Id"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:singleLine="true"
                 android:text=""
                 android:textColor="#000000" />
         </LinearLayout>
