@@ -9,17 +9,21 @@ import crypto.soft.cryptongy.feature.account.CustomDialog;
 import crypto.soft.cryptongy.feature.order.OrderPresenter;
 import crypto.soft.cryptongy.feature.shared.json.markethistory.MarketHistory;
 import crypto.soft.cryptongy.feature.shared.json.marketsummary.MarketSummary;
+import crypto.soft.cryptongy.feature.shared.json.openorder.OpenOrder;
+import crypto.soft.cryptongy.feature.shared.json.orderhistory.OrderHistory;
 import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
 import crypto.soft.cryptongy.feature.shared.module.Account;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by tseringwongelgurung on 11/25/17.
  */
 
 public class CoinPresenter extends OrderPresenter<CoinView> {
-    private boolean marketSummary = false,
-            marketHistory = false;
-    ;
     private CoinInteractor coinInteractor;
 
     public CoinPresenter(Context context) {
@@ -37,14 +41,53 @@ public class CoinPresenter extends OrderPresenter<CoinView> {
                     getV().showLoading(context.getString(R.string.fetch_msg));
                     setAccounts(result);
                 }
-                openOrder = false;
-                orderHistory = false;
-                marketSummary = false;
-                marketHistory = false;
-                getMarketSummary();
-                getMarketHistory();
-                getOpenOrders(false);
-                getOrderHistory();
+
+                Observer observer = new Observer() {
+                    private int count = 0;
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        count = 0;
+                    }
+
+                    @Override
+                    public void onNext(Object o) {
+                        if (o instanceof OpenOrder) {
+                            if (getView() != null)
+                                getV().setOpenOrders((OpenOrder) o);
+                        } else if (o instanceof OrderHistory) {
+                            if (getView() != null) {
+                                getV().setOrderHistory((OrderHistory) o);
+                                calculateProfit((OrderHistory) o);
+                            }
+                        } else if (o instanceof MarketSummary) {
+                            if (getView() != null)
+                                getView().setMarketSummary((MarketSummary) o);
+                        } else if (o instanceof OrderHistory) {
+                            if (getView() != null)
+                                getView().setMarketTrade((MarketHistory) o);
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        count++;
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        if (getView() != null) {
+                            getV().hideLoading();
+                            if (count == 4) {
+                                CustomDialog.showMessagePop(context, "Error Fetching data. Please try again later.", null);
+                                getV().showEmptyView();
+                            } else
+                                getView().hideEmptyView();
+                        }
+                    }
+                };
+                Observable.merge(getMarketSummary(), getOpenOrders(), getOrderHistory(), getMarketHistory())
+                        .subscribe(observer);
             }
 
             @Override
@@ -56,53 +99,45 @@ public class CoinPresenter extends OrderPresenter<CoinView> {
         });
     }
 
-    public void getMarketHistory() {
-        coinInteractor.getMarketHistory(new OnFinishListner<MarketHistory>() {
+    public Observable getMarketHistory() {
+        return Observable.create(new ObservableOnSubscribe() {
             @Override
-            public void onComplete(MarketHistory result) {
-                if (getView() != null) {
-                    marketHistory = true;
-                    getView().hideLoading();
-                    getView().setMarketTrade(result);
-                    getView().hideEmptyView();
-                }
-            }
+            public void subscribe(final ObservableEmitter e) throws Exception {
+                coinInteractor.getMarketHistory(new OnFinishListner<MarketHistory>() {
+                    @Override
+                    public void onComplete(MarketHistory result) {
+                        e.onNext(result);
+                        e.onComplete();
+                    }
 
-            @Override
-            public void onFail(String error) {
-                if (getView() != null)
-                    getView().hideLoading();
-                isDataAvailable();
-            }
-        });
-    }
-
-    public void getMarketSummary() {
-        coinInteractor.getMarketSummary(new OnFinishListner<MarketSummary>() {
-            @Override
-            public void onComplete(MarketSummary result) {
-                if (getView() != null) {
-                    marketSummary = true;
-                    getView().hideLoading();
-                    getView().setMarketSummary(result);
-                    getView().hideEmptyView();
-                }
-            }
-
-            @Override
-            public void onFail(String error) {
-                if (getView() != null)
-                    getView().hideLoading();
-                isDataAvailable();
+                    @Override
+                    public void onFail(String error) {
+                        e.onError(null);
+                        e.onComplete();
+                    }
+                });
             }
         });
     }
 
-    @Override
-    protected void isDataAvailable() {
-        if (!openOrder && !orderHistory && !marketSummary & !marketHistory) {
-            if (getView() != null)
-                getV().showEmptyView();
-        }
+    public Observable<MarketSummary> getMarketSummary() {
+        return io.reactivex.Observable.create(new ObservableOnSubscribe<MarketSummary>() {
+            @Override
+            public void subscribe(final ObservableEmitter<MarketSummary> e) throws Exception {
+                coinInteractor.getMarketSummary(new OnFinishListner<MarketSummary>() {
+                    @Override
+                    public void onComplete(MarketSummary result) {
+                        e.onNext(result);
+                        e.onComplete();
+                    }
+
+                    @Override
+                    public void onFail(String error) {
+                        e.onError(null);
+                        e.onComplete();
+                    }
+                });
+            }
+        });
     }
 }

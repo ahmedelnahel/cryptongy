@@ -2,8 +2,6 @@ package crypto.soft.cryptongy.feature.order;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
@@ -12,7 +10,6 @@ import com.hannesdorfmann.mosby.mvp.MvpView;
 import java.util.List;
 
 import crypto.soft.cryptongy.R;
-
 import crypto.soft.cryptongy.feature.account.AccountFragment;
 import crypto.soft.cryptongy.feature.account.CustomDialog;
 import crypto.soft.cryptongy.feature.setting.SettingActivity;
@@ -24,6 +21,11 @@ import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
 import crypto.soft.cryptongy.feature.shared.module.Account;
 import crypto.soft.cryptongy.utils.CoinApplication;
 import crypto.soft.cryptongy.utils.GlobalUtil;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by tseringwongelgurung on 11/23/17.
@@ -32,7 +34,6 @@ import crypto.soft.cryptongy.utils.GlobalUtil;
 public class OrderPresenter<T extends MvpView> extends MvpBasePresenter<T> {
     protected Context context;
     protected OrderInteractor interactor;
-    protected boolean openOrder = false, orderHistory = false;
 
     public OrderPresenter(Context context) {
         this.context = context;
@@ -67,10 +68,48 @@ public class OrderPresenter<T extends MvpView> extends MvpBasePresenter<T> {
                     getV().showLoading(context.getString(R.string.fetch_msg));
                     setAccounts(result);
                 }
-                openOrder = false;
-                orderHistory = false;
-                getOpenOrders(false);
-                getOrderHistory();
+
+                Observer observer = new Observer() {
+                    private int count = 0;
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        count = 0;
+                    }
+
+                    @Override
+                    public void onNext(Object o) {
+                        if (o instanceof OpenOrder) {
+                            if (getView() != null)
+                                getV().setOpenOrders((OpenOrder) o);
+                        } else if (o instanceof OrderHistory) {
+                            if (getView() != null) {
+                                getV().setOrderHistory((OrderHistory) o);
+                                calculateProfit((OrderHistory) o);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        count++;
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        if (getView() != null) {
+                            getV().hideLoading();
+                            if (count == 2) {
+                                CustomDialog.showMessagePop(context, "Error Fetching data. Please try again later.", null);
+                                getV().showEmptyView();
+                            }else
+                                getV().hideEmptyView();
+                        }
+                    }
+                };
+
+                Observable.merge(getOpenOrders(), getOrderHistory())
+                        .subscribe(observer);
             }
 
             @Override
@@ -107,60 +146,46 @@ public class OrderPresenter<T extends MvpView> extends MvpBasePresenter<T> {
 
     }
 
-    public void getOrderHistory() {
-        interactor.getOrderHistory(new OnFinishListner<OrderHistory>() {
+    public Observable<OrderHistory> getOrderHistory() {
+        return Observable.create(new ObservableOnSubscribe() {
             @Override
-            public void onComplete(OrderHistory result) {
-                if (getView() != null) {
-                    orderHistory = true;
-                    getV().hideLoading();
-                    getV().setOrderHistory(result);
-                    calculateProfit(result);
-                    getV().hideEmptyView();
-                }
-            }
-
-            @Override
-            public void onFail(String error) {
-                if (getView() != null)
-                    getV().hideLoading();
-                isDataAvailable();
-            }
-        });
-    }
-
-    public void getOpenOrders(final boolean isRefresh) {
-        interactor.getOpenOrder(new OnFinishListner<OpenOrder>() {
-            @Override
-            public void onComplete(OpenOrder result) {
-                if (getView() != null) {
-                    openOrder = true;
-                    getV().hideLoading();
-                    getV().setOpenOrders(result);
-                    getV().hideEmptyView();
-                    if (isRefresh) {
-                        String msg = result.getMessage();
-                        if (TextUtils.isEmpty(msg))
-                            msg = "Order has been cancled successfully.";
-                        CustomDialog.showMessagePop(context, msg, null);
+            public void subscribe(final ObservableEmitter e) throws Exception {
+                interactor.getOrderHistory(new OnFinishListner<OrderHistory>() {
+                    @Override
+                    public void onComplete(OrderHistory result) {
+                        e.onNext(result);
+                        e.onComplete();
                     }
-                }
-            }
 
-            @Override
-            public void onFail(String error) {
-                if (getView() != null)
-                    getV().hideLoading();
-                isDataAvailable();
+                    @Override
+                    public void onFail(String error) {
+                        e.onError(null);
+                        e.onComplete();
+                    }
+                });
             }
         });
     }
 
-    protected void isDataAvailable() {
-        if (!openOrder && !orderHistory) {
-            if (getView() != null)
-                getV().showEmptyView();
-        }
+    public Observable<OpenOrder> getOpenOrders() {
+        return Observable.create(new ObservableOnSubscribe<OpenOrder>() {
+            @Override
+            public void subscribe(final ObservableEmitter<OpenOrder> e) throws Exception {
+                interactor.getOpenOrder(new OnFinishListner<OpenOrder>() {
+                    @Override
+                    public void onComplete(OpenOrder result) {
+                        e.onNext(result);
+                        e.onComplete();
+                    }
+
+                    @Override
+                    public void onFail(String error) {
+                        e.onError(null);
+                        e.onComplete();
+                    }
+                });
+            }
+        });
     }
 
     public void cancleOrder(String orderUuid) {
@@ -172,7 +197,36 @@ public class OrderPresenter<T extends MvpView> extends MvpBasePresenter<T> {
             public void onComplete(Cancel result) {
                 if (result.getSuccess()) {
                     if (getView() != null) {
-                        getOpenOrders(true);
+                        Observer observer = new Observer() {
+                            @Override
+                            public void onSubscribe(Disposable d) {
+                            }
+
+                            @Override
+                            public void onNext(Object o) {
+                                if (getView() != null) {
+                                    getV().setOpenOrders((OpenOrder) o);
+                                    getV().hideEmptyView();
+                                    String msg = ((OpenOrder) o).getMessage();
+                                    if (TextUtils.isEmpty(msg))
+                                        msg = "Order has been cancled successfully.";
+                                    CustomDialog.showMessagePop(context, msg, null);
+                                }
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                onFail(e.getMessage());
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                if (getView() != null)
+                                    getV().hideLoading();
+                            }
+                        };
+
+                        getOpenOrders().subscribe(observer);
                     } else
                         onFail(result.getMessage());
                 }
@@ -187,7 +241,7 @@ public class OrderPresenter<T extends MvpView> extends MvpBasePresenter<T> {
         });
     }
 
-    private void calculateProfit(OrderHistory history) {
+    protected void calculateProfit(OrderHistory history) {
         if (history == null || history.getResult() == null || history.getResult().size() == 0)
             return;
         double sell = 0d, buy = 0d;

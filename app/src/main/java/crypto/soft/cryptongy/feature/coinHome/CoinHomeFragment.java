@@ -47,7 +47,7 @@ public class CoinHomeFragment extends MvpFragment<CoinHomeView, CoinHomePresente
     @Override
     public void setTitle() {
         TextView txtTitle = getActivity().findViewById(R.id.txtTitle);
-        txtTitle.setText(R.string.account);
+        txtTitle.setText(R.string.app_name);
     }
 
     @Override
