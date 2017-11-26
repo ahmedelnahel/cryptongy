@@ -46,7 +46,7 @@
                 android:layout_marginBottom="8dp"
                 android:layout_marginLeft="24dp"
                 android:layout_marginTop="12dp"
-                android:text="Vtc"
+                android:text=""
                 android:textColor="@color/order_secondary2"
                 android:textSize="@dimen/orderListTitle"
                 android:visibility="gone" />

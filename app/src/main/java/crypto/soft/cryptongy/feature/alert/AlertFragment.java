@@ -323,18 +323,17 @@ public class AlertFragment extends Fragment {
             // set coin info
 
             progressBar.setVisibility(View.GONE);
-            NumberFormat formatter = new DecimalFormat("#0.00000000");
-            lastValuInfo_TXT.setText(String.valueOf(formatter.format((lastV))));
-            BidvalueInfo_TXT.setText(String.valueOf(formatter.format(bidV)));
-            ASKvalu_TXT.setText(String.valueOf(formatter.format(askV)));
-            Highvalue_Txt.setText(String.valueOf(formatter.format(highV)));
-            VolumeValue_Txt.setText(String.valueOf(formatter.format(volumeV)));
-            LowvalueInfo_TXT.setText(String.valueOf(formatter.format(lowV)));
+            lastValuInfo_TXT.setText(String.valueOf(String.format("%.6f",lastV)));
+            BidvalueInfo_TXT.setText(String.valueOf(String.format("%.6f",bidV)));
+            ASKvalu_TXT.setText(String.valueOf(String.format("%.6f",askV)));
+            Highvalue_Txt.setText(String.valueOf(String.format("%.6f",highV)));
+            VolumeValue_Txt.setText(String.valueOf(String.format("%.6f",volumeV)));
+            LowvalueInfo_TXT.setText(String.valueOf(String.format("%.6f",lowV)));
 
             //
 
 
-            lastComp_txt.setText(String.valueOf(formatter.format(lastV)));
+            lastComp_txt.setText(String.valueOf(String.format("%.6f",lastV)));
 
 
             //

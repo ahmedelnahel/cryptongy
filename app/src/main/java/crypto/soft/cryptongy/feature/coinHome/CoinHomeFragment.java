@@ -59,7 +59,11 @@ public class CoinHomeFragment extends MvpFragment<CoinHomeView, CoinHomePresente
     @Override
     public void initTab() {
         MainPagerAdaptor adapter = new MainPagerAdaptor(getActivity().getSupportFragmentManager());
-        adapter.addFragment(new CoinFragment(), "Coin");
+        CoinFragment coinFragment=new CoinFragment();
+        Bundle bundle=new Bundle();
+        bundle.putString("COIN_NAME","BTC-XVG");
+        coinFragment.setArguments(bundle);
+        adapter.addFragment(coinFragment, "Coin");
         adapter.addFragment(new AlertFragment(), "Alert");
         viewPager.setAdapter(adapter);
         viewPager.setOffscreenPageLimit(2);

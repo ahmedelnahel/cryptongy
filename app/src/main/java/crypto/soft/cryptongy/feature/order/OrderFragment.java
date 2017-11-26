@@ -63,7 +63,7 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter<OrderVi
         setHasOptionsMenu(true);
         if (isFirst) {
             isFirst = false;
-            presenter.getData();
+            presenter.getData("");
         }
     }
 
@@ -158,7 +158,7 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter<OrderVi
             holder.txtAction.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    presenter.cancleOrder(data.getOrderUuid());
+                    presenter.cancleOrder("", data.getOrderUuid());
                 }
             });
 
