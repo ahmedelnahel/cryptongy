@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="activity_horizontal_margin">10dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="account_bg">150dp</dimen>
     <dimen name="account_card_radius">3dp</dimen>
     <dimen name="account_text">14sp</dimen>
@@ -21,8 +23,6 @@
     <dimen name="order_tbl_sub">11sp</dimen>
     <dimen name="order_tbl_sub_pad">5dp</dimen>
 
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="nav_header_vertical_spacing">8dp</dimen>
     <dimen name="nav_header_height">176dp</dimen>
     <dimen name="fab_margin">16dp</dimen>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableRow xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorPrimary"
+    android:orientation="horizontal"
+    android:paddingBottom="15dp"
+    android:paddingLeft="7dp"
+    android:paddingRight="5dp"
+    android:paddingTop="15dp">
+
+    <crypto.soft.cryptongy.feature.shared.customView.MspTextView
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="Price"
+        android:textColor="@color/order_tbl_title"
+        android:textSize="@dimen/order_tbl_title" />
+
+    <crypto.soft.cryptongy.feature.shared.customView.MspTextView
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="Amount"
+        android:textColor="@color/order_tbl_title"
+        android:textSize="@dimen/order_tbl_title" />
+
+    <crypto.soft.cryptongy.feature.shared.customView.MspTextView
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="Total"
+        android:textColor="@color/order_tbl_title"
+        android:textSize="@dimen/order_tbl_title" />
+
+    <crypto.soft.cryptongy.feature.shared.customView.MspTextView
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="When"
+        android:textColor="@color/order_tbl_title"
+        android:textSize="@dimen/order_tbl_title" />
+
+</TableRow>

@@ -2,10 +2,12 @@ package crypto.soft.cryptongy.feature.order;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
+import com.hannesdorfmann.mosby.mvp.MvpView;
 
 import java.util.List;
 
@@ -27,10 +29,10 @@ import crypto.soft.cryptongy.utils.GlobalUtil;
  * Created by tseringwongelgurung on 11/23/17.
  */
 
-public class OrderPresenter extends MvpBasePresenter<OrderView> {
-    private Context context;
-    private OrderInteractor interactor;
-    private boolean openOrder = false, orderHistory = false;
+public class OrderPresenter<T extends MvpView> extends MvpBasePresenter<T> {
+    protected Context context;
+    protected OrderInteractor interactor;
+    protected boolean openOrder = false, orderHistory = false;
 
     public OrderPresenter(Context context) {
         this.context = context;
@@ -62,7 +64,7 @@ public class OrderPresenter extends MvpBasePresenter<OrderView> {
             @Override
             public void onComplete(List<Account> result) {
                 if (getView() != null) {
-                    getView().showLoading(context.getString(R.string.fetch_msg));
+                    getV().showLoading(context.getString(R.string.fetch_msg));
                     setAccounts(result);
                 }
                 openOrder = false;
@@ -75,7 +77,7 @@ public class OrderPresenter extends MvpBasePresenter<OrderView> {
             public void onFail(String error) {
                 CustomDialog.showMessagePop(context, error, null);
                 if (getView() != null)
-                    getView().showEmptyView();
+                    getV().showEmptyView();
             }
         });
     }
@@ -97,11 +99,11 @@ public class OrderPresenter extends MvpBasePresenter<OrderView> {
         }
         if (getView() != null)
             if (isRead)
-                getView().setLevel("Read");
+                getV().setLevel("Read");
             else if (isTrade)
-                getView().setLevel("Trade");
+                getV().setLevel("Trade");
             else if (isWithdraw)
-                getView().setLevel("Withdraw");
+                getV().setLevel("Withdraw");
 
     }
 
@@ -111,17 +113,17 @@ public class OrderPresenter extends MvpBasePresenter<OrderView> {
             public void onComplete(OrderHistory result) {
                 if (getView() != null) {
                     orderHistory = true;
-                    getView().hideLoading();
-                    getView().setOrderHistory(result);
+                    getV().hideLoading();
+                    getV().setOrderHistory(result);
                     calculateProfit(result);
-                    getView().hideEmptyView();
+                    getV().hideEmptyView();
                 }
             }
 
             @Override
             public void onFail(String error) {
                 if (getView() != null)
-                    getView().hideLoading();
+                    getV().hideLoading();
                 isDataAvailable();
             }
         });
@@ -133,9 +135,9 @@ public class OrderPresenter extends MvpBasePresenter<OrderView> {
             public void onComplete(OpenOrder result) {
                 if (getView() != null) {
                     openOrder = true;
-                    getView().hideLoading();
-                    getView().setOpenOrders(result);
-                    getView().hideEmptyView();
+                    getV().hideLoading();
+                    getV().setOpenOrders(result);
+                    getV().hideEmptyView();
                     if (isRefresh) {
                         String msg = result.getMessage();
                         if (TextUtils.isEmpty(msg))
@@ -148,22 +150,22 @@ public class OrderPresenter extends MvpBasePresenter<OrderView> {
             @Override
             public void onFail(String error) {
                 if (getView() != null)
-                    getView().hideLoading();
+                    getV().hideLoading();
                 isDataAvailable();
             }
         });
     }
 
-    private void isDataAvailable() {
+    protected void isDataAvailable() {
         if (!openOrder && !orderHistory) {
             if (getView() != null)
-                getView().showEmptyView();
+                getV().showEmptyView();
         }
     }
 
     public void cancleOrder(String orderUuid) {
         if (getView() != null)
-            getView().showLoading(context.getString(R.string.cancle_msg));
+            getV().showLoading(context.getString(R.string.cancle_msg));
         interactor.cancleOrder(orderUuid, new OnFinishListner<Cancel>() {
 
             @Override
@@ -179,7 +181,7 @@ public class OrderPresenter extends MvpBasePresenter<OrderView> {
             @Override
             public void onFail(String error) {
                 if (getView() != null)
-                    getView().hideLoading();
+                    getV().hideLoading();
                 CustomDialog.showMessagePop(context, error, null);
             }
         });
@@ -214,7 +216,15 @@ public class OrderPresenter extends MvpBasePresenter<OrderView> {
         double calculation = buy - sell;
 
         if (getView() != null)
-            getView().setCalculation(String.valueOf(GlobalUtil.formatNumber(calculation, "#.########") + "฿"),
+            getV().setCalculation(String.valueOf(GlobalUtil.formatNumber(calculation, "#.########") + "฿"),
                     "$" + String.valueOf(GlobalUtil.formatNumber(GlobalUtil.convertBtcToUsd(calculation), "#.####")));
+    }
+
+    public OrderView getV() {
+        T view = super.getView();
+        if (view == null)
+            return null;
+        else
+            return (OrderView) view;
     }
 }

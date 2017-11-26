@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_alignParentTop="true"
+        android:background="@color/colorPrimary" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin">
+
+        <ProgressBar
+            android:id="@+id/progressBar_cyclic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:minHeight="50dp"
+            android:minWidth="50dp" />
+
+        <include
+            android:id="@+id/include"
+            layout="@layout/layout_sync_account"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true" />
+
+        <TextView
+            android:id="@+id/vtc_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/HorScrollView"
+            android:layout_alignStart="@+id/HorScrollView"
+            android:layout_below="@+id/include"
+            android:layout_marginLeft="14dp"
+            android:layout_marginStart="14dp"
+            android:layout_marginTop="37dp"
+            android:textColor="#000000"
+            android:textSize="15dp"
+            android:textStyle="bold" />
+
+        <include
+            android:id="@+id/HorScrollView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="17dp"
+            android:layout_below="@+id/vtc_txt"
+            android:layout_centerHorizontal="true"
+            layout="@layout/layout_vtc_horizontal" />
+
+        <LinearLayout
+            android:id="@+id/linValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/HorScrollView"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="39dp"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+
+            <EditText
+                android:id="@+id/LowValue_ED"
+                android:layout_width="80dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="3dp"
+                android:background="@drawable/editborder"
+                android:cursorVisible="true"
+                android:inputType="numberDecimal"
+
+                android:textSize="10sp"
+                android:theme="@style/edit" />
+
+            <CheckBox
+                android:id="@+id/ch_lower"
+                android:layout_width="34dp"
+                android:layout_height="35dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="3dp"
+                android:checked="true"
+                android:theme="@style/check" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+
+                android:layout_marginRight="10dp"
+                android:text="> =" />
+
+            <TextView
+                android:id="@+id/lastvalue_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="10dp"
+                android:text="Last"
+
+                android:textColor="#000000" />
+
+            <CheckBox
+                android:id="@+id/ch_higher"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="3dp"
+                android:checked="true"
+                android:theme="@style/check" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="10dp"
+                android:text="> =" />
+
+            <EditText
+                android:id="@+id/HighValue_ED"
+                android:layout_width="80dp"
+                android:layout_height="30dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/editborder"
+                android:cursorVisible="true"
+                android:inputType="numberDecimal"
+                android:textSize="10sp"
+                android:theme="@style/edit" />
+
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/Line"
+            android:layout_width="match_parent"
+            android:layout_height="0.3dp"
+            android:layout_below="@+id/linValue"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="30dp"
+            android:background="@color/colorPrimary" />
+
+        <RadioGroup
+            android:id="@+id/RadioG"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/Line"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/radioOneTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="1 Time"
+                android:theme="@style/checkbox" />
+
+            <RadioButton
+                android:id="@+id/radioEvryTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50dp"
+                android:checked="false"
+                android:text="Persistant"
+                android:theme="@style/checkbox" />
+
+        </RadioGroup>
+
+        <Button
+            android:id="@+id/save_b"
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:layout_below="@+id/RadioG"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="29dp"
+            android:background="@color/colorPrimary"
+            android:text="save"
+            android:textColor="#ffffff" />
+    </RelativeLayout>
+</RelativeLayout>

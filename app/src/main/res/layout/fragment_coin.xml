@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
@@ -37,11 +36,34 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/include"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <crypto.soft.cryptongy.feature.shared.customView.CabTextView
+                android:id="@+id/txtVtc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="24dp"
+                android:layout_marginTop="12dp"
+                android:text="Vtc"
+                android:textColor="@color/order_secondary2"
+                android:textSize="@dimen/orderListTitle"
+                android:visibility="gone" />
+
+            <include
+                android:id="@+id/HorScrollView"
+                layout="@layout/layout_vtc_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_marginLeft="24dp" />
 
             <include layout="@layout/table_open_order" />
 
             <include layout="@layout/table_order_history" />
+
+            <include layout="@layout/table_market_trade" />
 
         </LinearLayout>
 

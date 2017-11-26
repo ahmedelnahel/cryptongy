@@ -1,15 +1,16 @@
 package crypto.soft.cryptongy.feature.home;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import crypto.soft.cryptongy.R;
 import crypto.soft.cryptongy.feature.aboutUs.AboutUsActivity;
 import crypto.soft.cryptongy.feature.account.AccountFragment;
+import crypto.soft.cryptongy.feature.coinHome.CoinHomeFragment;
 import crypto.soft.cryptongy.feature.order.OrderFragment;
 import crypto.soft.cryptongy.feature.setting.SettingActivity;
 import crypto.soft.cryptongy.feature.wallet.WalletFragment;
@@ -45,6 +46,10 @@ public class HomeActivity extends AppCompatActivity {
 
     public void openOrder(View view) {
         GlobalUtil.addFragment(this, new OrderFragment(), R.id.container, true);
+    }
+
+    public void openCoinHome(View view) {
+        GlobalUtil.addFragment(this, new CoinHomeFragment(), R.id.container, true);
     }
 
     public void openWallet(View view) {
