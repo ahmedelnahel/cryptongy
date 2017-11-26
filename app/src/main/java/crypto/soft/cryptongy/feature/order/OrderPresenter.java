@@ -115,8 +115,10 @@ public class OrderPresenter<T extends MvpView> extends MvpBasePresenter<T> {
             @Override
             public void onFail(String error) {
                 CustomDialog.showMessagePop(context, error, null);
-                if (getView() != null)
+                if (getView() != null) {
+                    getV().setLevel("No API");
                     getV().showEmptyView();
+                }
             }
         });
     }

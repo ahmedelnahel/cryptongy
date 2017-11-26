@@ -93,8 +93,10 @@ public class CoinPresenter extends OrderPresenter<CoinView> {
             @Override
             public void onFail(String error) {
                 CustomDialog.showMessagePop(context, error, null);
-                if (getView() != null)
+                if (getView() != null) {
+                    getV().setLevel("No API");
                     getV().showEmptyView();
+                }
             }
         });
     }
