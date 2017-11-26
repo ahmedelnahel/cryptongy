@@ -32,7 +32,7 @@ public class CoinPresenter extends OrderPresenter<CoinView> {
     }
 
     @Override
-    public void getData() {
+    public void getData(final String coinName) {
         interactor.getAccount(new OnFinishListner<List<Account>>() {
 
             @Override
@@ -43,15 +43,16 @@ public class CoinPresenter extends OrderPresenter<CoinView> {
                 }
 
                 Observer observer = new Observer() {
-                    private int count = 0;
+                    private int count = 4;
 
                     @Override
                     public void onSubscribe(Disposable d) {
-                        count = 0;
+                        count = 4;
                     }
 
                     @Override
                     public void onNext(Object o) {
+                        count--;
                         if (o instanceof OpenOrder) {
                             if (getView() != null)
                                 getV().setOpenOrders((OpenOrder) o);
@@ -71,7 +72,6 @@ public class CoinPresenter extends OrderPresenter<CoinView> {
 
                     @Override
                     public void onError(Throwable e) {
-                        count++;
                     }
 
                     @Override
@@ -86,7 +86,7 @@ public class CoinPresenter extends OrderPresenter<CoinView> {
                         }
                     }
                 };
-                Observable.merge(getMarketSummary(), getOpenOrders(), getOrderHistory(), getMarketHistory())
+                Observable.merge(getMarketSummary(), getOpenOrders(coinName), getOrderHistory(coinName), getMarketHistory())
                         .subscribe(observer);
             }
 
@@ -112,7 +112,6 @@ public class CoinPresenter extends OrderPresenter<CoinView> {
 
                     @Override
                     public void onFail(String error) {
-                        e.onError(null);
                         e.onComplete();
                     }
                 });
@@ -133,7 +132,6 @@ public class CoinPresenter extends OrderPresenter<CoinView> {
 
                     @Override
                     public void onFail(String error) {
-                        e.onError(null);
                         e.onComplete();
                     }
                 });

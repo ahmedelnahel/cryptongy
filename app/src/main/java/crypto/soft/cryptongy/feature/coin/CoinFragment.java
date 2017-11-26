@@ -17,9 +17,6 @@ import android.widget.TextView;
 
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-
 import crypto.soft.cryptongy.R;
 import crypto.soft.cryptongy.feature.order.OpenOrderHolder;
 import crypto.soft.cryptongy.feature.order.OrderHistoryHolder;
@@ -48,6 +45,7 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
     private HorizontalScrollView scrollView;
 
     private boolean isFirst = false;
+    private String coinName = "";
 
     @Nullable
     @Override
@@ -60,6 +58,7 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
             isFirst = true;
         } else
             isFirst = false;
+        coinName = getArguments().getString("COIN_NAME", "");
         setTitle();
         return view;
     }
@@ -75,7 +74,7 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
         setHasOptionsMenu(true);
         if (isFirst) {
             isFirst = false;
-            presenter.getData();
+            presenter.getData(coinName);
         }
     }
 
@@ -179,7 +178,7 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
             holder.txtAction.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    presenter.cancleOrder(data.getOrderUuid());
+                    presenter.cancleOrder(coinName,data.getOrderUuid());
                 }
             });
 
@@ -232,16 +231,17 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
     @Override
     public void setMarketSummary(MarketSummary summary) {
         txtVtc.setVisibility(View.VISIBLE);
+        txtVtc.setText(coinName);
         scrollView.setVisibility(View.VISIBLE);
 
         if (summary != null) {
             crypto.soft.cryptongy.feature.shared.json.marketsummary.Result result = summary.getResult().get(0);
-            lastValuInfo_TXT.setText(String.valueOf(String.format("%.6f",result.getLast().doubleValue())));
-            BidvalueInfo_TXT.setText(String.valueOf(String.format("%.6f",result.getBid().doubleValue())));
-            ASKvalu_TXT.setText(String.valueOf(String.format("%.6f",result.getAsk().doubleValue())));
-            Highvalue_Txt.setText(String.valueOf(String.format("%.6f",result.getHigh().doubleValue())));
-            VolumeValue_Txt.setText(String.valueOf(String.format("%.6f",result.getVolume().doubleValue())));
-            LowvalueInfo_TXT.setText(String.valueOf(String.format("%.6f",result.getLow().doubleValue())));
+            lastValuInfo_TXT.setText(String.valueOf(String.format("%.6f", result.getLast().doubleValue())));
+            BidvalueInfo_TXT.setText(String.valueOf(String.format("%.6f", result.getBid().doubleValue())));
+            ASKvalu_TXT.setText(String.valueOf(String.format("%.6f", result.getAsk().doubleValue())));
+            Highvalue_Txt.setText(String.valueOf(String.format("%.6f", result.getHigh().doubleValue())));
+            VolumeValue_Txt.setText(String.valueOf(String.format("%.6f", result.getVolume().doubleValue())));
+            LowvalueInfo_TXT.setText(String.valueOf(String.format("%.6f", result.getLow().doubleValue())));
         }
     }
 

@@ -51,7 +51,7 @@ public class OrderPresenter<T extends MvpView> extends MvpBasePresenter<T> {
     public void onClicked(int id) {
         switch (id) {
             case R.id.imgSync:
-                getData();
+                getData("");
                 break;
             case R.id.imgAccSetting:
                 GlobalUtil.addFragment(context, new AccountFragment(), R.id.container, true);
@@ -59,7 +59,7 @@ public class OrderPresenter<T extends MvpView> extends MvpBasePresenter<T> {
         }
     }
 
-    public void getData() {
+    public void getData(String coinName) {
         interactor.getAccount(new OnFinishListner<List<Account>>() {
 
             @Override
@@ -70,15 +70,16 @@ public class OrderPresenter<T extends MvpView> extends MvpBasePresenter<T> {
                 }
 
                 Observer observer = new Observer() {
-                    private int count = 0;
+                    private int count = 2;
 
                     @Override
                     public void onSubscribe(Disposable d) {
-                        count = 0;
+                        count = 2;
                     }
 
                     @Override
                     public void onNext(Object o) {
+                        count--;
                         if (o instanceof OpenOrder) {
                             if (getView() != null)
                                 getV().setOpenOrders((OpenOrder) o);
@@ -92,7 +93,6 @@ public class OrderPresenter<T extends MvpView> extends MvpBasePresenter<T> {
 
                     @Override
                     public void onError(Throwable e) {
-                        count++;
                     }
 
                     @Override
@@ -102,13 +102,13 @@ public class OrderPresenter<T extends MvpView> extends MvpBasePresenter<T> {
                             if (count == 2) {
                                 CustomDialog.showMessagePop(context, "Error Fetching data. Please try again later.", null);
                                 getV().showEmptyView();
-                            }else
+                            } else
                                 getV().hideEmptyView();
                         }
                     }
                 };
 
-                Observable.merge(getOpenOrders(), getOrderHistory())
+                Observable.merge(getOpenOrders(""), getOrderHistory(""))
                         .subscribe(observer);
             }
 
@@ -146,11 +146,11 @@ public class OrderPresenter<T extends MvpView> extends MvpBasePresenter<T> {
 
     }
 
-    public Observable<OrderHistory> getOrderHistory() {
+    public Observable<OrderHistory> getOrderHistory(final String coinName) {
         return Observable.create(new ObservableOnSubscribe() {
             @Override
             public void subscribe(final ObservableEmitter e) throws Exception {
-                interactor.getOrderHistory(new OnFinishListner<OrderHistory>() {
+                interactor.getOrderHistory(coinName, new OnFinishListner<OrderHistory>() {
                     @Override
                     public void onComplete(OrderHistory result) {
                         e.onNext(result);
@@ -159,7 +159,6 @@ public class OrderPresenter<T extends MvpView> extends MvpBasePresenter<T> {
 
                     @Override
                     public void onFail(String error) {
-                        e.onError(null);
                         e.onComplete();
                     }
                 });
@@ -167,11 +166,11 @@ public class OrderPresenter<T extends MvpView> extends MvpBasePresenter<T> {
         });
     }
 
-    public Observable<OpenOrder> getOpenOrders() {
+    public Observable<OpenOrder> getOpenOrders(final String coinName) {
         return Observable.create(new ObservableOnSubscribe<OpenOrder>() {
             @Override
             public void subscribe(final ObservableEmitter<OpenOrder> e) throws Exception {
-                interactor.getOpenOrder(new OnFinishListner<OpenOrder>() {
+                interactor.getOpenOrder(coinName, new OnFinishListner<OpenOrder>() {
                     @Override
                     public void onComplete(OpenOrder result) {
                         e.onNext(result);
@@ -180,7 +179,6 @@ public class OrderPresenter<T extends MvpView> extends MvpBasePresenter<T> {
 
                     @Override
                     public void onFail(String error) {
-                        e.onError(null);
                         e.onComplete();
                     }
                 });
@@ -188,7 +186,7 @@ public class OrderPresenter<T extends MvpView> extends MvpBasePresenter<T> {
         });
     }
 
-    public void cancleOrder(String orderUuid) {
+    public void cancleOrder(final String coinName, String orderUuid) {
         if (getView() != null)
             getV().showLoading(context.getString(R.string.cancle_msg));
         interactor.cancleOrder(orderUuid, new OnFinishListner<Cancel>() {
@@ -226,7 +224,7 @@ public class OrderPresenter<T extends MvpView> extends MvpBasePresenter<T> {
                             }
                         };
 
-                        getOpenOrders().subscribe(observer);
+                        getOpenOrders(coinName).subscribe(observer);
                     } else
                         onFail(result.getMessage());
                 }

@@ -1,12 +1,15 @@
 package crypto.soft.cryptongy.feature.order;
 
 import android.os.AsyncTask;
+import android.text.TextUtils;
 
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
 
 import crypto.soft.cryptongy.feature.shared.json.action.Cancel;
 import crypto.soft.cryptongy.feature.shared.json.openorder.OpenOrder;
+import crypto.soft.cryptongy.feature.shared.json.openorder.Result;
 import crypto.soft.cryptongy.feature.shared.json.orderhistory.OrderHistory;
 import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
 import crypto.soft.cryptongy.feature.shared.module.Account;
@@ -19,14 +22,27 @@ import io.realm.RealmResults;
  */
 
 public class OrderInteractor {
-    void getOpenOrder(final OnFinishListner<OpenOrder> listner) {
+    void getOpenOrder(final String coinName, final OnFinishListner<OpenOrder> listner) {
         new AsyncTask<Void, Void, OpenOrder>() {
 
             @Override
             protected OpenOrder doInBackground(Void... voids) {
                 try {
                     Thread.sleep(2000);
-                    return new BittrexServices().getOpnOrdersMock();
+                    OpenOrder openOrder = new BittrexServices().getOpnOrdersMock();
+                    if (TextUtils.isEmpty(coinName))
+                        return openOrder;
+                    else {
+                        if (openOrder != null) {
+                            Iterator<Result> iterator = openOrder.getResult().iterator();
+                            while (iterator.hasNext()) {
+                                Result result = iterator.next();
+                                if (!result.getExchange().equals(coinName))
+                                    iterator.remove();
+                            }
+                            return openOrder;
+                        }
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (InterruptedException e) {
@@ -46,13 +62,26 @@ public class OrderInteractor {
         }.execute();
     }
 
-    void getOrderHistory(final OnFinishListner<OrderHistory> listner) {
+    void getOrderHistory(final String coinName, final OnFinishListner<OrderHistory> listner) {
         new AsyncTask<Void, Void, OrderHistory>() {
 
             @Override
             protected OrderHistory doInBackground(Void... voids) {
                 try {
-                    return new BittrexServices().getOrderHistoryMock();
+                    OrderHistory orderHistory = new BittrexServices().getOrderHistoryMock();
+                    if (TextUtils.isEmpty(coinName))
+                        return orderHistory;
+                    else {
+                        if (orderHistory != null) {
+                            Iterator<crypto.soft.cryptongy.feature.shared.json.orderhistory.Result> iterator = orderHistory.getResult().iterator();
+                            while (iterator.hasNext()) {
+                                crypto.soft.cryptongy.feature.shared.json.orderhistory.Result result = iterator.next();
+                                if (!result.getExchange().equals(coinName))
+                                    iterator.remove();
+                            }
+                            return orderHistory;
+                        }
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
