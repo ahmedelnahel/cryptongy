@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import crypto.soft.cryptongy.R;
 import crypto.soft.cryptongy.feature.shared.json.market.MarketSummaries;
 import crypto.soft.cryptongy.feature.shared.json.wallet.Result;
 import crypto.soft.cryptongy.feature.shared.json.wallet.Wallet;
@@ -35,7 +36,6 @@ import crypto.soft.cryptongy.utils.AlertUtility;
 import crypto.soft.cryptongy.utils.CoinApplication;
 import crypto.soft.cryptongy.utils.GlobalUtil;
 import crypto.soft.cryptongy.utils.ViewFontHelper;
-import crypto.soft.cryptongy.R;
 
 
 /**
@@ -47,7 +47,7 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
 {
     private TextView tvBTCValue, tvDollarValue;
 
-    private AppBarLayout appBarLayout;
+//    private AppBarLayout appBarLayout;
     private LinearLayout linlaySummary;
     private LinearLayout linlayOperationButton;
     private RecyclerView rvCoinList;
@@ -57,7 +57,7 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
     private ImageView ivRefresh;
     private List<Result> resultList;
     private double BTCSum = 0;
-    private CoordinatorLayout baseView;
+    private LinearLayout baseView;
     private TextView tvHolding, tvPrice;
 //    private static final String ARG_PARAM1 = "param1";
 //    private String mParam1;
@@ -175,7 +175,7 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
 
             }
         });
-        appBarLayout = view.findViewById(R.id.app_bar);
+//        appBarLayout = view.findViewById(R.id.app_bar);
         linlaySummary = view.findViewById(R.id.linlaySummary);
         linlayOperationButton = view.findViewById(R.id.linlayOperationButton);
         rvCoinList = view.findViewById(R.id.rvCoinList);
@@ -187,28 +187,28 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
         rvCoinList.setItemAnimator(new DefaultItemAnimator());
         rvCoinList.setAdapter(coinAdapter);
 
-        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener()
-        {
-            @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset)
-            {
-                /**
-                 * verticalOffset changes in diapason
-                 * from 0 - appBar is fully unwrapped
-                 * to -appBarLayout's height - appBar is totally collapsed
-                 * so in example we hide FAB when user folds half of the appBarLayout
-                 */
-                if (appBarLayout.getHeight() / 2 < -verticalOffset)
-                {
-                    linlaySummary.setVisibility(View.GONE);
-                    linlayOperationButton.setVisibility(View.GONE);
-                } else
-                {
-                    linlaySummary.setVisibility(View.VISIBLE);
-                    linlayOperationButton.setVisibility(View.VISIBLE);
-                }
-            }
-        });
+//        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener()
+//        {
+//            @Override
+//            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset)
+//            {
+//                /**
+//                 * verticalOffset changes in diapason
+//                 * from 0 - appBar is fully unwrapped
+//                 * to -appBarLayout's height - appBar is totally collapsed
+//                 * so in example we hide FAB when user folds half of the appBarLayout
+//                 */
+//                if (appBarLayout.getHeight() / 2 < -verticalOffset)
+//                {
+//                    linlaySummary.setVisibility(View.GONE);
+//                    linlayOperationButton.setVisibility(View.GONE);
+//                } else
+//                {
+//                    linlaySummary.setVisibility(View.VISIBLE);
+//                    linlayOperationButton.setVisibility(View.VISIBLE);
+//                }
+//            }
+//        });
 
     }
 
