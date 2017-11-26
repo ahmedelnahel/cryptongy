@@ -35,4 +35,8 @@
     <string name="str_dollar_precision">%.4f</string>
     <string name="noAPI">No api key available</string>
     <string name="wallet">Wallet</string>
+    <string name="donnation_title">Thanks for your donnation</string>
+    <string name="donnation_Address">Address</string>
+    <string name="donnation_send">Please send your donnation to the following address: </string>
+    <string name="donnation_to"> 0x8C6249F8dD89d69db3a435Bd94971AB659C6f291</string>
 </resources>

@@ -67,6 +67,13 @@
                 android:onClick="openWallet"
                 android:text="Wallet" />
 
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/btnCoin"
+                android:onClick="openDonnation"
+                android:text="Donnate" />
+
         </RelativeLayout>
 
     </FrameLayout>

@@ -31,4 +31,6 @@
     <dimen name="small_text_size">15sp</dimen>
     <dimen name="text_size_large">25sp</dimen>
     <dimen name="fragment_layout_margin">10dp</dimen>
+
+    <dimen name="donnate_text">13sp</dimen>
 </resources>

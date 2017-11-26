@@ -11,6 +11,7 @@ import crypto.soft.cryptongy.R;
 import crypto.soft.cryptongy.feature.aboutUs.AboutUsActivity;
 import crypto.soft.cryptongy.feature.account.AccountFragment;
 import crypto.soft.cryptongy.feature.coinHome.CoinHomeFragment;
+import crypto.soft.cryptongy.feature.donnate.DonnateActivity;
 import crypto.soft.cryptongy.feature.order.OrderFragment;
 import crypto.soft.cryptongy.feature.setting.SettingActivity;
 import crypto.soft.cryptongy.feature.wallet.WalletFragment;
@@ -54,5 +55,9 @@ public class HomeActivity extends AppCompatActivity {
 
     public void openWallet(View view) {
         GlobalUtil.addFragment(this, new WalletFragment(), R.id.container, true);
+    }
+
+    public void openDonnation(View view) {
+        startActivity(new Intent(this, DonnateActivity.class));
     }
 }
