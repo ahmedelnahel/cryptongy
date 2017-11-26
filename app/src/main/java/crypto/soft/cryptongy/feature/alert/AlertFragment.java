@@ -20,7 +20,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
@@ -29,12 +28,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import crypto.soft.cryptongy.R;
+import crypto.soft.cryptongy.feature.account.CustomDialog;
 import crypto.soft.cryptongy.feature.shared.json.marketsummary.MarketSummary;
 import crypto.soft.cryptongy.feature.shared.json.marketsummary.Result;
 import crypto.soft.cryptongy.network.BittrexServices;
@@ -60,8 +58,6 @@ public class AlertFragment extends Fragment {
     CheckBox ch_higher, ch_lower;
     // to check one time or every time
     int AlarmFreq = 1;
-    int checkedHigher = 1;
-    int CheckedLower = 1;
     private int reqCode, CoinId;
     private TextView lastValuInfo_Lab, BidvalueInfo_Lab, Highvalue_Lab, ASKvalu_Lab, LowvalueInfo_Lab, VolumeValue_Lab;
 
@@ -124,30 +120,6 @@ public class AlertFragment extends Fragment {
 
         }
 
-
-        ch_higher.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                ch_higher.setChecked(isChecked);
-                if (isChecked) {
-                    checkedHigher = 2;
-                } else {
-                    checkedHigher = 1;
-                }
-            }
-        });
-
-        ch_lower.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                ch_lower.setChecked(isChecked);
-                if (isChecked) {
-                    CheckedLower = 2;
-                } else {
-                    CheckedLower = 1;
-                }
-            }
-        });
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
@@ -169,22 +141,33 @@ public class AlertFragment extends Fragment {
         save_b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                LowValueEn = Double.parseDouble(lowComp_txt.getText().toString());
-                HighValueEn = Double.parseDouble(highValueComp_txt.getText().toString());
-
-                if (TextUtils.isEmpty(String.valueOf(LowValueEn))) {
-
-                    Toast.makeText(getContext(), "Please Ener The Low Value", Toast.LENGTH_LONG).show();
-
-                } else if (TextUtils.isEmpty(String.valueOf(HighValueEn))) {
-                    Toast.makeText(getContext(), "Please Ener The High Value", Toast.LENGTH_LONG).show();
-
-                } else {
-                    //save the data and set the alarm manger
-                    saveData(LowValueEn, HighValueEn, exchangeName, coinName, AlarmFreq);
-
+                if (!ch_higher.isChecked() && !ch_lower.isChecked()) {
+                    CustomDialog.showMessagePop(getContext(), "One should be checked", null);
+                    return;
                 }
+                String last, high;
+                last = lowComp_txt.getText().toString();
+                high = highValueComp_txt.getText().toString();
+                boolean error = false;
+                if (ch_lower.isChecked() && TextUtils.isEmpty(last)) {
+                    lowComp_txt.setError("Cannot be Empty.");
+                    error = true;
+                } else if (ch_lower.isChecked()) {
+                    LowValueEn = Double.parseDouble(lowComp_txt.getText().toString());
+                } else
+                    LowValueEn = 0d;
+
+                if (ch_higher.isChecked() && TextUtils.isEmpty(high)) {
+                    highValueComp_txt.setError("Cannot be Empty.");
+                    error = true;
+                } else if (ch_higher.isChecked()) {
+                    HighValueEn = Double.parseDouble(highValueComp_txt.getText().toString());
+                } else
+                    HighValueEn = 0d;
+
+                if (error)
+                    return;
+                saveData(LowValueEn, HighValueEn, exchangeName, coinName, AlarmFreq);
             }
         });
         sycCoinInfo sycCoinInfo = new sycCoinInfo();
@@ -223,8 +206,6 @@ public class AlertFragment extends Fragment {
     }
 
     private void saveData(Double lowV, Double highV, String exchangeName, String coinName, int alarmFreq) {
-
-
         db = new dbHandler(getContext());
         CoinInfo coinInfo = new CoinInfo(coinName, exchangeName, HighValueEn, LowValueEn);
         db.AddCoinInfo(coinInfo);
@@ -237,8 +218,8 @@ public class AlertFragment extends Fragment {
         i.putExtra("low", LowValueEn);
         i.putExtra("reqCode", reqCode);
         i.putExtra("alarmFreq", alarmFreq);
-        i.putExtra("higherCh", checkedHigher);
-        i.putExtra("lowerCh", CheckedLower);
+        i.putExtra("higherCh", ch_higher.isChecked());
+        i.putExtra("lowerCh", ch_lower.isChecked());
 
 
         PendingIntent opertaion = PendingIntent.getBroadcast(getContext(), reqCode, i, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -323,17 +304,17 @@ public class AlertFragment extends Fragment {
             // set coin info
 
             progressBar.setVisibility(View.GONE);
-            lastValuInfo_TXT.setText(String.valueOf(String.format("%.6f",lastV)));
-            BidvalueInfo_TXT.setText(String.valueOf(String.format("%.6f",bidV)));
-            ASKvalu_TXT.setText(String.valueOf(String.format("%.6f",askV)));
-            Highvalue_Txt.setText(String.valueOf(String.format("%.6f",highV)));
-            VolumeValue_Txt.setText(String.valueOf(String.format("%.6f",volumeV)));
-            LowvalueInfo_TXT.setText(String.valueOf(String.format("%.6f",lowV)));
+            lastValuInfo_TXT.setText(String.valueOf(String.format("%.6f", lastV)));
+            BidvalueInfo_TXT.setText(String.valueOf(String.format("%.6f", bidV)));
+            ASKvalu_TXT.setText(String.valueOf(String.format("%.6f", askV)));
+            Highvalue_Txt.setText(String.valueOf(String.format("%.6f", highV)));
+            VolumeValue_Txt.setText(String.valueOf(String.format("%.6f", volumeV)));
+            LowvalueInfo_TXT.setText(String.valueOf(String.format("%.6f", lowV)));
 
             //
 
 
-            lastComp_txt.setText(String.valueOf(String.format("%.6f",lastV)));
+            lastComp_txt.setText(String.valueOf(String.format("%.6f", lastV)));
 
 
             //

@@ -79,20 +79,27 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
         txtProfit.setText("Total");
         ViewFontHelper.setupTextViews(getActivity(), baseView);
 
+        getData();
+        setTitle();
+
+        return view;
+    }
+
+    void getData(){
         CoinApplication application = (CoinApplication) getActivity().getApplication();
         Account account = application.getAccount();
         if (account == null) {
             CustomDialog.showMessagePop(getContext(), getActivity().getString(R.string.noAPI), null);
             setLevel("No API");
             txtEmpty.setVisibility(View.VISIBLE);
-
+            if (resultList!=null){
+                resultList.clear();
+                coinAdapter.notifyDataSetChanged();
+            }
         } else {
             setLevel(account.getLabel());
             new GetCoinDetails().execute();
         }
-        setTitle();
-
-        return view;
     }
 
     void setTitle() {
@@ -120,7 +127,7 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
         ivRefresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new GetCoinDetails().execute();
+                getData();
             }
         });
 
@@ -162,7 +169,9 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
 
             @Override
             public void afterTextChanged(Editable editable) {
-                //after the change calling the method and passing the search input
+                if (resultList==null){
+                    return;
+                }
                 filter(editable.toString());
                 if (editable.toString().length() == 0)
                     editCoinSearch.setCursorVisible(false);
