@@ -292,6 +292,7 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
 
             } catch (Exception e)
             {
+                e.printStackTrace();
             }
             return null;
         }
