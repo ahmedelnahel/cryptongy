@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/baseView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
@@ -36,8 +37,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/include"
-            android:orientation="vertical"
-            android:visibility="gone">
+            android:orientation="vertical">
 
             <include layout="@layout/wallet_details" />
 
@@ -45,7 +45,8 @@
 
     </RelativeLayout>
 
-</ScrollView><!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"--><!--xmlns:app="http://schemas.android.com/apk/res-auto"--><!--android:id="@+id/baseView"--><!--android:layout_width="match_parent"--><!--android:layout_height="match_parent"--><!--android:background="@color/color_back"--><!--android:orientation="vertical"--><!--android:fitsSystemWindows="true">-->
+</ScrollView>
+    <!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"--><!--xmlns:app="http://schemas.android.com/apk/res-auto"--><!--android:id="@+id/baseView"--><!--android:layout_width="match_parent"--><!--android:layout_height="match_parent"--><!--android:background="@color/color_back"--><!--android:orientation="vertical"--><!--android:fitsSystemWindows="true">-->
 
     <!--&lt;!&ndash;<android.support.design.widget.AppBarLayout&ndash;&gt;--><!--&lt;!&ndash;android:id="@+id/app_bar"&ndash;&gt;--><!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;--><!--&lt;!&ndash;android:layout_height="@dimen/app_bar_height"&ndash;&gt;--><!--&lt;!&ndash;android:fitsSystemWindows="true"&ndash;&gt;--><!--&lt;!&ndash;android:theme="@style/AppTheme.AppBarOverlay">&ndash;&gt;-->
 

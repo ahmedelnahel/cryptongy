@@ -7,8 +7,6 @@ import android.text.TextUtils;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 import com.hannesdorfmann.mosby.mvp.MvpView;
 
-import java.util.List;
-
 import crypto.soft.cryptongy.R;
 import crypto.soft.cryptongy.feature.account.AccountFragment;
 import crypto.soft.cryptongy.feature.account.CustomDialog;
@@ -60,92 +58,62 @@ public class OrderPresenter<T extends MvpView> extends MvpBasePresenter<T> {
     }
 
     public void getData(String coinName) {
-        interactor.getAccount(new OnFinishListner<List<Account>>() {
+        CoinApplication application = (CoinApplication) context.getApplicationContext();
+        Account account = application.getAccount();
+        if (account != null) {
+            if (getView() != null) {
+                getV().showLoading(context.getString(R.string.fetch_msg));
+                getV().setLevel(account.getLabel());
+            }
 
-            @Override
-            public void onComplete(List<Account> result) {
-                if (getView() != null) {
-                    getV().showLoading(context.getString(R.string.fetch_msg));
-                    setAccounts(result);
+            Observer observer = new Observer() {
+                private int count = 2;
+
+                @Override
+                public void onSubscribe(Disposable d) {
+                    count = 2;
                 }
 
-                Observer observer = new Observer() {
-                    private int count = 2;
-
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        count = 2;
-                    }
-
-                    @Override
-                    public void onNext(Object o) {
-                        count--;
-                        if (o instanceof OpenOrder) {
-                            if (getView() != null)
-                                getV().setOpenOrders((OpenOrder) o);
-                        } else if (o instanceof OrderHistory) {
-                            if (getView() != null) {
-                                getV().setOrderHistory((OrderHistory) o);
-                                calculateProfit((OrderHistory) o);
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                    }
-
-                    @Override
-                    public void onComplete() {
+                @Override
+                public void onNext(Object o) {
+                    count--;
+                    if (o instanceof OpenOrder) {
+                        if (getView() != null)
+                            getV().setOpenOrders((OpenOrder) o);
+                    } else if (o instanceof OrderHistory) {
                         if (getView() != null) {
-                            getV().hideLoading();
-                            if (count == 2) {
-                                CustomDialog.showMessagePop(context, "Error Fetching data. Please try again later.", null);
-                                getV().showEmptyView();
-                            } else
-                                getV().hideEmptyView();
+                            getV().setOrderHistory((OrderHistory) o);
+                            calculateProfit((OrderHistory) o);
                         }
                     }
-                };
-
-                Observable.merge(getOpenOrders(""), getOrderHistory(""))
-                        .subscribe(observer);
-            }
-
-            @Override
-            public void onFail(String error) {
-                CustomDialog.showMessagePop(context, error, null);
-                if (getView() != null) {
-                    getV().setLevel("No API");
-                    getV().showEmptyView();
                 }
-            }
-        });
-    }
 
-    public void setAccounts(List<Account> list) {
-        CoinApplication app = (CoinApplication) context.getApplicationContext();
-        boolean isRead = false, isTrade = false, isWithdraw = false;
-        for (Account account : list) {
-            if (account.getLabel().equals("Read")) {
-                app.setReadAccount(account);
-                isRead = true;
-            } else if (account.getLabel().equals("Trade")) {
-                app.setTradeAccount(account);
-                isTrade = true;
-            } else if (account.getLabel().equals("Withdraw")) {
-                app.setWithdrawAccount(account);
-                isWithdraw = true;
+                @Override
+                public void onError(Throwable e) {
+                }
+
+                @Override
+                public void onComplete() {
+                    if (getView() != null) {
+                        getV().hideLoading();
+                        if (count == 2) {
+                            CustomDialog.showMessagePop(context, "Error Fetching data. Please try again later.", null);
+                            getV().showEmptyView();
+                        } else
+                            getV().hideEmptyView();
+                    }
+                }
+            };
+
+            Observable.merge(getOpenOrders(""), getOrderHistory(""))
+                    .subscribe(observer);
+        } else {
+            CustomDialog.showMessagePop(context, context.getString(R.string.noAPI), null);
+            if (getView() != null) {
+                getV().setLevel("No API");
+                getV().showEmptyView();
             }
         }
-        if (getView() != null)
-            if (isRead)
-                getV().setLevel("Read");
-            else if (isTrade)
-                getV().setLevel("Trade");
-            else if (isWithdraw)
-                getV().setLevel("Withdraw");
-
     }
 
     public Observable<OrderHistory> getOrderHistory(final String coinName) {

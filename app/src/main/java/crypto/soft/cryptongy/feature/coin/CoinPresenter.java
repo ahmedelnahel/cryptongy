@@ -2,8 +2,6 @@ package crypto.soft.cryptongy.feature.coin;
 
 import android.content.Context;
 
-import java.util.List;
-
 import crypto.soft.cryptongy.R;
 import crypto.soft.cryptongy.feature.account.CustomDialog;
 import crypto.soft.cryptongy.feature.order.OrderPresenter;
@@ -13,6 +11,7 @@ import crypto.soft.cryptongy.feature.shared.json.openorder.OpenOrder;
 import crypto.soft.cryptongy.feature.shared.json.orderhistory.OrderHistory;
 import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
 import crypto.soft.cryptongy.feature.shared.module.Account;
+import crypto.soft.cryptongy.utils.CoinApplication;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -33,72 +32,67 @@ public class CoinPresenter extends OrderPresenter<CoinView> {
 
     @Override
     public void getData(final String coinName) {
-        interactor.getAccount(new OnFinishListner<List<Account>>() {
+        CoinApplication application = (CoinApplication) context.getApplicationContext();
+        Account account = application.getAccount();
+        if (account != null) {
+            if (getView() != null) {
+                getV().showLoading(context.getString(R.string.fetch_msg));
+                getV().setLevel(account.getLabel());
+            }
 
-            @Override
-            public void onComplete(List<Account> result) {
-                if (getView() != null) {
-                    getV().showLoading(context.getString(R.string.fetch_msg));
-                    setAccounts(result);
+            Observer observer = new Observer() {
+                private int count = 4;
+
+                @Override
+                public void onSubscribe(Disposable d) {
+                    count = 4;
                 }
 
-                Observer observer = new Observer() {
-                    private int count = 4;
-
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        count = 4;
-                    }
-
-                    @Override
-                    public void onNext(Object o) {
-                        count--;
-                        if (o instanceof OpenOrder) {
-                            if (getView() != null)
-                                getV().setOpenOrders((OpenOrder) o);
-                        } else if (o instanceof OrderHistory) {
-                            if (getView() != null) {
-                                getV().setOrderHistory((OrderHistory) o);
-                                calculateProfit((OrderHistory) o);
-                            }
-                        } else if (o instanceof MarketSummary) {
-                            if (getView() != null)
-                                getView().setMarketSummary((MarketSummary) o);
-                        } else if (o instanceof MarketHistory) {
-                            if (getView() != null)
-                                getView().setMarketTrade((MarketHistory) o);
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                    }
-
-                    @Override
-                    public void onComplete() {
+                @Override
+                public void onNext(Object o) {
+                    count--;
+                    if (o instanceof OpenOrder) {
+                        if (getView() != null)
+                            getV().setOpenOrders((OpenOrder) o);
+                    } else if (o instanceof OrderHistory) {
                         if (getView() != null) {
-                            getV().hideLoading();
-                            if (count == 4) {
-                                CustomDialog.showMessagePop(context, "Error Fetching data. Please try again later.", null);
-                                getV().showEmptyView();
-                            } else
-                                getView().hideEmptyView();
+                            getV().setOrderHistory((OrderHistory) o);
+                            calculateProfit((OrderHistory) o);
                         }
+                    } else if (o instanceof MarketSummary) {
+                        if (getView() != null)
+                            getView().setMarketSummary((MarketSummary) o);
+                    } else if (o instanceof MarketHistory) {
+                        if (getView() != null)
+                            getView().setMarketTrade((MarketHistory) o);
                     }
-                };
-                Observable.merge(getMarketSummary(), getOpenOrders(coinName), getOrderHistory(coinName), getMarketHistory())
-                        .subscribe(observer);
-            }
-
-            @Override
-            public void onFail(String error) {
-                CustomDialog.showMessagePop(context, error, null);
-                if (getView() != null) {
-                    getV().setLevel("No API");
-                    getV().showEmptyView();
                 }
+
+                @Override
+                public void onError(Throwable e) {
+                }
+
+                @Override
+                public void onComplete() {
+                    if (getView() != null) {
+                        getV().hideLoading();
+                        if (count == 4) {
+                            CustomDialog.showMessagePop(context, "Error Fetching data. Please try again later.", null);
+                            getV().showEmptyView();
+                        } else
+                            getView().hideEmptyView();
+                    }
+                }
+            };
+            Observable.merge(getMarketSummary(), getOpenOrders(coinName), getOrderHistory(coinName), getMarketHistory())
+                    .subscribe(observer);
+        } else {
+            CustomDialog.showMessagePop(context, context.getString(R.string.noAPI), null);
+            if (getView() != null) {
+                getV().setLevel("No API");
+                getV().showEmptyView();
             }
-        });
+        }
     }
 
     public Observable getMarketHistory() {

@@ -2,8 +2,6 @@ package crypto.soft.cryptongy.feature.wallet;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,7 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,11 +25,13 @@ import java.util.Collections;
 import java.util.List;
 
 import crypto.soft.cryptongy.R;
+import crypto.soft.cryptongy.feature.account.AccountFragment;
+import crypto.soft.cryptongy.feature.account.CustomDialog;
 import crypto.soft.cryptongy.feature.shared.json.market.MarketSummaries;
 import crypto.soft.cryptongy.feature.shared.json.wallet.Result;
 import crypto.soft.cryptongy.feature.shared.json.wallet.Wallet;
+import crypto.soft.cryptongy.feature.shared.module.Account;
 import crypto.soft.cryptongy.network.BittrexServices;
-
 import crypto.soft.cryptongy.utils.AlertUtility;
 import crypto.soft.cryptongy.utils.CoinApplication;
 import crypto.soft.cryptongy.utils.GlobalUtil;
@@ -43,89 +43,92 @@ import crypto.soft.cryptongy.utils.ViewFontHelper;
  * Use the {@link WalletFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class WalletFragment extends Fragment implements OnRecyclerItemClickListener<Result>, View.OnClickListener
-{
-    private TextView tvBTCValue, tvDollarValue;
-
-//    private AppBarLayout appBarLayout;
-    private LinearLayout linlaySummary;
-    private LinearLayout linlayOperationButton;
+public class WalletFragment extends Fragment implements OnRecyclerItemClickListener<Result>, View.OnClickListener {
+    private TextView txtLevel, txtBtc, txtUsd, txtEmpty, txtProfit;
     private RecyclerView rvCoinList;
     private WalletAdapter coinAdapter;
     private Spinner spCurrency;
     private EditText editCoinSearch;
-    private ImageView ivRefresh;
+    private ImageView ivRefresh, imgAccount;
     private List<Result> resultList;
     private double BTCSum = 0;
-    private LinearLayout baseView;
+    private ScrollView baseView;
     private TextView tvHolding, tvPrice;
-//    private static final String ARG_PARAM1 = "param1";
-//    private String mParam1;
 
-    public WalletFragment()
-    {
-        // Required empty public constructor
+    public WalletFragment() {
+
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment WalletFragment.
-     */
-    public static WalletFragment newInstance(/*String param1*/)
-    {
+    public static WalletFragment newInstance(/*String param1*/) {
         WalletFragment fragment = new WalletFragment();
         Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
         fragment.setArguments(args);
         return fragment;
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        /*if (getArguments() != null)
-        {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-        }*/
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState)
-    {
-        // Inflate the layout for this fragment
+                             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_wallet, container, false);
         setUpView(view);
+        txtProfit.setText("Total");
         ViewFontHelper.setupTextViews(getActivity(), baseView);
-        new GetCoinDetails().execute();
+
+        CoinApplication application = (CoinApplication) getActivity().getApplication();
+        Account account = application.getAccount();
+        if (account == null) {
+            CustomDialog.showMessagePop(getContext(), getActivity().getString(R.string.noAPI), null);
+            setLevel("No API");
+            txtEmpty.setVisibility(View.VISIBLE);
+
+        } else {
+            setLevel(account.getLabel());
+            new GetCoinDetails().execute();
+        }
+        setTitle();
 
         return view;
     }
 
-    void setUpView(View view)
-    {
+    void setTitle() {
+        TextView txtTitle = getActivity().findViewById(R.id.txtTitle);
+        txtTitle.setText(R.string.wallet);
+    }
+
+    void setUpView(View view) {
+        txtBtc = view.findViewById(R.id.txtBtc);
+        txtUsd = view.findViewById(R.id.txtUsd);
+        txtLevel = view.findViewById(R.id.txtLevel);
+        txtEmpty = view.findViewById(R.id.txtEmpty);
+        txtProfit = view.findViewById(R.id.txtProfit);
+
         tvHolding = view.findViewById(R.id.tvHolding);
-        tvHolding.setTag(R.id.tvHolding,Boolean.TRUE);
+        tvHolding.setTag(R.id.tvHolding, Boolean.TRUE);
         tvHolding.setOnClickListener(this);
         tvPrice = view.findViewById(R.id.tvPrice);
-        tvPrice.setTag(R.id.tvPrice,Boolean.TRUE);
+        tvPrice.setTag(R.id.tvPrice, Boolean.TRUE);
         tvPrice.setOnClickListener(this);
         baseView = view.findViewById(R.id.baseView);
-        tvBTCValue = view.findViewById(R.id.tvBTCValue);
-        tvDollarValue = view.findViewById(R.id.tvDollarValue);
 
         spCurrency = view.findViewById(R.id.spCurrency);
-        ivRefresh = view.findViewById(R.id.ivRefresh);
-        ivRefresh.setOnClickListener(new View.OnClickListener()
-        {
+        ivRefresh = view.findViewById(R.id.imgSync);
+        ivRefresh.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 new GetCoinDetails().execute();
+            }
+        });
+
+        imgAccount = view.findViewById(R.id.imgAccSetting);
+        imgAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                GlobalUtil.addFragment(getContext(), new AccountFragment(), R.id.container, true);
             }
         });
 
@@ -136,39 +139,32 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
         spCurrency.setAdapter(spinnerArrayAdapter);
         editCoinSearch = view.findViewById(R.id.editCoinSearch);
 
-        editCoinSearch.setOnTouchListener(new View.OnTouchListener()
-        {
+        editCoinSearch.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event)
-            {
-                if(event.getAction() == MotionEvent.ACTION_DOWN)
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN)
                     editCoinSearch.setCursorVisible(true);
                 return false;
             }
 
         });
 
-
-        editCoinSearch.addTextChangedListener(new TextWatcher()
-        {
+        editCoinSearch.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2)
-            {
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
             }
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2)
-            {
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
             }
 
             @Override
-            public void afterTextChanged(Editable editable)
-            {
+            public void afterTextChanged(Editable editable) {
                 //after the change calling the method and passing the search input
                 filter(editable.toString());
-                if(editable.toString().length()==0)
+                if (editable.toString().length() == 0)
                     editCoinSearch.setCursorVisible(false);
                 else
                     editCoinSearch.setCursorVisible(true);
@@ -176,8 +172,8 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
             }
         });
 //        appBarLayout = view.findViewById(R.id.app_bar);
-        linlaySummary = view.findViewById(R.id.linlaySummary);
-        linlayOperationButton = view.findViewById(R.id.linlayOperationButton);
+//        linlaySummary = view.findViewById(R.id.linlaySummary);
+//        linlayOperationButton = view.findViewById(R.id.linlayOperationButton);
         rvCoinList = view.findViewById(R.id.rvCoinList);
         rvCoinList.setNestedScrollingEnabled(false);
         coinAdapter = new WalletAdapter(new ArrayList<Result>(), getActivity(), this);
@@ -186,41 +182,14 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
         rvCoinList.setLayoutManager(mLayoutManager);
         rvCoinList.setItemAnimator(new DefaultItemAnimator());
         rvCoinList.setAdapter(coinAdapter);
-
-//        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener()
-//        {
-//            @Override
-//            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset)
-//            {
-//                /**
-//                 * verticalOffset changes in diapason
-//                 * from 0 - appBar is fully unwrapped
-//                 * to -appBarLayout's height - appBar is totally collapsed
-//                 * so in example we hide FAB when user folds half of the appBarLayout
-//                 */
-//                if (appBarLayout.getHeight() / 2 < -verticalOffset)
-//                {
-//                    linlaySummary.setVisibility(View.GONE);
-//                    linlayOperationButton.setVisibility(View.GONE);
-//                } else
-//                {
-//                    linlaySummary.setVisibility(View.VISIBLE);
-//                    linlayOperationButton.setVisibility(View.VISIBLE);
-//                }
-//            }
-//        });
-
     }
 
-    private void filter(String text)
-    {
+    private void filter(String text) {
         ArrayList<Result> filterdCurrency = new ArrayList<>();
 
-        for (Result result : resultList)
-        {
+        for (Result result : resultList) {
             //if the existing elements contains the search input
-            if (result.getCurrency().toLowerCase().contains(text.toLowerCase()))
-            {
+            if (result.getCurrency().toLowerCase().contains(text.toLowerCase())) {
                 //adding the element to filtered list
                 filterdCurrency.add(result);
             }
@@ -232,20 +201,17 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
     }
 
     @Override
-    public void onCoinClickListener(Result result)
-    {
+    public void onCoinClickListener(Result result) {
         Toast.makeText(getActivity(), "Coin Clicked", Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void onClick(View v)
-    {
+    public void onClick(View v) {
         List<Result> results = coinAdapter.getResultList();//new ArrayList<>();
 //        results.addAll(resultList);
 
 
-        switch (v.getId())
-        {
+        switch (v.getId()) {
             case R.id.tvPrice:
                 Collections.sort(results, new Result.PriceComparator((Boolean) v.getTag(v.getId())));
                 break;
@@ -256,32 +222,30 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
         }
 //        coinAdapter.addResultList(results);
 //        coinAdapter.setResultList();
-        v.setTag(v.getId(),!(Boolean) v.getTag(v.getId()));
+        v.setTag(v.getId(), !(Boolean) v.getTag(v.getId()));
 
         coinAdapter.notifyDataSetChanged();
     }
 
+    public void setLevel(String level) {
+        txtLevel.setText(level);
+    }
 
-    private class GetCoinDetails extends AsyncTask<String, Void, List<Result>>
-    {
+    private class GetCoinDetails extends AsyncTask<String, Void, List<Result>> {
         private BittrexServices bittrexServices = new BittrexServices();
 
         @Override
-        protected List<Result> doInBackground(String... params)
-        {
-            try
-            {
+        protected List<Result> doInBackground(String... params) {
+            try {
                 Wallet wallet = bittrexServices.getWalletMock();
 
-                if (wallet != null && wallet.getSuccess())
-                {
+                if (wallet != null && wallet.getSuccess()) {
                     List<Result> walletResults = wallet.getResult();
 
                     List<Result> filteredWalletResults = new ArrayList<>();
 
                     MarketSummaries marketSummaries = bittrexServices.getMarketSummariesMock();
-                    if (marketSummaries != null && marketSummaries.getSuccess())
-                    {
+                    if (marketSummaries != null && marketSummaries.getSuccess()) {
 
                         getFilteredCoinList(walletResults, filteredWalletResults);
 
@@ -290,35 +254,27 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
                     }
                 }
 
-            } catch (Exception e)
-            {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             return null;
         }
 
-        private void getFilteredCoinList(List<Result> walletResults, List<Result> filteredWalletResults)
-        {
-            for (Result walletResult : walletResults)
-            {
+        private void getFilteredCoinList(List<Result> walletResults, List<Result> filteredWalletResults) {
+            for (Result walletResult : walletResults) {
                 if (walletResult.getBalance() != 0)
                     filteredWalletResults.add(walletResult);
             }
         }
 
-
-        private void fillCoinPrice(List<Result> walletResults, MarketSummaries marketSummaries)
-        {
+        private void fillCoinPrice(List<Result> walletResults, MarketSummaries marketSummaries) {
             BTCSum = 0;
             List<crypto.soft.cryptongy.feature.shared.json.market.Result> marketResults = marketSummaries.getResult();
-            for (Result walletResult : walletResults)
-            {
+            for (Result walletResult : walletResults) {
 
-                for (crypto.soft.cryptongy.feature.shared.json.market.Result marketResult : marketResults)
-                {
+                for (crypto.soft.cryptongy.feature.shared.json.market.Result marketResult : marketResults) {
                     String currency = "BTC-" + walletResult.getCurrency();
-                    if (currency.equals(marketResult.getMarketName()))
-                    {
+                    if (currency.equals(marketResult.getMarketName())) {
                         walletResult.setPrice(marketResult.getLast());
                         double balance = walletResult.getBalance();
 
@@ -334,12 +290,11 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
         }
 
         @Override
-        protected void onPostExecute(List<Result> result)
-        {
+        protected void onPostExecute(List<Result> result) {
             AlertUtility.dismissDialog();
 
-            if (result == null)
-            {
+            txtEmpty.setVisibility(View.GONE);
+            if (result == null) {
                 Toast.makeText(getActivity(), "Error fetching Coin details", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -349,20 +304,17 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
             coinAdapter.setResultList(result);
             coinAdapter.notifyDataSetChanged();
 
-            tvBTCValue.setText(String.valueOf(GlobalUtil.round(BTCSum, 9)));
-            tvDollarValue.setText(String.valueOf(GlobalUtil.round(BTCSum * ((CoinApplication) getActivity().getApplication()).getUsdt_btc(), 4)));
+            txtBtc.setText(String.valueOf(GlobalUtil.round(BTCSum, 9)) + "฿");
+            txtUsd.setText("$" + String.valueOf(GlobalUtil.round(GlobalUtil.convertBtcToUsd(BTCSum), 4)));
         }
 
         @Override
-        protected void onPreExecute()
-        {
+        protected void onPreExecute() {
             AlertUtility.showLoadingDialog(getActivity());
         }
 
         @Override
-        protected void onProgressUpdate(Void... values)
-        {
+        protected void onProgressUpdate(Void... values) {
         }
     }
-
 }

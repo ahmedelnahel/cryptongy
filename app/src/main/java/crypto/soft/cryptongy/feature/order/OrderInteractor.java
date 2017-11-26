@@ -5,17 +5,13 @@ import android.text.TextUtils;
 
 import java.io.IOException;
 import java.util.Iterator;
-import java.util.List;
 
 import crypto.soft.cryptongy.feature.shared.json.action.Cancel;
 import crypto.soft.cryptongy.feature.shared.json.openorder.OpenOrder;
 import crypto.soft.cryptongy.feature.shared.json.openorder.Result;
 import crypto.soft.cryptongy.feature.shared.json.orderhistory.OrderHistory;
 import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
-import crypto.soft.cryptongy.feature.shared.module.Account;
 import crypto.soft.cryptongy.network.BittrexServices;
-import io.realm.Realm;
-import io.realm.RealmResults;
 
 /**
  * Created by tseringwongelgurung on 11/24/17.
@@ -99,36 +95,6 @@ public class OrderInteractor {
         }.execute();
     }
 
-    public void getAccount(OnFinishListner<List<Account>> listner) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.beginTransaction();
-        RealmResults<Account> list = realm.where(Account.class).findAll();
-        if (list != null && list.size() != 0) {
-            List<Account> data = realm.copyFromRealm(list);
-            realm.commitTransaction();
-            listner.onComplete(data);
-        } else {
-            realm.commitTransaction();
-            listner.onFail("No api key available");
-        }
-//        Account accountDb = realm.where(Account.class).equalTo("label", "Read").findFirst();
-//        if (accountDb != null) {
-//            Account account = realm.copyFromRealm(accountDb);
-//            realm.commitTransaction();
-//            listner.onComplete(account);
-//        } else {
-//            accountDb = realm.where(Account.class).equalTo("label", "Trade").findFirst();
-//            if (accountDb != null) {
-//                Account account = realm.copyFromRealm(accountDb);
-//                realm.commitTransaction();
-//                listner.onComplete(account);
-//            } else {
-//                realm.commitTransaction();
-//                listner.onFail("No api key available");
-//            }
-//        }
-    }
-
     public void cancleOrder(final String uuid, final OnFinishListner<Cancel> listner) {
         new AsyncTask<Void, Void, Cancel>() {
 
@@ -154,6 +120,5 @@ public class OrderInteractor {
                     listner.onComplete(cancel);
             }
         }.execute();
-
     }
 }

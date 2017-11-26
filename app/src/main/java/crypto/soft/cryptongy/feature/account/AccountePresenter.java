@@ -8,8 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import crypto.soft.cryptongy.R;
-import crypto.soft.cryptongy.feature.shared.module.Account;
 import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
+import crypto.soft.cryptongy.feature.shared.module.Account;
+import crypto.soft.cryptongy.utils.CoinApplication;
 import crypto.soft.cryptongy.utils.GlobalUtil;
 
 /**
@@ -77,6 +78,7 @@ public class AccountePresenter extends MvpBasePresenter<AccountView> {
             @Override
             public void onComplete(Account result) {
                 if (getView() != null) {
+                    ((CoinApplication) context.getApplicationContext()).updateAccount();
                     getView().hideEmptyView();
                     getView().addData(result);
                 }
@@ -93,6 +95,7 @@ public class AccountePresenter extends MvpBasePresenter<AccountView> {
         interactor.update(account, new OnFinishListner<Account>() {
             @Override
             public void onComplete(Account result) {
+                ((CoinApplication) context.getApplicationContext()).updateAccount();
                 getData();
             }
 
@@ -112,5 +115,6 @@ public class AccountePresenter extends MvpBasePresenter<AccountView> {
     public void deleteAccount(int id) {
         interactor.delete(id);
         getData();
+        ((CoinApplication) context.getApplicationContext()).updateAccount();
     }
 }

@@ -33,4 +33,6 @@
     <string name="str_wallet">Wallet</string>
     <string name="str_btc_precision">%.9f</string>
     <string name="str_dollar_precision">%.4f</string>
+    <string name="noAPI">No api key available</string>
+    <string name="wallet">Wallet</string>
 </resources>
