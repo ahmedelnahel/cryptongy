@@ -62,6 +62,12 @@ public class AccountFragment extends MvpFragment<AccountView, AccountePresenter>
     }
 
     @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        menu.findItem(R.id.ic_setting).setVisible(false);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         presenter.onOptionItemClicked(item.getItemId());
         return super.onOptionsItemSelected(item);

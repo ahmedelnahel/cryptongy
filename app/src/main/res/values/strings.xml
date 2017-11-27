@@ -35,4 +35,10 @@
     <string name="str_dollar_precision">%.4f</string>
     <string name="noAPI">No api key available</string>
     <string name="wallet">Wallet</string>
+    <string name="home">Watch List</string>
+
+    <string-array name="coin_array">
+        <item>Bittrex</item>
+        <item>Other</item>
+    </string-array>
 </resources>

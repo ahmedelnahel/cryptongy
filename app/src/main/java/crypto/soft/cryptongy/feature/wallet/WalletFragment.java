@@ -35,6 +35,7 @@ import crypto.soft.cryptongy.network.BittrexServices;
 import crypto.soft.cryptongy.utils.AlertUtility;
 import crypto.soft.cryptongy.utils.CoinApplication;
 import crypto.soft.cryptongy.utils.GlobalUtil;
+import crypto.soft.cryptongy.utils.HideKeyboard;
 import crypto.soft.cryptongy.utils.ViewFontHelper;
 
 
@@ -75,6 +76,7 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_wallet, container, false);
+        new HideKeyboard(getContext()).setupUI(view);
         setUpView(view);
         txtProfit.setText("Total");
         ViewFontHelper.setupTextViews(getActivity(), baseView);

@@ -73,8 +73,6 @@ public class Result {
     @JsonProperty("MarketName")
     public void setMarketName(String marketName) {
         this.marketName = marketName;
-
-
     }
 
     @JsonProperty("High")

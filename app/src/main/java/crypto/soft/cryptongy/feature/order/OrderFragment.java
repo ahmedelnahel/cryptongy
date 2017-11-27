@@ -20,6 +20,7 @@ import crypto.soft.cryptongy.R;
 import crypto.soft.cryptongy.feature.shared.json.openorder.OpenOrder;
 import crypto.soft.cryptongy.feature.shared.json.openorder.Result;
 import crypto.soft.cryptongy.feature.shared.json.orderhistory.OrderHistory;
+import crypto.soft.cryptongy.utils.HideKeyboard;
 import crypto.soft.cryptongy.utils.ProgressDialogFactory;
 
 /**
@@ -43,6 +44,7 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter<OrderVi
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (view == null) {
             view = inflater.inflate(R.layout.fragment_order, container, false);
+            new HideKeyboard(getContext()).setupUI(view);
             findViews();
             setClickListner();
             isFirst = true;
@@ -60,23 +62,10 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter<OrderVi
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setHasOptionsMenu(true);
         if (isFirst) {
             isFirst = false;
             presenter.getData("");
         }
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.ic_menu_order, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        presenter.onOptionItemClicked(item.getItemId());
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
