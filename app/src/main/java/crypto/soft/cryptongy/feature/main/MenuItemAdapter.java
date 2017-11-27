@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -41,7 +42,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuIt
         MenuItem menuItem = menuItems.get(position);
         holder.icon.setImageResource(menuItem.getResourceId());
         holder.menuName.setText(menuItem.getItemName());
-        holder.menuName.setTextSize(convertPixelToSp(30));
+//        holder.menuName.setTextSize(convertPixelToSp(30));
         if(menuItem.isSelected) {
             holder.parent.setBackgroundColor(Color.parseColor("#ffffff"));
             holder.menuName.setTextColor(Color.parseColor("#21bdb9"));
@@ -63,7 +64,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuIt
         @BindView(R.id.menuName)
         TextView menuName;
         @BindView(R.id.parent)
-        RelativeLayout parent;
+        LinearLayout parent;
 
         public MenuItemViewHolder(View itemView) {
             super(itemView);

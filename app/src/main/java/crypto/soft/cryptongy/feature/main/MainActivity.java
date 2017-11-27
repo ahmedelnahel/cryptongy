@@ -103,7 +103,7 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
         menuItems.add(new MenuItem(R.drawable.ic_trade, "Trade", false));
         menuItems.add(new MenuItem(R.drawable.ic_portfolio, "Portfolio", false));
         menuItems.add(new MenuItem(R.drawable.ic_account, "Accounts", false));
-        menuItems.add(new MenuItem(R.drawable.ic_about, "About", false));
+        menuItems.add(new MenuItem(R.drawable.ic_about, "About Us", false));
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         listMenu.setLayoutManager(linearLayoutManager);
         listMenu.setHasFixedSize(true);
