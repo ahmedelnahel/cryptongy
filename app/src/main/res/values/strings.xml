@@ -39,7 +39,6 @@
 
     <string-array name="coin_array">
         <item>Bittrex</item>
-        <item>Other</item>
     </string-array>
     <string name="donnation_title">Thanks for your donnation</string>
     <string name="donnation_Address">Address</string>

@@ -7,8 +7,7 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
-        android:name="crypto.soft.cryptongy.utils.CoinApplication"
-
+        android:name=".utils.CoinApplication"
         android:allowBackup="true"
         android:icon="@drawable/about_us_icon"
         android:label="@string/app_name"
@@ -21,12 +20,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="crypto.soft.cryptongy.feature.aboutUs.AboutUsActivity" />
-
-        <activity android:name="crypto.soft.cryptongy.feature.donnate.DonnateActivity" />
-
-        <activity android:name="crypto.soft.cryptongy.feature.setting.SettingActivity"></activity>
-
+        <activity android:name=".feature.aboutUs.AboutUsActivity" />
+        <activity android:name=".feature.donnate.DonnateActivity" />
+        <activity android:name=".feature.setting.SettingActivity" />
 
         <service
             android:name=".feature.alert.getTickerService"
@@ -37,13 +33,12 @@
             android:name=".feature.alert.broadCastTicker"
             android:enabled="true"
             android:exported="false">
-
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
-
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
-
         </receiver>
+
+        <activity android:name=".feature.coinHome.CoinHomeActivity"></activity>
     </application>
 
 </manifest>

@@ -78,28 +78,23 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.MyViewHold
         this.resultList = resultList;
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView tvCoin, tvHolding, tvPrice;
         private LinearLayout linearLayout;
 
         public MyViewHolder(View view) {
             super(view);
             tvCoin = view.findViewById(R.id.tvCoin);
-            tvCoin.setOnClickListener(this);
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onRecyclerItemClickListener.onCoinClickListener(resultList.get(getAdapterPosition()));
+                }
+            });
             tvHolding = view.findViewById(R.id.tvHolding);
             tvPrice = view.findViewById(R.id.tvPrice);
             linearLayout = view.findViewById(R.id.linlay);
             ViewFontHelper.setupTextViews(activity, linearLayout);
-
-        }
-
-        @Override
-        public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.tvCoin:
-                    onRecyclerItemClickListener.onCoinClickListener(resultList.get(getAdapterPosition()));
-                    break;
-            }
         }
     }
 }

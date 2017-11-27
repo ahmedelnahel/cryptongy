@@ -1,5 +1,6 @@
 package crypto.soft.cryptongy.feature.home;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -38,6 +39,7 @@ import butterknife.OnClick;
 import crypto.soft.cryptongy.R;
 import crypto.soft.cryptongy.feature.account.AccountFragment;
 import crypto.soft.cryptongy.feature.account.CustomDialog;
+import crypto.soft.cryptongy.feature.coinHome.CoinHomeActivity;
 import crypto.soft.cryptongy.feature.shared.json.market.MarketSummaries;
 import crypto.soft.cryptongy.feature.shared.json.market.Result;
 import crypto.soft.cryptongy.feature.shared.listner.AdapterItemClickListener;
@@ -51,8 +53,8 @@ import crypto.soft.cryptongy.utils.SharedPreference;
  */
 
 public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implements HomeView, AdapterItemClickListener, TextWatcher {
-    @BindView(R.id.txtLevel)
-    TextView txtLevel;
+//    @BindView(R.id.txtLevel)
+//    TextView txtLevel;
     @BindView(R.id.type)
     ImageView type;
     @BindView(R.id.price)
@@ -206,7 +208,7 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
 
     @Override
     public void setLevel(String s) {
-        txtLevel.setText(s);
+//        txtLevel.setText(s);
     }
 
     @Override
@@ -262,6 +264,10 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
 
     @Override
     public void onItemClicked(Result menuItem, int position) {
+        Log.d("Ar","called");
+        Intent intent = new Intent(getContext(), CoinHomeActivity.class);
+        intent.putExtra("COIN_NAME", menuItem.getMarketName());
+        startActivity(intent);
     }
 
     @Override
