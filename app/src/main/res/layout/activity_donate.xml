@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:fillViewport="true"
+    tools:context="crypto.soft.cryptongy.feature.donnate.DonnateActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorBg">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/account_bg"
+            android:layout_alignParentTop="true"
+            android:background="@color/colorPrimary" />
+
+        <android.support.design.widget.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="true"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:elevation="0dp">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/colorPrimary"
+                app:layout_scrollFlags="scroll|enterAlways"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.ActionBar">
+
+
+            </android.support.v7.widget.Toolbar>
+
+        </android.support.design.widget.AppBarLayout>
+
+        <ImageView
+            android:id="@+id/imgIcon"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/about_us_icon" />
+
+        <crypto.soft.cryptongy.feature.shared.customView.CalTextView
+            android:id="@+id/txtTitle"
+            android:textSize="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/imgIcon"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="9dp"
+            android:text="Donnations"
+            android:textColor="#FFFFFF" />
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/cardView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txtTitle"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="27dp"
+            app:cardBackgroundColor="#FFFFFF"
+            app:cardCornerRadius="3dp"
+            app:cardUseCompatPadding="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingBottom="23dp"
+                android:paddingTop="23dp">
+
+                <crypto.soft.cryptongy.feature.shared.customView.MspTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="23dp"
+                    android:layout_marginRight="13dp"
+                    android:text="@string/donnation_title"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/about_title" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_marginTop="20dp"
+                    android:background="@color/colorPrimary" />
+
+                <crypto.soft.cryptongy.feature.shared.customView.CabTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="37dp"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/ic_about_corner"
+                    android:paddingLeft="23dp"
+                    android:paddingRight="15dp"
+                    android:text="@string/donnation_Address"
+                    android:textColor="@color/about_sub_title"
+                    android:textSize="@dimen/about_sub_title" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="60dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="23dp"
+                    android:orientation="horizontal">
+
+
+                    <crypto.soft.cryptongy.feature.shared.customView.CalTextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/donnation_send"
+                        android:textColor="@color/setting_text"
+                        android:textSize="@dimen/about_text" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="@dimen/about_sub"
+                    android:orientation="horizontal">
+
+
+                    <crypto.soft.cryptongy.feature.shared.customView.CalTextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/donnation_to"
+                        android:textColor="@color/setting_text"
+                        android:textIsSelectable="true"
+                        android:textSize="@dimen/donnate_text" />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+
+
+    </RelativeLayout>
+
+</ScrollView>

@@ -22,6 +22,9 @@
             </intent-filter>
         </activity>
         <activity android:name="crypto.soft.cryptongy.feature.aboutUs.AboutUsActivity" />
+
+        <activity android:name="crypto.soft.cryptongy.feature.donnate.DonnateActivity" />
+
         <activity android:name="crypto.soft.cryptongy.feature.setting.SettingActivity"></activity>
 
 
