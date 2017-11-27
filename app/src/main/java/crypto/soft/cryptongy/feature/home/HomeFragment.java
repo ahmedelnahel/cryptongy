@@ -1,5 +1,6 @@
 package crypto.soft.cryptongy.feature.home;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -53,7 +55,7 @@ import crypto.soft.cryptongy.utils.SharedPreference;
  */
 
 public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implements HomeView, AdapterItemClickListener, TextWatcher {
-//    @BindView(R.id.txtLevel)
+    //    @BindView(R.id.txtLevel)
 //    TextView txtLevel;
     @BindView(R.id.type)
     ImageView type;
@@ -82,7 +84,7 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
     @BindView(R.id.inputCoin)
     AutoCompleteTextView inputCoin;
     CurrencyAdapter currencyAdapter;
-    List<Result> mock;
+    List<Result> mock = new ArrayList<>();
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
     @BindView(R.id.search)
@@ -97,6 +99,8 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
     RelativeLayout volume;
     @BindView(R.id.relPr)
     RelativeLayout relPrice;
+    @BindView(R.id.rltSearch)
+    RelativeLayout rltSearch;
     boolean isVolumesorted = false;
     boolean isPricesorted = false;
     Result result;
@@ -145,6 +149,15 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
             });
             price.setText("" + ((CoinApplication) getActivity().getApplication()).getUsdt_btc());
             initRecycler();
+
+            rltSearch.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    search.requestFocus();
+                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.showSoftInput(search, InputMethodManager.SHOW_IMPLICIT);
+                }
+            });
         }
         return view;
     }
@@ -173,13 +186,9 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
     }
 
     @Override
-    public void setAdapter() {
-        mock = new ArrayList<>();
-        if (!SharedPreference.getFromPrefs(getContext(), "mockValue").equals("")) {
-            List<Result> results = new Gson().fromJson(SharedPreference.getFromPrefs(getContext(), "mockValue"), new TypeToken<List<Result>>() {
-            }.getType());
-            mock.addAll(results);
-        }
+    public void setAdapter(List<Result> results) {
+        mock.clear();
+        mock.addAll(results);
         currencyAdapter = new CurrencyAdapter(mock);
         listCurrency.setAdapter(currencyAdapter);
         currencyAdapter.setAdapterItemClickListener(this);
@@ -225,6 +234,8 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.imgAdd:
+                if (mock==null)
+                    return;
                 if (result != null) {
                     mock.add(result);
                     result = null;
@@ -264,7 +275,7 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
 
     @Override
     public void onItemClicked(Result menuItem, int position) {
-        Log.d("Ar","called");
+        Log.d("Ar", "called");
         Intent intent = new Intent(getContext(), CoinHomeActivity.class);
         intent.putExtra("COIN_NAME", menuItem.getMarketName());
         startActivity(intent);
