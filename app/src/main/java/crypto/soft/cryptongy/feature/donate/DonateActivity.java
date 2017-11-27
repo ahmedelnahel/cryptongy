@@ -1,4 +1,4 @@
-package crypto.soft.cryptongy.feature.donnate;
+package crypto.soft.cryptongy.feature.donate;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -8,7 +8,7 @@ import android.view.MenuItem;
 
 import crypto.soft.cryptongy.R;
 
-public class DonnateActivity extends AppCompatActivity {
+public class DonateActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
