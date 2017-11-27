@@ -1,5 +1,6 @@
 package crypto.soft.cryptongy.feature.wallet;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -27,6 +28,7 @@ import java.util.List;
 import crypto.soft.cryptongy.R;
 import crypto.soft.cryptongy.feature.account.AccountFragment;
 import crypto.soft.cryptongy.feature.account.CustomDialog;
+import crypto.soft.cryptongy.feature.coinHome.CoinHomeActivity;
 import crypto.soft.cryptongy.feature.shared.json.market.MarketSummaries;
 import crypto.soft.cryptongy.feature.shared.json.wallet.Result;
 import crypto.soft.cryptongy.feature.shared.json.wallet.Wallet;
@@ -87,14 +89,14 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
         return view;
     }
 
-    void getData(){
+    void getData() {
         CoinApplication application = (CoinApplication) getActivity().getApplication();
         Account account = application.getAccount();
         if (account == null) {
             CustomDialog.showMessagePop(getContext(), getActivity().getString(R.string.noAPI), null);
             setLevel("No API");
             txtEmpty.setVisibility(View.VISIBLE);
-            if (resultList!=null){
+            if (resultList != null) {
                 resultList.clear();
                 coinAdapter.notifyDataSetChanged();
             }
@@ -171,7 +173,7 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if (resultList==null){
+                if (resultList == null) {
                     return;
                 }
                 filter(editable.toString());
@@ -213,7 +215,16 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
 
     @Override
     public void onCoinClickListener(Result result) {
-        Toast.makeText(getActivity(), "Coin Clicked", Toast.LENGTH_SHORT).show();
+        String coinName = result.getCurrency();
+        if (coinName.equalsIgnoreCase("usdt"))
+            return;
+        if (coinName.equalsIgnoreCase("btc"))
+            coinName = "usdt-" + coinName;
+        else
+            coinName = "btc-" + coinName;
+        Intent intent = new Intent(getContext(), CoinHomeActivity.class);
+        intent.putExtra("COIN_NAME", coinName.toUpperCase());
+        startActivity(intent);
     }
 
     @Override

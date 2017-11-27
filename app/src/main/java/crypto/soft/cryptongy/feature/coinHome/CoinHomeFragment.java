@@ -51,6 +51,11 @@ public class CoinHomeFragment extends MvpFragment<CoinHomeView, CoinHomePresente
     }
 
     @Override
+    public void initToolbar() {
+
+    }
+
+    @Override
     public void findViews() {
         tabLayout = view.findViewById(R.id.tabs);
         viewPager = view.findViewById(R.id.viewPager);

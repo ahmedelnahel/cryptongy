@@ -9,6 +9,8 @@ import com.hannesdorfmann.mosby.mvp.MvpView;
 public interface CoinHomeView extends MvpView {
     void setTitle();
 
+    void initToolbar();
+
     void findViews();
 
     void initTab();

@@ -18,6 +18,14 @@ public class SharedPreference {
         Log.v("ShpUtils saving", "key: " + key + "\n value:" + value);
     }
 
+    public static void saveToPrefs(Context context, String key, Boolean value) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        final SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(key, value);
+        editor.commit();
+        Log.v("ShpUtils saving", "key: " + key + "\n value:" + value);
+    }
+
     public static void clearall(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         final SharedPreferences.Editor editor = prefs.edit();
@@ -41,6 +49,19 @@ public class SharedPreference {
         try {
             Log.v("ShpUtils for key: " + key, sharedPrefs.getString(key, defaultValue));
             return sharedPrefs.getString(key, defaultValue);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.v("ShpUtils for nothing", e.toString());
+            return defaultValue;
+        }
+    }
+
+    public static Boolean isFirst(Context context, String key) {
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+
+        Boolean defaultValue = true;
+        try {
+            return sharedPrefs.getBoolean(key, defaultValue);
         } catch (Exception e) {
             e.printStackTrace();
             Log.v("ShpUtils for nothing", e.toString());

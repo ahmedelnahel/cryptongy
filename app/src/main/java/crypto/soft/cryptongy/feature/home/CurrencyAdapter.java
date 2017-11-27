@@ -57,7 +57,7 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
     }
 
     @Override
-    public void onBindViewHolder(CurrencyViewHolder holder, int position) {
+    public void onBindViewHolder(CurrencyViewHolder holder, final int position) {
         Result result = currencyItemsFiltered.get(position);
         holder.coin.setText(result.getMarketName());
         holder.volume.setText("" + result.getVolume());
@@ -77,7 +77,13 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
         holder.seekBar.setProgress(50);
         holder.seekBar.setOnSeekBarChangeListener(new OnSeekBarChange(position, holder, currencyItemsFiltered.get(position)));
         holder.parent.setOnLongClickListener(new OnCurrencyItemClick(position, holder, currencyItemsFiltered.get(position)));
-
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (adapterItemClickListener != null)
+                    adapterItemClickListener.onItemClicked(currencyItemsFiltered.get(position), position);
+            }
+        });
     }
 
     @Override
