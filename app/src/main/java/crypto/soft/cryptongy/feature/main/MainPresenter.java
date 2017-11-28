@@ -12,6 +12,7 @@ import crypto.soft.cryptongy.feature.account.AccountFragment;
 import crypto.soft.cryptongy.feature.donate.DonateActivity;
 import crypto.soft.cryptongy.feature.home.HomeFragment;
 import crypto.soft.cryptongy.feature.order.OrderFragment;
+import crypto.soft.cryptongy.feature.trade.TradeFragment;
 import crypto.soft.cryptongy.feature.wallet.WalletFragment;
 import crypto.soft.cryptongy.utils.GlobalUtil;
 
@@ -42,6 +43,7 @@ public class MainPresenter extends MvpBasePresenter<MainView> {
                 replaceFragment(new OrderFragment());
                 break;
             case "Trade":
+                replaceFragment(new TradeFragment());
                 break;
             case "Portfolio":
                 break;

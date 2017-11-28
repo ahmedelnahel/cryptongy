@@ -40,7 +40,7 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
         findViews();
         initSideMenu();
         setAdapter();
-        presenter.onItemClicked("Home");
+        presenter.onItemClicked("Trade");
     }
 
     @NonNull
@@ -97,10 +97,10 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
     @Override
     public void setAdapter() {
         List<MenuItem> menuItems = new ArrayList<>();
-        menuItems.add(new MenuItem(R.drawable.ic_home_a, "Home", true));
+        menuItems.add(new MenuItem(R.drawable.ic_home_a, "Home", false));
         menuItems.add(new MenuItem(R.drawable.ic_wallet, "Wallet", false));
         menuItems.add(new MenuItem(R.drawable.ic_orders, "Orders", false));
-        menuItems.add(new MenuItem(R.drawable.ic_trade, "Trade", false));
+        menuItems.add(new MenuItem(R.drawable.ic_trade, "Trade", true));
         menuItems.add(new MenuItem(R.drawable.ic_portfolio, "Portfolio", false));
         menuItems.add(new MenuItem(R.drawable.ic_account, "Accounts", false));
         menuItems.add(new MenuItem(R.drawable.ic_donate, "Donate", false));

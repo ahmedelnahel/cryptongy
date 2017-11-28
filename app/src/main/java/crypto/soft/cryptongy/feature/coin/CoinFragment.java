@@ -35,7 +35,7 @@ import crypto.soft.cryptongy.utils.ProgressDialogFactory;
 
 public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implements CoinView
         , View.OnClickListener {
-    TextView lastValuInfo_TXT, BidvalueInfo_TXT, Highvalue_Txt, ASKvalu_TXT, LowvalueInfo_TXT, VolumeValue_Txt, HoldingValue_Txt, lastComp_txt;
+    private TextView lastValuInfo_TXT, BidvalueInfo_TXT, Highvalue_Txt, ASKvalu_TXT, LowvalueInfo_TXT, VolumeValue_Txt, HoldingValue_Txt, lastComp_txt;
     private View view;
     private TableLayout tblOpenOrders, tblOrderHistory, tblMarketTrade;
     private LinearLayout lnlContainer;

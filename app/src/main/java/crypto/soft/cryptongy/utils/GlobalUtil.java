@@ -50,14 +50,12 @@ public class GlobalUtil {
         return btc * 8100;
     }
 
-    public static String round(double value, int precision)
-    {
-        int scale = (int) Math.pow(10, precision);
-        double d = (double) Math.round(value * scale) / scale;
-        if (precision == 4)
-            return new DecimalFormat("#.####").format(d);
-        else
-            return new DecimalFormat("#.#########").format(d);
+    public static double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
 
+        long factor = (long) Math.pow(10, places);
+        value = value * factor;
+        long tmp = Math.round(value);
+        return (double) tmp / factor;
     }
 }

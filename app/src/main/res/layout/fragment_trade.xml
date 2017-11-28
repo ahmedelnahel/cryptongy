@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBg"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical"
+    tools:ignore="MissingPrefix">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/account_bg"
+        android:layout_alignParentTop="true"
+        android:background="@color/colorPrimary" />
+
+    <include
+        android:id="@+id/include"
+        layout="@layout/layout_calculation2" />
+
+    <crypto.soft.cryptongy.feature.shared.customView.MspTextView
+        android:id="@+id/txtEmpty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/include"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:text="No data available"
+        android:textColor="@color/colorPrimary"
+        android:textSize="18sp" />
+
+    <LinearLayout
+        android:id="@+id/lnlContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/include"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/rect_left_right"
+                android:padding="10dp">
+
+                <Spinner
+                    android:id="@+id/spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true">
+
+                </Spinner>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/rect_left_right"
+                android:padding="10dp">
+
+                <ImageView
+                    android:id="@+id/icon_search"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_search" />
+
+                <AutoCompleteTextView
+                    android:id="@+id/inputCoin"
+                    fontPath="fonts/myriad_pro_semibold.ttf"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/icon_search"
+                    android:background="@android:color/white"
+                    android:hint="Coin"
+                    android:paddingLeft="10dp"
+                    android:singleLine="true"
+                    android:textStyle="italic" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <crypto.soft.cryptongy.feature.shared.customView.CabTextView
+            android:id="@+id/txtVtc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/rect_bottom_black"
+            android:text=""
+            android:textColor="@color/order_secondary2"
+            android:textSize="@dimen/orderListTitle"
+            android:visibility="visible" />
+
+        <include
+            android:id="@+id/HorScrollView"
+            layout="@layout/layout_vtc_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="24dp"
+            android:visibility="visible" />
+
+    </LinearLayout>
+
+</RelativeLayout>

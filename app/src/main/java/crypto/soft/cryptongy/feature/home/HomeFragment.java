@@ -106,15 +106,6 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
     Result result;
     private View view;
 
-    public static double round(double value, int places) {
-        if (places < 0) throw new IllegalArgumentException();
-
-        long factor = (long) Math.pow(10, places);
-        value = value * factor;
-        long tmp = Math.round(value);
-        return (double) tmp / factor;
-    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -199,7 +190,7 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
         if (marketSummaries.getSuccess()) {
             for (crypto.soft.cryptongy.feature.shared.json.market.Result result : marketSummaries.getResult()) {
                 if (result.getMarketName().equalsIgnoreCase("USDT-BTC")) {
-                    ((CoinApplication) getActivity().getApplication()).setUsdt_btc(round(result.getBtcusdt(), 4));
+                    ((CoinApplication) getActivity().getApplication()).setUsdt_btc(GlobalUtil.round(result.getBtcusdt(), 4));
                     price.setText("" + ((CoinApplication) getActivity().getApplication()).getUsdt_btc());
                 }
             }
