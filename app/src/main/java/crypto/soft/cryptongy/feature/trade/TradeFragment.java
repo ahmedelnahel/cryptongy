@@ -2,6 +2,8 @@ package crypto.soft.cryptongy.feature.trade;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +23,7 @@ import java.util.List;
 
 import crypto.soft.cryptongy.R;
 import crypto.soft.cryptongy.feature.home.CustomArrayAdapter;
+import crypto.soft.cryptongy.feature.shared.adapter.MainPagerAdaptor;
 import crypto.soft.cryptongy.feature.shared.json.market.MarketSummaries;
 import crypto.soft.cryptongy.feature.shared.json.market.Result;
 import crypto.soft.cryptongy.feature.shared.json.marketsummary.MarketSummary;
@@ -40,11 +43,14 @@ public class TradeFragment extends MvpFragment<TradeView, TradePresenter> implem
 
     private HorizontalScrollView scrollView;
     private TextView lastValuInfo_TXT, BidvalueInfo_TXT, Highvalue_Txt, ASKvalu_TXT, LowvalueInfo_TXT, VolumeValue_Txt, HoldingValue_Txt, lastComp_txt;
-    private Spinner spinner;
+    private Spinner spinner,spnCoin;
 
     private List<Result> coins;
     private AutoCompleteTextView inputCoin;
     private CustomArrayAdapter adapterCoins;
+
+    private ViewPager pager;
+    private TabLayout tabLayout;
 
     private boolean isFirst = false;
 
@@ -55,6 +61,7 @@ public class TradeFragment extends MvpFragment<TradeView, TradePresenter> implem
             view = inflater.inflate(R.layout.fragment_trade, container, false);
             findViews();
             init();
+            initBottomTab();
             setOnClickListner();
             setCoinAdapter();
             isFirst = true;
@@ -105,8 +112,12 @@ public class TradeFragment extends MvpFragment<TradeView, TradePresenter> implem
         lnlContainer = view.findViewById(R.id.lnlContainer);
 
         spinner = view.findViewById(R.id.spinner);
+        spnCoin = view.findViewById(R.id.spnCoin);
 
         inputCoin = view.findViewById(R.id.inputCoin);
+
+        tabLayout = view.findViewById(R.id.tabs);
+        pager = view.findViewById(R.id.viewPager);
     }
 
     @Override
@@ -115,6 +126,28 @@ public class TradeFragment extends MvpFragment<TradeView, TradePresenter> implem
                 R.array.coin_array, R.layout.drop_down_text);
         adapter.setDropDownViewResource(R.layout.drop_down_text);
         spinner.setAdapter(adapter);
+
+
+        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(getContext(),
+                R.array.coin_array2, R.layout.drop_down_text);
+        adapter.setDropDownViewResource(R.layout.drop_down_text);
+        spnCoin.setAdapter(adapter2);
+    }
+
+    public void initBottomTab() {
+        MainPagerAdaptor pagerAdapter = new MainPagerAdaptor(getFragmentManager());
+        pagerAdapter.addFragment(new FragmentLimit(), "Limit Trade");
+        pagerAdapter.addFragment(new FragmentConditional(), "Conditional");
+        pager.setAdapter(pagerAdapter);
+        pager.setOffscreenPageLimit(2);
+        tabLayout.setupWithViewPager(pager);
+
+        View view1 = getLayoutInflater().inflate(R.layout.tab_layout_check,null);
+        ((TextView) view1.findViewById(R.id.txtTitle)).setText("Limit Trade");
+        tabLayout.getTabAt(0).setCustomView(view1);
+        View view2 = getLayoutInflater().inflate(R.layout.tab_layout_unchecked, null);
+        ((TextView) view2.findViewById(R.id.txtTitle)).setText("Conditional");
+        tabLayout.getTabAt(1).setCustomView(view2);
     }
 
     void setCoinAdapter() {

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="15dp"
+        android:paddingTop="10dp">
+
+        <CheckBox
+            android:id="@+id/chkImediate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <crypto.soft.cryptongy.feature.shared.customView.CalTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:gravity="center_vertical"
+            android:text="Imediate"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <RadioGroup
+        android:id="@+id/rdgValue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="10dp"
+        android:paddingLeft="5dp">
+
+        <crypto.soft.cryptongy.feature.shared.customView.CalTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/rect_bottom_black"
+            android:text="Value"
+            android:textColor="@android:color/black"
+            android:textSize="13sp" />
+
+        <RadioButton
+            android:id="@+id/rdbLast"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="true"
+            android:paddingHorizontal="5dp"
+            android:text="Last"
+            android:textColor="@android:color/black"
+            android:textSize="14sp" />
+
+        <RadioButton
+            android:id="@+id/rdbBid"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="true"
+            android:paddingHorizontal="5dp"
+            android:text="Bid"
+            android:textColor="@android:color/black"
+            android:textSize="14sp" />
+
+        <RadioButton
+            android:id="@+id/rdbAsk"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="true"
+            android:paddingHorizontal="5dp"
+            android:text="Ask"
+            android:textColor="@android:color/black"
+            android:textSize="14sp" />
+
+    </RadioGroup>
+
+    <crypto.soft.cryptongy.feature.shared.customView.CalEditText
+        android:id="@+id/edtValue"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/ic_border_black"
+        android:paddingBottom="10dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:gravity="center"
+        android:paddingTop="10dp"
+        android:text="43,456s"
+        android:textColor="@android:color/black"
+        android:textSize="13sp" />
+
+</LinearLayout>

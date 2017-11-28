@@ -40,6 +40,11 @@
     <string-array name="coin_array">
         <item>Bittrex</item>
     </string-array>
+    <string-array name="coin_array2">
+        <item>BTC:2.56</item>
+        <item>ETH:0</item>
+        <item>USD:500</item>
+    </string-array>
     <string name="donnation_title">Thanks for your donnation</string>
     <string name="donnation_Address">Address</string>
     <string name="donnation_send">Please send your donnation to the following address: </string>
