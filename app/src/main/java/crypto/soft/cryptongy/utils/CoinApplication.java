@@ -3,6 +3,8 @@ package crypto.soft.cryptongy.utils;
 import android.app.Application;
 
 import crypto.soft.cryptongy.common.Setting;
+import crypto.soft.cryptongy.feature.setting.Notification;
+import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
 import crypto.soft.cryptongy.feature.shared.module.Account;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -18,13 +20,13 @@ public class CoinApplication extends Application {
     private Account readAccount;
     private Account tradeAccount;
     private Account withdrawAccount;
-    private Setting settings;
+    private Notification settings;
 
-    public Setting getSettings() {
+    public Notification getSettings() {
         return settings;
     }
 
-    public void setSettings(Setting settings) {
+    public void setSettings(Notification settings) {
         this.settings = settings;
     }
 
@@ -77,6 +79,7 @@ public class CoinApplication extends Application {
                 .build();
         Realm.setDefaultConfiguration(realmConfiguration);
         updateAccount();
+        getNotification();
     }
 
     public void updateAccount() {
@@ -108,4 +111,19 @@ public class CoinApplication extends Application {
             return getWithdrawAccount();
         return null;
     }
-}
+
+    public void getNotification() {
+        Realm realm = Realm.getDefaultInstance();
+
+        realm.beginTransaction();
+        Notification notificationDb = realm.where(Notification.class).equalTo("id", 0).findFirst();
+        Notification notification;
+        if (notificationDb == null) {
+            notification = new Notification(true, true);
+            realm.copyToRealmOrUpdate(notification);
+        } else
+            notification = realm.copyFromRealm(notificationDb);
+        realm.commitTransaction();
+        setSettings(notification);
+    }
+    }
