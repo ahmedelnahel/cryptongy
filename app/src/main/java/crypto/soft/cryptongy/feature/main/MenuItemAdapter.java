@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -43,19 +42,27 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuIt
         holder.icon.setImageResource(menuItem.getResourceId());
         holder.menuName.setText(menuItem.getItemName());
 //        holder.menuName.setTextSize(convertPixelToSp(30));
-        if(menuItem.isSelected) {
+        if (menuItem.isSelected) {
             holder.parent.setBackgroundColor(Color.parseColor("#ffffff"));
             holder.menuName.setTextColor(Color.parseColor("#21bdb9"));
-        }else {
+        } else {
             holder.parent.setBackgroundColor(Color.parseColor("#21bdb9"));
             holder.menuName.setTextColor(Color.parseColor("#ffffff"));
         }
-        holder.parent.setOnClickListener(new OnNavItemClick(menuItem,position,holder));
+        holder.parent.setOnClickListener(new OnNavItemClick(menuItem, position, holder));
     }
 
     @Override
     public int getItemCount() {
         return menuItems.size();
+    }
+
+    public void setOnItemClickListener(MenuItemClickListener itemClickListener) {
+        this.menuItemClickListener = itemClickListener;
+    }
+
+    float convertPixelToSp(int px) {
+        return (px / context.getResources().getDisplayMetrics().scaledDensity);
     }
 
     public static class MenuItemViewHolder extends RecyclerView.ViewHolder {
@@ -72,18 +79,15 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuIt
         }
     }
 
-    public void setOnItemClickListener(MenuItemClickListener itemClickListener) {
-        this.menuItemClickListener = itemClickListener;
-    }
-
     class OnNavItemClick implements View.OnClickListener {
         MenuItem menuItem;
         int position;
         MenuItemViewHolder menuItemViewHolder;
-        public OnNavItemClick(MenuItem menuItem, int position,MenuItemViewHolder menuItemViewHolder) {
+
+        public OnNavItemClick(MenuItem menuItem, int position, MenuItemViewHolder menuItemViewHolder) {
             this.menuItem = menuItem;
             this.position = position;
-            this.menuItemViewHolder=menuItemViewHolder;
+            this.menuItemViewHolder = menuItemViewHolder;
         }
 
         @Override
@@ -137,6 +141,13 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuIt
                                 menuItems.get(i).setResourceId(R.drawable.ic_account);
                             }
                             break;
+                        case "Donate":
+                            if (menuItems.get(i).isSelected) {
+                                menuItems.get(i).setResourceId(R.drawable.ic_donate_a);
+                            } else {
+                                menuItems.get(i).setResourceId(R.drawable.ic_donate);
+                            }
+                            break;
                         case "About":
                             if (menuItems.get(i).isSelected) {
                                 menuItems.get(i).setResourceId(R.drawable.ic_about_a);
@@ -152,9 +163,5 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuIt
                 menuItemViewHolder.menuName.setTextColor(Color.parseColor("#21bdb9"));
             }
         }
-    }
-    float convertPixelToSp(int px)
-    {
-        return (px /context. getResources().getDisplayMetrics().scaledDensity);
     }
 }

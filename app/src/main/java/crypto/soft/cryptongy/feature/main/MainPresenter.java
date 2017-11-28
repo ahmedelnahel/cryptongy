@@ -9,6 +9,7 @@ import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 import crypto.soft.cryptongy.R;
 import crypto.soft.cryptongy.feature.aboutUs.AboutUsActivity;
 import crypto.soft.cryptongy.feature.account.AccountFragment;
+import crypto.soft.cryptongy.feature.donate.DonateActivity;
 import crypto.soft.cryptongy.feature.home.HomeFragment;
 import crypto.soft.cryptongy.feature.order.OrderFragment;
 import crypto.soft.cryptongy.feature.wallet.WalletFragment;
@@ -47,7 +48,10 @@ public class MainPresenter extends MvpBasePresenter<MainView> {
             case "Accounts":
                 replaceFragment(new AccountFragment());
                 break;
-            case "About":
+            case "Donate":
+                context.startActivity(new Intent(context, DonateActivity.class));
+                break;
+            case "About Us":
                 context.startActivity(new Intent(context, AboutUsActivity.class));
                 break;
         }
