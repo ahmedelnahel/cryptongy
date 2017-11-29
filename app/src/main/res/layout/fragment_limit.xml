@@ -11,20 +11,32 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingBottom="15dp"
-        android:paddingTop="10dp">
+        android:gravity="center"
+        android:paddingBottom="5dp"
+        android:paddingTop="8dp">
 
-        <CheckBox
-            android:id="@+id/chkImediate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+        <crypto.soft.cryptongy.feature.shared.customView.CalEditText
+            android:id="@+id/edtTotal"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:background="@drawable/ic_border_black"
+            android:gravity="center"
+            android:paddingBottom="10dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="10dp"
+            android:hint="total"
+            android:inputType="number"
+            android:textColor="@android:color/black"
+            android:textSize="13sp" />
 
         <crypto.soft.cryptongy.feature.shared.customView.CalTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
             android:gravity="center_vertical"
-            android:text="Imediate"
+            android:text="Total"
             android:textColor="@android:color/black"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -64,7 +76,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:checked="true"
             android:paddingHorizontal="5dp"
             android:text="Bid"
             android:textColor="@android:color/black"
@@ -75,7 +86,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:checked="true"
             android:paddingHorizontal="5dp"
             android:text="Ask"
             android:textColor="@android:color/black"
@@ -89,15 +99,26 @@
         android:layout_height="wrap_content"
         android:layout_gravity="right"
         android:layout_marginBottom="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:background="@drawable/ic_border_black"
+        android:gravity="center"
         android:paddingBottom="10dp"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
-        android:gravity="center"
         android:paddingTop="10dp"
-        android:text="43,456s"
+        android:inputType="number"
+        android:hint="price"
         android:textColor="@android:color/black"
         android:textSize="13sp" />
+
+    <crypto.soft.cryptongy.feature.shared.customView.CalButton
+        android:id="@+id/btnOk"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ok"
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/colorPrimary"
+        android:background="@drawable/bg_tab_button"
+        android:textSize="15sp" />
 
 </LinearLayout>

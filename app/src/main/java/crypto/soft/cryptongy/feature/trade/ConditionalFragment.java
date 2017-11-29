@@ -8,12 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import crypto.soft.cryptongy.R;
+import crypto.soft.cryptongy.utils.HideKeyboard;
 
 /**
  * Created by tseringwongelgurung on 11/28/17.
  */
 
-public class FragmentConditional extends Fragment {
+public class ConditionalFragment extends Fragment {
     private View view;
 
     @Nullable
@@ -21,6 +22,7 @@ public class FragmentConditional extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (view == null) {
             view = inflater.inflate(R.layout.fragment_conditional, container, false);
+            new HideKeyboard(getContext()).setupUI(view);
         }
         return view;
     }

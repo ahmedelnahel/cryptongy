@@ -1,8 +1,10 @@
 package crypto.soft.cryptongy.feature.trade;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +31,7 @@ import crypto.soft.cryptongy.feature.shared.json.market.Result;
 import crypto.soft.cryptongy.feature.shared.json.marketsummary.MarketSummary;
 import crypto.soft.cryptongy.utils.CoinApplication;
 import crypto.soft.cryptongy.utils.GlobalUtil;
+import crypto.soft.cryptongy.utils.HideKeyboard;
 import crypto.soft.cryptongy.utils.ProgressDialogFactory;
 
 /**
@@ -37,13 +40,13 @@ import crypto.soft.cryptongy.utils.ProgressDialogFactory;
 
 public class TradeFragment extends MvpFragment<TradeView, TradePresenter> implements TradeView, View.OnClickListener {
     private View view;
-    private TextView txtCoin, txtBtc, txtLevel, txtVtc, txtEmpty;
+    private TextView txtCoin, txtBtc, txtLevel, txtVtc;
     private ImageView imgSync, imgAccSetting;
     private LinearLayout lnlContainer;
 
     private HorizontalScrollView scrollView;
     private TextView lastValuInfo_TXT, BidvalueInfo_TXT, Highvalue_Txt, ASKvalu_TXT, LowvalueInfo_TXT, VolumeValue_Txt, HoldingValue_Txt, lastComp_txt;
-    private Spinner spinner,spnCoin;
+    private Spinner spinner, spnCoin;
 
     private List<Result> coins;
     private AutoCompleteTextView inputCoin;
@@ -53,12 +56,14 @@ public class TradeFragment extends MvpFragment<TradeView, TradePresenter> implem
     private TabLayout tabLayout;
 
     private boolean isFirst = false;
+    private Result result;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (view == null) {
             view = inflater.inflate(R.layout.fragment_trade, container, false);
+            new HideKeyboard(getContext()).setupUI(view);
             findViews();
             init();
             initBottomTab();
@@ -108,7 +113,6 @@ public class TradeFragment extends MvpFragment<TradeView, TradePresenter> implem
         VolumeValue_Txt = view.findViewById(R.id.VolumeValue_Id);
         scrollView = view.findViewById(R.id.HorScrollView);
 
-        txtEmpty = view.findViewById(R.id.txtEmpty);
         lnlContainer = view.findViewById(R.id.lnlContainer);
 
         spinner = view.findViewById(R.id.spinner);
@@ -135,19 +139,36 @@ public class TradeFragment extends MvpFragment<TradeView, TradePresenter> implem
     }
 
     public void initBottomTab() {
-        MainPagerAdaptor pagerAdapter = new MainPagerAdaptor(getFragmentManager());
-        pagerAdapter.addFragment(new FragmentLimit(), "Limit Trade");
-        pagerAdapter.addFragment(new FragmentConditional(), "Conditional");
+        final Fragment fragment=new ConditionalFragment();
+        final MainPagerAdaptor pagerAdapter = new MainPagerAdaptor(getFragmentManager());
+        pagerAdapter.addFragment(new LimitFragment(), "Limit Trade");
+        pagerAdapter.addFragment(new ConditionalFragment(), "Conditional");
         pager.setAdapter(pagerAdapter);
         pager.setOffscreenPageLimit(2);
         tabLayout.setupWithViewPager(pager);
 
-        View view1 = getLayoutInflater().inflate(R.layout.tab_layout_check,null);
+        View view1 = getLayoutInflater().inflate(R.layout.tab_layout_check, null);
         ((TextView) view1.findViewById(R.id.txtTitle)).setText("Limit Trade");
         tabLayout.getTabAt(0).setCustomView(view1);
         View view2 = getLayoutInflater().inflate(R.layout.tab_layout_unchecked, null);
         ((TextView) view2.findViewById(R.id.txtTitle)).setText("Conditional");
         tabLayout.getTabAt(1).setCustomView(view2);
+
+        pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     void setCoinAdapter() {
@@ -159,13 +180,13 @@ public class TradeFragment extends MvpFragment<TradeView, TradePresenter> implem
         inputCoin.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                result = new Result();
-//                inputCoin.setText(((Result) ((CustomArrayAdapter) adapterView.getAdapter()).getItem(i)).getMarketName());
-//                inputCoin.setTextSize(12);
-//                Typeface face = Typeface.createFromAsset(getActivity().getAssets(),
-//                        "fonts/calibri.ttf");
-//                inputCoin.setTypeface(face, Typeface.NORMAL);
-//                result = (Result) ((CustomArrayAdapter) adapterView.getAdapter()).getItem(i);
+                result = new Result();
+                inputCoin.setText(((Result) ((CustomArrayAdapter) adapterView.getAdapter()).getItem(i)).getMarketName());
+                inputCoin.setTextSize(12);
+                Typeface face = Typeface.createFromAsset(getActivity().getAssets(),
+                        "fonts/calibri.ttf");
+                inputCoin.setTypeface(face, Typeface.NORMAL);
+                result = (Result) ((CustomArrayAdapter) adapterView.getAdapter()).getItem(i);
 
             }
         });
@@ -227,13 +248,11 @@ public class TradeFragment extends MvpFragment<TradeView, TradePresenter> implem
 
     @Override
     public void showEmptyView() {
-        txtEmpty.setVisibility(View.VISIBLE);
         lnlContainer.setVisibility(View.GONE);
     }
 
     @Override
     public void hideEmptyView() {
-        txtEmpty.setVisibility(View.GONE);
         lnlContainer.setVisibility(View.VISIBLE);
     }
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -25,18 +25,6 @@
             android:id="@+id/include"
             layout="@layout/layout_calculation2" />
 
-        <crypto.soft.cryptongy.feature.shared.customView.MspTextView
-            android:id="@+id/txtEmpty"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_below="@+id/include"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:text="No data available"
-            android:textColor="@color/colorPrimary"
-            android:textSize="18sp" />
-
         <LinearLayout
             android:id="@+id/lnlContainer"
             android:layout_width="match_parent"
@@ -52,7 +40,6 @@
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:layout_marginTop="20dp"
                 android:orientation="horizontal">
 
                 <RelativeLayout
@@ -145,16 +132,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="15dp"
-                        android:paddingHorizontal="5dp"
                         android:checked="true"
+                        android:paddingHorizontal="5dp"
                         android:text="Buy" />
 
                     <RadioButton
                         android:id="@+id/rdbSell"
-                        android:paddingHorizontal="5dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="15dp"
+                        android:paddingHorizontal="5dp"
                         android:text="Sell" />
 
                 </RadioGroup>
@@ -258,11 +245,11 @@
                         android:layout_height="40dp"
                         app:tabGravity="fill"
                         app:tabIndicatorHeight="0dp"
+                        app:tabMode="fixed"
                         app:tabPaddingBottom="-1dp"
                         app:tabPaddingEnd="-1dp"
                         app:tabPaddingStart="-1dp"
-                        app:tabPaddingTop="-1dp"
-                        app:tabMode="fixed" />
+                        app:tabPaddingTop="-1dp" />
 
                     <crypto.soft.cryptongy.feature.shared.customView.ScrollableViewPager
                         android:id="@+id/viewPager"
@@ -277,4 +264,4 @@
 
     </RelativeLayout>
 
-</ScrollView>
+</android.support.v4.widget.NestedScrollView>
