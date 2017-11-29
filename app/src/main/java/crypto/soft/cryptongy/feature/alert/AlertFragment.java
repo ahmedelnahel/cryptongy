@@ -101,7 +101,6 @@ public class AlertFragment extends Fragment {
 
         ch_higher = (CheckBox) rootView.findViewById(R.id.ch_higher);
         ch_lower = (CheckBox) rootView.findViewById(R.id.ch_lower);
-        //
 
         coinNmae.setText(coinName);
 
@@ -189,12 +188,12 @@ public class AlertFragment extends Fragment {
             int x = getArguments().getInt("x");
             if (x == 1) {
 
-                coinName = getArguments().getString("CoinName");
+                coinName = getArguments().getString("COIN_NAME");
                 exchangeName = getArguments().getString("exchangeName");
                 reqCode = (int) System.currentTimeMillis();
             } else {
 
-                coinName = getArguments().getString("CoinName");
+                coinName = getArguments().getString("COIN_NAME");
                 exchangeName = getArguments().getString("exchangeName");
                 HighValueEn = getArguments().getDouble("high", 0);
                 LowValueEn = getArguments().getDouble("low", 0);

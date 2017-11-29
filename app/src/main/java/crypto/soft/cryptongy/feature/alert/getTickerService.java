@@ -121,15 +121,17 @@ public class getTickerService extends IntentService {
                 .setSmallIcon(R.drawable.circle)
 
                 .setContentTitle(coinName);
-
+         String alarmText = "";
         if (notifyLow) {
-            b.setContentText(coinName + " is lower than " + formatter.format(LowValueEn));
+            alarmText  = coinName + " is lower than " + formatter.format(LowValueEn);
+
         }
         if (notifyHigh) {
-            b.setContentText(coinName + " is higher than " + formatter.format(HighValueEn));
+            alarmText +=  " " + coinName + " is higher than " + formatter.format(HighValueEn);
+
         }
 
-
+        b.setContentText(alarmText);
         Intent resultIntent = new Intent(this, MainActivity.class);
         resultIntent.putExtra("CoinName", coinName);
         resultIntent.putExtra("requestCode", ReqCode);
