@@ -7,151 +7,165 @@
     android:paddingLeft="10dp"
     android:paddingRight="10dp">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="10dp">
+    <HorizontalScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
-        <crypto.soft.cryptongy.feature.shared.customView.CabTextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
             android:gravity="center"
-            android:text="Stop Loss"
-            android:layout_alignParentLeft="true"
-            android:textColor="@android:color/black"
-            android:textSize="13sp" />
+            android:orientation="horizontal">
 
-        <crypto.soft.cryptongy.feature.shared.customView.CabTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="Profit"
-            android:layout_alignParentRight="true"
-            android:textColor="@android:color/black"
-            android:textSize="13sp" />
+            <crypto.soft.cryptongy.feature.shared.customView.CabTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:gravity="center"
+                android:text="Stop Loss"
+                android:textColor="@android:color/black"
+                android:textSize="12sp" />
 
-    </RelativeLayout>
+            <crypto.soft.cryptongy.feature.shared.customView.CalEditText
+                android:id="@+id/edtLoss"
+                android:layout_width="75dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_border_black"
+                android:gravity="center"
+                android:hint="Stop Loss"
+                android:inputType="numberDecimal"
+                android:maxLength="10"
+                android:paddingBottom="10dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:paddingTop="10dp"
+                android:singleLine="true"
+                android:text="10"
+                android:textColor="@android:color/black"
+                android:textSize="12sp" />
+
+            <ToggleButton
+                android:id="@+id/tgbLoss"
+                android:layout_width="25dp"
+                android:layout_height="68dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/toogle_selector"
+                android:checked="true"
+                android:textOff=""
+                android:textOn="" />
+
+            <CheckBox
+                android:id="@+id/chkLoss"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <crypto.soft.cryptongy.feature.shared.customView.CalTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:gravity="center_vertical"
+                android:text=">="
+                android:textColor="@android:color/black"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <crypto.soft.cryptongy.feature.shared.customView.CabTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:gravity="center"
+                android:text="Last"
+                android:textColor="@android:color/black"
+                android:textSize="12sp" />
+
+            <CheckBox
+                android:id="@+id/chkProfit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp" />
+
+            <crypto.soft.cryptongy.feature.shared.customView.CalTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:gravity="center_vertical"
+                android:text=">="
+                android:textColor="@android:color/black"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <crypto.soft.cryptongy.feature.shared.customView.CalEditText
+                android:id="@+id/edtProfit"
+                android:layout_width="75dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/ic_border_black"
+                android:gravity="center"
+                android:hint="profit"
+                android:inputType="numberDecimal"
+                android:maxLength="10"
+                android:paddingBottom="10dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:paddingTop="10dp"
+                android:singleLine="true"
+                android:text="0.23456789"
+                android:textColor="@android:color/black"
+                android:textSize="12sp" />
+
+
+            <crypto.soft.cryptongy.feature.shared.customView.CabTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:gravity="center"
+                android:text="Profit"
+                android:textColor="@android:color/black"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+    </HorizontalScrollView>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:layout_marginBottom="10dp"
         android:orientation="horizontal">
 
         <crypto.soft.cryptongy.feature.shared.customView.CalEditText
-            android:id="@+id/edtValueLeft"
-            android:layout_width="0dp"
+            android:id="@+id/edtPrice"
+            android:layout_width="75dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:background="@drawable/ic_border_black"
             android:gravity="center"
+            android:hint="Stop Loss"
+            android:inputType="numberDecimal"
+            android:maxLength="10"
             android:paddingBottom="10dp"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
-            android:singleLine="true"
             android:paddingTop="10dp"
-            android:text=""
-            android:hint="Stop Loss"
-            android:inputType="number"
+            android:singleLine="true"
+            android:text="10"
             android:textColor="@android:color/black"
-            android:textSize="13sp" />
+            android:textSize="12sp" />
 
         <ToggleButton
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:textOff="฿"
-            android:textOn="%"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="5dp"
-            android:textColor="@color/colorPrimary"
-            android:background="@drawable/bg_tab_button"/>
-
-        <CheckBox
-            android:id="@+id/chkLeft"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <crypto.soft.cryptongy.feature.shared.customView.CalTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/tgbPrice"
+            android:layout_width="25dp"
+            android:layout_height="68dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:gravity="center_vertical"
-            android:text=">="
-            android:textColor="@android:color/black"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
-        <crypto.soft.cryptongy.feature.shared.customView.CabTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="Last"
-            android:layout_marginRight="5dp"
-            android:textColor="@android:color/black"
-            android:textSize="13sp" />
-
-        <CheckBox
-            android:id="@+id/chkRight"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="5dp" />
-
-        <crypto.soft.cryptongy.feature.shared.customView.CalTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="5dp"
-            android:gravity="center_vertical"
-            android:text=">="
-            android:textColor="@android:color/black"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
-        <crypto.soft.cryptongy.feature.shared.customView.CalEditText
-            android:id="@+id/edtValueRight"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/ic_border_black"
-            android:gravity="center"
-            android:paddingBottom="10dp"
-            android:paddingLeft="5dp"
-            android:hint="profit"
-            android:paddingRight="5dp"
-            android:paddingTop="10dp"
-            android:inputType="number"
-            android:singleLine="true"
-            android:textColor="@android:color/black"
-            android:textSize="13sp" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <crypto.soft.cryptongy.feature.shared.customView.CalEditText
-            android:id="@+id/edtValue"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/ic_border_black"
-            android:gravity="center"
-            android:paddingBottom="10dp"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:paddingTop="10dp"
-            android:inputType="number"
-            android:hint="Value"
-            android:textColor="@android:color/black"
-            android:textSize="13sp" />
+            android:background="@drawable/toogle_selector"
+            android:checked="true"
+            android:textOff=""
+            android:textOn="" />
 
         <crypto.soft.cryptongy.feature.shared.customView.CabTextView
             android:layout_width="0dp"
@@ -159,12 +173,12 @@
             android:layout_marginRight="15dp"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="Value"
+            android:text="Price"
             android:textColor="@android:color/black"
             android:textSize="13sp" />
 
         <RadioGroup
-            android:id="@+id/rdgValue"
+            android:id="@+id/rdgPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -203,15 +217,14 @@
 
     </LinearLayout>
 
-
     <crypto.soft.cryptongy.feature.shared.customView.CalButton
         android:id="@+id/btnOk"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Ok"
         android:layout_gravity="center_horizontal"
-        android:textColor="@color/colorPrimary"
         android:background="@drawable/bg_tab_button"
+        android:text="Ok"
+        android:textColor="@color/colorPrimary"
         android:textSize="15sp" />
 
 </LinearLayout>

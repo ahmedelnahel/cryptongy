@@ -7,41 +7,22 @@
     android:paddingLeft="10dp"
     android:paddingRight="10dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <crypto.soft.cryptongy.feature.shared.customView.CalEditText
+        android:id="@+id/edtValue"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/ic_border_black"
         android:gravity="center"
-        android:paddingBottom="5dp"
-        android:paddingTop="8dp">
-
-        <crypto.soft.cryptongy.feature.shared.customView.CalEditText
-            android:id="@+id/edtTotal"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:background="@drawable/ic_border_black"
-            android:gravity="center"
-            android:paddingBottom="10dp"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:paddingTop="10dp"
-            android:hint="total"
-            android:inputType="number"
-            android:textColor="@android:color/black"
-            android:textSize="13sp" />
-
-        <crypto.soft.cryptongy.feature.shared.customView.CalTextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:gravity="center_vertical"
-            android:text="Total"
-            android:textColor="@android:color/black"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
-    </LinearLayout>
+        android:paddingBottom="10dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="10dp"
+        android:inputType="number"
+        android:hint="price"
+        android:textColor="@android:color/black"
+        android:textSize="13sp" />
 
     <RadioGroup
         android:id="@+id/rdgValue"
@@ -93,23 +74,41 @@
 
     </RadioGroup>
 
-    <crypto.soft.cryptongy.feature.shared.customView.CalEditText
-        android:id="@+id/edtValue"
-        android:layout_width="100dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="5dp"
-        android:background="@drawable/ic_border_black"
+        android:orientation="horizontal"
         android:gravity="center"
-        android:paddingBottom="10dp"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:paddingTop="10dp"
-        android:inputType="number"
-        android:hint="price"
-        android:textColor="@android:color/black"
-        android:textSize="13sp" />
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp">
+
+        <crypto.soft.cryptongy.feature.shared.customView.CalEditText
+            android:id="@+id/edtTotal"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:background="@drawable/ic_border_black"
+            android:gravity="center"
+            android:paddingBottom="10dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="10dp"
+            android:hint="total"
+            android:inputType="number"
+            android:textColor="@android:color/black"
+            android:textSize="13sp" />
+
+        <crypto.soft.cryptongy.feature.shared.customView.CalTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:gravity="center_vertical"
+            android:text="Total"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
 
     <crypto.soft.cryptongy.feature.shared.customView.CalButton
         android:id="@+id/btnOk"
