@@ -33,4 +33,5 @@
     <dimen name="fragment_layout_margin">10dp</dimen>
 
     <dimen name="donnate_text">13sp</dimen>
+    <dimen name="condition_text">11sp</dimen>
 </resources>
