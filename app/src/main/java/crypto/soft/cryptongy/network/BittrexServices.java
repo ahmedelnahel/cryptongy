@@ -5,8 +5,11 @@ import android.util.Log;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
+import java.util.HashMap;
 
+import crypto.soft.cryptongy.common.RESTUtil;
 import crypto.soft.cryptongy.feature.shared.json.action.Cancel;
+import crypto.soft.cryptongy.feature.shared.json.limitorder.LimitOrder;
 import crypto.soft.cryptongy.feature.shared.json.market.MarketSummaries;
 import crypto.soft.cryptongy.feature.shared.json.markethistory.MarketHistory;
 import crypto.soft.cryptongy.feature.shared.json.marketsummary.MarketSummary;
@@ -14,6 +17,7 @@ import crypto.soft.cryptongy.feature.shared.json.openorder.OpenOrder;
 import crypto.soft.cryptongy.feature.shared.json.orderhistory.OrderHistory;
 import crypto.soft.cryptongy.feature.shared.json.ticker.Ticker;
 import crypto.soft.cryptongy.feature.shared.json.wallet.Wallet;
+import crypto.soft.cryptongy.feature.shared.module.Account;
 
 /**
  * Created by noni on 26/10/2017.
@@ -21,13 +25,7 @@ import crypto.soft.cryptongy.feature.shared.json.wallet.Wallet;
  */
 
 public class BittrexServices {
-    //response true{"success":true,"message":"","result":[{"MarketName":"BTC-1ST","High":0.00004453,"Low":0.00003839,"Volume":502812.07168955,"Last":0.00003938,"BaseVolume":20.58770166,"TimeStamp":"2017-11-05T14:18:24.413","Bid":0.00003930,"Ask":0.00003938,"OpenBuyOrders":142,"OpenSellOrders":5659,"PrevDay":0.00004077,"Created":"2017-06-06T01:22:35.727"},{"MarketName":"BTC-2GIVE","High":0.00000074,"Low":0.00000070,"Volume":1701369.43270481,"Last":0.00000070,"BaseVolume":1.21710449,"TimeStamp":"2017-11-05T13:46:05.83","Bid":0.00000070,"Ask":0.00000072,"OpenBuyOrders":164,"OpenSellOrders":2281,"PrevDay":0.00000075,"Created":"2016-05-16T06:44:15.287"},{"MarketName":"BTC-ABY","High":0.00000077,"Low":0.00000072,"Volume":3499608.96947303,"Last":0.00000075,"BaseVolume":2.59513197,"TimeStamp":"2017-11-05T14:17:55.49","Bid":0.00000075,"Ask":0.00000076,"OpenBuyOrders":196,"OpenSellOrders":4984,"PrevDay":0.00000075,"Created":"2014-10-31T01:43:25.743"},{"MarketName":"BTC-ADA","High":0.00000321,"Low":0.00000292,"Volume":90042088.61765655,"Last":0.00000294,"BaseVolume":272.39843534,"TimeStamp":"2017-11-05T14:20:21.603","Bid":0.00000293,"Ask":0.00000294,"OpenBuyOrders":1104,"OpenSellOrders":8845,"PrevDay":0.00000318,"Created":"2017-09-29T07:01:58.873"},{"MarketName":"BTC-ADT","High":0.00000299,"Low":0.00000242,"Volume":7536196.78770819,"Last":0.00000253,"BaseVolume":20.12929864,"TimeStamp":"2017-11-05T14:20:46.23","Bid":0.00000258,"Ask":0.00000262,"OpenBuyOrders":125,"OpenSellOrders":3035,"PrevDay":0.00000280,"Created":"2017-07-03T21:08:06.11"},{"MarketName":"BTC-ADX","High":0.00011125,"Low":0.00010437,"Volume":838596.57193706,"Last":0.00010625,"BaseVolume":90.31411449,"TimeStamp":"2017-11-05T14:20:48.713","Bid":0.00010623,"Ask":0.00010676,"OpenBuyOrders":519,"OpenSellOrders":8861,"PrevDay":0.00010823,"Created":"2017-07-11T22:42:17.78"},{"MarketName":"BTC-AEON","High":0.00028600,"Low":0.00019000,"Volume":402565.45467779,"Last":0.00019698,"BaseVolume":96.70299519,"TimeStamp":"2017-11-05T14:20:48.98","Bid":0.00019811,"Ask":0.00020087,"OpenBuyOrders":227,"OpenSellOrders":2115,"PrevDay":0.00022550,"Created":"2015-07-31T00:50:47.11"},{"MarketName":"BTC-AGRS","High":0.00005069,"Low":0.00004616,"Volume":63026.29450465,"Last":0.00004926,"BaseVolume":3.06017920,"TimeStamp":"2017-11-05T14:14:40.627","Bid":0.00004847,"Ask":0.00004926,"OpenBuyOrders":143,"OpenSellOrders":2460,"PrevDay":0.00004679,"Created":"2015-11-10T00:53:59.643"},{"MarketName":"BTC-AMP","High":0.00001872,"Low":0.00001779,"Volume":594503.04036198,"Last":0.00001840,"BaseVolume":10.87976207,"TimeStamp":"2017-11-05T14:20:27.027","Bid":0.00001812,"Ask":0.00001840,"OpenBuyOrders":125,"OpenSellOrders":5609,"PrevDay":0.00001822,"Created":"2015-11-03T19:13:55.18"},{"MarketName":"BTC-ANT","High":0.00019900,"Low":0.00015511,"Volume":205092.07499717,"Last":0.00015869,"BaseVolume":35.46792783,"TimeStamp":"2017-11-05T14:20:49.933","Bid":0.00015588,"Ask":0.00015868,"OpenBuyOrders":181,"OpenSellOrders":4183,"PrevDay":0.00016600,"Created":"2017-05-17T19:54:30.143"},{"MarketName":"BTC-APX","High":0.00077922,"Low":0.00071000,"Volume":2567.19515713,"Last":0.00073645,"BaseVolume":1.88078304,"TimeStamp":"2017-11-05T14:20:37.463","Bid":0.00073645,"Ask":0.00075296,"OpenBuyOrders":162,"OpenSellOrders":1877,"PrevDay":0.00072001,"Created":"2017-05-02T06:26:32.897"},{"MarketName":"BTC-ARDR","High":0.00002830,"Low":0.00002645,"Volume":790289.42126667,"Last":0.00002647,"BaseVolume":21.45893312,"TimeStamp":"2017-11-05T14:20:10.777","Bid":0.00002646,"Ask":0.00002647,"OpenBuyOrders":394,"OpenSellOrders":4201,"PrevDay":0.00002832,"Created":"2016-10-13T18:59:37.407"},{"MarketName":"BTC-ARK","High":0.00034285,"Low":0.00029965,"Volume":481882.96684271,"Last":0.00031177,"BaseVolume":154.01007013,"TimeStamp":"2017-11-05T14:20:50.15","Bid":0.00030555,"Ask":0.00031175,"OpenBuyOrders":1467,"OpenSellOrders":10063,"PrevDay":0.00033562,"Created":"2017-03-21T18:11:29.347"},{"MarketName":"BTC-AUR","High":0.00009500,"Low":0.00008401,"Volume":47545.81159218,"Last":0.00008402,"BaseVolume":4.25443806,
 
-
-
-
-
-/***********************************************************************************************/
 
     public MarketSummaries getMarketSummariesMock() throws IOException {
 
@@ -110,6 +108,37 @@ public class BittrexServices {
         Log.i("MarketSummary", mhStr);
 
         return mh;
+    }
+
+    public LimitOrder buyLimit(String market, String quantity, String rate, Account account) throws IOException
+    {
+
+        String buyLimitStr = "{\"success\" : true, " +
+                "\"message\" : \"\", " +
+                "\"result\" : {" +
+                "\"uuid\" : \"614c34e4-8d71-11e3-94b5-425861b86ab6\"" +
+                "}" +
+                "}";
+        ObjectMapper mapper = new ObjectMapper();
+        LimitOrder limitOrder = mapper.readValue(buyLimitStr, LimitOrder.class);
+
+        return limitOrder;
+
+    }
+
+    public LimitOrder sellLimit(String market, String quantity, String rate, Account account) throws IOException
+    {
+        String buyLimitStr = "{\"success\" : true, " +
+                "\"message\" : \"\", " +
+                "\"result\" : {" +
+                "\"uuid\" : \"614c34e4-8d71-11e3-94b5-425861b86ab6\"" +
+                "}" +
+                "}";
+        ObjectMapper mapper = new ObjectMapper();
+        LimitOrder limitOrder = mapper.readValue(buyLimitStr, LimitOrder.class);
+
+        return limitOrder;
+
     }
 
 }
