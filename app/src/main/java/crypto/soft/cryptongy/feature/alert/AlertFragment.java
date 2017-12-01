@@ -11,6 +11,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
@@ -27,6 +28,8 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hannesdorfmann.mosby.mvp.MvpFragment;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +44,7 @@ import crypto.soft.cryptongy.network.BittrexServices;
  * Created by maiAjam on 11/20/2017.
  */
 
-public class AlertFragment extends Fragment {
+public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> {
     ProgressBar progressBar;
     dbHandler db;
     TextView lastValuInfo_TXT, BidvalueInfo_TXT, Highvalue_Txt, ASKvalu_TXT, LowvalueInfo_TXT, VolumeValue_Txt, HoldingValue_Txt, lastComp_txt;
@@ -166,7 +169,8 @@ public class AlertFragment extends Fragment {
 
                 if (error)
                     return;
-                saveData(LowValueEn, HighValueEn, exchangeName, coinName, AlarmFreq);
+                presenter.saveData(getContext(), LowValueEn, HighValueEn, exchangeName, coinName,
+                        AlarmFreq, reqCode, ch_higher, ch_lower);
             }
         });
         sycCoinInfo sycCoinInfo = new sycCoinInfo();
@@ -176,6 +180,12 @@ public class AlertFragment extends Fragment {
         return rootView;
     }
 
+
+    @NonNull
+    @Override
+    public AlertPresenter createPresenter() {
+        return new AlertPresenter();
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
     @Override
@@ -203,37 +213,6 @@ public class AlertFragment extends Fragment {
         }
 
     }
-
-    private void saveData(Double lowV, Double highV, String exchangeName, String coinName, int alarmFreq) {
-        db = new dbHandler(getContext());
-        CoinInfo coinInfo = new CoinInfo(coinName, exchangeName, HighValueEn, LowValueEn);
-        db.AddCoinInfo(coinInfo);
-        db.updateCoinInfo(coinInfo);
-        Intent i = new Intent(getContext(), broadCastTicker.class);
-
-        i.putExtra("coinName", coinName);
-        i.putExtra("exchangeName", exchangeName);
-        i.putExtra("high", HighValueEn);
-        i.putExtra("low", LowValueEn);
-        i.putExtra("reqCode", reqCode);
-        i.putExtra("alarmFreq", alarmFreq);
-        i.putExtra("higherCh", ch_higher.isChecked());
-        i.putExtra("lowerCh", ch_lower.isChecked());
-
-
-        PendingIntent opertaion = PendingIntent.getBroadcast(getContext(), reqCode, i, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        AlarmManager alarmManger = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
-
-
-        alarmManger.setRepeating(AlarmManager.RTC_WAKEUP, 30 * 1000,
-                1000 * 30, opertaion);
-
-
-        Toast.makeText(getContext(), "Your Values have been saved successfully", Toast.LENGTH_LONG).show();
-
-    }
-
 
     @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
     public class sycCoinInfo extends AsyncTask<String, Void, String> {
