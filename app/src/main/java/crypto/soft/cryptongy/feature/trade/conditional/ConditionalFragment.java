@@ -1,22 +1,22 @@
-package crypto.soft.cryptongy.feature.trade;
+package crypto.soft.cryptongy.feature.trade.conditional;
 
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
@@ -25,7 +25,6 @@ import java.util.List;
 
 import crypto.soft.cryptongy.R;
 import crypto.soft.cryptongy.feature.home.CustomArrayAdapter;
-import crypto.soft.cryptongy.feature.shared.adapter.MainPagerAdaptor;
 import crypto.soft.cryptongy.feature.shared.json.market.MarketSummaries;
 import crypto.soft.cryptongy.feature.shared.json.market.Result;
 import crypto.soft.cryptongy.feature.shared.json.marketsummary.MarketSummary;
@@ -38,8 +37,10 @@ import crypto.soft.cryptongy.utils.ProgressDialogFactory;
  * Created by tseringwongelgurung on 11/28/17.
  */
 
-public class TradeFragment extends MvpFragment<TradeView, TradePresenter> implements TradeView, View.OnClickListener {
+public class ConditionalFragment extends MvpFragment<ConditionalView, ConditonalPresenter> implements
+        ConditionalView, CompoundButton.OnCheckedChangeListener, View.OnClickListener {
     private View view;
+
     private TextView txtCoin, txtBtc, txtLevel, txtVtc;
     private ImageView imgSync, imgAccSetting;
     private LinearLayout lnlContainer;
@@ -52,32 +53,26 @@ public class TradeFragment extends MvpFragment<TradeView, TradePresenter> implem
     private AutoCompleteTextView inputCoin;
     private CustomArrayAdapter adapterCoins;
 
-    private ViewPager pager;
-    private TabLayout tabLayout;
-
     private boolean isFirst = false;
     private Result result;
+
+    private ToggleButton tgbPrice, tgbLoss;
+    private EditText edtPrice, edtLoss;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (view == null) {
-            view = inflater.inflate(R.layout.fragment_trade, container, false);
+            view = inflater.inflate(R.layout.fragment_conditional, container, false);
             new HideKeyboard(getContext()).setupUI(view);
             findViews();
             init();
-            initBottomTab();
             setOnClickListner();
             setCoinAdapter();
             isFirst = true;
         }
         setTitle();
         return view;
-    }
-
-    @Override
-    public TradePresenter createPresenter() {
-        return new TradePresenter(getContext());
     }
 
     @Override
@@ -89,10 +84,34 @@ public class TradeFragment extends MvpFragment<TradeView, TradePresenter> implem
         }
     }
 
+    public void initToggleListner() {
+        tgbPrice.setOnCheckedChangeListener(this);
+        tgbLoss.setOnCheckedChangeListener(this);
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+        int id = compoundButton.getId();
+        EditText editText = null;
+        switch (id) {
+            case R.id.tgbLoss:
+                editText = edtLoss;
+                break;
+            case R.id.tgbPrice:
+                editText = edtPrice;
+                break;
+        }
+    }
+
+    @Override
+    public ConditonalPresenter createPresenter() {
+        return new ConditonalPresenter(getContext());
+    }
+
     @Override
     public void setTitle() {
         TextView txtTitle = getActivity().findViewById(R.id.txtTitle);
-        txtTitle.setText(R.string.trade);
+        txtTitle.setText(R.string.conditional_trade);
     }
 
     @Override
@@ -120,8 +139,11 @@ public class TradeFragment extends MvpFragment<TradeView, TradePresenter> implem
 
         inputCoin = view.findViewById(R.id.inputCoin);
 
-        tabLayout = view.findViewById(R.id.tabs);
-        pager = view.findViewById(R.id.viewPager);
+        tgbPrice = view.findViewById(R.id.tgbPrice);
+        tgbLoss = view.findViewById(R.id.tgbLoss);
+
+        edtPrice = view.findViewById(R.id.edtPrice);
+        edtLoss = view.findViewById(R.id.edtLoss);
     }
 
     @Override
@@ -136,39 +158,6 @@ public class TradeFragment extends MvpFragment<TradeView, TradePresenter> implem
                 R.array.coin_array2, R.layout.drop_down_text);
         adapter.setDropDownViewResource(R.layout.drop_down_text);
         spnCoin.setAdapter(adapter2);
-    }
-
-    public void initBottomTab() {
-        final Fragment fragment=new ConditionalFragment();
-        final MainPagerAdaptor pagerAdapter = new MainPagerAdaptor(getFragmentManager());
-        pagerAdapter.addFragment(new LimitFragment(), "Limit Trade");
-        pagerAdapter.addFragment(new ConditionalFragment(), "Conditional");
-        pager.setAdapter(pagerAdapter);
-        pager.setOffscreenPageLimit(2);
-        tabLayout.setupWithViewPager(pager);
-
-        View view1 = getLayoutInflater().inflate(R.layout.tab_layout_check, null);
-        ((TextView) view1.findViewById(R.id.txtTitle)).setText("Limit Trade");
-        tabLayout.getTabAt(0).setCustomView(view1);
-        View view2 = getLayoutInflater().inflate(R.layout.tab_layout_unchecked, null);
-        ((TextView) view2.findViewById(R.id.txtTitle)).setText("Conditional");
-        tabLayout.getTabAt(1).setCustomView(view2);
-
-        pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
     }
 
     void setCoinAdapter() {

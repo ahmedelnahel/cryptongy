@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/rect_left_right"
+            android:padding="10dp">
+
+            <Spinner
+                android:id="@+id/spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true">
+
+            </Spinner>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:background="@drawable/rect_left_right"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            tools:ignore="MissingPrefix">
+
+            <ImageView
+                android:id="@+id/icon_search"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_search" />
+
+            <AutoCompleteTextView
+                android:id="@+id/inputCoin"
+                fontPath="fonts/myriad_pro_semibold.ttf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/icon_search"
+                android:background="@android:color/white"
+                android:hint="Coin"
+                android:paddingLeft="10dp"
+                android:singleLine="true"
+                android:textStyle="italic" />
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <crypto.soft.cryptongy.feature.shared.customView.CabTextView
+        android:id="@+id/txtVtc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="14dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/rect_bottom_black"
+        android:text=""
+        android:textColor="@color/order_secondary2"
+        android:textSize="@dimen/orderListTitle"
+        android:visibility="visible" />
+
+    <include
+        android:id="@+id/HorScrollView"
+        layout="@layout/layout_vtc_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp">
+
+        <RadioGroup
+            android:id="@+id/rdg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/rllUnits"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rdbBuy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="15dp"
+                android:checked="true"
+                android:paddingHorizontal="5dp"
+                android:text="Buy" />
+
+            <RadioButton
+                android:id="@+id/rdbSell"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="15dp"
+                android:paddingHorizontal="5dp"
+                android:text="Sell" />
+
+        </RadioGroup>
+
+        <RelativeLayout
+            android:id="@+id/rllUnits"
+            android:layout_width="165dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/rect_black"
+            android:padding="8dp">
+
+            <EditText
+                android:id="@+id/edtUnits"
+                fontPath="fonts/myriad_pro_semibold.ttf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:background="@android:color/white"
+                android:hint="Coin"
+                android:paddingLeft="10dp"
+                android:singleLine="true"
+                android:textSize="13sp"
+                tools:ignore="MissingPrefix" />
+
+        </RelativeLayout>
+
+        <crypto.soft.cryptongy.feature.shared.customView.CalTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/rllUnits"
+            android:layout_below="@+id/rllUnits"
+            android:text="Units"
+            android:textColor="@android:color/black"
+            android:textSize="11sp"
+            android:textStyle="bold" />
+
+        <crypto.soft.cryptongy.feature.shared.customView.CalTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@+id/rllUnits"
+            android:layout_below="@+id/rllUnits"
+            android:background="@drawable/ic_rect_green"
+            android:gravity="right"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:text="max"
+            android:textColor="@android:color/white"
+            android:textSize="11sp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <crypto.soft.cryptongy.feature.shared.customView.CalTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/rllUnits"
+        android:layout_below="@+id/rllUnits"
+        android:layout_marginLeft="15dp"
+        android:background="@drawable/rect_bottom_black"
+        android:text="Against"
+        android:textColor="@android:color/black"
+        android:textSize="11sp"
+        android:textStyle="bold" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/rect_left_right"
+        android:padding="10dp">
+
+        <Spinner
+            android:id="@+id/spnCoin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true" />
+
+    </RelativeLayout>
+
+</merge>

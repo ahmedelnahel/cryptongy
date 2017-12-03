@@ -50,4 +50,5 @@
     <string name="donnation_send">ETH Address: </string>
     <string name="donnation_to"> 0x8C6249F8dD89d69db3a435Bd94971AB659C6f291</string>
     <string name="trade">Trade</string>
+    <string name="conditional_trade">Conditional Trade</string>
 </resources>

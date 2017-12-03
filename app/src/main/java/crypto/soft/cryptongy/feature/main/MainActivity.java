@@ -101,7 +101,7 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
         menuItems.add(new MenuItem(R.drawable.ic_wallet, "Wallet", false));
         menuItems.add(new MenuItem(R.drawable.ic_orders, "Orders", false));
         menuItems.add(new MenuItem(R.drawable.ic_trade, "Trade", false));
-        menuItems.add(new MenuItem(R.drawable.ic_portfolio, "Portfolio", false));
+        menuItems.add(new MenuItem(R.drawable.ic_portfolio, "Conditional", false));
         menuItems.add(new MenuItem(R.drawable.ic_account, "Accounts", false));
         menuItems.add(new MenuItem(R.drawable.ic_donate, "Donate", false));
         menuItems.add(new MenuItem(R.drawable.ic_about, "About Us", false));

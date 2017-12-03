@@ -21,7 +21,7 @@ import crypto.soft.cryptongy.utils.GlobalUtil;
  * Created by tseringwongelgurung on 11/28/17.
  */
 
-public class TradePresenter extends MvpBasePresenter<TradeView> {
+public class TradePresenter<T extends TradeView> extends MvpBasePresenter<T> {
     private Context context;
     private TradeInteractor tradeInteractor;
 
