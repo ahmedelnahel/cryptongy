@@ -16,6 +16,7 @@
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_marginRight="15dp"
+            android:layout_marginLeft="14dp"
             android:background="@drawable/buttonborder"
             android:orientation="vertical">
 
@@ -151,6 +152,34 @@
 
             <TextView
                 android:id="@+id/VolumeValue_Id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text=""
+                android:textColor="#000000" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/lnlHolding"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/buttonborder"
+            android:visibility="gone"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/LabHolding"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Holding"
+                android:textSize="15sp"
+
+                />
+
+            <TextView
+                android:id="@+id/HoldingValue_Id"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
