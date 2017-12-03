@@ -24,16 +24,39 @@
             android:id="@+id/include"
             layout="@layout/layout_calculation2" />
 
+        <include
+            android:id="@+id/includeSearch"
+            layout="@layout/trade_search_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/include"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical" />
+
+        <crypto.soft.cryptongy.feature.shared.customView.MspTextView
+            android:id="@+id/txtEmpty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@+id/includeSearch"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:text="No data available"
+            android:textColor="@color/colorPrimary"
+            android:textSize="18sp" />
+
         <LinearLayout
             android:id="@+id/lnlContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/include"
-            android:layout_marginTop="10dp"
-            android:orientation="vertical"
+            android:layout_below="@+id/includeSearch"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:visibility="visible">
+            android:layout_marginTop="10dp"
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <include layout="@layout/trade_top_layout" />
 

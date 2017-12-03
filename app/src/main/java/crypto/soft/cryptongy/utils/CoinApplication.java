@@ -2,9 +2,7 @@ package crypto.soft.cryptongy.utils;
 
 import android.app.Application;
 
-import crypto.soft.cryptongy.common.Setting;
 import crypto.soft.cryptongy.feature.setting.Notification;
-import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
 import crypto.soft.cryptongy.feature.shared.module.Account;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -126,4 +124,4 @@ public class CoinApplication extends Application {
         realm.commitTransaction();
         setSettings(notification);
     }
-    }
+}

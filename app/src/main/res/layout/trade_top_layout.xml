@@ -2,62 +2,6 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:orientation="horizontal">
-
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_marginRight="5dp"
-            android:layout_weight="1"
-            android:background="@drawable/rect_left_right"
-            android:padding="10dp">
-
-            <Spinner
-                android:id="@+id/spinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true">
-
-            </Spinner>
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:background="@drawable/rect_left_right"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            tools:ignore="MissingPrefix">
-
-            <ImageView
-                android:id="@+id/icon_search"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_centerVertical="true"
-                android:src="@drawable/ic_search" />
-
-            <AutoCompleteTextView
-                android:id="@+id/inputCoin"
-                fontPath="fonts/myriad_pro_semibold.ttf"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/icon_search"
-                android:background="@android:color/white"
-                android:hint="Coin"
-                android:paddingLeft="10dp"
-                android:singleLine="true"
-                android:textStyle="italic" />
-        </RelativeLayout>
-
-    </LinearLayout>
-
     <crypto.soft.cryptongy.feature.shared.customView.CabTextView
         android:id="@+id/txtVtc"
         android:layout_width="wrap_content"
@@ -84,7 +28,7 @@
         android:layout_marginTop="8dp">
 
         <RadioGroup
-            android:id="@+id/rdg"
+            android:id="@+id/rdgUnits"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@id/rllUnits"
@@ -98,6 +42,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="15dp"
                 android:checked="true"
+                android:textColor="@android:color/black"
                 android:paddingHorizontal="5dp"
                 android:text="Buy" />
 
@@ -107,6 +52,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="15dp"
                 android:paddingHorizontal="5dp"
+                android:textColor="@android:color/black"
                 android:text="Sell" />
 
         </RadioGroup>
@@ -132,6 +78,7 @@
                 android:paddingLeft="10dp"
                 android:singleLine="true"
                 android:textSize="13sp"
+                android:inputType="numberDecimal"
                 tools:ignore="MissingPrefix" />
 
         </RelativeLayout>
@@ -147,6 +94,7 @@
             android:textStyle="bold" />
 
         <crypto.soft.cryptongy.feature.shared.customView.CalTextView
+            android:id="@+id/txtMax"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignRight="@+id/rllUnits"

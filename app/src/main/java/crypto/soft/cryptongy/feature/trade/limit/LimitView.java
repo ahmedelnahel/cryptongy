@@ -7,4 +7,5 @@ import crypto.soft.cryptongy.feature.trade.TradeView;
  */
 
 public interface LimitView extends TradeView {
+    Limit getLimit();
 }

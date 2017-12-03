@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -28,6 +29,7 @@ import crypto.soft.cryptongy.feature.home.CustomArrayAdapter;
 import crypto.soft.cryptongy.feature.shared.json.market.MarketSummaries;
 import crypto.soft.cryptongy.feature.shared.json.market.Result;
 import crypto.soft.cryptongy.feature.shared.json.marketsummary.MarketSummary;
+import crypto.soft.cryptongy.feature.shared.json.wallet.Wallet;
 import crypto.soft.cryptongy.utils.CoinApplication;
 import crypto.soft.cryptongy.utils.GlobalUtil;
 import crypto.soft.cryptongy.utils.HideKeyboard;
@@ -41,9 +43,11 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
         ConditionalView, CompoundButton.OnCheckedChangeListener, View.OnClickListener {
     private View view;
 
-    private TextView txtCoin, txtBtc, txtLevel, txtVtc;
+    private TextView txtCoin, txtBtc, txtLevel, txtVtc, txtEmpty;
     private ImageView imgSync, imgAccSetting;
     private LinearLayout lnlContainer;
+
+    private RadioGroup rdgUnits;
 
     private HorizontalScrollView scrollView;
     private TextView lastValuInfo_TXT, BidvalueInfo_TXT, Highvalue_Txt, ASKvalu_TXT, LowvalueInfo_TXT, VolumeValue_Txt, HoldingValue_Txt, lastComp_txt;
@@ -120,8 +124,11 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
         txtBtc = view.findViewById(R.id.txtBtc);
         txtVtc = view.findViewById(R.id.txtVtc);
         txtLevel = view.findViewById(R.id.txtLevel);
+
         imgSync = view.findViewById(R.id.imgSync);
         imgAccSetting = view.findViewById(R.id.imgAccSetting);
+
+        rdgUnits = view.findViewById(R.id.rdgUnits);
 
         txtVtc = view.findViewById(R.id.txtVtc);
         lastValuInfo_TXT = view.findViewById(R.id.LastValue_Id);
@@ -188,6 +195,11 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
     }
 
     @Override
+    public void setTextWatcher() {
+
+    }
+
+    @Override
     public void setLevel(String level) {
         txtLevel.setText(level);
     }
@@ -243,6 +255,31 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
     @Override
     public void hideEmptyView() {
         lnlContainer.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void setHolding(Wallet o) {
+
+    }
+
+    @Override
+    public void setMax() {
+//        edtUnits.setText(Highvalue_Txt.getText());
+    }
+
+    @Override
+    public void setAgaints(String[] list) {
+
+    }
+
+    @Override
+    public void calculateTotal() {
+
+    }
+
+    @Override
+    public boolean isBuy() {
+        return false;
     }
 
     @Override
