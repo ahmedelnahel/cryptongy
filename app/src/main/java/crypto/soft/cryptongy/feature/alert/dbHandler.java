@@ -7,6 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static android.content.ContentValues.TAG;
 
 /**
@@ -95,6 +98,42 @@ public class dbHandler extends SQLiteOpenHelper {
 
     }
 
+
+    public List<CoinInfo> getAllCoinInfo() {
+        String selectQ = "SELECT * FROM coinInfo;";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQ, null);
+
+        List<CoinInfo> coinInfoList = new ArrayList<>();
+
+        if(cursor.getCount() != 0){
+            cursor.moveToFirst();
+
+            do{
+                String row_values = "";
+                CoinInfo coinInfo = new CoinInfo();
+
+                coinInfo.setCoinName(cursor.getString(1));
+                coinInfo.setExchangeName(cursor.getString(2));
+                coinInfo.setHighValue(Double.valueOf(cursor.getString(3)));
+                coinInfo.setLowValue(Double.valueOf(cursor.getString(4)));
+
+                coinInfoList.add(coinInfo);
+
+                for(int i = 0 ; i < cursor.getColumnCount(); i++){
+                    row_values = row_values + " || " + cursor.getString(i);
+                }
+
+                Log.d("LOG_TAG_HERE", row_values);
+
+            }while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+
+        return coinInfoList;
+    }
+
     public void updateCoinInfo(CoinInfo coinInfo) {
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -108,6 +147,11 @@ public class dbHandler extends SQLiteOpenHelper {
                     "' WHERE coinName = '" + coinInfo.getCoinName() + "';";
             Log.d(TAG, "updatemedcine: " + addQuery);
             db.execSQL(addQuery);
+    }
+
+    public void deleteCoin(String coinName) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("delete from coinInfo where coinName = '" + coinName + "';");
     }
 }
 

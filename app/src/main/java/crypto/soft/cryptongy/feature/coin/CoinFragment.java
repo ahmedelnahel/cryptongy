@@ -3,6 +3,7 @@ package crypto.soft.cryptongy.feature.coin;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import crypto.soft.cryptongy.R;
+import crypto.soft.cryptongy.feature.alert.CoinName;
 import crypto.soft.cryptongy.feature.order.OpenOrderHolder;
 import crypto.soft.cryptongy.feature.order.OrderHistoryHolder;
 import crypto.soft.cryptongy.feature.shared.json.markethistory.MarketHistory;
@@ -59,6 +61,7 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
         } else
             isFirst = false;
         coinName = getArguments().getString("COIN_NAME", "");
+        CoinName.coinName = coinName;
         setTitle();
         return view;
     }

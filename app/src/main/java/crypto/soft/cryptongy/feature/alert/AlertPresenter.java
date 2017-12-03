@@ -43,5 +43,17 @@ public class AlertPresenter extends MvpBasePresenter<AlertView> {
 
         Toast.makeText(context, "Your Values have been saved successfully", Toast.LENGTH_LONG).show();
 
+        if (isViewAttached()){
+            getView().updateTable();
+        }
+    }
+
+    public void deleteCoinInfo(Context context, String coinName) {
+        dbHandler db = new dbHandler(context);
+        db.deleteCoin(coinName);
+
+        if (isViewAttached()){
+            getView().updateTable();
+        }
     }
 }
