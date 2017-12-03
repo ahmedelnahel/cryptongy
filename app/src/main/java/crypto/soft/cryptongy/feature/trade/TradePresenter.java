@@ -137,8 +137,7 @@ public class TradePresenter<T extends TradeView> extends MvpBasePresenter<T> {
         return Observable.create(new ObservableOnSubscribe<Wallet>() {
             @Override
             public void subscribe(final ObservableEmitter<Wallet> e) throws Exception {
-                String coin = coinName.split("-")[0];
-                tradeInteractor.getWalletSummary(coin, new OnFinishListner<Wallet>() {
+                tradeInteractor.getWalletSummary(coinName, new OnFinishListner<Wallet>() {
                     @Override
                     public void onComplete(Wallet result) {
                         e.onNext(result);

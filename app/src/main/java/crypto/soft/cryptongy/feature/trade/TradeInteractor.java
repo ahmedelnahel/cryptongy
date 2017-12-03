@@ -56,11 +56,14 @@ public class TradeInteractor {
             protected Wallet doInBackground(Void... voids) {
                 try {
                     Thread.sleep(2000);
-                    Wallet wallet=new BittrexServices().getWalletMock();
-                    Iterator iterator=wallet.getResult().iterator();
-                    while (iterator.hasNext()){
-                        Result result= (Result) iterator.next();
-                        if (!result.getCurrency().equalsIgnoreCase(coin))
+                    Wallet wallet = new BittrexServices().getWalletMock();
+                    Iterator iterator = wallet.getResult().iterator();
+                    String[] ar = coin.split("-");
+                    String base = ar[0];
+                    String coinName = ar[1];
+                    while (iterator.hasNext()) {
+                        Result result = (Result) iterator.next();
+                        if (!result.getCurrency().equalsIgnoreCase(base) && !result.getCurrency().equalsIgnoreCase(coinName))
                             iterator.remove();
                     }
                     return wallet;
@@ -77,8 +80,12 @@ public class TradeInteractor {
                 super.onPostExecute(wallet);
                 if (wallet == null)
                     listner.onFail("Failed to fetch data");
-                else
-                    listner.onComplete(wallet);
+                else {
+                    if (wallet.getResult().size() < 2)
+                        listner.onFail("No coin match found");
+                    else
+                        listner.onComplete(wallet);
+                }
             }
         }.execute();
     }
@@ -117,7 +124,7 @@ public class TradeInteractor {
             protected LimitOrder doInBackground(Void... voids) {
                 try {
                     Thread.sleep(2000);
-                    return new BittrexServices().buyLimit(limit.getMarket(),limit.getQuantity(),limit.getRate(),limit.getAccount());
+                    return new BittrexServices().buyLimit(limit.getMarket(), limit.getQuantity(), limit.getRate(), limit.getAccount());
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (InterruptedException e) {
@@ -136,6 +143,7 @@ public class TradeInteractor {
             }
         }.execute();
     }
+
     public void sellLimit(final Limit limit, final OnFinishListner<LimitOrder> listner) {
         new AsyncTask<Void, Void, LimitOrder>() {
 
@@ -143,7 +151,7 @@ public class TradeInteractor {
             protected LimitOrder doInBackground(Void... voids) {
                 try {
                     Thread.sleep(2000);
-                    return new BittrexServices().sellLimit(limit.getMarket(),limit.getQuantity(),limit.getRate(),limit.getAccount());
+                    return new BittrexServices().sellLimit(limit.getMarket(), limit.getQuantity(), limit.getRate(), limit.getAccount());
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (InterruptedException e) {

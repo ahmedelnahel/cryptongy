@@ -33,7 +33,7 @@
             android:background="@drawable/rect_bottom_black"
             android:text="Value"
             android:textColor="@android:color/black"
-            android:textSize="13sp" />
+            android:textSize="12sp" />
 
         <RadioButton
             android:id="@+id/rdbLast"
@@ -44,7 +44,7 @@
             android:paddingHorizontal="5dp"
             android:text="Last"
             android:textColor="@android:color/black"
-            android:textSize="14sp" />
+            android:textSize="11sp" />
 
         <RadioButton
             android:id="@+id/rdbBid"
@@ -54,7 +54,7 @@
             android:paddingHorizontal="5dp"
             android:text="Bid"
             android:textColor="@android:color/black"
-            android:textSize="14sp" />
+            android:textSize="11sp" />
 
         <RadioButton
             android:id="@+id/rdbAsk"
@@ -64,7 +64,7 @@
             android:paddingHorizontal="5dp"
             android:text="Ask"
             android:textColor="@android:color/black"
-            android:textSize="14sp" />
+            android:textSize="11sp" />
 
     </RadioGroup>
 
