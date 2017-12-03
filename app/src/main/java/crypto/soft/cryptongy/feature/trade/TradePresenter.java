@@ -208,8 +208,10 @@ public class TradePresenter<T extends TradeView> extends MvpBasePresenter<T> {
                     if (count == 0) {
                         CustomDialog.showMessagePop(context, "Error Fetching data. Please try again later.", null);
                         getView().showEmptyView();
-                    } else
+                    } else {
+                        getView().resetAll();
                         getView().hideEmptyView();
+                    }
                 }
             }
         };
@@ -222,9 +224,11 @@ public class TradePresenter<T extends TradeView> extends MvpBasePresenter<T> {
         tradeInteractor.buyLimit(limit, new OnFinishListner<LimitOrder>() {
             @Override
             public void onComplete(LimitOrder limitOrder) {
-                if (getView() != null)
+                if (getView() != null) {
+                    getView().resetAll();
                     getView().hideLoading();
-                CustomDialog.showMessagePop(context, "Limit was bought Successfully.", null);
+                }
+                CustomDialog.showMessagePop(context, "Buy order is placed successfully", null);
             }
 
             @Override
@@ -240,9 +244,11 @@ public class TradePresenter<T extends TradeView> extends MvpBasePresenter<T> {
         tradeInteractor.sellLimit(limit, new OnFinishListner<LimitOrder>() {
             @Override
             public void onComplete(LimitOrder limitOrder) {
-                if (getView() != null)
+                if (getView() != null) {
+                    getView().resetAll();
                     getView().hideLoading();
-                CustomDialog.showMessagePop(context, "Limit was sold Successfully.", null);
+                }
+                CustomDialog.showMessagePop(context, "Sell order is placed successfully", null);
             }
 
             @Override

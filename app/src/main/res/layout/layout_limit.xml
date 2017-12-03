@@ -1,31 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <crypto.soft.cryptongy.feature.shared.customView.CalEditText
-        android:id="@+id/edtValue"
-        android:layout_width="110dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/ic_border_black"
-        android:gravity="center"
-        android:hint="Value"
-        android:inputType="number"
-        android:paddingBottom="10dp"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:paddingTop="10dp"
-        android:maxLength="10"
-        android:textColor="@android:color/black"
-        android:textSize="13sp" />
-
     <RadioGroup
         android:id="@+id/rdgValue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingBottom="10dp"
-        android:paddingLeft="5dp">
+        android:paddingBottom="10dp">
+
+        <crypto.soft.cryptongy.feature.shared.customView.CalEditText
+            android:id="@+id/edtValue"
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/ic_border_black"
+            android:gravity="center"
+            android:hint="Value"
+            android:inputType="number"
+            android:maxLength="10"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:textColor="@android:color/black"
+            android:textSize="13sp" />
 
         <crypto.soft.cryptongy.feature.shared.customView.CalTextView
             android:layout_width="wrap_content"
@@ -77,8 +76,8 @@
         android:paddingBottom="5dp"
         android:paddingTop="5dp">
 
-        <crypto.soft.cryptongy.feature.shared.customView.CalTextView
-            android:id="@+id/txtTotal"
+        <crypto.soft.cryptongy.feature.shared.customView.CalEditText
+            android:id="@+id/edtTotal"
             android:layout_width="110dp"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
@@ -86,6 +85,7 @@
             android:gravity="center"
             android:hint="total"
             android:inputType="numberDecimal"
+            android:maxLength="10"
             android:paddingBottom="10dp"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"

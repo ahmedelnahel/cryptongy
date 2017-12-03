@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import crypto.soft.cryptongy.R;
+import crypto.soft.cryptongy.feature.account.CustomDialog;
 import crypto.soft.cryptongy.feature.home.CustomArrayAdapter;
 import crypto.soft.cryptongy.feature.shared.json.market.MarketSummaries;
 import crypto.soft.cryptongy.feature.shared.json.market.Result;
@@ -45,17 +46,17 @@ import crypto.soft.cryptongy.utils.ProgressDialogFactory;
 
 public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> implements LimitView, View.OnClickListener, RadioGroup.OnCheckedChangeListener {
     private View view;
-    private TextView txtCoin, txtBtc, txtLevel, txtVtc, txtEmpty, txtMax, txtTotal;
+    private TextView txtCoin, txtBtc, txtLevel, txtVtc, txtEmpty, txtMax, txtAgainst;
     private ImageView imgSync, imgAccSetting;
     private LinearLayout lnlContainer, lnlHolding;
     private EditText edtUnits;
 
     private RadioGroup rdgUnits;
-    private RadioButton rdbSell, rdbBuy;
+    private RadioButton rdbSell, rdbBuy,rdbLast;
 
     private HorizontalScrollView scrollView;
     private TextView lastValuInfo_TXT, BidvalueInfo_TXT, Highvalue_Txt, ASKvalu_TXT, LowvalueInfo_TXT, VolumeValue_Txt, HoldingValue_Txt, lastComp_txt;
-    private Spinner spinner, spnCoin;
+    private Spinner spinner;
 
     private List<Result> coins;
     private AutoCompleteTextView inputCoin;
@@ -66,8 +67,9 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
 
     //limit
     private RadioGroup rdgValue;
-    private EditText edtValue;
+    private EditText edtValue,edtTotal;
     private Button btnOk;
+    private TextWatcher unitWatcher,totalWatcher;
 
     @Nullable
     @Override
@@ -115,11 +117,13 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
         imgSync = view.findViewById(R.id.imgSync);
         imgAccSetting = view.findViewById(R.id.imgAccSetting);
         txtMax = view.findViewById(R.id.txtMax);
+        txtAgainst = view.findViewById(R.id.txtAgainst);
 
         edtUnits = view.findViewById(R.id.edtUnits);
         rdgUnits = view.findViewById(R.id.rdgUnits);
         rdbSell = view.findViewById(R.id.rdbSell);
         rdbBuy = view.findViewById(R.id.rdbBuy);
+        rdbLast = view.findViewById(R.id.rdbLast);
 
         txtVtc = view.findViewById(R.id.txtVtc);
         lastValuInfo_TXT = view.findViewById(R.id.LastValue_Id);
@@ -135,13 +139,12 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
         lnlHolding = view.findViewById(R.id.lnlHolding);
 
         spinner = view.findViewById(R.id.spinner);
-        spnCoin = view.findViewById(R.id.spnCoin);
 
         inputCoin = view.findViewById(R.id.inputCoin);
 
         rdgValue = view.findViewById(R.id.rdgValue);
         edtValue = view.findViewById(R.id.edtValue);
-        txtTotal = view.findViewById(R.id.txtTotal);
+        edtTotal = view.findViewById(R.id.edtTotal);
         btnOk = view.findViewById(R.id.btnOk);
     }
 
@@ -185,7 +188,7 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
 
     @Override
     public void setTextWatcher() {
-        edtUnits.addTextChangedListener(new TextWatcher() {
+        unitWatcher=new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -200,7 +203,41 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
             public void afterTextChanged(Editable editable) {
                 calculateTotal();
             }
-        });
+        };
+
+        totalWatcher=new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                try {
+                    String str = edtTotal.getText().toString();
+                    if (!TextUtils.isEmpty(str)) {
+                        String str2 = edtValue.getText().toString();
+                        if (!TextUtils.isEmpty(str2)) {
+                            Double total = GlobalUtil.formatNumber(Double.parseDouble(str) / Double.parseDouble(str2), "#.########");
+                            edtUnits.removeTextChangedListener(unitWatcher);
+                            edtUnits.setText(BigDecimal.valueOf(total).toPlainString());
+                            edtUnits.addTextChangedListener(unitWatcher);
+                        }
+                    }
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        edtUnits.addTextChangedListener(unitWatcher);
+
+        edtTotal.addTextChangedListener(totalWatcher);
     }
 
     @Override
@@ -268,7 +305,7 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
         this.wallet = wallet;
         crypto.soft.cryptongy.feature.shared.json.wallet.Result w = wallet.getResult().get(0);
         lnlHolding.setVisibility(View.VISIBLE);
-        HoldingValue_Txt.setText(String.format("%.6f", w.getBalance().doubleValue()));
+        HoldingValue_Txt.setText(BigDecimal.valueOf(w.getBalance().doubleValue()).toPlainString());
         if (w.getBalance() > 0d) {
             rdbSell.setEnabled(true);
             rdbBuy.setEnabled(true);
@@ -280,20 +317,17 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
         }
 
         String coin = txtVtc.getText().toString().split("-")[0];
-        setAgaints(new String[]{coin});
+        setAgaints(coin+"-"+BigDecimal.valueOf(w.getAvailable()).toPlainString());
     }
 
     @Override
     public void setMax() {
-        edtUnits.setText(Highvalue_Txt.getText().toString());
+        edtUnits.setText(HoldingValue_Txt.getText().toString());
     }
 
     @Override
-    public void setAgaints(String[] list) {
-        ArrayAdapter<CharSequence> adapter2 = new ArrayAdapter<CharSequence>(getContext(),
-                R.layout.drop_down_text, list);
-        adapter2.setDropDownViewResource(R.layout.drop_down_text);
-        spnCoin.setAdapter(adapter2);
+    public void setAgaints(String coin) {
+        txtAgainst.setText(coin);
     }
 
     @Override
@@ -303,8 +337,11 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
             if (!TextUtils.isEmpty(str)) {
                 String str2 = edtValue.getText().toString();
                 if (!TextUtils.isEmpty(str2)) {
-                    Double total = GlobalUtil.formatNumber(Double.parseDouble(str) * Double.parseDouble(str2), "#.########");
-                    txtTotal.setText(BigDecimal.valueOf(total).toPlainString());
+                    Double total = Double.parseDouble(str) * Double.parseDouble(str2);
+                    edtTotal.removeTextChangedListener(totalWatcher);
+
+                    edtTotal.setText(String.format("%.8f", total));
+                    edtTotal.addTextChangedListener(totalWatcher);
                 }
             }
         } catch (NumberFormatException e) {
@@ -342,11 +379,18 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
             edtUnits.setError("Cannot be empty");
             return null;
         }
-        Limit limit = new Limit();
-        limit.setMarket(txtVtc.getText().toString());
-        limit.setRate(txtBtc.getText().toString());
-        limit.setQuantity(txtTotal.getText().toString());
-        return limit;
+
+        String total=edtTotal.getText().toString();
+        if (Double.parseDouble(total)<=wallet.getResult().get(0).getBalance()) {
+            Limit limit = new Limit();
+            limit.setMarket(txtVtc.getText().toString());
+            limit.setRate(txtBtc.getText().toString());
+            limit.setQuantity(edtTotal.getText().toString());
+            return limit;
+        }else {
+            CustomDialog.showMessagePop(getContext(),"Insufficient balance",null);
+            return null;
+        }
     }
 
     @Override
@@ -355,5 +399,12 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
             return true;
         else
             return false;
+    }
+
+    @Override
+    public void resetAll() {
+        edtUnits.setText("");
+        rdbLast.setChecked(true);
+        edtTotal.setText("");
     }
 }
