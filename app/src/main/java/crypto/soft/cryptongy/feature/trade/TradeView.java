@@ -39,9 +39,11 @@ public interface TradeView extends MvpView {
 
     void setMax();
 
-    void setAgaints(String[] list);
+    void setAgaints(String coin);
 
     void calculateTotal();
 
     boolean isBuy();
+
+    void resetAll();
 }

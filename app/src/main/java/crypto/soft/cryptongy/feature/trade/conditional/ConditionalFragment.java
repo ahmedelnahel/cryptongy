@@ -142,7 +142,6 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
         lnlContainer = view.findViewById(R.id.lnlContainer);
 
         spinner = view.findViewById(R.id.spinner);
-        spnCoin = view.findViewById(R.id.spnCoin);
 
         inputCoin = view.findViewById(R.id.inputCoin);
 
@@ -268,7 +267,7 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
     }
 
     @Override
-    public void setAgaints(String[] list) {
+    public void setAgaints(String coin) {
 
     }
 
@@ -280,6 +279,11 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
     @Override
     public boolean isBuy() {
         return false;
+    }
+
+    @Override
+    public void resetAll() {
+
     }
 
     @Override
