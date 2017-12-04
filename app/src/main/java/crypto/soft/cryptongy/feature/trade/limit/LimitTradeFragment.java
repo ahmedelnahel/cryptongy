@@ -269,13 +269,13 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
 
         if (summary != null) {
             crypto.soft.cryptongy.feature.shared.json.marketsummary.Result result = summary.getResult().get(0);
-            lastValuInfo_TXT.setText(String.valueOf(String.format("%.6f", result.getLast().doubleValue())));
-            edtValue.setText(String.valueOf(String.format("%.6f", result.getLast().doubleValue())));
-            BidvalueInfo_TXT.setText(String.valueOf(String.format("%.6f", result.getBid().doubleValue())));
-            ASKvalu_TXT.setText(String.valueOf(String.format("%.6f", result.getAsk().doubleValue())));
-            Highvalue_Txt.setText(String.valueOf(String.format("%.6f", result.getHigh().doubleValue())));
-            VolumeValue_Txt.setText(String.valueOf(String.format("%.6f", result.getVolume().doubleValue())));
-            LowvalueInfo_TXT.setText(String.valueOf(String.format("%.6f", result.getLow().doubleValue())));
+            lastValuInfo_TXT.setText(String.format("%.8f", result.getLast().doubleValue()));
+            edtValue.setText(String.format("%.8f", result.getLast().doubleValue()));
+            BidvalueInfo_TXT.setText(String.format("%.8f", result.getBid().doubleValue()));
+            ASKvalu_TXT.setText(String.format("%.8f", result.getAsk().doubleValue()));
+            Highvalue_Txt.setText(String.format("%.8f", result.getHigh().doubleValue()));
+            VolumeValue_Txt.setText(String.format("%.8f", result.getVolume().doubleValue()));
+            LowvalueInfo_TXT.setText(String.format("%.8f", result.getLow().doubleValue()));
         }
     }
 
@@ -410,8 +410,10 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
         crypto.soft.cryptongy.feature.shared.json.wallet.Result result;
         if (isBuy())
             result = baseWallet;
-        else
+        else {
+            total=edtUnits.getText().toString();
             result = coinWallet;
+        }
         if (Double.parseDouble(total) <= result.getBalance()) {
             Limit limit = new Limit();
             limit.setMarket(txtVtc.getText().toString());
