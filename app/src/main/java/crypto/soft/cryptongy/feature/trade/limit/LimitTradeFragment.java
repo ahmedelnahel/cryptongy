@@ -52,7 +52,7 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
     private EditText edtUnits;
 
     private RadioGroup rdgUnits;
-    private RadioButton rdbSell, rdbBuy,rdbLast;
+    private RadioButton rdbSell, rdbBuy, rdbLast;
 
     private HorizontalScrollView scrollView;
     private TextView lastValuInfo_TXT, BidvalueInfo_TXT, Highvalue_Txt, ASKvalu_TXT, LowvalueInfo_TXT, VolumeValue_Txt, HoldingValue_Txt, lastComp_txt;
@@ -63,13 +63,13 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
     private CustomArrayAdapter adapterCoins;
 
     private boolean isFirst = false;
-    private Wallet wallet;
+    private crypto.soft.cryptongy.feature.shared.json.wallet.Result baseWallet, coinWallet;
 
     //limit
     private RadioGroup rdgValue;
-    private EditText edtValue,edtTotal;
+    private EditText edtValue, edtTotal;
     private Button btnOk;
-    private TextWatcher unitWatcher,totalWatcher;
+    private TextWatcher unitWatcher, totalWatcher;
 
     @Nullable
     @Override
@@ -188,7 +188,7 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
 
     @Override
     public void setTextWatcher() {
-        unitWatcher=new TextWatcher() {
+        unitWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -205,7 +205,7 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
             }
         };
 
-        totalWatcher=new TextWatcher() {
+        totalWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -238,6 +238,23 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
         edtUnits.addTextChangedListener(unitWatcher);
 
         edtTotal.addTextChangedListener(totalWatcher);
+
+        edtValue.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                calculateTotal();
+            }
+        });
     }
 
     @Override
@@ -302,27 +319,36 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
 
     @Override
     public void setHolding(Wallet wallet) {
-        this.wallet = wallet;
-        crypto.soft.cryptongy.feature.shared.json.wallet.Result w = wallet.getResult().get(0);
-        lnlHolding.setVisibility(View.VISIBLE);
-        HoldingValue_Txt.setText(BigDecimal.valueOf(w.getBalance().doubleValue()).toPlainString());
-        if (w.getBalance() > 0d) {
-            rdbSell.setEnabled(true);
-            rdbBuy.setEnabled(true);
-            btnOk.setEnabled(true);
-        } else {
-            rdbSell.setEnabled(false);
-            rdbBuy.setEnabled(false);
-            btnOk.setEnabled(false);
+        String[] ar = txtVtc.getText().toString().split("-");
+        for (crypto.soft.cryptongy.feature.shared.json.wallet.Result result : wallet.getResult()) {
+            if (result.getCurrency().equalsIgnoreCase(ar[0]))
+                baseWallet = result;
+            else
+                coinWallet = result;
         }
+        lnlHolding.setVisibility(View.VISIBLE);
+        HoldingValue_Txt.setText(String.format("%.8f", baseWallet.getAvailable().doubleValue()));
+        if (baseWallet.getBalance() > 0d)
+            rdbBuy.setEnabled(true);
+        else
+            rdbBuy.setEnabled(false);
 
+        if (coinWallet.getBalance() > 0d)
+            rdbSell.setEnabled(true);
+        else
+            rdbSell.setEnabled(false);
+
+        if (!rdbBuy.isEnabled() && !rdbSell.isEnabled())
+            btnOk.setEnabled(false);
+        else
+            btnOk.setEnabled(true);
         String coin = txtVtc.getText().toString().split("-")[0];
-        setAgaints(coin+"-"+BigDecimal.valueOf(w.getAvailable()).toPlainString());
+        setAgaints(coin + "-" + BigDecimal.valueOf(baseWallet.getBalance()).toPlainString());
     }
 
     @Override
     public void setMax() {
-        edtUnits.setText(HoldingValue_Txt.getText().toString());
+        edtUnits.setText(coinWallet.getBalance().toString());
     }
 
     @Override
@@ -380,15 +406,20 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
             return null;
         }
 
-        String total=edtTotal.getText().toString();
-        if (Double.parseDouble(total)<=wallet.getResult().get(0).getBalance()) {
+        String total = edtTotal.getText().toString();
+        crypto.soft.cryptongy.feature.shared.json.wallet.Result result;
+        if (isBuy())
+            result = baseWallet;
+        else
+            result = coinWallet;
+        if (Double.parseDouble(total) <= result.getBalance()) {
             Limit limit = new Limit();
             limit.setMarket(txtVtc.getText().toString());
             limit.setRate(txtBtc.getText().toString());
             limit.setQuantity(edtTotal.getText().toString());
             return limit;
-        }else {
-            CustomDialog.showMessagePop(getContext(),"Insufficient balance",null);
+        } else {
+            CustomDialog.showMessagePop(getContext(), "Insufficient balance", null);
             return null;
         }
     }
