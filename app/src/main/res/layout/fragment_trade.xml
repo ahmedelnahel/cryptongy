@@ -43,7 +43,7 @@
             android:layout_below="@+id/includeSearch"
             android:gravity="center"
             android:orientation="vertical"
-            android:text="No data available"
+            android:text="Please select a coin"
             android:textColor="@color/colorPrimary"
             android:textSize="18sp" />
 
