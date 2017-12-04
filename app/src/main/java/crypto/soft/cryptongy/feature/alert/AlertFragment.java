@@ -1,9 +1,5 @@
 package crypto.soft.cryptongy.feature.alert;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -11,21 +7,29 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
-import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
+import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -33,15 +37,18 @@ import java.util.List;
 
 import crypto.soft.cryptongy.R;
 import crypto.soft.cryptongy.feature.account.CustomDialog;
+import crypto.soft.cryptongy.feature.home.CustomArrayAdapter;
 import crypto.soft.cryptongy.feature.shared.json.marketsummary.MarketSummary;
 import crypto.soft.cryptongy.feature.shared.json.marketsummary.Result;
 import crypto.soft.cryptongy.network.BittrexServices;
+import crypto.soft.cryptongy.utils.CoinApplication;
+import crypto.soft.cryptongy.utils.GlobalUtil;
 
 /**
  * Created by maiAjam on 11/20/2017.
  */
 
-public class AlertFragment extends Fragment {
+public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implements AlertView {
     ProgressBar progressBar;
     dbHandler db;
     TextView lastValuInfo_TXT, BidvalueInfo_TXT, Highvalue_Txt, ASKvalu_TXT, LowvalueInfo_TXT, VolumeValue_Txt, HoldingValue_Txt, lastComp_txt;
@@ -56,6 +63,15 @@ public class AlertFragment extends Fragment {
     RadioGroup alarm;
     RadioButton timeOneRB, everyTimeRB;
     CheckBox ch_higher, ch_lower;
+
+    AutoCompleteTextView inputCoin;
+    CustomArrayAdapter adapterCoins;
+    Spinner spinner;
+    List<Result> coins;
+    Result result;
+    TableLayout tblMarketTradeAlert;
+    TextView txtMarket;
+
     // to check one time or every time
     int AlarmFreq = 1;
     private int reqCode, CoinId;
@@ -67,9 +83,7 @@ public class AlertFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_alert, container, false);
 
-
         progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar_cyclic);
-
 
         // coin detials
         lastValuInfo_TXT = (TextView) rootView.findViewById(R.id.LastValue_Id);
@@ -86,7 +100,10 @@ public class AlertFragment extends Fragment {
         LowvalueInfo_Lab = (TextView) rootView.findViewById(R.id.LabLow);
         VolumeValue_Lab = (TextView) rootView.findViewById(R.id.LabVolume);
         //
-
+        inputCoin = rootView.findViewById(R.id.inputCoin);
+        spinner = rootView.findViewById(R.id.spinner);
+        txtMarket = rootView.findViewById(R.id.txtMarket);
+        tblMarketTradeAlert = rootView.findViewById(R.id.tblMarketTradeAlert);
         //
         TextView coinNmae = (TextView) rootView.findViewById(R.id.vtc_txt);
         //
@@ -102,6 +119,7 @@ public class AlertFragment extends Fragment {
         ch_higher = (CheckBox) rootView.findViewById(R.id.ch_higher);
         ch_lower = (CheckBox) rootView.findViewById(R.id.ch_lower);
 
+        coinName = CoinName.coinName;
         coinNmae.setText(coinName);
 
 
@@ -166,16 +184,21 @@ public class AlertFragment extends Fragment {
 
                 if (error)
                     return;
-                saveData(LowValueEn, HighValueEn, exchangeName, coinName, AlarmFreq);
+                presenter.saveData(getContext(), LowValueEn, HighValueEn, exchangeName, coinName,
+                        AlarmFreq, reqCode, ch_higher, ch_lower);
             }
         });
-        sycCoinInfo sycCoinInfo = new sycCoinInfo();
-        sycCoinInfo.execute();
 
 
         return rootView;
     }
 
+
+    @NonNull
+    @Override
+    public AlertPresenter createPresenter() {
+        return new AlertPresenter();
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
     @Override
@@ -201,39 +224,39 @@ public class AlertFragment extends Fragment {
 
             }
         }
+        Log.d("CoinName", CoinName.coinName);
+
+        sycCoinInfo sycCoinInfo = new sycCoinInfo();
+        sycCoinInfo.execute();
 
     }
 
-    private void saveData(Double lowV, Double highV, String exchangeName, String coinName, int alarmFreq) {
-        db = new dbHandler(getContext());
-        CoinInfo coinInfo = new CoinInfo(coinName, exchangeName, HighValueEn, LowValueEn);
-        db.AddCoinInfo(coinInfo);
-        db.updateCoinInfo(coinInfo);
-        Intent i = new Intent(getContext(), broadCastTicker.class);
+    @Override
+    public void updateTable() {
+        tblMarketTradeAlert.removeAllViews();
 
-        i.putExtra("coinName", coinName);
-        i.putExtra("exchangeName", exchangeName);
-        i.putExtra("high", HighValueEn);
-        i.putExtra("low", LowValueEn);
-        i.putExtra("reqCode", reqCode);
-        i.putExtra("alarmFreq", alarmFreq);
-        i.putExtra("higherCh", ch_higher.isChecked());
-        i.putExtra("lowerCh", ch_lower.isChecked());
+        List<CoinInfo> coinInfoList = presenter.getCoinInfo();
+        if (coinInfoList != null) {
+            View title = getLayoutInflater().inflate(R.layout.table_alert_title, null);
+            tblMarketTradeAlert.addView(title);
+            for (int i = 0; i < coinInfoList.size(); i++) {
+                View sub = getLayoutInflater().inflate(R.layout.table_alert_sub, null);
+                final AlertHolder holder = new AlertHolder(sub);
+                holder.txtCoin.setText(coinInfoList.get(i).getCoinName());
+                holder.txtLowPrice.setText(String.valueOf(coinInfoList.get(i).getLowValue()));
+                holder.txtHighPrice.setText(String.valueOf(coinInfoList.get(i).getHighValue()));
+                tblMarketTradeAlert.addView(sub);
 
-
-        PendingIntent opertaion = PendingIntent.getBroadcast(getContext(), reqCode, i, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        AlarmManager alarmManger = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
-
-
-        alarmManger.setRepeating(AlarmManager.RTC_WAKEUP, 30 * 1000,
-                1000 * 30, opertaion);
-
-
-        Toast.makeText(getContext(), "Your Values have been saved successfully", Toast.LENGTH_LONG).show();
+                holder.txtAction.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        presenter.deleteCoinInfo(holder.txtCoin.getText().toString());
+                    }
+                });
+            }
+        }
 
     }
-
 
     @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
     public class sycCoinInfo extends AsyncTask<String, Void, String> {
@@ -241,7 +264,6 @@ public class AlertFragment extends Fragment {
         protected void onPreExecute() {
             //check network conntection
 
-            progressBar.setVisibility(View.VISIBLE);
             ConnectivityManager cm =
                     (ConnectivityManager) getActivity().getSystemService(getContext().CONNECTIVITY_SERVICE);
 
@@ -284,6 +306,14 @@ public class AlertFragment extends Fragment {
                     highV = resultItem.getHigh();
                     volumeV = resultItem.getVolume();
                     lowV = resultItem.getLow();
+//                    for (Result result : marketSummary.getResult()) {
+//                        if (result.getMarketName().equalsIgnoreCase("USDT-BTC")) {
+//                            ((CoinApplication) getActivity().getApplication()).setUsdt_btc(GlobalUtil.round(result.getBtcusdt(), 4));
+//                        }
+//                    }
+//                    coins = new ArrayList();
+//                    coins.addAll(marketSummary.getResult());
+//                    adapterCoins.notifyDataSetChanged();
 
 
                 } else {
@@ -338,6 +368,32 @@ public class AlertFragment extends Fragment {
 
             save_b.setTypeface(typeFaceCalibri);
 
+            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
+                    R.array.coin_array, R.layout.drop_down_text);
+            adapter.setDropDownViewResource(R.layout.drop_down_text);
+            spinner.setAdapter(adapter);
+
+            coins = new ArrayList<Result>();
+//            adapterCoins = new CustomArrayAdapter(getContext(), coins);
+            inputCoin.setThreshold(1);
+            inputCoin.setAdapter(adapterCoins);
+//                adapterCoins.setAdapterItemClickListener(this);
+
+            inputCoin.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    crypto.soft.cryptongy.feature.shared.json.market.Result resultOne = new crypto.soft.cryptongy.feature.shared.json.market.Result();
+                    inputCoin.setText(((crypto.soft.cryptongy.feature.shared.json.market.Result) ((CustomArrayAdapter) adapterView.getAdapter()).getItem(i)).getMarketName());
+                    inputCoin.setTextSize(12);
+                    Typeface face = Typeface.createFromAsset(getActivity().getAssets(),
+                            "fonts/calibri.ttf");
+                    inputCoin.setTypeface(face, Typeface.NORMAL);
+                    resultOne =(crypto.soft.cryptongy.feature.shared.json.market.Result) ((CustomArrayAdapter) adapterView.getAdapter()).getItem(i);
+
+                }
+            });
+
+            updateTable();
         }
     }
 }

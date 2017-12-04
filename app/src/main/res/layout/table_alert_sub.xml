@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableRow xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/orderSub"
+    android:orientation="horizontal"
+    android:paddingBottom="15dp"
+    android:paddingLeft="7dp"
+    android:paddingRight="5dp"
+    android:paddingTop="15dp"
+    android:weightSum="4">
+
+    <crypto.soft.cryptongy.feature.shared.customView.MspTextView
+        android:layout_width="wrap_content"
+        android:id="@+id/txtCoin"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:textColor="@color/colorAccent"
+        android:textSize="@dimen/order_tbl_title" />
+
+    <crypto.soft.cryptongy.feature.shared.customView.MspTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:id="@+id/txtLowPrice"
+        android:gravity="center"
+        android:textColor="@color/colorAccent"
+        android:textSize="@dimen/order_tbl_title" />
+
+    <crypto.soft.cryptongy.feature.shared.customView.MspTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:id="@+id/txtHighPrice"
+        android:gravity="center"
+        android:textColor="@color/colorAccent"
+        android:textSize="@dimen/order_tbl_title" />
+
+    <crypto.soft.cryptongy.feature.shared.customView.MspTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:id="@+id/txtAction"
+        android:gravity="center"
+        android:textColor="@color/colorAccent"
+        android:text="Cancel"
+        android:textSize="@dimen/order_tbl_title" />
+
+</TableRow>
