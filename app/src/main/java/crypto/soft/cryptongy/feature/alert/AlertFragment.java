@@ -1,9 +1,5 @@
 package crypto.soft.cryptongy.feature.alert;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -14,18 +10,21 @@ import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
-import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,10 +37,12 @@ import java.util.List;
 
 import crypto.soft.cryptongy.R;
 import crypto.soft.cryptongy.feature.account.CustomDialog;
-import crypto.soft.cryptongy.feature.order.OpenOrderHolder;
+import crypto.soft.cryptongy.feature.home.CustomArrayAdapter;
 import crypto.soft.cryptongy.feature.shared.json.marketsummary.MarketSummary;
 import crypto.soft.cryptongy.feature.shared.json.marketsummary.Result;
 import crypto.soft.cryptongy.network.BittrexServices;
+import crypto.soft.cryptongy.utils.CoinApplication;
+import crypto.soft.cryptongy.utils.GlobalUtil;
 
 /**
  * Created by maiAjam on 11/20/2017.
@@ -63,6 +64,11 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
     RadioButton timeOneRB, everyTimeRB;
     CheckBox ch_higher, ch_lower;
 
+    AutoCompleteTextView inputCoin;
+    CustomArrayAdapter adapterCoins;
+    Spinner spinner;
+    List<Result> coins;
+    Result result;
     TableLayout tblMarketTradeAlert;
     TextView txtMarket;
 
@@ -77,9 +83,7 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_alert, container, false);
 
-
         progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar_cyclic);
-
 
         // coin detials
         lastValuInfo_TXT = (TextView) rootView.findViewById(R.id.LastValue_Id);
@@ -96,6 +100,8 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
         LowvalueInfo_Lab = (TextView) rootView.findViewById(R.id.LabLow);
         VolumeValue_Lab = (TextView) rootView.findViewById(R.id.LabVolume);
         //
+        inputCoin = rootView.findViewById(R.id.inputCoin);
+        spinner = rootView.findViewById(R.id.spinner);
         txtMarket = rootView.findViewById(R.id.txtMarket);
         tblMarketTradeAlert = rootView.findViewById(R.id.tblMarketTradeAlert);
         //
@@ -229,7 +235,7 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
     public void updateTable() {
         tblMarketTradeAlert.removeAllViews();
 
-        List<CoinInfo> coinInfoList = db.getAllCoinInfo();
+        List<CoinInfo> coinInfoList = presenter.getCoinInfo();
         if (coinInfoList != null) {
             View title = getLayoutInflater().inflate(R.layout.table_alert_title, null);
             tblMarketTradeAlert.addView(title);
@@ -244,8 +250,7 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
                 holder.txtAction.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        presenter.deleteCoinInfo(getContext(), holder.txtCoin.getText().toString());
-                        Log.d("XaisName", holder.txtCoin.getText().toString());
+                        presenter.deleteCoinInfo(holder.txtCoin.getText().toString());
                     }
                 });
             }
@@ -301,6 +306,14 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
                     highV = resultItem.getHigh();
                     volumeV = resultItem.getVolume();
                     lowV = resultItem.getLow();
+//                    for (Result result : marketSummary.getResult()) {
+//                        if (result.getMarketName().equalsIgnoreCase("USDT-BTC")) {
+//                            ((CoinApplication) getActivity().getApplication()).setUsdt_btc(GlobalUtil.round(result.getBtcusdt(), 4));
+//                        }
+//                    }
+//                    coins = new ArrayList();
+//                    coins.addAll(marketSummary.getResult());
+//                    adapterCoins.notifyDataSetChanged();
 
 
                 } else {
@@ -355,8 +368,32 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
 
             save_b.setTypeface(typeFaceCalibri);
 
+            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
+                    R.array.coin_array, R.layout.drop_down_text);
+            adapter.setDropDownViewResource(R.layout.drop_down_text);
+            spinner.setAdapter(adapter);
+
+            coins = new ArrayList<Result>();
+//            adapterCoins = new CustomArrayAdapter(getContext(), coins);
+            inputCoin.setThreshold(1);
+            inputCoin.setAdapter(adapterCoins);
+//                adapterCoins.setAdapterItemClickListener(this);
+
+            inputCoin.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    crypto.soft.cryptongy.feature.shared.json.market.Result resultOne = new crypto.soft.cryptongy.feature.shared.json.market.Result();
+                    inputCoin.setText(((crypto.soft.cryptongy.feature.shared.json.market.Result) ((CustomArrayAdapter) adapterView.getAdapter()).getItem(i)).getMarketName());
+                    inputCoin.setTextSize(12);
+                    Typeface face = Typeface.createFromAsset(getActivity().getAssets(),
+                            "fonts/calibri.ttf");
+                    inputCoin.setTypeface(face, Typeface.NORMAL);
+                    resultOne =(crypto.soft.cryptongy.feature.shared.json.market.Result) ((CustomArrayAdapter) adapterView.getAdapter()).getItem(i);
+
+                }
+            });
+
             updateTable();
         }
     }
-
 }

@@ -9,6 +9,7 @@ import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 import crypto.soft.cryptongy.R;
 import crypto.soft.cryptongy.feature.aboutUs.AboutUsActivity;
 import crypto.soft.cryptongy.feature.account.AccountFragment;
+import crypto.soft.cryptongy.feature.alert.AlertFragment;
 import crypto.soft.cryptongy.feature.donate.DonateActivity;
 import crypto.soft.cryptongy.feature.home.HomeFragment;
 import crypto.soft.cryptongy.feature.order.OrderFragment;
@@ -46,6 +47,9 @@ public class MainPresenter extends MvpBasePresenter<MainView> {
                 replaceFragment(new TradeFragment());
                 break;
             case "Portfolio":
+                break;
+            case "Alert":
+                replaceFragment(new AlertFragment());
                 break;
             case "Accounts":
                 replaceFragment(new AccountFragment());

@@ -76,7 +76,7 @@ public class CoinHomeActivity extends MvpActivity<CoinHomeView, CoinHomePresente
         bundle.putString("COIN_NAME", coinName);
         coinFragment.setArguments(bundle);
         adapter.addFragment(coinFragment, "Coin");
-        adapter.addFragment(new AlertFragment(), "Alert");
+//        adapter.addFragment(new AlertFragment(), "Alert");
         viewPager.setAdapter(adapter);
         viewPager.setOffscreenPageLimit(2);
         tabLayout.setupWithViewPager(viewPager);

@@ -9,6 +9,10 @@ import android.widget.Toast;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
+import java.util.List;
+
+import io.realm.Realm;
+
 /**
  * Created by prajwal on 12/1/17.
  */
@@ -16,10 +20,28 @@ import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 public class AlertPresenter extends MvpBasePresenter<AlertView> {
     public void saveData(Context context, Double LowValueEn, Double HighValueEn, String exchangeName,
                           String coinName, int alarmFreq, int reqCode, CheckBox ch_higher, CheckBox ch_lower) {
-        dbHandler db = new dbHandler(context);
+//        dbHandler db = new dbHandler(context);
+//        CoinInfo coinInfo = new CoinInfo(coinName, exchangeName, HighValueEn, LowValueEn);
+//        db.AddCoinInfo(coinInfo);
+//        db.updateCoinInfo(coinInfo);
         CoinInfo coinInfo = new CoinInfo(coinName, exchangeName, HighValueEn, LowValueEn);
-        db.AddCoinInfo(coinInfo);
-        db.updateCoinInfo(coinInfo);
+        Realm realm = Realm.getDefaultInstance();
+        CoinInfo coinInfoResult = realm.where(CoinInfo.class).equalTo("CoinName", coinName).findFirst();
+        if (coinInfoResult == null) {
+            if (getCoinInfo() != null && getCoinInfo().size() <= 5) {
+                realm.beginTransaction();
+                realm.copyToRealmOrUpdate(coinInfo);
+                realm.commitTransaction();
+                realm.close();
+            }else {
+                Toast.makeText(context, "You can only add maximum of 5 alerts", Toast.LENGTH_LONG).show();
+                return;
+            }
+        }else {
+            Toast.makeText(context, "You can only add one alert for one coin", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         Intent i = new Intent(context, broadCastTicker.class);
 
         i.putExtra("coinName", coinName);
@@ -48,12 +70,24 @@ public class AlertPresenter extends MvpBasePresenter<AlertView> {
         }
     }
 
-    public void deleteCoinInfo(Context context, String coinName) {
-        dbHandler db = new dbHandler(context);
-        db.deleteCoin(coinName);
+    public void deleteCoinInfo(String coinName) {
+//        dbHandler db = new dbHandler(context);
+//        db.deleteCoin(coinName);
+
+        Realm realm = Realm.getDefaultInstance();
+        realm.beginTransaction();
+        CoinInfo coinInfo = realm.where(CoinInfo.class).equalTo("CoinName", coinName).findFirst();
+        coinInfo.deleteFromRealm();
+        realm.commitTransaction();
+        realm.close();
 
         if (isViewAttached()){
             getView().updateTable();
         }
+    }
+
+    public List<CoinInfo> getCoinInfo(){
+        Realm realm = Realm.getDefaultInstance();
+        return  realm.where(CoinInfo.class).findAll();
     }
 }
