@@ -204,8 +204,8 @@ public class TradePresenter<T extends TradeView> extends MvpBasePresenter<T> {
             public void onComplete() {
                 if (getView() != null) {
                     getView().hideLoading();
-                    if (count == 0) {
-                        CustomDialog.showMessagePop(context, "Error Fetching data. Please try again later.", null);
+                    if (count < 2) {
+                        CustomDialog.showMessagePop(context, "No matched coin found. Please try again later.", null);
                         getView().showEmptyView();
                     } else {
                         getView().resetAll();
