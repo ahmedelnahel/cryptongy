@@ -410,8 +410,10 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
         crypto.soft.cryptongy.feature.shared.json.wallet.Result result;
         if (isBuy())
             result = baseWallet;
-        else
+        else {
+            total=edtUnits.getText().toString();
             result = coinWallet;
+        }
         if (Double.parseDouble(total) <= result.getBalance()) {
             Limit limit = new Limit();
             limit.setMarket(txtVtc.getText().toString());
