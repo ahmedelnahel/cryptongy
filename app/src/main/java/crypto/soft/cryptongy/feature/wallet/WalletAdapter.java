@@ -55,13 +55,34 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.MyViewHold
         double totalBTC = (balance * bitcoinPrice);
 
         double priceInDollar = ((CoinApplication) activity.getApplication()).getUsdt_btc();
-        double totalBTCInDollar = (totalBTC * priceInDollar);
+        double totalBTCInDollar = 0;
 
-        String holding = new DecimalFormat("#.#########").format(balance) + "\nB " + GlobalUtil.round(totalBTC, 9) + "\n$" + GlobalUtil.round(totalBTCInDollar, 4);
+        totalBTCInDollar = (totalBTC * priceInDollar);
+
+        String holding = "";
+        if(result.getCurrency().equals("USDT"))
+            holding = "$" + GlobalUtil.round(balance, 4);
+        else if(result.getCurrency().equals("BTC"))
+            holding =  new DecimalFormat("#.#########").format(balance);
+        else
+            holding =  GlobalUtil.round(balance, 4) + "\n"+  new DecimalFormat("#.#########").format(totalBTC) + "\n$" + GlobalUtil.round(totalBTCInDollar, 4);
+
         holder.tvHolding.setText(holding);
-        double coininDollar = bitcoinPrice * priceInDollar;
-        String price = "" + GlobalUtil.round(bitcoinPrice, 9) + "s\n$" + GlobalUtil.round(coininDollar, 4);
 
+        double coininDollar = 0;
+        String price = "";
+        if(result.getCurrency().equals("USDT")) {
+            coininDollar = balance;
+            price = "1";
+        }
+        else if(result.getCurrency().equals("BTC")) {
+            coininDollar = priceInDollar;
+            price = "1" + "\n$" + GlobalUtil.round(coininDollar, 4);
+        }
+        else {
+            coininDollar = bitcoinPrice * priceInDollar;
+            price = "" + new DecimalFormat("#.#########").format(bitcoinPrice) + "\n$" + GlobalUtil.round(coininDollar, 4);
+        }
         holder.tvPrice.setText(price);
     }
 

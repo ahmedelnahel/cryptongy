@@ -59,6 +59,7 @@ public class BittrexServices {
         {
             HashMap<String, crypto.soft.cryptongy.feature.shared.json.wallet.Result> coinsMap = new HashMap<>();
             for (crypto.soft.cryptongy.feature.shared.json.wallet.Result r : wallet.getResult()) {
+                if(r.getBalance() != 0)
                 coinsMap.put(r.getCurrency(), r) ;
             }
             wallet.setCoinsMap(coinsMap);

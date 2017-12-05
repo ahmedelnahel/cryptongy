@@ -23,7 +23,9 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import crypto.soft.cryptongy.R;
 import crypto.soft.cryptongy.feature.account.AccountFragment;
@@ -262,14 +264,12 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
                 Wallet wallet = bittrexServices.getWalletMock();
 
                 if (wallet != null && wallet.getSuccess()) {
-                    List<Result> walletResults = wallet.getResult();
+                   // List<Result> walletResults = wallet.getResult();
 
-                    List<Result> filteredWalletResults = new ArrayList<>();
+                    List<Result> filteredWalletResults = new ArrayList<Result>(wallet.getCoinsMap().values());
 
                     MarketSummaries marketSummaries = bittrexServices.getMarketSummariesMock();
                     if (marketSummaries != null && marketSummaries.getSuccess()) {
-
-                        getFilteredCoinList(walletResults, filteredWalletResults);
 
                         fillCoinPrice(filteredWalletResults, marketSummaries);
                         return filteredWalletResults;
@@ -293,11 +293,19 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
             BTCSum = 0;
             List<crypto.soft.cryptongy.feature.shared.json.market.Result> marketResults = marketSummaries.getResult();
             for (Result walletResult : walletResults) {
+                String coinName = walletResult.getCurrency();
+                if(walletResult.getCurrency().equals("USDT"))
+                    walletResult.setPrice(1.0);
+                else if(walletResult.getCurrency().equals("BTC")) {
+                    walletResult.setPrice(1.0);
+                    double balance = walletResult.getBalance();
+                    BTCSum += balance;
+                }
+                else {
+                    coinName = "BTC-"+coinName;
+                    crypto.soft.cryptongy.feature.shared.json.market.Result marketSummary = marketSummaries.getCoinsMap().get(coinName);
+                    walletResult.setPrice(marketSummary != null ? marketSummary.getLast() : null);
 
-                for (crypto.soft.cryptongy.feature.shared.json.market.Result marketResult : marketResults) {
-                    String currency = "BTC-" + walletResult.getCurrency();
-                    if (currency.equals(marketResult.getMarketName())) {
-                        walletResult.setPrice(marketResult.getLast());
                         double balance = walletResult.getBalance();
 
                         double coinbitcoinPrice = walletResult.getPrice();
@@ -305,9 +313,10 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
                         double totalBTC = (balance * coinbitcoinPrice);
 
                         BTCSum += totalBTC;
-                        break;
-                    }
+
                 }
+
+
             }
         }
 
