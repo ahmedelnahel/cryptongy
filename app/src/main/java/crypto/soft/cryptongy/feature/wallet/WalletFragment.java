@@ -294,8 +294,12 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
             List<crypto.soft.cryptongy.feature.shared.json.market.Result> marketResults = marketSummaries.getResult();
             for (Result walletResult : walletResults) {
                 String coinName = walletResult.getCurrency();
-                if(walletResult.getCurrency().equals("USDT"))
+                if(walletResult.getCurrency().equals("USDT")) {
                     walletResult.setPrice(1.0);
+                    double bitcoinPrice = ((CoinApplication) getActivity().getApplication()).getUsdt_btc();
+                    double balance = walletResult.getBalance();
+                    BTCSum += (balance/bitcoinPrice);
+                }
                 else if(walletResult.getCurrency().equals("BTC")) {
                     walletResult.setPrice(1.0);
                     double balance = walletResult.getBalance();
@@ -336,7 +340,8 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
             coinAdapter.notifyDataSetChanged();
 
             txtBtc.setText(String.valueOf(GlobalUtil.round(BTCSum, 9)) + "฿");
-            txtUsd.setText("$" + String.valueOf(GlobalUtil.round(GlobalUtil.convertBtcToUsd(BTCSum), 4)));
+            double bitcoinPrice = ((CoinApplication) getActivity().getApplication()).getUsdt_btc();
+            txtUsd.setText("$" + String.valueOf(GlobalUtil.round(BTCSum*bitcoinPrice, 4)));
         }
 
         @Override

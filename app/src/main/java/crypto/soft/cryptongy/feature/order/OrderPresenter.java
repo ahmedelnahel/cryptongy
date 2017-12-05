@@ -237,9 +237,11 @@ public class OrderPresenter<T extends MvpView> extends MvpBasePresenter<T> {
         }
         double calculation = buy - sell;
 
-        if (getView() != null)
-            getV().setCalculation(String.valueOf(GlobalUtil.formatNumber(calculation, "#.########") + "฿"),
-                    "$" + String.valueOf(GlobalUtil.formatNumber(GlobalUtil.convertBtcToUsd(calculation), "#.####")));
+        if (getView() != null) {
+            getV().setCalculation(calculation);
+//            getV().setCalculation(String.valueOf(GlobalUtil.formatNumber(calculation, "#.########") + "฿"),
+//                    "$" + String.valueOf(GlobalUtil.formatNumber(GlobalUtil.convertBtcToUsd(calculation), "#.####")));
+        }
     }
 
     public OrderView getV() {

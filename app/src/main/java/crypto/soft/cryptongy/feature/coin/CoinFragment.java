@@ -27,6 +27,7 @@ import crypto.soft.cryptongy.feature.shared.json.marketsummary.MarketSummary;
 import crypto.soft.cryptongy.feature.shared.json.openorder.OpenOrder;
 import crypto.soft.cryptongy.feature.shared.json.openorder.Result;
 import crypto.soft.cryptongy.feature.shared.json.orderhistory.OrderHistory;
+import crypto.soft.cryptongy.utils.CoinApplication;
 import crypto.soft.cryptongy.utils.GlobalUtil;
 import crypto.soft.cryptongy.utils.HideKeyboard;
 import crypto.soft.cryptongy.utils.ProgressDialogFactory;
@@ -134,9 +135,10 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
     }
 
     @Override
-    public void setCalculation(String btc, String usd) {
-        txtUsd.setText(usd);
-        txtBtc.setText(btc);
+    public void setCalculation(double calculation) {
+        double priceInDollar = ((CoinApplication) getActivity().getApplication()).getUsdt_btc();
+        txtUsd.setText( "$" + String.valueOf(GlobalUtil.formatNumber(priceInDollar*calculation, "#.####")));
+        txtBtc.setText(String.valueOf(GlobalUtil.formatNumber(calculation, "#.########") + "฿"));
     }
 
     @Override
