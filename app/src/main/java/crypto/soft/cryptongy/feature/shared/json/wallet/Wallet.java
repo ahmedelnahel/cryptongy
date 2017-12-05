@@ -18,6 +18,15 @@ import java.util.Map;
         "result"
 })
 public class Wallet {
+    private HashMap<String, Result> coinsMap;
+
+    public HashMap<String, Result> getCoinsMap() {
+        return coinsMap;
+    }
+
+    public void setCoinsMap(HashMap<String, Result> coinsMap) {
+        this.coinsMap = coinsMap;
+    }
 
     @JsonProperty("success")
     private Boolean success;

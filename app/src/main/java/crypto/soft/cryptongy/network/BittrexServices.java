@@ -11,6 +11,7 @@ import crypto.soft.cryptongy.common.RESTUtil;
 import crypto.soft.cryptongy.feature.shared.json.action.Cancel;
 import crypto.soft.cryptongy.feature.shared.json.limitorder.LimitOrder;
 import crypto.soft.cryptongy.feature.shared.json.market.MarketSummaries;
+import crypto.soft.cryptongy.feature.shared.json.market.Result;
 import crypto.soft.cryptongy.feature.shared.json.markethistory.MarketHistory;
 import crypto.soft.cryptongy.feature.shared.json.marketsummary.MarketSummary;
 import crypto.soft.cryptongy.feature.shared.json.openorder.OpenOrder;
@@ -34,6 +35,14 @@ public class BittrexServices {
         MarketSummaries marketSummaries_;
         marketSummaries_ = mapper.readValue(msg, MarketSummaries.class);
         marketSummaries_.setJson(msg);
+        if (marketSummaries_.getSuccess())
+        {
+            HashMap<String, Result> coinsMap = new HashMap<>();
+            for (Result r : marketSummaries_.getResult()) {
+                coinsMap.put(r.getMarketName(), r) ;
+            }
+            marketSummaries_.setCoinsMap(coinsMap);
+        }
 
         return marketSummaries_;
     }
@@ -46,6 +55,14 @@ public class BittrexServices {
         Wallet wallet = mapper.readValue(msg, Wallet.class);
         wallet.setJson(msg);
 //        Log.i("response " , wallet.getSuccess() + wallet.getJson());
+        if (wallet.getSuccess())
+        {
+            HashMap<String, crypto.soft.cryptongy.feature.shared.json.wallet.Result> coinsMap = new HashMap<>();
+            for (crypto.soft.cryptongy.feature.shared.json.wallet.Result r : wallet.getResult()) {
+                coinsMap.put(r.getCurrency(), r) ;
+            }
+            wallet.setCoinsMap(coinsMap);
+        }
         return wallet;
     }
 

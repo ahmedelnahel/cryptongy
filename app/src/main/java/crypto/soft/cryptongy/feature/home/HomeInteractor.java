@@ -45,13 +45,11 @@ public class HomeInteractor {
                 MarketSummaries marketSummaries = new BittrexServices().getMarketSummariesMock();
                 boolean isFirst = SharedPreference.isFirst(context, "isCoinAdded");
                 if (isFirst) {
-                    if (marketSummaries != null && marketSummaries.getResult() != null) {
-                        for (Result result : marketSummaries.getResult()) {
-                            if (result.getMarketName().equalsIgnoreCase("usdt-btc") || result.getMarketName().equalsIgnoreCase("usdt-ltc")
-                                    || result.getMarketName().equalsIgnoreCase("usdt-eth")) {
-                                results.add(result);
-                            }
-                        }
+                    if (marketSummaries != null && marketSummaries.getResult() != null &&  marketSummaries.getSuccess()) {
+
+                        results.add(marketSummaries.getCoinsMap().get("USDT-BTC"));
+                        results.add(marketSummaries.getCoinsMap().get("USDT-LTC"));
+                        results.add(marketSummaries.getCoinsMap().get("USDT-ETH"));
                         if (results != null) {
                             SharedPreference.saveToPrefs(context, "isCoinAdded", false);
                             SharedPreference.saveToPrefs(context, "mockValue", new Gson().toJson(results));
