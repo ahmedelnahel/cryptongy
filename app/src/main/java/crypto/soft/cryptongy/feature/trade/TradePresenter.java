@@ -27,7 +27,7 @@ import io.reactivex.disposables.Disposable;
  */
 
 public class TradePresenter<T extends TradeView> extends MvpBasePresenter<T> {
-    private Context context;
+    protected Context context;
     private TradeInteractor tradeInteractor;
 
     public TradePresenter(Context context) {
@@ -47,21 +47,6 @@ public class TradePresenter<T extends TradeView> extends MvpBasePresenter<T> {
                 if (getView() != null)
                     getView().setMax();
                 break;
-            case R.id.btnOk:
-                if (getView() != null) {
-                    Limit limit = ((LimitView) getView()).getLimit();
-                    if (limit != null) {
-                        CoinApplication application = (CoinApplication) context.getApplicationContext();
-                        limit.setAccount(application.getTradeAccount());
-                        getView().showLoading("Please wait.");
-                        if (getView().isBuy())
-                            buyLimit(limit);
-                        else
-                            sellLimit(limit);
-                    }
-                }
-                break;
-
         }
     }
 

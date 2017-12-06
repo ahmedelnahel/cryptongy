@@ -42,9 +42,9 @@
             android:layout_alignParentBottom="true"
             android:layout_below="@+id/includeSearch"
             android:gravity="center"
-            android:visibility="gone"
+            android:visibility="visible"
             android:orientation="vertical"
-            android:text="No data available"
+            android:text="Please select a coin"
             android:textColor="@color/colorPrimary"
             android:textSize="18sp" />
 
@@ -57,7 +57,7 @@
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
             android:orientation="vertical"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <include layout="@layout/trade_top_layout" />
 

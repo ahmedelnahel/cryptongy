@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
@@ -21,6 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -32,9 +34,11 @@ import java.util.List;
 
 import crypto.soft.cryptongy.R;
 import crypto.soft.cryptongy.feature.home.CustomArrayAdapter;
+import crypto.soft.cryptongy.feature.order.OpenOrderHolder;
 import crypto.soft.cryptongy.feature.shared.json.market.MarketSummaries;
 import crypto.soft.cryptongy.feature.shared.json.market.Result;
 import crypto.soft.cryptongy.feature.shared.json.marketsummary.MarketSummary;
+import crypto.soft.cryptongy.feature.shared.json.openorder.OpenOrder;
 import crypto.soft.cryptongy.feature.shared.json.wallet.Wallet;
 import crypto.soft.cryptongy.utils.CoinApplication;
 import crypto.soft.cryptongy.utils.GlobalUtil;
@@ -74,6 +78,10 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
 
     private ToggleButton tgbPrice, tgbLoss;
     private EditText edtPrice, edtLoss,edtProfit;
+
+    private CheckBox chbLoss,chbTrailerLoss,chbProfit;
+    private TableLayout tblSavedOrders;
+    private TextView txtSavedOrders;
 
     @Nullable
     @Override
@@ -116,6 +124,14 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
                 break;
             case R.id.tgbPrice:
                 editText = edtPrice;
+                break;
+            case R.id.chbLoss:
+                if (b && chbTrailerLoss.isChecked())
+                    chbTrailerLoss.setChecked(false);
+                break;
+            case R.id.chbTrailerLoss:
+                if (b && chbLoss.isChecked())
+                    chbLoss.setChecked(false);
                 break;
         }
     }
@@ -168,6 +184,13 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
         rdgPrice = view.findViewById(R.id.rdgPrice);
         edtProfit = view.findViewById(R.id.edtProfit);
         btnOk = view.findViewById(R.id.btnOk);
+
+        chbLoss = view.findViewById(R.id.chbLoss);
+        chbTrailerLoss = view.findViewById(R.id.chbTrailerLoss);
+        chbProfit = view.findViewById(R.id.chbProfit);
+
+        tblSavedOrders = view.findViewById(R.id.tblSavedOrders);
+        txtSavedOrders = view.findViewById(R.id.txtSavedOrders);
     }
 
     @Override
@@ -206,6 +229,9 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
         txtMax.setOnClickListener(this);
         btnOk.setOnClickListener(this);
         rdgPrice.setOnCheckedChangeListener(this);
+        chbLoss.setOnCheckedChangeListener(this);
+        chbTrailerLoss.setOnCheckedChangeListener(this);
+        chbProfit.setOnCheckedChangeListener(this);
     }
 
     @Override
@@ -461,5 +487,52 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
         edtUnits.setText("");
         rdbLast.setChecked(true);
 //        edtTotal.setText("");
+    }
+
+    public void setOpenOrders(OpenOrder openOrders) {
+        tblSavedOrders.removeAllViews();
+        if (openOrders == null || openOrders.getResult() == null || openOrders.getResult().isEmpty()) {
+            txtSavedOrders.setVisibility(View.GONE);
+            return;
+        }
+
+        txtSavedOrders.setVisibility(View.VISIBLE);
+        View title = getLayoutInflater().inflate(R.layout.table_open_order_title, null);
+        tblSavedOrders.addView(title);
+        for (int i = 0; i < openOrders.getResult().size(); i++) {
+            final crypto.soft.cryptongy.feature.shared.json.openorder.Result data = openOrders.getResult().get(i);
+            View sub = getLayoutInflater().inflate(R.layout.table_open_order_sub, null);
+            OpenOrderHolder holder = new OpenOrderHolder(sub);
+            holder.txtType.setText(data.getOrderType());
+            holder.txtCoin.setText(data.getExchange());
+            holder.txtQuantity.setText(String.valueOf(data.getQuantity()) + "\n" + String.valueOf(data.getQuantityRemaining()));
+            holder.txtRate.setText(String.valueOf(data.getPrice()));
+            String date = data.getOpened();
+            if (!TextUtils.isEmpty(date)) {
+                String[] arr = date.split("T");
+                String d = arr[0];
+                String t = "";
+                if (arr.length > 1) {
+                    t = arr[1];
+                    holder.txtTime.setText(d + "\n" + t);
+                } else
+                    holder.txtTime.setText(d);
+            } else
+                holder.txtTime.setText("");
+            holder.txtAction.setText("Cancel");
+            tblSavedOrders.addView(sub);
+
+            holder.txtAction.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+//                    presenter.cancleOrder("", data.getOrderUuid());
+                }
+            });
+
+            if (i < openOrders.getResult().size() - 1) {
+                View line = getLayoutInflater().inflate(R.layout.table_line, null);
+                tblSavedOrders.addView(line);
+            }
+        }
     }
 }
