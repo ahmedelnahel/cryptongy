@@ -12,6 +12,7 @@ import crypto.soft.cryptongy.feature.shared.json.market.MarketSummaries;
 import crypto.soft.cryptongy.feature.shared.json.marketsummary.MarketSummary;
 import crypto.soft.cryptongy.feature.shared.json.wallet.Wallet;
 import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
+import crypto.soft.cryptongy.feature.shared.module.Account;
 import crypto.soft.cryptongy.feature.trade.limit.Limit;
 import crypto.soft.cryptongy.feature.trade.limit.LimitView;
 import crypto.soft.cryptongy.utils.CoinApplication;
@@ -133,11 +134,11 @@ public class TradePresenter<T extends TradeView> extends MvpBasePresenter<T> {
         });
     }
 
-    public Observable<Wallet> getWallet(final String coinName) {
+    public Observable<Wallet> getWallet(final String coinName, final Account account) {
         return Observable.create(new ObservableOnSubscribe<Wallet>() {
             @Override
             public void subscribe(final ObservableEmitter<Wallet> e) throws Exception {
-                tradeInteractor.getWalletSummary(coinName, new OnFinishListner<Wallet>() {
+                tradeInteractor.getWalletSummary(coinName,account, new OnFinishListner<Wallet>() {
                     @Override
                     public void onComplete(Wallet result) {
                         e.onNext(result);
@@ -203,7 +204,9 @@ public class TradePresenter<T extends TradeView> extends MvpBasePresenter<T> {
             @Override
             public void onComplete() {
                 if (getView() != null) {
-                    getView().hideLoading();
+                    {
+                        getView().hideLoading();
+                    }
                     if (count < 2) {
                         CustomDialog.showMessagePop(context, "No matched coin found. Please try again later.", null);
                         getView().showEmptyView();
@@ -214,8 +217,9 @@ public class TradePresenter<T extends TradeView> extends MvpBasePresenter<T> {
                 }
             }
         };
+        CoinApplication application = (CoinApplication) context.getApplicationContext();
 
-        Observable.merge(getMarketSummary(marketName), getWallet(marketName))
+        Observable.merge(getMarketSummary(marketName), getWallet(marketName, application.getTradeAccount()))
                 .subscribe(observer);
     }
 

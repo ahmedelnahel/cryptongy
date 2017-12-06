@@ -14,14 +14,14 @@ import crypto.soft.cryptongy.network.BittrexServices;
  */
 
 public class CoinInteractor {
-    public void getMarketSummary(final OnFinishListner<MarketSummary> listner) {
+    public void getMarketSummary(final String coin, final OnFinishListner<MarketSummary> listner) {
         new AsyncTask<Void, Void, MarketSummary>() {
 
             @Override
             protected MarketSummary doInBackground(Void... voids) {
                 try {
                     Thread.sleep(2000);
-                    return new BittrexServices().getMarketSummaryMock("");
+                    return new BittrexServices().getMarketSummary(coin);
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (InterruptedException e) {

@@ -27,6 +27,7 @@ import crypto.soft.cryptongy.feature.shared.json.marketsummary.MarketSummary;
 import crypto.soft.cryptongy.feature.shared.json.openorder.OpenOrder;
 import crypto.soft.cryptongy.feature.shared.json.openorder.Result;
 import crypto.soft.cryptongy.feature.shared.json.orderhistory.OrderHistory;
+import crypto.soft.cryptongy.feature.shared.module.Account;
 import crypto.soft.cryptongy.utils.CoinApplication;
 import crypto.soft.cryptongy.utils.GlobalUtil;
 import crypto.soft.cryptongy.utils.HideKeyboard;
@@ -183,7 +184,8 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
             holder.txtAction.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    presenter.cancleOrder(coinName,data.getOrderUuid());
+                    final CoinApplication application = (CoinApplication) getActivity().getApplicationContext();
+                    presenter.cancleOrder(coinName, data.getOrderUuid(), application.getReadAccount() );
                 }
             });
 

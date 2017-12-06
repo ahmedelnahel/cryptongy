@@ -33,7 +33,7 @@ public class CoinPresenter extends OrderPresenter<CoinView> {
     @Override
     public void getData(final String coinName) {
         CoinApplication application = (CoinApplication) context.getApplicationContext();
-        Account account = application.getAccount();
+        Account account = application.getReadAccount();
         if (account != null) {
             if (getView() != null) {
                 getV().showLoading(context.getString(R.string.fetch_msg));
@@ -84,7 +84,7 @@ public class CoinPresenter extends OrderPresenter<CoinView> {
                     }
                 }
             };
-            Observable.merge(getMarketSummary(), getOpenOrders(coinName), getOrderHistory(coinName), getMarketHistory())
+            Observable.merge(getMarketSummary(coinName), getOpenOrders(coinName, account), getOrderHistory(coinName, account), getMarketHistory())
                     .subscribe(observer);
         } else {
             CustomDialog.showMessagePop(context, context.getString(R.string.noAPI), null);
@@ -115,11 +115,11 @@ public class CoinPresenter extends OrderPresenter<CoinView> {
         });
     }
 
-    public Observable<MarketSummary> getMarketSummary() {
+    public Observable<MarketSummary> getMarketSummary(final String coin) {
         return io.reactivex.Observable.create(new ObservableOnSubscribe<MarketSummary>() {
             @Override
             public void subscribe(final ObservableEmitter<MarketSummary> e) throws Exception {
-                coinInteractor.getMarketSummary(new OnFinishListner<MarketSummary>() {
+                coinInteractor.getMarketSummary(coin, new OnFinishListner<MarketSummary>() {
                     @Override
                     public void onComplete(MarketSummary result) {
                         e.onNext(result);

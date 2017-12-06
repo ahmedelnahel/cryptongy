@@ -35,6 +35,7 @@ import crypto.soft.cryptongy.feature.shared.json.market.MarketSummaries;
 import crypto.soft.cryptongy.feature.shared.json.wallet.Result;
 import crypto.soft.cryptongy.feature.shared.json.wallet.Wallet;
 import crypto.soft.cryptongy.feature.shared.module.Account;
+import crypto.soft.cryptongy.network.BittrexServiceComp;
 import crypto.soft.cryptongy.network.BittrexServices;
 import crypto.soft.cryptongy.utils.AlertUtility;
 import crypto.soft.cryptongy.utils.CoinApplication;
@@ -93,7 +94,7 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
 
     void getData() {
         CoinApplication application = (CoinApplication) getActivity().getApplication();
-        Account account = application.getAccount();
+        Account account = application.getReadAccount();
         if (account == null) {
             CustomDialog.showMessagePop(getContext(), getActivity().getString(R.string.noAPI), null);
             setLevel("No API");
@@ -255,31 +256,35 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
         txtLevel.setText(level);
     }
 
-    private class GetCoinDetails extends AsyncTask<String, Void, List<Result>> {
+    private class GetCoinDetails extends AsyncTask<String, Void, Wallet> {
         private BittrexServices bittrexServices = new BittrexServices();
 
         @Override
-        protected List<Result> doInBackground(String... params) {
+        protected Wallet doInBackground(String... params) {
+            Wallet wallet = null;
             try {
-                Wallet wallet = bittrexServices.getWalletMock();
+                CoinApplication application = (CoinApplication) getActivity().getApplication();
+                Account account = application.getReadAccount();
+                 wallet = bittrexServices.getWallet(account);
 
                 if (wallet != null && wallet.getSuccess()) {
                    // List<Result> walletResults = wallet.getResult();
 
                     List<Result> filteredWalletResults = new ArrayList<Result>(wallet.getCoinsMap().values());
 
-                    MarketSummaries marketSummaries = bittrexServices.getMarketSummariesMock();
+                    MarketSummaries marketSummaries = bittrexServices.getMarketSummaries();
                     if (marketSummaries != null && marketSummaries.getSuccess()) {
 
                         fillCoinPrice(filteredWalletResults, marketSummaries);
-                        return filteredWalletResults;
+                        wallet.setResult(filteredWalletResults);
+                        return wallet;
                     }
                 }
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            return null;
+            return wallet;
         }
 
         private void getFilteredCoinList(List<Result> walletResults, List<Result> filteredWalletResults) {
@@ -325,18 +330,18 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
         }
 
         @Override
-        protected void onPostExecute(List<Result> result) {
+        protected void onPostExecute(Wallet wallet) {
             AlertUtility.dismissDialog();
 
             txtEmpty.setVisibility(View.GONE);
-            if (result == null) {
-                Toast.makeText(getActivity(), "Error fetching Coin details", Toast.LENGTH_SHORT).show();
+            if (!wallet.getSuccess()) {
+                Toast.makeText(getActivity(), wallet.getMessage(), Toast.LENGTH_SHORT).show();
                 return;
             }
             resultList = new ArrayList<>();
-            resultList.addAll(result);
+            resultList.addAll(wallet.getResult());
 
-            coinAdapter.setResultList(result);
+            coinAdapter.setResultList(wallet.getResult());
             coinAdapter.notifyDataSetChanged();
 
             txtBtc.setText(String.valueOf(GlobalUtil.round(BTCSum, 9)) + "฿");

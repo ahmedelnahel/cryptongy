@@ -29,7 +29,11 @@ public class CoinApplication extends Application {
     }
 
     public Account getTradeAccount() {
-        return tradeAccount;
+        if (tradeAccount != null)
+            return tradeAccount;
+        else if (getWithdrawAccount() != null)
+            return getWithdrawAccount();
+        return null;
     }
 
     public void setTradeAccount(Account tradeAccount) {
@@ -37,7 +41,13 @@ public class CoinApplication extends Application {
     }
 
     public Account getReadAccount() {
-        return readAccount;
+        if (readAccount != null)
+            return readAccount;
+        else if (getTradeAccount() != null)
+            return getTradeAccount();
+        else if (getWithdrawAccount() != null)
+            return getWithdrawAccount();
+        return null;
     }
 
     public void setReadAccount(Account readAccount) {
@@ -100,15 +110,6 @@ public class CoinApplication extends Application {
         realm.commitTransaction();
     }
 
-    public Account getAccount() {
-        if (getReadAccount() != null)
-            return getReadAccount();
-        else if (getTradeAccount() != null)
-            return getTradeAccount();
-        else if (getWithdrawAccount() != null)
-            return getWithdrawAccount();
-        return null;
-    }
 
     public void getNotification() {
         Realm realm = Realm.getDefaultInstance();

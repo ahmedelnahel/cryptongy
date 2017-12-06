@@ -11,6 +11,8 @@ import crypto.soft.cryptongy.feature.shared.json.openorder.OpenOrder;
 import crypto.soft.cryptongy.feature.shared.json.openorder.Result;
 import crypto.soft.cryptongy.feature.shared.json.orderhistory.OrderHistory;
 import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
+import crypto.soft.cryptongy.feature.shared.module.Account;
+import crypto.soft.cryptongy.network.BittrexServiceComp;
 import crypto.soft.cryptongy.network.BittrexServices;
 
 /**
@@ -18,18 +20,20 @@ import crypto.soft.cryptongy.network.BittrexServices;
  */
 
 public class OrderInteractor {
-    void getOpenOrder(final String coinName, final OnFinishListner<OpenOrder> listner) {
+    void getOpenOrder(final String coinName,  final Account account, final OnFinishListner<OpenOrder> listner) {
         new AsyncTask<Void, Void, OpenOrder>() {
 
             @Override
             protected OpenOrder doInBackground(Void... voids) {
+                OpenOrder openOrder = null;
                 try {
                     Thread.sleep(2000);
-                    OpenOrder openOrder = new BittrexServices().getOpnOrdersMock();
+                    openOrder = new BittrexServices().getOpnOrders(account);
+                    if (openOrder != null && openOrder.getSuccess()) {
                     if (TextUtils.isEmpty(coinName))
                         return openOrder;
                     else {
-                        if (openOrder != null) {
+
                             Iterator<Result> iterator = openOrder.getResult().iterator();
                             while (iterator.hasNext()) {
                                 Result result = iterator.next();
@@ -39,12 +43,13 @@ public class OrderInteractor {
                             return openOrder;
                         }
                     }
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                return null;
+                return openOrder;
             }
 
             @Override
@@ -58,17 +63,19 @@ public class OrderInteractor {
         }.execute();
     }
 
-    void getOrderHistory(final String coinName, final OnFinishListner<OrderHistory> listner) {
+    void getOrderHistory(final String coinName, final Account account, final OnFinishListner<OrderHistory> listner) {
         new AsyncTask<Void, Void, OrderHistory>() {
 
             @Override
             protected OrderHistory doInBackground(Void... voids) {
+                OrderHistory orderHistory = null;
                 try {
-                    OrderHistory orderHistory = new BittrexServices().getOrderHistoryMock();
+                    orderHistory = new BittrexServices().getOrderHistory(account);
+                    if (orderHistory != null && orderHistory.getSuccess()) {
                     if (TextUtils.isEmpty(coinName))
                         return orderHistory;
                     else {
-                        if (orderHistory != null) {
+
                             Iterator<crypto.soft.cryptongy.feature.shared.json.orderhistory.Result> iterator = orderHistory.getResult().iterator();
                             while (iterator.hasNext()) {
                                 crypto.soft.cryptongy.feature.shared.json.orderhistory.Result result = iterator.next();
@@ -81,7 +88,7 @@ public class OrderInteractor {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                return null;
+                return orderHistory;
             }
 
             @Override
@@ -95,14 +102,14 @@ public class OrderInteractor {
         }.execute();
     }
 
-    public void cancleOrder(final String uuid, final OnFinishListner<Cancel> listner) {
+    public void cancleOrder(final String uuid, final Account account, final OnFinishListner<Cancel> listner) {
         new AsyncTask<Void, Void, Cancel>() {
 
             @Override
             protected Cancel doInBackground(Void... voids) {
                 try {
                     Thread.sleep(2000);
-                    return new BittrexServices().cancelOrderMock(uuid);
+                    return new BittrexServices().cancelOrder(uuid, account);
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (InterruptedException e) {

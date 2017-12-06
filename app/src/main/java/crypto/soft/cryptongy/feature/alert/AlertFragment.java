@@ -227,7 +227,7 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
         Log.d("CoinName", CoinName.coinName);
 
         sycCoinInfo sycCoinInfo = new sycCoinInfo();
-        sycCoinInfo.execute();
+        sycCoinInfo.execute(CoinName.coinName);
 
     }
 
@@ -291,7 +291,7 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
             MarketSummary marketSummary = new MarketSummary();
             BittrexServices bittrexServices = new BittrexServices();
             try {
-                marketSummary = bittrexServices.getMarketSummaryMock("");
+                marketSummary = bittrexServices.getMarketSummary(params[0]);
                 if (marketSummary.getSuccess()) {
 
                     resultList = marketSummary.getResult();

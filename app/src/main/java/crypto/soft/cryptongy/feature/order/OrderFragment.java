@@ -150,7 +150,8 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter<OrderVi
             holder.txtAction.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    presenter.cancleOrder("", data.getOrderUuid());
+                    final CoinApplication application = (CoinApplication) getActivity().getApplicationContext();
+                    presenter.cancleOrder(data.getExchange(), data.getOrderUuid(), application.getReadAccount());
                 }
             });
 

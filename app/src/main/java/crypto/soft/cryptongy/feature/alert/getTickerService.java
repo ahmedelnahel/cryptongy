@@ -64,7 +64,7 @@ public class getTickerService extends IntentService {
 
 
         try {
-            ticker = Tickerservices.getTickerMock("");
+            ticker = Tickerservices.getTicker(coinName);
             if (!ticker.getSuccess()) {
                 Handler mHandler = new Handler(getMainLooper());
                 mHandler.post(new Runnable() {
