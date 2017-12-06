@@ -134,12 +134,14 @@
 
 
                     <crypto.soft.cryptongy.feature.shared.customView.CalTextView
+                        android:id="@+id/donatelink"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/donnation_to"
                         android:textColor="@color/setting_text"
-                        android:textIsSelectable="true"
+                        android:autoLink="web"
+                        android:linksClickable="true"
                         android:textSize="@dimen/donnate_text" />
 
                 </LinearLayout>

@@ -65,7 +65,7 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.MyViewHold
         else if(result.getCurrency().equals("BTC"))
             holding =  new DecimalFormat("#.#########").format(balance);
         else
-            holding =  GlobalUtil.round(balance, 4) + "\n"+  new DecimalFormat("#.#########").format(totalBTC) + "\n$" + GlobalUtil.round(totalBTCInDollar, 4);
+            holding =  GlobalUtil.round(balance, 4) + "\n"+  new DecimalFormat("#.#########").format(totalBTC) + "\n$" + new DecimalFormat("#.#####").format(totalBTCInDollar);
 
         holder.tvHolding.setText(holding);
 
@@ -81,7 +81,7 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.MyViewHold
         }
         else {
             coininDollar = bitcoinPrice * priceInDollar;
-            price = "" + new DecimalFormat("#.#########").format(bitcoinPrice) + "\n$" + GlobalUtil.round(coininDollar, 4);
+            price = "" + new DecimalFormat("#.##########").format(bitcoinPrice) + "\n$" + GlobalUtil.round(coininDollar, 4);
         }
         holder.tvPrice.setText(price);
     }
