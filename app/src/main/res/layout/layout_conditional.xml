@@ -140,7 +140,8 @@
             <CheckBox
                 android:id="@+id/chbTrailerLoss"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:enabled="false" />
 
             <LinearLayout android:orientation="horizontal">
 
@@ -163,7 +164,7 @@
                     android:gravity="center"
                     android:hint="Trailer Stop Loss"
                     android:inputType="numberDecimal"
-                    android:maxLength="10"
+                    android:maxLength="3"
                     android:paddingBottom="10dp"
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"
@@ -211,7 +212,7 @@
                     android:gravity="center"
                     android:hint="Price"
                     android:inputType="numberDecimal"
-                    android:maxLength="10"
+                    android:maxLength="3"
                     android:paddingBottom="10dp"
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"
@@ -355,21 +356,4 @@
         android:text="Ok"
         android:textColor="@color/colorPrimary"
         android:textSize="15sp" />
-
-    <android.support.v7.widget.CardView
-        android:id="@+id/crvOpenOrders"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
-        app:cardCornerRadius="5dp"
-        app:cardUseCompatPadding="true">
-
-        <TableLayout
-            android:id="@+id/tblOpenOrders"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-    </android.support.v7.widget.CardView>
 </merge>

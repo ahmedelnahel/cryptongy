@@ -12,6 +12,16 @@ public class Limit {
     private String rate;
     private Account account;
 
+    public Limit() {
+    }
+
+    public Limit(String market, String quantity, String rate, Account account) {
+        this.market = market;
+        this.quantity = quantity;
+        this.rate = rate;
+        this.account = account;
+    }
+
     public String getMarket() {
         return market;
     }
