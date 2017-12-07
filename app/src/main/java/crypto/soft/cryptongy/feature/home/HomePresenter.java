@@ -32,7 +32,7 @@ public class HomePresenter extends MvpBasePresenter<HomeView> implements OnMulti
         if (getView() != null)
             getView().showProgressBar();
         CoinApplication application = (CoinApplication) context.getApplicationContext();
-        Account account = application.getAccount();
+        Account account = application.getReadAccount();
         if (account != null) {
             homeInteractor.loadSummary(context, this);
         } else {

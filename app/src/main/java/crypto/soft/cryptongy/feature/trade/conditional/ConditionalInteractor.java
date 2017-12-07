@@ -63,7 +63,7 @@ public class ConditionalInteractor extends TradeInteractor {
             protected Ticker doInBackground(Void... voids) {
                 try {
                     Thread.sleep(2000);
-                    return new BittrexServices().getTickerMock(marketName);
+                    return new BittrexServices().getTicker(marketName);
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (InterruptedException e) {

@@ -11,6 +11,7 @@ import crypto.soft.cryptongy.feature.shared.json.marketsummary.MarketSummary;
 import crypto.soft.cryptongy.feature.shared.json.wallet.Wallet;
 import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
 import crypto.soft.cryptongy.feature.trade.TradePresenter;
+import crypto.soft.cryptongy.utils.CoinApplication;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -54,7 +55,7 @@ public class ConditonalPresenter extends TradePresenter<ConditionalView> {
             public void onError(Throwable e) {
                 if (getView() != null) {
                     getView().hideLoading();
-                    CustomDialog.showMessagePop(context, "No matched coin found. Please try again later.", null);
+                    CustomDialog.showMessagePop(context, e.getMessage(), null);
                     getView().showEmptyView();
                 }
             }
@@ -69,7 +70,8 @@ public class ConditonalPresenter extends TradePresenter<ConditionalView> {
             }
         };
 
-        Observable.merge(getMarketSummary(marketName), getWallet(marketName), getConditionals())
+        CoinApplication application = (CoinApplication) context.getApplicationContext();
+        Observable.merge(getMarketSummary(marketName), getWallet(marketName,application.getTradeAccount()), getConditionals())
                 .subscribe(observer);
     }
 

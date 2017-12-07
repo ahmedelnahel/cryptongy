@@ -46,9 +46,6 @@ public class GlobalUtil {
         return data;
     }
 
-    public static double convertBtcToUsd(double btc) {
-        return btc * 8100;
-    }
 
     public static double round(double value, int places) {
         if (places < 0) throw new IllegalArgumentException();

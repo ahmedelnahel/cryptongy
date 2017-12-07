@@ -46,9 +46,9 @@
         <item>USD:500</item>
     </string-array>
     <string name="donnation_title">Thanks for your donation</string>
-    <string name="donnation_Address">Address</string>
-    <string name="donnation_send">ETH Address: </string>
-    <string name="donnation_to"> 0x8C6249F8dD89d69db3a435Bd94971AB659C6f291</string>
+    <string name="donnation_Address">Payment</string>
+    <string name="donnation_send">Please follow the link: </string>
+    <string name="donnation_to"> https://gocps.net/8rwpz7nok3wfkbockqks18ndg/</string>
     <string name="trade">Trade</string>
     <string name="conditional_trade">Conditional Trade</string>
 </resources>

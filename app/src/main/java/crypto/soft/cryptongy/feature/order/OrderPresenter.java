@@ -59,7 +59,7 @@ public class OrderPresenter<T extends MvpView> extends MvpBasePresenter<T> {
 
     public void getData(String coinName) {
         CoinApplication application = (CoinApplication) context.getApplicationContext();
-        Account account = application.getAccount();
+        Account account = application.getReadAccount();
         if (account != null) {
             if (getView() != null) {
                 getV().showLoading(context.getString(R.string.fetch_msg));
@@ -105,7 +105,7 @@ public class OrderPresenter<T extends MvpView> extends MvpBasePresenter<T> {
                 }
             };
 
-            Observable.merge(getOpenOrders(""), getOrderHistory(""))
+            Observable.merge(getOpenOrders("", account), getOrderHistory("", account))
                     .subscribe(observer);
         } else {
             CustomDialog.showMessagePop(context, context.getString(R.string.noAPI), null);
@@ -116,11 +116,11 @@ public class OrderPresenter<T extends MvpView> extends MvpBasePresenter<T> {
         }
     }
 
-    public Observable<OrderHistory> getOrderHistory(final String coinName) {
+    public Observable<OrderHistory> getOrderHistory(final String coinName, final Account account) {
         return Observable.create(new ObservableOnSubscribe() {
             @Override
             public void subscribe(final ObservableEmitter e) throws Exception {
-                interactor.getOrderHistory(coinName, new OnFinishListner<OrderHistory>() {
+                interactor.getOrderHistory(coinName, account, new OnFinishListner<OrderHistory>() {
                     @Override
                     public void onComplete(OrderHistory result) {
                         e.onNext(result);
@@ -136,11 +136,11 @@ public class OrderPresenter<T extends MvpView> extends MvpBasePresenter<T> {
         });
     }
 
-    public Observable<OpenOrder> getOpenOrders(final String coinName) {
+    public Observable<OpenOrder> getOpenOrders(final String coinName, final Account account) {
         return Observable.create(new ObservableOnSubscribe<OpenOrder>() {
             @Override
             public void subscribe(final ObservableEmitter<OpenOrder> e) throws Exception {
-                interactor.getOpenOrder(coinName, new OnFinishListner<OpenOrder>() {
+                interactor.getOpenOrder(coinName, account, new OnFinishListner<OpenOrder>() {
                     @Override
                     public void onComplete(OpenOrder result) {
                         e.onNext(result);
@@ -156,10 +156,10 @@ public class OrderPresenter<T extends MvpView> extends MvpBasePresenter<T> {
         });
     }
 
-    public void cancleOrder(final String coinName, String orderUuid) {
+    public void cancleOrder(final String coinName, String orderUuid, final Account account) {
         if (getView() != null)
             getV().showLoading(context.getString(R.string.cancle_msg));
-        interactor.cancleOrder(orderUuid, new OnFinishListner<Cancel>() {
+        interactor.cancleOrder(orderUuid, account, new OnFinishListner<Cancel>() {
 
             @Override
             public void onComplete(Cancel result) {
@@ -194,7 +194,7 @@ public class OrderPresenter<T extends MvpView> extends MvpBasePresenter<T> {
                             }
                         };
 
-                        getOpenOrders(coinName).subscribe(observer);
+                        getOpenOrders(coinName, account).subscribe(observer);
                     } else
                         onFail(result.getMessage());
                 }
@@ -237,9 +237,11 @@ public class OrderPresenter<T extends MvpView> extends MvpBasePresenter<T> {
         }
         double calculation = buy - sell;
 
-        if (getView() != null)
-            getV().setCalculation(String.valueOf(GlobalUtil.formatNumber(calculation, "#.########") + "฿"),
-                    "$" + String.valueOf(GlobalUtil.formatNumber(GlobalUtil.convertBtcToUsd(calculation), "#.####")));
+        if (getView() != null) {
+            getV().setCalculation(calculation);
+//            getV().setCalculation(String.valueOf(GlobalUtil.formatNumber(calculation, "#.########") + "฿"),
+//                    "$" + String.valueOf(GlobalUtil.formatNumber(GlobalUtil.convertBtcToUsd(calculation), "#.####")));
+        }
     }
 
     public OrderView getV() {

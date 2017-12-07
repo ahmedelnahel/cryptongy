@@ -43,27 +43,6 @@ public class Result {
     private Object displayMarketName;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
-    @JsonIgnore
-    private double btcusdt;
-    @JsonIgnore
-    private double ethusdt;
-
-    public double getBtcusdt() {
-        return btcusdt;
-    }
-
-    public void setBtcusdt(double btcusdt) {
-        this.btcusdt = btcusdt;
-    }
-
-    public double getEthusdt() {
-        return ethusdt;
-    }
-
-    public void setEthusdt(double ethusdt) {
-        this.ethusdt = ethusdt;
-    }
-
 
     @JsonProperty("MarketName")
     public String getMarketName() {
@@ -113,15 +92,6 @@ public class Result {
     @JsonProperty("Last")
     public void setLast(Double last) {
         this.last = last;
-
-        if (null != marketName && marketName.equalsIgnoreCase("usdt-btc"))
-        {
-        setBtcusdt(last);
-        }
-        else if (null != marketName && marketName.equalsIgnoreCase("usdt-eth"))
-        {
-            setEthusdt(last);
-        }
     }
 
     @JsonProperty("BaseVolume")

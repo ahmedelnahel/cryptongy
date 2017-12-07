@@ -188,12 +188,8 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
     @Override
     public void onSummaryDataLoad(MarketSummaries marketSummaries) {
         if (marketSummaries.getSuccess()) {
-            for (crypto.soft.cryptongy.feature.shared.json.market.Result result : marketSummaries.getResult()) {
-                if (result.getMarketName().equalsIgnoreCase("USDT-BTC")) {
-                    ((CoinApplication) getActivity().getApplication()).setUsdt_btc(GlobalUtil.round(result.getBtcusdt(), 4));
-                    price.setText("" + ((CoinApplication) getActivity().getApplication()).getUsdt_btc());
-                }
-            }
+            ((CoinApplication) getActivity().getApplication()).setUsdt_btc(GlobalUtil.round(marketSummaries.getCoinsMap().get("USDT-BTC").getLast(), 4));
+            price.setText("" + ((CoinApplication) getActivity().getApplication()).getUsdt_btc());
             coins.addAll(marketSummaries.getResult());
             adapterCoins.notifyDataSetChanged();
         }

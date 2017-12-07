@@ -11,6 +11,7 @@ import crypto.soft.cryptongy.feature.shared.json.marketsummary.MarketSummary;
 import crypto.soft.cryptongy.feature.shared.json.wallet.Result;
 import crypto.soft.cryptongy.feature.shared.json.wallet.Wallet;
 import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
+import crypto.soft.cryptongy.feature.shared.module.Account;
 import crypto.soft.cryptongy.feature.trade.limit.Limit;
 import crypto.soft.cryptongy.network.BittrexServices;
 
@@ -27,7 +28,7 @@ public class TradeInteractor {
             protected MarketSummary doInBackground(Void... voids) {
                 try {
                     Thread.sleep(2000);
-                    return new BittrexServices().getMarketSummaryMock(coinName);
+                    return new BittrexServices().getMarketSummary(coinName);
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (InterruptedException e) {
@@ -48,7 +49,7 @@ public class TradeInteractor {
     }
 
 
-    public void getWalletSummary(final String coin, final OnFinishListner<Wallet> listner) {
+    public void getWalletSummary(final String coin, final Account account, final OnFinishListner<Wallet> listner) {
 
         new AsyncTask<Void, Void, Wallet>() {
 
@@ -56,15 +57,17 @@ public class TradeInteractor {
             protected Wallet doInBackground(Void... voids) {
                 try {
                     Thread.sleep(2000);
-                    Wallet wallet = new BittrexServices().getWalletMock();
-                    Iterator iterator = wallet.getResult().iterator();
-                    String[] ar = coin.split("-");
-                    String base = ar[0];
-                    String coinName = ar[1];
-                    while (iterator.hasNext()) {
-                        Result result = (Result) iterator.next();
-                        if (!result.getCurrency().equalsIgnoreCase(base) && !result.getCurrency().equalsIgnoreCase(coinName))
-                            iterator.remove();
+                    Wallet wallet = new BittrexServices().getWallet(account);
+                    if (wallet != null && wallet.getSuccess()) {
+                        Iterator iterator = wallet.getResult().iterator();
+                        String[] ar = coin.split("-");
+                        String base = ar[0];
+                        String coinName = ar[1];
+                        while (iterator.hasNext()) {
+                            Result result = (Result) iterator.next();
+                            if (!result.getCurrency().equalsIgnoreCase(base) && !result.getCurrency().equalsIgnoreCase(coinName))
+                                iterator.remove();
+                        }
                     }
                     return wallet;
                 } catch (IOException e) {
@@ -78,8 +81,8 @@ public class TradeInteractor {
             @Override
             protected void onPostExecute(Wallet wallet) {
                 super.onPostExecute(wallet);
-                if (wallet == null)
-                    listner.onFail("Failed to fetch data");
+                if (wallet == null || !wallet.getSuccess())
+                    listner.onFail(wallet.getMessage());
                 else {
                     if (wallet.getResult().size() < 2)
                         listner.onFail("No coin match found");
@@ -97,7 +100,7 @@ public class TradeInteractor {
             protected MarketSummaries doInBackground(Void... voids) {
                 try {
                     Thread.sleep(2000);
-                    return new BittrexServices().getMarketSummariesMock();
+                    return new BittrexServices().getMarketSummaries();
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (InterruptedException e) {

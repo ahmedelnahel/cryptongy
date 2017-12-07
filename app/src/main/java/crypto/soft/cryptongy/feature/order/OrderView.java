@@ -16,7 +16,7 @@ public interface OrderView extends MvpView {
 
     void setClickListner();
 
-    void setCalculation(String btc,String usd);
+    void setCalculation(double calcualtion);
 
     void setLevel(String level);
 
