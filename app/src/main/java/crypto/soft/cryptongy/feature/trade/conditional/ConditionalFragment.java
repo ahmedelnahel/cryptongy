@@ -327,6 +327,7 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
 
     @Override
     public void setMax() {
+        edtUnits.setError(null);
         edtUnits.setText(coinWallet.getBalance().toString());
     }
 
