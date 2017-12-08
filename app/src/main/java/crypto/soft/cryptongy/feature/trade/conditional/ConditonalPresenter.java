@@ -94,7 +94,7 @@ public class ConditonalPresenter extends TradePresenter<ConditionalView> {
                         conditionalInteractor.saveConditional(conditionals, limit, new OnFinishListner<Void>() {
                             @Override
                             public void onComplete(Void result) {
-                                CustomDialog.showMessagePop(context, "Alert Order has been created sucessfully.", null);
+                                CustomDialog.showMessagePop(context, "Conditional Order has been created sucessfully.", null);
                                 fetchConditionals();
                             }
 
