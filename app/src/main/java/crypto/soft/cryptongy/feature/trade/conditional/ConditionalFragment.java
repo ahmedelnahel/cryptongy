@@ -3,6 +3,7 @@ package crypto.soft.cryptongy.feature.trade.conditional;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.NestedScrollView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,6 +52,7 @@ import crypto.soft.cryptongy.utils.ProgressDialogFactory;
 public class ConditionalFragment extends MvpFragment<ConditionalView, ConditonalPresenter> implements
         ConditionalView, CompoundButton.OnCheckedChangeListener, RadioGroup.OnCheckedChangeListener, View.OnClickListener {
     private View view;
+    private NestedScrollView nestedScroll;
     private TextView txtCoin, txtBtc, txtLevel, txtVtc, txtEmpty, txtMax, txtAgainst;
     private ImageView imgSync, imgAccSetting;
     private LinearLayout lnlContainer, lnlHolding;
@@ -156,6 +158,8 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
 
     @Override
     public void findViews() {
+        nestedScroll = view.findViewById(R.id.nestedScroll);
+
         txtCoin = view.findViewById(R.id.txtCoin);
         txtBtc = view.findViewById(R.id.txtBtc);
         txtLevel = view.findViewById(R.id.txtLevel);
@@ -480,6 +484,7 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
     public List<Conditional> getConditionals() {
         if (TextUtils.isEmpty(edtUnits.getText().toString())) {
             edtUnits.setError("Cannot be empty");
+            nestedScroll.smoothScrollTo(0, 0);
             return null;
         }
 

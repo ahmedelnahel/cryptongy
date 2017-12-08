@@ -34,4 +34,5 @@
 
     <dimen name="donnate_text">13sp</dimen>
     <dimen name="condition_text">10sp</dimen>
+    <dimen name="order_tbl_condition">11sp</dimen>
 </resources>
