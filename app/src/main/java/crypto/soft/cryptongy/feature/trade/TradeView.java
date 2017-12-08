@@ -17,7 +17,7 @@ public interface TradeView extends MvpView {
 
     void init();
 
-    void setOnClickListner();
+    void setOnListner();
 
     void setTextWatcher();
 

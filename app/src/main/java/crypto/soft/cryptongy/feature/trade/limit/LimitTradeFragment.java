@@ -79,7 +79,7 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
             new HideKeyboard(getContext()).setupUI(view);
             findViews();
             init();
-            setOnClickListner();
+            setOnListner();
             setTextWatcher();
             setCoinAdapter();
             isFirst = true;
@@ -178,7 +178,7 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
     }
 
     @Override
-    public void setOnClickListner() {
+    public void setOnListner() {
         imgSync.setOnClickListener(this);
         imgAccSetting.setOnClickListener(this);
         txtMax.setOnClickListener(this);

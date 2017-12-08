@@ -3,9 +3,7 @@ package crypto.soft.cryptongy.feature.trade.conditional;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
@@ -21,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -32,11 +32,13 @@ import java.util.List;
 
 import crypto.soft.cryptongy.R;
 import crypto.soft.cryptongy.feature.home.CustomArrayAdapter;
+import crypto.soft.cryptongy.feature.order.OpenOrderHolder;
 import crypto.soft.cryptongy.feature.shared.json.market.MarketSummaries;
 import crypto.soft.cryptongy.feature.shared.json.market.Result;
 import crypto.soft.cryptongy.feature.shared.json.marketsummary.MarketSummary;
 import crypto.soft.cryptongy.feature.shared.json.wallet.Wallet;
 import crypto.soft.cryptongy.utils.CoinApplication;
+import crypto.soft.cryptongy.utils.GlobalConstant;
 import crypto.soft.cryptongy.utils.GlobalUtil;
 import crypto.soft.cryptongy.utils.HideKeyboard;
 import crypto.soft.cryptongy.utils.ProgressDialogFactory;
@@ -70,10 +72,12 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
     //limit
     private RadioGroup rdgPrice;
     private Button btnOk;
-    private TextWatcher unitWatcher, totalWatcher;
 
     private ToggleButton tgbPrice, tgbLoss;
-    private EditText edtPrice, edtLoss,edtProfit;
+    private EditText edtPrice, edtLoss, edtProfit, edtTrailerLoss, edtTrailerPrice;
+
+    private CheckBox chbLoss, chbTrailerLoss, chbProfit;
+    private TableLayout tblConditional;
 
     @Nullable
     @Override
@@ -83,7 +87,7 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
             new HideKeyboard(getContext()).setupUI(view);
             findViews();
             init();
-            setOnClickListner();
+            setOnListner();
             setTextWatcher();
             setCoinAdapter();
             isFirst = true;
@@ -101,11 +105,6 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
         }
     }
 
-    public void initToggleListner() {
-        tgbPrice.setOnCheckedChangeListener(this);
-        tgbLoss.setOnCheckedChangeListener(this);
-    }
-
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
         int id = compoundButton.getId();
@@ -116,6 +115,14 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
                 break;
             case R.id.tgbPrice:
                 editText = edtPrice;
+                break;
+            case R.id.chbLoss:
+                if (b && chbTrailerLoss.isChecked())
+                    chbTrailerLoss.setChecked(false);
+                break;
+            case R.id.chbTrailerLoss:
+                if (b && chbLoss.isChecked())
+                    chbLoss.setChecked(false);
                 break;
         }
     }
@@ -168,6 +175,20 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
         rdgPrice = view.findViewById(R.id.rdgPrice);
         edtProfit = view.findViewById(R.id.edtProfit);
         btnOk = view.findViewById(R.id.btnOk);
+
+        chbLoss = view.findViewById(R.id.chbLoss);
+        chbTrailerLoss = view.findViewById(R.id.chbTrailerLoss);
+        chbProfit = view.findViewById(R.id.chbProfit);
+
+        tblConditional = view.findViewById(R.id.tblConditional);
+
+        tgbPrice = view.findViewById(R.id.tgbPrice);
+        tgbLoss = view.findViewById(R.id.tgbLoss);
+        edtPrice = view.findViewById(R.id.edtPrice);
+        edtLoss = view.findViewById(R.id.edtLoss);
+
+        edtTrailerLoss = view.findViewById(R.id.edtTrailerLoss);
+        edtTrailerPrice = view.findViewById(R.id.edtTrailerPrice);
     }
 
     @Override
@@ -200,83 +221,20 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
     }
 
     @Override
-    public void setOnClickListner() {
+    public void setOnListner() {
         imgSync.setOnClickListener(this);
         imgAccSetting.setOnClickListener(this);
         txtMax.setOnClickListener(this);
         btnOk.setOnClickListener(this);
         rdgPrice.setOnCheckedChangeListener(this);
+        chbLoss.setOnCheckedChangeListener(this);
+        chbTrailerLoss.setOnCheckedChangeListener(this);
+        chbProfit.setOnCheckedChangeListener(this);
+        rdgUnits.setOnCheckedChangeListener(this);
     }
 
     @Override
     public void setTextWatcher() {
-        unitWatcher = new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                calculateTotal();
-            }
-        };
-
-        totalWatcher = new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-//                try {
-//                    String str = edtTotal.getText().toString();
-//                    if (!TextUtils.isEmpty(str)) {
-//                        String str2 = edtValue.getText().toString();
-//                        if (!TextUtils.isEmpty(str2)) {
-//                            Double total = GlobalUtil.formatNumber(Double.parseDouble(str) / Double.parseDouble(str2), "#.########");
-//                            edtUnits.removeTextChangedListener(unitWatcher);
-//                            edtUnits.setText(BigDecimal.valueOf(total).toPlainString());
-//                            edtUnits.addTextChangedListener(unitWatcher);
-//                        }
-//                    }
-//                } catch (NumberFormatException e) {
-//                    e.printStackTrace();
-//                }
-            }
-        };
-
-        edtUnits.addTextChangedListener(unitWatcher);
-
-//        edtTotal.addTextChangedListener(totalWatcher);
-
-        edtProfit.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                calculateTotal();
-            }
-        });
     }
 
     @Override
@@ -376,21 +334,6 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
 
     @Override
     public void calculateTotal() {
-//        try {
-//            String str = edtUnits.getText().toString();
-//            if (!TextUtils.isEmpty(str)) {
-//                String str2 = edtValue.getText().toString();
-//                if (!TextUtils.isEmpty(str2)) {
-//                    Double total = Double.parseDouble(str) * Double.parseDouble(str2);
-//                    edtTotal.removeTextChangedListener(totalWatcher);
-//
-//                    edtTotal.setText(String.format("%.8f", total));
-//                    edtTotal.addTextChangedListener(totalWatcher);
-//                }
-//            }
-//        } catch (NumberFormatException e) {
-//            e.printStackTrace();
-//        }
     }
 
     @Override
@@ -403,46 +346,22 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
         switch (radioGroup.getCheckedRadioButtonId()) {
             case R.id.rdbLast:
                 edtProfit.setText(lastValuInfo_TXT.getText().toString());
-                calculateTotal();
                 break;
             case R.id.rdbAsk:
                 edtProfit.setText(ASKvalu_TXT.getText().toString());
-                calculateTotal();
                 break;
             case R.id.rdbBid:
                 edtProfit.setText(BidvalueInfo_TXT.getText().toString());
-                calculateTotal();
+                break;
+            case R.id.rdbBuy:
+                chbTrailerLoss.setChecked(false);
+                chbTrailerLoss.setEnabled(false);
+                break;
+            case R.id.rdbSell:
+                chbTrailerLoss.setEnabled(true);
                 break;
         }
     }
-
-//    @Override
-//    public Limit getLimit() {
-//        String units = edtUnits.getText().toString();
-//        if (TextUtils.isEmpty(units)) {
-//            edtUnits.setError("Cannot be empty");
-//            return null;
-//        }
-//
-//        String total = edtTotal.getText().toString();
-//        crypto.soft.cryptongy.feature.shared.json.wallet.Result result;
-//        if (isBuy())
-//            result = baseWallet;
-//        else {
-//        total=edtUnits.getText().toString();
-//        result = coinWallet;
-//    }
-//        if (Double.parseDouble(total) <= result.getBalance()) {
-//            Limit limit = new Limit();
-//            limit.setMarket(txtVtc.getText().toString());
-//            limit.setRate(txtBtc.getText().toString());
-//            limit.setQuantity(edtTotal.getText().toString());
-//            return limit;
-//        } else {
-//            CustomDialog.showMessagePop(getContext(), "Insufficient balance", null);
-//            return null;
-//        }
-//    }
 
     @Override
     public boolean isBuy() {
@@ -456,6 +375,179 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
     public void resetAll() {
         edtUnits.setText("");
         rdbLast.setChecked(true);
-//        edtTotal.setText("");
+        rdbBuy.setChecked(true);
+    }
+
+    @Override
+    public void setConditional(List<Conditional> conditionals) {
+        tblConditional.removeAllViews();
+        if (conditionals == null || conditionals.size() == 0) {
+            return;
+        }
+        View title = getLayoutInflater().inflate(R.layout.table_conditional_title, null);
+        tblConditional.addView(title);
+        for (int i = 0; i < conditionals.size(); i++) {
+            final Conditional conditional = conditionals.get(i);
+            View sub = getLayoutInflater().inflate(R.layout.table_open_order_sub, null);
+            OpenOrderHolder holder = new OpenOrderHolder(sub);
+            holder.txtType.setText(conditional.getOrderType());
+            holder.txtCoin.setText(String.format("%.8f", conditional.getUnits().doubleValue()));
+            Double low = conditional.getLowPrice();
+            if (low != null) {
+                if (conditional.getConditionType().equalsIgnoreCase(GlobalConstant.Conditional.TYPE_PERCENTAGE))
+                    holder.txtQuantity.setText(String.format("%.0f", low.doubleValue())+"%");
+                else
+                    holder.txtQuantity.setText(String.format("%.8f", low.doubleValue()));
+            } else
+                holder.txtQuantity.setText("NA");
+
+            Double high = conditional.getHighPrice();
+            if (high != null) {
+                if (conditional.getConditionHighType().equalsIgnoreCase(GlobalConstant.Conditional.TYPE_PERCENTAGE))
+                    holder.txtRate.setText(String.format("%.0f", high.doubleValue())+"%");
+                else
+                    holder.txtRate.setText(String.format("%.8f", high.doubleValue()));
+            } else
+                holder.txtRate.setText("NA");
+            holder.txtTime.setText(conditional.getOrderStatus());
+
+            if (conditional.getOrderStatus().equalsIgnoreCase(GlobalConstant.Conditional.TYPE_OPEN))
+                holder.txtAction.setText("Cancel");
+            else
+                holder.txtAction.setText("NA");
+            tblConditional.addView(sub);
+
+            holder.txtAction.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (((TextView) view).getText().toString().equalsIgnoreCase("cancel"))
+                        presenter.delete(conditional.getId());
+                }
+            });
+
+            if (i < conditionals.size() - 1) {
+                View line = getLayoutInflater().inflate(R.layout.table_line, null);
+                tblConditional.addView(line);
+            }
+        }
+    }
+
+    @Override
+    public List<Conditional> getConditionals() {
+        if (TextUtils.isEmpty(edtUnits.getText().toString())) {
+            edtUnits.setError("Cannot be empty");
+            return null;
+        }
+
+        Double units, last, against;
+        String orderType = GlobalConstant.Conditional.TYPE_SELL;
+        String coin = txtVtc.getText().toString();
+
+        units = Double.parseDouble(edtUnits.getText().toString());
+        if (rdgUnits.getCheckedRadioButtonId() == R.id.rdbBuy)
+            orderType = GlobalConstant.Conditional.TYPE_BUY;
+
+        last = Double.parseDouble(lastValuInfo_TXT.getText().toString());
+        against = baseWallet.getBalance();
+
+        List<Conditional> conditional = new ArrayList<>();
+        if (chbLoss.isChecked()) {
+            conditional.add(getStop(coin, units, last, against, orderType));
+        } else if (chbTrailerLoss.isChecked())
+            conditional.add(getTrailerStop(coin, units, last, against, orderType));
+
+        if (chbProfit.isChecked())
+            conditional.add(getProfit(coin, units, last, against, orderType));
+        return conditional;
+    }
+
+    public Conditional getStop(String coin, Double units, Double last, Double against, String orderType) {
+        Double lowCondition, lowPrice;
+        String conditionType, priceType, stopLossType, orderStatus;
+
+        if (TextUtils.isEmpty(edtPrice.getText().toString())) {
+            edtPrice.setError("Cannot be empty");
+            return null;
+        }
+        if (TextUtils.isEmpty(edtLoss.getText().toString())) {
+            edtLoss.setError("Cannot be empty");
+            return null;
+        }
+
+        lowCondition = Double.parseDouble(edtLoss.getText().toString());
+
+        if (tgbLoss.isChecked()) {
+            conditionType = GlobalConstant.Conditional.TYPE_PERCENTAGE;
+        } else
+            conditionType = GlobalConstant.Conditional.TYPE_OTHER;
+        if (tgbPrice.isChecked())
+            priceType = GlobalConstant.Conditional.TYPE_PERCENTAGE;
+        else
+            priceType = GlobalConstant.Conditional.TYPE_OTHER;
+        lowPrice = Double.parseDouble(edtPrice.getText().toString());
+
+        stopLossType = GlobalConstant.Conditional.TYPE_FIXED;
+        orderStatus = GlobalConstant.Conditional.TYPE_OPEN;
+
+        return new Conditional(false, orderType, coin, units, last, against, lowCondition, conditionType,
+                lowPrice, priceType, stopLossType, orderStatus);
+    }
+
+    public Conditional getTrailerStop(String coin, Double units, Double last, Double against, String orderType) {
+        Double lowCondition, lowPrice;
+        String conditionType, priceType, stopLossType, orderStatus;
+
+        if (TextUtils.isEmpty(edtTrailerLoss.getText().toString())) {
+            edtTrailerLoss.setError("Cannot be empty");
+            return null;
+        }
+        if (TextUtils.isEmpty(edtTrailerPrice.getText().toString())) {
+            edtTrailerPrice.setError("Cannot be empty");
+            return null;
+        }
+
+        lowCondition = Double.parseDouble(edtTrailerLoss.getText().toString());
+
+        conditionType = GlobalConstant.Conditional.TYPE_PERCENTAGE;
+        priceType = GlobalConstant.Conditional.TYPE_PERCENTAGE;
+
+        lowPrice = Double.parseDouble(edtTrailerPrice.getText().toString());
+
+        stopLossType = GlobalConstant.Conditional.TYPE_TRAILER;
+        orderStatus = GlobalConstant.Conditional.TYPE_OPEN;
+
+        return new Conditional(false, orderType, coin, units, last, against, lowCondition, conditionType,
+                lowPrice, priceType, stopLossType, orderStatus);
+    }
+
+    public Conditional getProfit(String coin, Double units, Double last, Double against, String orderType) {
+        Double highCondition, highPrice;
+        String conditionType, priceType, stopLossType, orderStatus;
+
+        if (TextUtils.isEmpty(edtProfit.getText().toString())) {
+            edtProfit.setError("Cannot be empty");
+            return null;
+        }
+
+        highCondition = Double.parseDouble(edtProfit.getText().toString());
+        conditionType = GlobalConstant.Conditional.TYPE_OTHER;
+
+        switch (rdgPrice.getCheckedRadioButtonId()) {
+            case R.id.rdbAsk:
+                priceType = GlobalConstant.Conditional.TYPE_ASK;
+                break;
+            case R.id.rdbBid:
+                priceType = GlobalConstant.Conditional.TYPE_BID;
+                break;
+            default:
+                priceType = GlobalConstant.Conditional.TYPE_LAST;
+        }
+        highPrice = null;
+
+        stopLossType = GlobalConstant.Conditional.TYPE_NA;
+        orderStatus = GlobalConstant.Conditional.TYPE_OPEN;
+
+        return new Conditional(true, orderType, coin, units, last, against, highCondition, conditionType,
+                highPrice, priceType, stopLossType, orderStatus);
     }
 }

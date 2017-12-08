@@ -12,7 +12,6 @@ import crypto.soft.cryptongy.feature.shared.json.openorder.Result;
 import crypto.soft.cryptongy.feature.shared.json.orderhistory.OrderHistory;
 import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
 import crypto.soft.cryptongy.feature.shared.module.Account;
-import crypto.soft.cryptongy.network.BittrexServiceComp;
 import crypto.soft.cryptongy.network.BittrexServices;
 
 /**
@@ -20,7 +19,7 @@ import crypto.soft.cryptongy.network.BittrexServices;
  */
 
 public class OrderInteractor {
-    void getOpenOrder(final String coinName,  final Account account, final OnFinishListner<OpenOrder> listner) {
+    void getOpenOrder(final String coinName, final Account account, final OnFinishListner<OpenOrder> listner) {
         new AsyncTask<Void, Void, OpenOrder>() {
 
             @Override
@@ -30,9 +29,9 @@ public class OrderInteractor {
                     Thread.sleep(2000);
                     openOrder = new BittrexServices().getOpnOrders(account);
                     if (openOrder != null && openOrder.getSuccess()) {
-                    if (TextUtils.isEmpty(coinName))
-                        return openOrder;
-                    else {
+                        if (TextUtils.isEmpty(coinName))
+                            return openOrder;
+                        else {
 
                             Iterator<Result> iterator = openOrder.getResult().iterator();
                             while (iterator.hasNext()) {
@@ -72,9 +71,9 @@ public class OrderInteractor {
                 try {
                     orderHistory = new BittrexServices().getOrderHistory(account);
                     if (orderHistory != null && orderHistory.getSuccess()) {
-                    if (TextUtils.isEmpty(coinName))
-                        return orderHistory;
-                    else {
+                        if (TextUtils.isEmpty(coinName))
+                            return orderHistory;
+                        else {
 
                             Iterator<crypto.soft.cryptongy.feature.shared.json.orderhistory.Result> iterator = orderHistory.getResult().iterator();
                             while (iterator.hasNext()) {

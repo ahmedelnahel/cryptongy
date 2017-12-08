@@ -1,6 +1,6 @@
 package crypto.soft.cryptongy.feature.trade.conditional;
 
-import com.hannesdorfmann.mosby.mvp.MvpView;
+import java.util.List;
 
 import crypto.soft.cryptongy.feature.trade.TradeView;
 
@@ -9,4 +9,7 @@ import crypto.soft.cryptongy.feature.trade.TradeView;
  */
 
 public interface ConditionalView extends TradeView {
+    List<Conditional> getConditionals();
+
+    void setConditional(List<Conditional> conditionals);
 }

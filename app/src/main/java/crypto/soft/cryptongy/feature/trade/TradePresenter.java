@@ -14,7 +14,6 @@ import crypto.soft.cryptongy.feature.shared.json.wallet.Wallet;
 import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
 import crypto.soft.cryptongy.feature.shared.module.Account;
 import crypto.soft.cryptongy.feature.trade.limit.Limit;
-import crypto.soft.cryptongy.feature.trade.limit.LimitView;
 import crypto.soft.cryptongy.utils.CoinApplication;
 import crypto.soft.cryptongy.utils.GlobalUtil;
 import io.reactivex.Observable;
@@ -28,8 +27,8 @@ import io.reactivex.disposables.Disposable;
  */
 
 public class TradePresenter<T extends TradeView> extends MvpBasePresenter<T> {
-    private Context context;
-    private TradeInteractor tradeInteractor;
+    protected Context context;
+    protected TradeInteractor tradeInteractor;
 
     public TradePresenter(Context context) {
         this.context = context;
@@ -48,21 +47,6 @@ public class TradePresenter<T extends TradeView> extends MvpBasePresenter<T> {
                 if (getView() != null)
                     getView().setMax();
                 break;
-            case R.id.btnOk:
-                if (getView() != null) {
-                    Limit limit = ((LimitView) getView()).getLimit();
-                    if (limit != null) {
-                        CoinApplication application = (CoinApplication) context.getApplicationContext();
-                        limit.setAccount(application.getTradeAccount());
-                        getView().showLoading("Please wait.");
-                        if (getView().isBuy())
-                            buyLimit(limit);
-                        else
-                            sellLimit(limit);
-                    }
-                }
-                break;
-
         }
     }
 
@@ -127,7 +111,7 @@ public class TradePresenter<T extends TradeView> extends MvpBasePresenter<T> {
 
                     @Override
                     public void onFail(String error) {
-                        e.onComplete();
+                        e.onError(new Throwable(error));
                     }
                 });
             }
@@ -138,7 +122,7 @@ public class TradePresenter<T extends TradeView> extends MvpBasePresenter<T> {
         return Observable.create(new ObservableOnSubscribe<Wallet>() {
             @Override
             public void subscribe(final ObservableEmitter<Wallet> e) throws Exception {
-                tradeInteractor.getWalletSummary(coinName,account, new OnFinishListner<Wallet>() {
+                tradeInteractor.getWalletSummary(coinName, account, new OnFinishListner<Wallet>() {
                     @Override
                     public void onComplete(Wallet result) {
                         e.onNext(result);
@@ -147,7 +131,7 @@ public class TradePresenter<T extends TradeView> extends MvpBasePresenter<T> {
 
                     @Override
                     public void onFail(String error) {
-                        e.onComplete();
+                        e.onError(new Throwable(error));
                     }
                 });
             }
@@ -178,16 +162,13 @@ public class TradePresenter<T extends TradeView> extends MvpBasePresenter<T> {
         if (getView() != null)
             getView().showLoading(context.getString(R.string.fetch_msg));
         Observer observer = new Observer() {
-            private int count = 0;
 
             @Override
             public void onSubscribe(Disposable d) {
-                count = 0;
             }
 
             @Override
             public void onNext(Object o) {
-                count++;
                 if (o instanceof MarketSummary) {
                     if (getView() != null)
                         getView().setMarketSummary((MarketSummary) o);
@@ -199,21 +180,19 @@ public class TradePresenter<T extends TradeView> extends MvpBasePresenter<T> {
 
             @Override
             public void onError(Throwable e) {
+                if (getView() != null) {
+                    getView().hideLoading();
+                    CustomDialog.showMessagePop(context, "No matched coin found. Please try again later.", null);
+                    getView().showEmptyView();
+                }
             }
 
             @Override
             public void onComplete() {
                 if (getView() != null) {
-                    {
-                        getView().hideLoading();
-                    }
-                    if (count < 2) {
-                        CustomDialog.showMessagePop(context, "No matched coin found. Please try again later.", null);
-                        getView().showEmptyView();
-                    } else {
-                        getView().resetAll();
-                        getView().hideEmptyView();
-                    }
+                    getView().hideLoading();
+                    getView().resetAll();
+                    getView().hideEmptyView();
                 }
             }
         };

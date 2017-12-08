@@ -14,7 +14,6 @@ import java.util.List;
 import crypto.soft.cryptongy.feature.shared.json.market.MarketSummaries;
 import crypto.soft.cryptongy.feature.shared.json.market.Result;
 import crypto.soft.cryptongy.feature.shared.listner.OnMultiFinishListner;
-import crypto.soft.cryptongy.network.BittrexServiceComp;
 import crypto.soft.cryptongy.network.BittrexServices;
 import crypto.soft.cryptongy.utils.SharedPreference;
 

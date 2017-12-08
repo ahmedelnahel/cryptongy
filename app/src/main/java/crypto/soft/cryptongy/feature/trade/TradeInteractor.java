@@ -13,7 +13,6 @@ import crypto.soft.cryptongy.feature.shared.json.wallet.Wallet;
 import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
 import crypto.soft.cryptongy.feature.shared.module.Account;
 import crypto.soft.cryptongy.feature.trade.limit.Limit;
-import crypto.soft.cryptongy.network.BittrexServiceComp;
 import crypto.soft.cryptongy.network.BittrexServices;
 
 /**
@@ -59,7 +58,7 @@ public class TradeInteractor {
                 try {
                     Thread.sleep(2000);
                     Wallet wallet = new BittrexServices().getWallet(account);
-                    if(wallet != null && wallet.getSuccess()) {
+                    if (wallet != null && wallet.getSuccess()) {
                         Iterator iterator = wallet.getResult().iterator();
                         String[] ar = coin.split("-");
                         String base = ar[0];
@@ -101,7 +100,7 @@ public class TradeInteractor {
             protected MarketSummaries doInBackground(Void... voids) {
                 try {
                     Thread.sleep(2000);
-                    return new BittrexServiceComp().getMarketSummaries();
+                    return new BittrexServices().getMarketSummaries();
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (InterruptedException e) {
