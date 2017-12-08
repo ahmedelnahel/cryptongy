@@ -36,19 +36,6 @@
             android:layout_marginTop="10dp"
             android:orientation="vertical" />
 
-        <crypto.soft.cryptongy.feature.shared.customView.MspTextView
-            android:id="@+id/txtEmpty"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_below="@+id/includeSearch"
-            android:gravity="center"
-            android:visibility="visible"
-            android:orientation="vertical"
-            android:text="Please select a coin"
-            android:textColor="@color/colorPrimary"
-            android:textSize="18sp" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -57,6 +44,20 @@
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
             android:orientation="vertical">
+
+            <crypto.soft.cryptongy.feature.shared.customView.MspTextView
+                android:id="@+id/txtEmpty"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_alignParentBottom="true"
+                android:layout_below="@+id/includeSearch"
+                android:gravity="center"
+                android:visibility="visible"
+                android:orientation="vertical"
+                android:text="Please select a coin"
+                android:textColor="@color/colorPrimary"
+                android:textSize="18sp" />
 
             <LinearLayout
                 android:id="@+id/lnlContainer"

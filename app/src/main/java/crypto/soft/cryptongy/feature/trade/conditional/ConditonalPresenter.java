@@ -88,22 +88,24 @@ public class ConditonalPresenter extends TradePresenter<ConditionalView> {
         switch (id) {
             case R.id.btnOk:
                 List<Conditional> conditionals = getView().getConditionals();
-                if (conditionals != null && conditionals.size() > 0) {
-                    int limit = context.getResources().getInteger(R.integer.order_limit);
-                    conditionalInteractor.saveConditional(conditionals, limit, new OnFinishListner<Void>() {
-                        @Override
-                        public void onComplete(Void result) {
-                            fetchConditionals();
-                        }
+                if (conditionals != null) {
+                    if (conditionals.size() > 0) {
+                        int limit = context.getResources().getInteger(R.integer.order_limit);
+                        conditionalInteractor.saveConditional(conditionals, limit, new OnFinishListner<Void>() {
+                            @Override
+                            public void onComplete(Void result) {
+                                fetchConditionals();
+                            }
 
-                        @Override
-                        public void onFail(String error) {
-                            fetchConditionals();
-                            CustomDialog.showMessagePop(context, error, null);
-                        }
-                    });
-                } else
+                            @Override
+                            public void onFail(String error) {
+                                fetchConditionals();
+                                CustomDialog.showMessagePop(context, error, null);
+                            }
+                        });
+                    }
                     CustomDialog.showMessagePop(context, "Please choose any option", null);
+                }
                 break;
             default:
                 super.onClicked(id);

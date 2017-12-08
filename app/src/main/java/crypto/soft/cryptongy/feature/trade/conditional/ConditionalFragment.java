@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import crypto.soft.cryptongy.R;
+import crypto.soft.cryptongy.feature.account.CustomDialog;
 import crypto.soft.cryptongy.feature.home.CustomArrayAdapter;
 import crypto.soft.cryptongy.feature.order.OpenOrderHolder;
 import crypto.soft.cryptongy.feature.shared.json.market.MarketSummaries;
@@ -391,27 +392,27 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
         TextView txtTitleStatus = title.findViewById(R.id.txtTitleStatus);
 
         if (isCoinAscend)
-            txtTitleCoin.setCompoundDrawablesWithIntrinsicBounds(0,0,android.R.drawable.arrow_down_float,0);
+            txtTitleCoin.setCompoundDrawablesWithIntrinsicBounds(0, 0, android.R.drawable.arrow_down_float, 0);
         else
-            txtTitleCoin.setCompoundDrawablesWithIntrinsicBounds(0,0,android.R.drawable.arrow_up_float,0);
+            txtTitleCoin.setCompoundDrawablesWithIntrinsicBounds(0, 0, android.R.drawable.arrow_up_float, 0);
 
         txtTitleCoin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 isCoinAscend = !isCoinAscend;
-                presenter.sortList(conditionals,isCoinAscend);
+                presenter.sortList(conditionals, isCoinAscend);
             }
         });
         if (isStatusAscend)
-            txtTitleStatus.setCompoundDrawablesWithIntrinsicBounds(0,0,android.R.drawable.arrow_down_float,0);
+            txtTitleStatus.setCompoundDrawablesWithIntrinsicBounds(0, 0, android.R.drawable.arrow_down_float, 0);
         else
-            txtTitleStatus.setCompoundDrawablesWithIntrinsicBounds(0,0,android.R.drawable.arrow_up_float,0);
+            txtTitleStatus.setCompoundDrawablesWithIntrinsicBounds(0, 0, android.R.drawable.arrow_up_float, 0);
 
         txtTitleStatus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 isStatusAscend = !isStatusAscend;
-                presenter.sortListByStatus(conditionals,isStatusAscend);
+                presenter.sortListByStatus(conditionals, isStatusAscend);
             }
         });
         tblConditional.addView(title);
@@ -464,6 +465,18 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
     public List<Conditional> getConditionals() {
         if (TextUtils.isEmpty(edtUnits.getText().toString())) {
             edtUnits.setError("Cannot be empty");
+            return null;
+        }
+
+        String total = edtUnits.getText().toString();
+        crypto.soft.cryptongy.feature.shared.json.wallet.Result result;
+        if (isBuy())
+            result = baseWallet;
+        else
+            result = coinWallet;
+
+        if (Double.parseDouble(total) > result.getBalance()) {
+            CustomDialog.showMessagePop(getContext(), "Insufficient balance", null);
             return null;
         }
 
