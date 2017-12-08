@@ -391,24 +391,23 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
             View sub = getLayoutInflater().inflate(R.layout.table_open_order_sub, null);
             OpenOrderHolder holder = new OpenOrderHolder(sub);
             holder.txtType.setText(conditional.getOrderType());
-            holder.txtCoin.setText(String.format("%.8f", conditional.getUnits().doubleValue()));
-            Double low = conditional.getLowPrice();
-            if (low != null) {
-                if (conditional.getConditionType().equalsIgnoreCase(GlobalConstant.Conditional.TYPE_PERCENTAGE))
-                    holder.txtQuantity.setText(String.format("%.0f", low.doubleValue())+"%");
-                else
-                    holder.txtQuantity.setText(String.format("%.8f", low.doubleValue()));
-            } else
-                holder.txtQuantity.setText("NA");
+            holder.txtCoin.setText(conditional.getOrderCoin());
+            holder.txtQuantity.setText(String.format("%.8f", conditional.getUnits().doubleValue()));
 
-            Double high = conditional.getHighPrice();
-            if (high != null) {
-                if (conditional.getConditionHighType().equalsIgnoreCase(GlobalConstant.Conditional.TYPE_PERCENTAGE))
-                    holder.txtRate.setText(String.format("%.0f", high.doubleValue())+"%");
+            Double conditionPrice = conditional.getLowCondition();
+            String conditionType = conditional.getConditionType();
+            if (conditionPrice == null)
+                conditionPrice = conditional.getHighCondition();
+            if (TextUtils.isEmpty(conditionType))
+                conditionType = conditional.getConditionHighType();
+
+            if (conditionPrice != null && conditionType != null) {
+                if (conditionType.equalsIgnoreCase(GlobalConstant.Conditional.TYPE_PERCENTAGE))
+                    holder.txtRate.setText(String.format("%.0f", conditionPrice.doubleValue()) + "%");
                 else
-                    holder.txtRate.setText(String.format("%.8f", high.doubleValue()));
-            } else
-                holder.txtRate.setText("NA");
+                    holder.txtRate.setText(String.format("%.8f", conditionPrice.doubleValue()));
+            }
+
             holder.txtTime.setText(conditional.getOrderStatus());
 
             if (conditional.getOrderStatus().equalsIgnoreCase(GlobalConstant.Conditional.TYPE_OPEN))

@@ -41,7 +41,7 @@ public class Conditional extends RealmObject {
         this.orderStatus = orderStatus;
         if (isHigh){
             this.highCondition = lowCondition;
-            this.highType = conditionType;
+            this.conditionHighType = conditionType;
             this.highPrice = lowPrice;
             this.highType = priceType;
         }else {
