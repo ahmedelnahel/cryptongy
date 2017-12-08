@@ -27,8 +27,6 @@
         android:textSize="@dimen/order_tbl_title" />
 
     <crypto.soft.cryptongy.feature.shared.customView.MspTextView
-        android:layout_width="0dp"
-        android:layout_weight="1"
         android:gravity="center"
         android:text="Units"
         android:paddingRight="5dp"
@@ -36,6 +34,9 @@
         android:textSize="@dimen/order_tbl_title" />
 
     <crypto.soft.cryptongy.feature.shared.customView.MspTextView
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_gravity="center"
         android:gravity="center"
         android:text="Price\nCondition"
         android:paddingRight="5dp"

@@ -103,8 +103,8 @@ public class ConditonalPresenter extends TradePresenter<ConditionalView> {
                                 CustomDialog.showMessagePop(context, error, null);
                             }
                         });
-                    }
-                    CustomDialog.showMessagePop(context, "Please choose any option", null);
+                    } else
+                        CustomDialog.showMessagePop(context, "Please choose any option", null);
                 }
                 break;
             default:

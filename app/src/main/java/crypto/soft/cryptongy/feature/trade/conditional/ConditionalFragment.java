@@ -91,6 +91,7 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
             findViews();
             init();
             setOnListner();
+            setToggleListner();
             setTextWatcher();
             setCoinAdapter();
             isFirst = true;
@@ -108,16 +109,23 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
         }
     }
 
+    public void setToggleListner() {
+        tgbLoss.setOnCheckedChangeListener(this);
+        tgbPrice.setOnCheckedChangeListener(this);
+    }
+
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
         int id = compoundButton.getId();
-        EditText editText = null;
         switch (id) {
             case R.id.tgbLoss:
-                editText = edtLoss;
+                boolean isChecked = tgbLoss.isChecked();
+                if (isChecked)
+                    edtLoss.setText("5");
+                else
+                    edtLoss.setText(LowvalueInfo_TXT.getText());
                 break;
             case R.id.tgbPrice:
-                editText = edtPrice;
                 break;
             case R.id.chbLoss:
                 if (b && chbTrailerLoss.isChecked())
@@ -259,6 +267,7 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
             Highvalue_Txt.setText(String.format("%.8f", result.getHigh().doubleValue()));
             VolumeValue_Txt.setText(String.format("%.8f", result.getVolume().doubleValue()));
             LowvalueInfo_TXT.setText(String.format("%.8f", result.getLow().doubleValue()));
+            edtLoss.setText("5");
         }
     }
 
@@ -423,7 +432,7 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
             OpenOrderHolder holder = new OpenOrderHolder(sub);
             holder.txtType.setText(conditional.getOrderType());
             holder.txtCoin.setText(conditional.getOrderCoin());
-            holder.txtQuantity.setText(String.format("%.8f", conditional.getUnits().doubleValue()));
+            holder.txtQuantity.setText(String.format("%.2f", conditional.getUnits().doubleValue()));
 
             Double conditionPrice = conditional.getLowCondition();
             String conditionType = conditional.getConditionType();
@@ -470,15 +479,11 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
         }
 
         String total = edtUnits.getText().toString();
-        crypto.soft.cryptongy.feature.shared.json.wallet.Result result;
-        if (isBuy())
-            result = baseWallet;
-        else
-            result = coinWallet;
-
-        if (Double.parseDouble(total) > result.getBalance()) {
-            CustomDialog.showMessagePop(getContext(), "Insufficient balance", null);
-            return null;
+        if (!isBuy()) {
+            if (Double.parseDouble(total) > coinWallet.getBalance()) {
+                CustomDialog.showMessagePop(getContext(), "Insufficient balance", null);
+                return null;
+            }
         }
 
         Double units, last, against;
