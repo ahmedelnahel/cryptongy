@@ -50,29 +50,32 @@
             android:textSize="18sp" />
 
         <LinearLayout
-            android:id="@+id/lnlContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/includeSearch"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
-            android:orientation="vertical"
-            android:visibility="gone">
+            android:orientation="vertical">
 
-            <include layout="@layout/trade_top_layout" />
+            <LinearLayout
+                android:id="@+id/lnlContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
 
-            <include layout="@layout/layout_conditional" />
+                <include layout="@layout/trade_top_layout" />
 
+                <include layout="@layout/layout_conditional" />
+
+            </LinearLayout>
 
             <android.support.v7.widget.CardView
                 android:id="@+id/crvConditional"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
                 android:layout_marginTop="10dp"
-                android:layout_below="@+id/lnlContainer"
                 app:cardCornerRadius="5dp"
                 app:cardUseCompatPadding="true">
 
@@ -82,7 +85,9 @@
                     android:layout_height="wrap_content" />
 
             </android.support.v7.widget.CardView>
+
         </LinearLayout>
+
     </RelativeLayout>
 
 </android.support.v4.widget.NestedScrollView>

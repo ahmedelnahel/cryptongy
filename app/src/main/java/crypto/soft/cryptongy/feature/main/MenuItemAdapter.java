@@ -127,7 +127,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuIt
                                 menuItems.get(i).setResourceId(R.drawable.ic_orders);
                             }
                             break;
-                        case "Portfolio":
+                        case "Conditional":
                             if (menuItems.get(i).isSelected) {
                                 menuItems.get(i).setResourceId(R.drawable.ic_portfolio_a);
                             } else {

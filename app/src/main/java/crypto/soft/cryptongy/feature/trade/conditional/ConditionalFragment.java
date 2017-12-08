@@ -78,6 +78,8 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
 
     private CheckBox chbLoss, chbTrailerLoss, chbProfit;
     private TableLayout tblConditional;
+    private boolean isCoinAscend = true;
+    private boolean isStatusAscend = true;
 
     @Nullable
     @Override
@@ -379,12 +381,39 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
     }
 
     @Override
-    public void setConditional(List<Conditional> conditionals) {
+    public void setConditional(final List<Conditional> conditionals) {
         tblConditional.removeAllViews();
         if (conditionals == null || conditionals.size() == 0) {
             return;
         }
         View title = getLayoutInflater().inflate(R.layout.table_conditional_title, null);
+        TextView txtTitleCoin = title.findViewById(R.id.txtTitleCoin);
+        TextView txtTitleStatus = title.findViewById(R.id.txtTitleStatus);
+
+        if (isCoinAscend)
+            txtTitleCoin.setCompoundDrawablesWithIntrinsicBounds(0,0,android.R.drawable.arrow_down_float,0);
+        else
+            txtTitleCoin.setCompoundDrawablesWithIntrinsicBounds(0,0,android.R.drawable.arrow_up_float,0);
+
+        txtTitleCoin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                isCoinAscend = !isCoinAscend;
+                presenter.sortList(conditionals,isCoinAscend);
+            }
+        });
+        if (isStatusAscend)
+            txtTitleStatus.setCompoundDrawablesWithIntrinsicBounds(0,0,android.R.drawable.arrow_down_float,0);
+        else
+            txtTitleStatus.setCompoundDrawablesWithIntrinsicBounds(0,0,android.R.drawable.arrow_up_float,0);
+
+        txtTitleStatus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                isStatusAscend = !isStatusAscend;
+                presenter.sortListByStatus(conditionals,isStatusAscend);
+            }
+        });
         tblConditional.addView(title);
         for (int i = 0; i < conditionals.size(); i++) {
             final Conditional conditional = conditionals.get(i);

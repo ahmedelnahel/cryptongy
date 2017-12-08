@@ -17,10 +17,13 @@
         android:textSize="@dimen/order_tbl_title" />
 
     <crypto.soft.cryptongy.feature.shared.customView.MspTextView
+        android:id="@+id/txtTitleCoin"
         android:gravity="center"
         android:text="Coin"
         android:paddingRight="5dp"
+        android:drawablePadding="5dp"
         android:textColor="@color/order_tbl_title"
+        android:drawableRight="@android:drawable/arrow_down_float"
         android:textSize="@dimen/order_tbl_title" />
 
     <crypto.soft.cryptongy.feature.shared.customView.MspTextView
@@ -40,9 +43,12 @@
         android:textSize="@dimen/order_tbl_title" />
 
     <crypto.soft.cryptongy.feature.shared.customView.MspTextView
+        android:id="@+id/txtTitleStatus"
         android:gravity="center"
         android:text="Status"
         android:paddingRight="5dp"
+        android:drawablePadding="5dp"
+        android:drawableRight="@android:drawable/arrow_down_float"
         android:textColor="@color/order_tbl_title"
         android:textSize="@dimen/order_tbl_title" />
 
