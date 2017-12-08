@@ -12,18 +12,21 @@
     <crypto.soft.cryptongy.feature.shared.customView.MspTextView
         android:gravity="center"
         android:text="Order Type"
+        android:paddingRight="5dp"
         android:textColor="@color/order_tbl_title"
         android:textSize="@dimen/order_tbl_title" />
 
     <crypto.soft.cryptongy.feature.shared.customView.MspTextView
         android:gravity="center"
         android:text="Units"
+        android:paddingRight="5dp"
         android:textColor="@color/order_tbl_title"
         android:textSize="@dimen/order_tbl_title" />
 
     <crypto.soft.cryptongy.feature.shared.customView.MspTextView
         android:gravity="center"
         android:text="Low Price"
+        android:paddingRight="5dp"
         android:textColor="@color/order_tbl_title"
         android:textSize="@dimen/order_tbl_title" />
 
@@ -32,12 +35,14 @@
         android:layout_weight="1"
         android:gravity="center"
         android:text="High Price"
+        android:paddingRight="5dp"
         android:textColor="@color/order_tbl_title"
         android:textSize="@dimen/order_tbl_title" />
 
     <crypto.soft.cryptongy.feature.shared.customView.MspTextView
         android:gravity="center"
         android:text="Status"
+        android:paddingRight="5dp"
         android:textColor="@color/order_tbl_title"
         android:textSize="@dimen/order_tbl_title" />
 
