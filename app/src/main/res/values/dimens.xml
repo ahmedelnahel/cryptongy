@@ -20,7 +20,7 @@
     <dimen name="order_icon">31dp</dimen>
     <dimen name="orderListTitle">12sp</dimen>
     <dimen name="order_tbl_title">13sp</dimen>
-    <dimen name="order_tbl_sub">11sp</dimen>
+    <dimen name="order_tbl_sub">10sp</dimen>
     <dimen name="order_tbl_sub_pad">5dp</dimen>
 
     <dimen name="nav_header_vertical_spacing">8dp</dimen>

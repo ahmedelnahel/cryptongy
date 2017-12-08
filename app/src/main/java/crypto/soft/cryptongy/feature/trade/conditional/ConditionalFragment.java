@@ -126,6 +126,11 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
                     edtLoss.setText(LowvalueInfo_TXT.getText());
                 break;
             case R.id.tgbPrice:
+                boolean isPChecked = tgbPrice.isChecked();
+                if (isPChecked)
+                    edtPrice.setText("5");
+                else
+                    edtPrice.setText(LowvalueInfo_TXT.getText());
                 break;
             case R.id.chbLoss:
                 if (b && chbTrailerLoss.isChecked())

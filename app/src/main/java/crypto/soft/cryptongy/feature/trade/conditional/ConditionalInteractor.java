@@ -25,11 +25,11 @@ public class ConditionalInteractor extends TradeInteractor {
 
         realm.beginTransaction();
         for (Conditional conditional : conditionals) {
-            Conditional sameConditional = realm.where(Conditional.class).equalTo("orderCoin", conditional.getOrderCoin()).findFirst();
+            RealmResults<Conditional> sameConditional = realm.where(Conditional.class).equalTo("orderCoin", conditional.getOrderCoin()).findAll();
             long count = realm.where(Conditional.class).equalTo("orderStatus", GlobalConstant.Conditional.TYPE_OPEN).count();
-            if (sameConditional != null) {
+            if (sameConditional != null && sameConditional.size()>1) {
                 realm.commitTransaction();
-                listner.onFail("Only one order per coin are permitted.");
+                listner.onFail("Only 2 order per coin are permitted.");
                 return;
             } else {
                 if (count < limit) {
