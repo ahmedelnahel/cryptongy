@@ -178,6 +178,7 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter<OrderVi
             View sub = getLayoutInflater().inflate(R.layout.talbe_order_history_sub, null);
             OrderHistoryHolder holder = new OrderHistoryHolder(sub);
             holder.txtType.setText(data.getOrderType());
+            holder.txtCoin.setText(data.getExchange());
             holder.txtQuantity.setText(String.valueOf(data.getQuantity()));
             holder.txtRate.setText(String.valueOf(data.getPrice()));
             String date = data.getOpened();

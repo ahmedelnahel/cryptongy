@@ -216,6 +216,8 @@ public class OrderPresenter<T extends MvpView> extends MvpBasePresenter<T> {
         double sell = 0d, buy = 0d;
 
         for (Result data : history.getResult()) {
+            if (data.getExchange().toLowerCase().contains("usdt"))
+                continue;
             if (data.getOrderType().toLowerCase().equals("limit_sell") ||
                     data.getOrderType().toLowerCase().equals("conditional_sell")) {
                 if (data.getLimit() != null) {

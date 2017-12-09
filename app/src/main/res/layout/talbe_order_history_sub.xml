@@ -19,6 +19,15 @@
         android:textSize="@dimen/order_tbl_sub" />
 
     <crypto.soft.cryptongy.feature.shared.customView.CalTextView
+        android:id="@+id/txtCoin"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:padding="@dimen/order_tbl_sub_pad"
+        android:textColor="@color/order_tbl_sub"
+        android:textSize="@dimen/order_tbl_sub" />
+
+    <crypto.soft.cryptongy.feature.shared.customView.CalTextView
         android:id="@+id/txtQuantity"
         android:layout_width="0dp"
         android:layout_weight="1"
