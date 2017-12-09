@@ -131,7 +131,7 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter<OrderVi
             holder.txtType.setText(data.getOrderType());
             holder.txtCoin.setText(data.getExchange());
             holder.txtQuantity.setText(String.valueOf(data.getQuantity()) + "\n" + String.valueOf(data.getQuantityRemaining()));
-            holder.txtRate.setText(String.valueOf(data.getPrice()));
+            holder.txtRate.setText(String.valueOf(data.getLimit()));
             String date = data.getOpened();
             if (!TextUtils.isEmpty(date)) {
                 String[] arr = date.split("T");
@@ -180,7 +180,7 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter<OrderVi
             holder.txtType.setText(data.getOrderType());
             holder.txtCoin.setText(data.getExchange());
             holder.txtQuantity.setText(String.valueOf(data.getQuantity()));
-            holder.txtRate.setText(String.valueOf(data.getPrice()));
+            holder.txtRate.setText(String.valueOf(data.getLimit()));
             String date = data.getClosed();
             if (!TextUtils.isEmpty(date)) {
                 String[] arr = date.split("T");
