@@ -143,9 +143,9 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuIt
                             break;
                         case "Donate":
                             if (menuItems.get(i).isSelected) {
-                                menuItems.get(i).setResourceId(R.drawable.ic_donate_a);
+                                menuItems.get(i).setResourceId(R.drawable.ic_bitcoin_a);
                             } else {
-                                menuItems.get(i).setResourceId(R.drawable.ic_donate);
+                                menuItems.get(i).setResourceId(R.drawable.ic_bitcoin);
                             }
                             break;
                         case "About":

@@ -104,7 +104,7 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
         menuItems.add(new MenuItem(R.drawable.ic_portfolio, "Conditional", false));
         menuItems.add(new MenuItem(R.drawable.ic_alert, "Alert", false));
         menuItems.add(new MenuItem(R.drawable.ic_account, "Accounts", false));
-        menuItems.add(new MenuItem(R.drawable.ic_donate, "Donate", false));
+        menuItems.add(new MenuItem(R.drawable.ic_bitcoin, "Donate", false));
         menuItems.add(new MenuItem(R.drawable.ic_about, "About Us", false));
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         listMenu.setLayoutManager(linearLayoutManager);
