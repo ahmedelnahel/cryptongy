@@ -181,7 +181,7 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter<OrderVi
             holder.txtCoin.setText(data.getExchange());
             holder.txtQuantity.setText(String.valueOf(data.getQuantity()));
             holder.txtRate.setText(String.valueOf(data.getPrice()));
-            String date = data.getOpened();
+            String date = data.getClosed();
             if (!TextUtils.isEmpty(date)) {
                 String[] arr = date.split("T");
                 String d = arr[0];

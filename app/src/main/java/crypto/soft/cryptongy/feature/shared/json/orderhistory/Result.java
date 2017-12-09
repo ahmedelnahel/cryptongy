@@ -22,11 +22,11 @@ import java.util.Map;
         "Commission",
         "Price",
         "PricePerUnit",
-        "Opened",
         "IsConditional",
         "Condition",
         "ConditionTarget",
-        "ImmediateOrCancel"
+        "ImmediateOrCancel",
+        "Closed"
 })
 public class Result {
 
@@ -50,16 +50,16 @@ public class Result {
     private Double price;
     @JsonProperty("PricePerUnit")
     private Double pricePerUnit;
-    @JsonProperty("Opened")
-    private String opened;
     @JsonProperty("IsConditional")
     private Boolean isConditional;
     @JsonProperty("Condition")
-    private Object condition;
+    private String condition;
     @JsonProperty("ConditionTarget")
-    private Object conditionTarget;
+    private Double conditionTarget;
     @JsonProperty("ImmediateOrCancel")
     private Boolean immediateOrCancel;
+    @JsonProperty("Closed")
+    private String closed;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -163,16 +163,6 @@ public class Result {
         this.pricePerUnit = pricePerUnit;
     }
 
-    @JsonProperty("Opened")
-    public String getOpened() {
-        return opened;
-    }
-
-    @JsonProperty("Opened")
-    public void setOpened(String opened) {
-        this.opened = opened;
-    }
-
     @JsonProperty("IsConditional")
     public Boolean getIsConditional() {
         return isConditional;
@@ -184,22 +174,22 @@ public class Result {
     }
 
     @JsonProperty("Condition")
-    public Object getCondition() {
+    public String getCondition() {
         return condition;
     }
 
     @JsonProperty("Condition")
-    public void setCondition(Object condition) {
+    public void setCondition(String condition) {
         this.condition = condition;
     }
 
     @JsonProperty("ConditionTarget")
-    public Object getConditionTarget() {
+    public Double getConditionTarget() {
         return conditionTarget;
     }
 
     @JsonProperty("ConditionTarget")
-    public void setConditionTarget(Object conditionTarget) {
+    public void setConditionTarget(Double conditionTarget) {
         this.conditionTarget = conditionTarget;
     }
 
@@ -213,6 +203,16 @@ public class Result {
         this.immediateOrCancel = immediateOrCancel;
     }
 
+    @JsonProperty("Closed")
+    public String getClosed() {
+        return closed;
+    }
+
+    @JsonProperty("Closed")
+    public void setClosed(String closed) {
+        this.closed = closed;
+    }
+
     @JsonAnyGetter
     public Map<String, Object> getAdditionalProperties() {
         return this.additionalProperties;
@@ -222,5 +222,6 @@ public class Result {
     public void setAdditionalProperty(String name, Object value) {
         this.additionalProperties.put(name, value);
     }
+
 
 }

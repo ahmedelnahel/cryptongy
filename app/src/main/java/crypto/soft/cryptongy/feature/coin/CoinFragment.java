@@ -214,7 +214,7 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
             holder.txtType.setText(data.getOrderType());
             holder.txtQuantity.setText(String.valueOf(data.getQuantity()));
             holder.txtRate.setText(String.valueOf(data.getPrice()));
-            String date = data.getOpened();
+            String date = data.getClosed();
             if (!TextUtils.isEmpty(date)) {
                 String[] arr = date.split("T");
                 String d = arr[0];
