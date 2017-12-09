@@ -224,6 +224,12 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
                 if (mock==null)
                     return;
                 if (result != null) {
+                    for (Result data:mock){
+                        if (data.getMarketName().equalsIgnoreCase(result.getMarketName())){
+                            CustomDialog.showMessagePop(getContext(),result.getMarketName()+" has been already added.",null);
+                            return;
+                        }
+                    }
                     mock.add(result);
                     result = null;
                 }

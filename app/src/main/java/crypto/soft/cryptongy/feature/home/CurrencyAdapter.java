@@ -60,7 +60,7 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
     public void onBindViewHolder(CurrencyViewHolder holder, final int position) {
         Result result = currencyItemsFiltered.get(position);
         holder.coin.setText(result.getMarketName());
-        holder.volume.setText("" + result.getVolume());
+        holder.volume.setText(String.format("%.2f", result.getVolume()));
         holder.low.setText("" + result.getLow());
         holder.high.setText("" + result.getHigh());
         double s = Double.parseDouble("" + result.getLast());
