@@ -56,8 +56,10 @@ public class OrderInteractor {
                 super.onPostExecute(openOrder);
                 if (openOrder == null)
                     listner.onFail("Failed to fetch data");
-                else
+                else if (openOrder.getSuccess().booleanValue())
                     listner.onComplete(openOrder);
+                else
+                    listner.onFail(openOrder.getMessage());
             }
         }.execute();
     }
@@ -95,8 +97,10 @@ public class OrderInteractor {
                 super.onPostExecute(orderHistory);
                 if (orderHistory == null)
                     listner.onFail("Failed to fetch data");
-                else
+                else if (orderHistory.getSuccess().booleanValue())
                     listner.onComplete(orderHistory);
+                else
+                    listner.onFail(orderHistory.getMessage());
             }
         }.execute();
     }
@@ -122,8 +126,10 @@ public class OrderInteractor {
                 super.onPostExecute(cancel);
                 if (cancel == null)
                     listner.onFail("Failed to cancle data");
-                else
+                else if (cancel.getSuccess().booleanValue())
                     listner.onComplete(cancel);
+                else
+                    listner.onFail(cancel.getMessage());
             }
         }.execute();
     }

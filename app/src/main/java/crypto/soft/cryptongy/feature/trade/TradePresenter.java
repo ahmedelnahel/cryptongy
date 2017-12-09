@@ -198,7 +198,7 @@ public class TradePresenter<T extends TradeView> extends MvpBasePresenter<T> {
         };
         CoinApplication application = (CoinApplication) context.getApplicationContext();
 
-        Observable.merge(getMarketSummary(marketName), getWallet(marketName, application.getTradeAccount()))
+        Observable.concat(getMarketSummary(marketName), getWallet(marketName, application.getTradeAccount()))
                 .subscribe(observer);
     }
 

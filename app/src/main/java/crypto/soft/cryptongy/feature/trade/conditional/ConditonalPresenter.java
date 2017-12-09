@@ -72,7 +72,7 @@ public class ConditonalPresenter extends TradePresenter<ConditionalView> {
                 }
             };
 
-            Observable.merge(getCoins(), getConditionals())
+            Observable.concat(getCoins(), getConditionals())
                     .subscribe(observer);
         } else {
             CustomDialog.showMessagePop(context, context.getString(R.string.noAPI), null);

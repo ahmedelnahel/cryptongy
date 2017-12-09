@@ -77,7 +77,6 @@ public class CoinPresenter extends OrderPresenter<CoinView> {
                     if (getView() != null) {
                         getV().hideLoading();
                         if (count == 4) {
-                            CustomDialog.showMessagePop(context, "Error Fetching data. Please try again later.", null);
                             getV().showEmptyView();
                         } else
                             getView().hideEmptyView();
@@ -108,6 +107,7 @@ public class CoinPresenter extends OrderPresenter<CoinView> {
 
                     @Override
                     public void onFail(String error) {
+                        CustomDialog.showMessagePop(context, error, null);
                         e.onComplete();
                     }
                 });
@@ -128,6 +128,7 @@ public class CoinPresenter extends OrderPresenter<CoinView> {
 
                     @Override
                     public void onFail(String error) {
+                        CustomDialog.showMessagePop(context, error, null);
                         e.onComplete();
                     }
                 });

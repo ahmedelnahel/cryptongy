@@ -35,8 +35,10 @@ public class CoinInteractor {
                 super.onPostExecute(marketSummary);
                 if (marketSummary == null)
                     listner.onFail("Failed to fetch data");
-                else
+                else if (marketSummary.getSuccess().booleanValue())
                     listner.onComplete(marketSummary);
+                else
+                    listner.onFail(marketSummary.getMessage());
             }
         }.execute();
     }
@@ -59,8 +61,10 @@ public class CoinInteractor {
                 super.onPostExecute(marketSummary);
                 if (marketSummary == null)
                     listner.onFail("Failed to fetch data");
-                else
+                else if (marketSummary.getSuccess().booleanValue())
                     listner.onComplete(marketSummary);
+                else
+                    listner.onFail(marketSummary.getMessage());
             }
         }.execute();
     }

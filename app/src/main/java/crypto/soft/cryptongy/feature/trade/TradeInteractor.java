@@ -42,8 +42,10 @@ public class TradeInteractor {
                 super.onPostExecute(marketSummary);
                 if (marketSummary == null)
                     listner.onFail("Failed to fetch data");
-                else
+                else if (marketSummary.getSuccess().booleanValue())
                     listner.onComplete(marketSummary);
+                else
+                    listner.onFail(marketSummary.getMessage());
             }
         }.execute();
     }
@@ -81,14 +83,15 @@ public class TradeInteractor {
             @Override
             protected void onPostExecute(Wallet wallet) {
                 super.onPostExecute(wallet);
-                if (wallet == null || !wallet.getSuccess())
-                    listner.onFail(wallet.getMessage());
-                else {
+                if (wallet == null)
+                    listner.onFail("Failed to fetch data");
+                else if (wallet.getSuccess().booleanValue()) {
                     if (wallet.getResult().size() < 2)
                         listner.onFail("No coin match found");
                     else
                         listner.onComplete(wallet);
-                }
+                } else
+                    listner.onFail(wallet.getMessage());
             }
         }.execute();
     }
@@ -114,8 +117,10 @@ public class TradeInteractor {
                 super.onPostExecute(summaries);
                 if (summaries == null)
                     listner.onFail("Failed to fetch data");
-                else
+                else if (summaries.getSuccess().booleanValue())
                     listner.onComplete(summaries);
+                else
+                    listner.onFail(summaries.getMessage());
             }
         }.execute();
     }
@@ -141,8 +146,10 @@ public class TradeInteractor {
                 super.onPostExecute(limitOrder);
                 if (limitOrder == null)
                     listner.onFail("Failed to fetch data");
-                else
+                else if (limitOrder.getSuccess().booleanValue())
                     listner.onComplete(limitOrder);
+                else
+                    listner.onFail(limitOrder.getMessage());
             }
         }.execute();
     }
@@ -168,8 +175,10 @@ public class TradeInteractor {
                 super.onPostExecute(limitOrder);
                 if (limitOrder == null)
                     listner.onFail("Failed to fetch data");
-                else
+                else if (limitOrder.getSuccess().booleanValue())
                     listner.onComplete(limitOrder);
+                else
+                    listner.onFail(limitOrder.getMessage());
             }
         }.execute();
     }

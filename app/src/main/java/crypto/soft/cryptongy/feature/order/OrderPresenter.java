@@ -97,7 +97,6 @@ public class OrderPresenter<T extends MvpView> extends MvpBasePresenter<T> {
                     if (getView() != null) {
                         getV().hideLoading();
                         if (count == 2) {
-                            CustomDialog.showMessagePop(context, "Error Fetching data. Please try again later.", null);
                             getV().showEmptyView();
                         } else
                             getV().hideEmptyView();
@@ -129,6 +128,7 @@ public class OrderPresenter<T extends MvpView> extends MvpBasePresenter<T> {
 
                     @Override
                     public void onFail(String error) {
+                        CustomDialog.showMessagePop(context, error, null);
                         e.onComplete();
                     }
                 });
@@ -149,6 +149,7 @@ public class OrderPresenter<T extends MvpView> extends MvpBasePresenter<T> {
 
                     @Override
                     public void onFail(String error) {
+                        CustomDialog.showMessagePop(context, error, null);
                         e.onComplete();
                     }
                 });
