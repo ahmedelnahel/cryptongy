@@ -30,6 +30,7 @@
             android:textSize="15sp" />
 
         <crypto.soft.cryptongy.feature.shared.customView.CabTextView
+            android:id="@+id/txtGap"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"

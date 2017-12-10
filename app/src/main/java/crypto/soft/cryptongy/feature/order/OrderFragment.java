@@ -4,9 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -36,7 +33,7 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter<OrderVi
     private TableLayout tblOpenOrders, tblOrderHistory;
 
     private LinearLayout lnlContainer;
-    private TextView txtLevel, txtOpenOrder, txtOrderHistory, txtEmpty, txtBtc, txtUsd;
+    private TextView txtLevel, txtOpenOrder, txtOrderHistory, txtEmpty, txtBtc, txtUsd, txtGap;
     private ImageView imgSync, imgAccSetting;
 
     private boolean isFirst = false;
@@ -52,6 +49,7 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter<OrderVi
             isFirst = true;
         } else
             isFirst = false;
+        hideTotal();
         setTitle();
         return view;
     }
@@ -83,6 +81,7 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter<OrderVi
 
         txtBtc = view.findViewById(R.id.txtBtc);
         txtUsd = view.findViewById(R.id.txtUsd);
+        txtGap = view.findViewById(R.id.txtGap);
         txtLevel = view.findViewById(R.id.txtLevel);
 
         imgSync = view.findViewById(R.id.imgSync);
@@ -95,6 +94,12 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter<OrderVi
         lnlContainer = view.findViewById(R.id.lnlContainer);
     }
 
+    public void hideTotal() {
+        txtBtc.setVisibility(View.GONE);
+        txtUsd.setVisibility(View.GONE);
+        txtGap.setVisibility(View.GONE);
+    }
+
     @Override
     public void setClickListner() {
         imgSync.setOnClickListener(this);
@@ -104,7 +109,7 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter<OrderVi
     @Override
     public void setCalculation(double calculation) {
         double priceInDollar = ((CoinApplication) getActivity().getApplication()).getUsdt_btc();
-        txtUsd.setText( "$" + String.valueOf(GlobalUtil.formatNumber(priceInDollar*calculation, "#.####")));
+        txtUsd.setText("$" + String.valueOf(GlobalUtil.formatNumber(priceInDollar * calculation, "#.####")));
         txtBtc.setText(String.valueOf(GlobalUtil.formatNumber(calculation, "#.########") + "฿"));
     }
 
@@ -128,10 +133,10 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter<OrderVi
             final Result data = openOrders.getResult().get(i);
             View sub = getLayoutInflater().inflate(R.layout.table_open_order_sub, null);
             OpenOrderHolder holder = new OpenOrderHolder(sub);
-            holder.txtType.setText(data.getOrderType());
+            holder.txtType.setText(data.getOrderType().replace("LIMIT_",""));
             holder.txtCoin.setText(data.getExchange());
-            holder.txtQuantity.setText(String.valueOf(data.getQuantity()) + "\n" + String.valueOf(data.getQuantityRemaining()));
-            holder.txtRate.setText(String.valueOf(data.getLimit()));
+            holder.txtQuantity.setText(String.format("%.2f",data.getQuantity()) + "\n" + String.format("%.2f",data.getQuantityRemaining()));
+            holder.txtRate.setText(String.format("%.8f", data.getLimit()));
             String date = data.getOpened();
             if (!TextUtils.isEmpty(date)) {
                 String[] arr = date.split("T");
@@ -177,10 +182,10 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter<OrderVi
             crypto.soft.cryptongy.feature.shared.json.orderhistory.Result data = orderHistory.getResult().get(i);
             View sub = getLayoutInflater().inflate(R.layout.talbe_order_history_sub, null);
             OrderHistoryHolder holder = new OrderHistoryHolder(sub);
-            holder.txtType.setText(data.getOrderType());
+            holder.txtType.setText(data.getOrderType().replace("LIMIT_",""));
             holder.txtCoin.setText(data.getExchange());
-            holder.txtQuantity.setText(String.valueOf(data.getQuantity()));
-            holder.txtRate.setText(String.valueOf(data.getLimit()));
+            holder.txtQuantity.setText(String.format("%.2f",data.getQuantity()));
+            holder.txtRate.setText(String.format("%.8f",data.getLimit()));
             String date = data.getClosed();
             if (!TextUtils.isEmpty(date)) {
                 String[] arr = date.split("T");
