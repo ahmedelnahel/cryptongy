@@ -1,7 +1,6 @@
 package crypto.soft.cryptongy.feature.trade.conditional;
 
 import android.content.Context;
-import android.content.Intent;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,6 +13,7 @@ import crypto.soft.cryptongy.feature.shared.json.market.MarketSummaries;
 import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
 import crypto.soft.cryptongy.feature.trade.TradePresenter;
 import crypto.soft.cryptongy.utils.CoinApplication;
+import crypto.soft.cryptongy.utils.GlobalUtil;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -97,8 +97,8 @@ public class ConditonalPresenter extends TradePresenter<ConditionalView> {
                             public void onComplete(Void result) {
                                 CustomDialog.showMessagePop(context, "Conditional Order has been created sucessfully.", null);
                                 fetchConditionals();
-                                Intent intent = new Intent(context, ConditionalService.class);
-                                context.startService(intent);
+                                if (!GlobalUtil.isServiceRunning(context, ConditionalService.class))
+                                    GlobalUtil.startAlarm(context.getResources().getInteger(R.integer.service_interval), context);
                             }
 
                             @Override

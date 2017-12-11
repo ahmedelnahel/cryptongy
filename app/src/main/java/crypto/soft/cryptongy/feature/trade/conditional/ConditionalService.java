@@ -7,12 +7,11 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.IBinder;
+import android.util.Log;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import crypto.soft.cryptongy.R;
 import crypto.soft.cryptongy.feature.main.MainActivity;
@@ -33,8 +32,6 @@ import io.realm.RealmResults;
  */
 
 public class ConditionalService extends Service {
-    private static Timer timer = new Timer();
-    private static int TIMER_PERIOD = 30000;
 
     public IBinder onBind(Intent arg0) {
         return null;
@@ -42,15 +39,28 @@ public class ConditionalService extends Service {
 
     public void onCreate() {
         super.onCreate();
+        Log.d("Ar", "Started");
         startService();
     }
 
     private void startService() {
-        timer.scheduleAtFixedRate(new mainTask(), 0, TIMER_PERIOD);
+        List<Conditional> list = getConditionals();
+        Account account = ((CoinApplication) getApplicationContext()).getTradeAccount();
+        if (list != null) {
+            for (int i = 0; i < list.size(); i++) {
+                Conditional conditional = list.get(i);
+                Ticker ticker = getTicker(conditional.getOrderCoin());
+                if (conditional.getOrderType().equalsIgnoreCase(GlobalConstant.Conditional.TYPE_BUY)) {
+                    checkBuy(conditional, ticker.getResult(), account, i);
+                } else {
+                    checkSell(conditional, ticker.getResult(), account, i);
+                }
+            }
+        }
     }
 
     public void onDestroy() {
-        timer.cancel();
+        Log.d("Ar", "destoryed");
         super.onDestroy();
     }
 
@@ -67,7 +77,7 @@ public class ConditionalService extends Service {
         Realm realm = Realm.getDefaultInstance();
 
         realm.beginTransaction();
-        RealmResults<Conditional> conditionalsDb = realm.where(Conditional.class).equalTo("orderStatus",GlobalConstant.Conditional.TYPE_OPEN).findAll();
+        RealmResults<Conditional> conditionalsDb = realm.where(Conditional.class).equalTo("orderStatus", GlobalConstant.Conditional.TYPE_OPEN).findAll();
         List<Conditional> list = new ArrayList<>();
         if (conditionalsDb != null)
             list.addAll(realm.copyFromRealm(conditionalsDb));
@@ -105,22 +115,41 @@ public class ConditionalService extends Service {
         Double quantity = conditional.getUnits();
         Double rate;
         if (conditional.isHigh()) {
-            if (conditional.getHighCondition().doubleValue() >= ticker.getLast().doubleValue())
-                rate = ticker.getBid().doubleValue();
-            else return;
-        } else {
-            double low = conditional.getLowCondition().doubleValue();
-            if (conditional.getStopLossType().equalsIgnoreCase(GlobalConstant.Conditional.TYPE_TRAILER) ||
-                    conditional.getConditionType().equalsIgnoreCase(GlobalConstant.Conditional.TYPE_PERCENTAGE))
-                low = conditional.getLast().doubleValue() - (low * conditional.getLast().doubleValue());
-
-            if (low <= ticker.getLast().doubleValue()) {
-                if (conditional.getStopLossType().equalsIgnoreCase(GlobalConstant.Conditional.TYPE_TRAILER) ||
-                        conditional.getPriceType().equalsIgnoreCase(GlobalConstant.Conditional.TYPE_PERCENTAGE))
-                    rate = ticker.getLast().doubleValue() - (ticker.getLast().doubleValue() * conditional.getLowPrice().doubleValue());
-                else
-                    rate = ticker.getLast().doubleValue() - conditional.getLowPrice().doubleValue();
+            if (conditional.getHighCondition().doubleValue() >= ticker.getLast().doubleValue()) {
+                switch (conditional.getPriceType()) {
+                    case GlobalConstant.Conditional.TYPE_BID:
+                        rate = ticker.getBid().doubleValue();
+                        break;
+                    case GlobalConstant.Conditional.TYPE_ASK:
+                        rate = ticker.getAsk().doubleValue();
+                        break;
+                    default:
+                        rate = ticker.getLast().doubleValue();
+                        break;
+                }
             } else return;
+        } else {
+            if (conditional.getStopLossType().equalsIgnoreCase(GlobalConstant.Conditional.TYPE_TRAILER)) {
+                double low = conditional.getLast().doubleValue() - (conditional.getLowCondition().doubleValue() * conditional.getLast().doubleValue());
+                if (low <= ticker.getLast().doubleValue())
+                    rate = ticker.getLast().doubleValue() - (ticker.getLast().doubleValue() * conditional.getLowPrice().doubleValue());
+                else {
+                    conditional.setLast(ticker.getLast());
+                    updateConditional(conditional);
+                    return;
+                }
+            } else {
+                double low = conditional.getLowCondition().doubleValue();
+                if (conditional.getConditionType().equalsIgnoreCase(GlobalConstant.Conditional.TYPE_PERCENTAGE))
+                    low = conditional.getLast().doubleValue() - (low * conditional.getLast().doubleValue());
+
+                if (low <= ticker.getLast().doubleValue()) {
+                    if (conditional.getPriceType().equalsIgnoreCase(GlobalConstant.Conditional.TYPE_PERCENTAGE))
+                        rate = ticker.getLast().doubleValue() - (ticker.getLast().doubleValue() * conditional.getLowPrice().doubleValue());
+                    else
+                        rate = ticker.getLast().doubleValue() - conditional.getLowPrice().doubleValue();
+                } else return;
+            }
         }
         Limit limit = new Limit(market, quantity, rate, account);
 
@@ -128,11 +157,12 @@ public class ConditionalService extends Service {
 
             @Override
             public void onComplete(String result) {
-                showNotification("Coin was sold succesfully", result, id);
+                showNotification("Sell order was placed successfully", result, id);
             }
 
             @Override
             public void onFail(String error) {
+                showNotification("Sell order was failed", error, id);
             }
         });
     }
@@ -142,9 +172,19 @@ public class ConditionalService extends Service {
         Double quantity = conditional.getUnits();
         Double rate;
         if (conditional.isHigh()) {
-            if (conditional.getHighCondition().doubleValue() >= ticker.getLast().doubleValue())
-                rate = ticker.getAsk().doubleValue();
-            else return;
+            if (conditional.getHighCondition().doubleValue() >= ticker.getLast().doubleValue()) {
+                switch (conditional.getPriceType()) {
+                    case GlobalConstant.Conditional.TYPE_BID:
+                        rate = ticker.getBid().doubleValue();
+                        break;
+                    case GlobalConstant.Conditional.TYPE_ASK:
+                        rate = ticker.getAsk().doubleValue();
+                        break;
+                    default:
+                        rate = ticker.getLast().doubleValue();
+                        break;
+                }
+            } else return;
         } else {
             double low = conditional.getLowCondition().doubleValue();
             if (conditional.getConditionType().equalsIgnoreCase(GlobalConstant.Conditional.TYPE_PERCENTAGE))
@@ -163,11 +203,12 @@ public class ConditionalService extends Service {
 
             @Override
             public void onComplete(String result) {
-                showNotification("Coin was bought succesfully", result, id);
+                showNotification("Buy order was placed successfully", result, id);
             }
 
             @Override
             public void onFail(String error) {
+                showNotification("Buy order was failed", error, id);
             }
         });
     }
@@ -205,7 +246,7 @@ public class ConditionalService extends Service {
                     updateConditional(conditional);
                     String msg = conditional.getOrderType() + " of " + conditional.getOrderCoin() + "   is failed due to " +
                             limitOrder.getMessage();
-                    listner.onComplete(msg);
+                    listner.onFail(msg);
                 }
             }
         }.execute();
@@ -244,27 +285,9 @@ public class ConditionalService extends Service {
                     updateConditional(conditional);
                     String msg = conditional.getOrderType() + " of " + conditional.getOrderCoin() + "   is failed due to " +
                             limitOrder.getMessage();
-                    listner.onComplete(msg);
+                    listner.onFail(msg);
                 }
             }
         }.execute();
-    }
-
-    private class mainTask extends TimerTask {
-        public void run() {
-            List<Conditional> list = getConditionals();
-            Account account = ((CoinApplication) getApplicationContext()).getTradeAccount();
-            if (list != null) {
-                for (int i = 0; i < list.size(); i++) {
-                    Conditional conditional = list.get(i);
-                    Ticker ticker = getTicker(conditional.getOrderCoin());
-                    if (conditional.getOrderType().equalsIgnoreCase(GlobalConstant.Conditional.TYPE_BUY)) {
-                        checkBuy(conditional, ticker.getResult(), account, i);
-                    } else {
-                        checkSell(conditional, ticker.getResult(), account, i);
-                    }
-                }
-            }
-        }
     }
 }

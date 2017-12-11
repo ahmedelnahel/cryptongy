@@ -31,7 +31,8 @@
 
         <service
             android:name=".feature.trade.conditional.ConditionalService"
-            android:exported="false" />
+            android:exported="false"
+            android:enabled="true"/>
 
         <service
             android:name=".feature.alert.getTickerService"
@@ -48,6 +49,14 @@
 
             </intent-filter>
 
+        </receiver>
+
+        <receiver
+            android:name=".feature.trade.conditional.ConditionalReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+            </intent-filter>
         </receiver>
     </application>
 
