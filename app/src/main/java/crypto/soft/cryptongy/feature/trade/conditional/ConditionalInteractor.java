@@ -71,35 +71,4 @@ public class ConditionalInteractor extends TradeInteractor {
         else
             listner.onComplete(list);
     }
-
-    public void getTicker(final String marketName, final OnFinishListner<Ticker> listner) {
-        new AsyncTask<Void, Void, Ticker>() {
-
-            @Override
-            protected Ticker doInBackground(Void... voids) {
-                try {
-                    Thread.sleep(2000);
-                    return new BittrexServices().getTicker(marketName);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Ticker ticker) {
-                super.onPostExecute(ticker);
-                if (ticker == null || ticker.getResult() != null)
-                    listner.onFail("Failed to fetch data");
-                else {
-                    if (ticker.getSuccess())
-                        listner.onComplete(ticker);
-                    else
-                        listner.onFail(ticker.getMessage());
-                }
-            }
-        }.execute();
-    }
 }

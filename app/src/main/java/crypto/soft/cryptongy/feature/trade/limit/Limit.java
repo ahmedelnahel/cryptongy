@@ -8,14 +8,14 @@ import crypto.soft.cryptongy.feature.shared.module.Account;
 
 public class Limit {
     private String market;
-    private String quantity;
-    private String rate;
+    private Double quantity;
+    private Double rate;
     private Account account;
 
     public Limit() {
     }
 
-    public Limit(String market, String quantity, String rate, Account account) {
+    public Limit(String market, Double quantity, Double rate, Account account) {
         this.market = market;
         this.quantity = quantity;
         this.rate = rate;
@@ -30,19 +30,19 @@ public class Limit {
         this.market = market;
     }
 
-    public String getQuantity() {
+    public Double getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(String quantity) {
+    public void setQuantity(Double quantity) {
         this.quantity = quantity;
     }
 
-    public String getRate() {
+    public Double getRate() {
         return rate;
     }
 
-    public void setRate(String rate) {
+    public void setRate(Double rate) {
         this.rate = rate;
     }
 

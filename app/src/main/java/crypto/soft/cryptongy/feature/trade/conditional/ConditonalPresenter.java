@@ -1,6 +1,7 @@
 package crypto.soft.cryptongy.feature.trade.conditional;
 
 import android.content.Context;
+import android.content.Intent;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -96,6 +97,8 @@ public class ConditonalPresenter extends TradePresenter<ConditionalView> {
                             public void onComplete(Void result) {
                                 CustomDialog.showMessagePop(context, "Conditional Order has been created sucessfully.", null);
                                 fetchConditionals();
+                                Intent intent = new Intent(context, ConditionalService.class);
+                                context.startService(intent);
                             }
 
                             @Override

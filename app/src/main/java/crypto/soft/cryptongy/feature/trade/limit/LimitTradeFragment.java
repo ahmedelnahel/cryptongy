@@ -407,14 +407,14 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
         if (isBuy())
             result = baseWallet;
         else {
-            total=edtUnits.getText().toString();
+            total = edtUnits.getText().toString();
             result = coinWallet;
         }
         if (Double.parseDouble(total) <= result.getBalance()) {
             Limit limit = new Limit();
             limit.setMarket(txtVtc.getText().toString());
-            limit.setRate(txtBtc.getText().toString());
-            limit.setQuantity(edtTotal.getText().toString());
+            limit.setRate(Double.parseDouble(txtBtc.getText().toString()));
+            limit.setQuantity(Double.parseDouble(edtTotal.getText().toString()));
             return limit;
         } else {
             CustomDialog.showMessagePop(getContext(), "Insufficient balance", null);

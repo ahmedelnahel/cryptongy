@@ -25,6 +25,8 @@ public class Conditional extends RealmObject {
     private String highType;
     private String stopLossType;
     private String orderStatus;
+    private boolean isHigh;
+    private String error="";
 
     public Conditional() {
     }
@@ -39,6 +41,7 @@ public class Conditional extends RealmObject {
         this.against = against;
         this.stopLossType = stopLossType;
         this.orderStatus = orderStatus;
+        this.isHigh=isHigh;
         if (isHigh){
             this.highCondition = lowCondition;
             this.conditionHighType = conditionType;
@@ -178,6 +181,22 @@ public class Conditional extends RealmObject {
 
     public void setHighType(String highType) {
         this.highType = highType;
+    }
+
+    public boolean isHigh() {
+        return isHigh;
+    }
+
+    public void setHigh(boolean high) {
+        isHigh = high;
+    }
+
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
     }
 }
 //order.type=buy,order.coin=coin,

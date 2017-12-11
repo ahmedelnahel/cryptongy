@@ -132,7 +132,7 @@ public class TradeInteractor {
             protected LimitOrder doInBackground(Void... voids) {
                 try {
                     Thread.sleep(2000);
-                    return new BittrexServices().buyLimit(limit.getMarket(), limit.getQuantity(), limit.getRate(), limit.getAccount());
+                    return new BittrexServices().buyLimit(limit.getMarket(), String.valueOf(limit.getQuantity()), String.valueOf(limit.getRate()), limit.getAccount());
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (InterruptedException e) {
@@ -161,7 +161,7 @@ public class TradeInteractor {
             protected LimitOrder doInBackground(Void... voids) {
                 try {
                     Thread.sleep(2000);
-                    return new BittrexServices().sellLimit(limit.getMarket(), limit.getQuantity(), limit.getRate(), limit.getAccount());
+                    return new BittrexServices().sellLimit(limit.getMarket(), String.valueOf(limit.getQuantity()), String.valueOf(limit.getRate()), limit.getAccount());
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (InterruptedException e) {

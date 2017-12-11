@@ -30,6 +30,10 @@
 
 
         <service
+            android:name=".feature.trade.conditional.ConditionalService"
+            android:exported="false" />
+
+        <service
             android:name=".feature.alert.getTickerService"
             android:enabled="true"
             android:exported="false" />

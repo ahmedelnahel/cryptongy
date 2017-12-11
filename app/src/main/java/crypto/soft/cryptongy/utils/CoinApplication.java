@@ -1,9 +1,12 @@
 package crypto.soft.cryptongy.utils;
 
 import android.app.Application;
+import android.content.Intent;
 
 import crypto.soft.cryptongy.feature.setting.Notification;
 import crypto.soft.cryptongy.feature.shared.module.Account;
+import crypto.soft.cryptongy.feature.trade.conditional.Conditional;
+import crypto.soft.cryptongy.feature.trade.conditional.ConditionalService;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
@@ -88,6 +91,7 @@ public class CoinApplication extends Application {
         Realm.setDefaultConfiguration(realmConfiguration);
         updateAccount();
         getNotification();
+        startService();
     }
 
     public void updateAccount() {
@@ -124,5 +128,17 @@ public class CoinApplication extends Application {
             notification = realm.copyFromRealm(notificationDb);
         realm.commitTransaction();
         setSettings(notification);
+    }
+
+    public void startService() {
+        Realm realm = Realm.getDefaultInstance();
+
+        realm.beginTransaction();
+        long count = realm.where(Conditional.class).equalTo("orderStatus", GlobalConstant.Conditional.TYPE_OPEN).count();
+        realm.commitTransaction();
+        if (count > 0) {
+            Intent intent = new Intent(this, ConditionalService.class);
+            startService(intent);
+        }
     }
 }

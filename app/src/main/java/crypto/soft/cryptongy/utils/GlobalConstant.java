@@ -17,5 +17,7 @@ public class GlobalConstant {
         public static final String TYPE_LAST = "Last";
         public static final String TYPE_BID = "Bid";
         public static final String TYPE_ASK = "Ask";
+        public static final String TYPE_ERROR = "Error";
+        public static final String TYPE_CLOSED = "Closed";
     }
 }
