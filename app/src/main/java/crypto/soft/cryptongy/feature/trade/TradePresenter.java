@@ -7,6 +7,7 @@ import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 import crypto.soft.cryptongy.R;
 import crypto.soft.cryptongy.feature.account.AccountFragment;
 import crypto.soft.cryptongy.feature.account.CustomDialog;
+import crypto.soft.cryptongy.feature.main.MainActivity;
 import crypto.soft.cryptongy.feature.shared.json.limitorder.LimitOrder;
 import crypto.soft.cryptongy.feature.shared.json.market.MarketSummaries;
 import crypto.soft.cryptongy.feature.shared.json.marketsummary.MarketSummary;
@@ -41,7 +42,7 @@ public class TradePresenter<T extends TradeView> extends MvpBasePresenter<T> {
                 getData();
                 break;
             case R.id.imgAccSetting:
-                GlobalUtil.addFragment(context, new AccountFragment(), R.id.container, true);
+                ((MainActivity) context).getPresenter().replaceAccountFragment();
                 break;
             case R.id.txtMax:
                 if (getView() != null)

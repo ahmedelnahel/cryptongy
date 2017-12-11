@@ -8,8 +8,9 @@ import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 import com.hannesdorfmann.mosby.mvp.MvpView;
 
 import crypto.soft.cryptongy.R;
-import crypto.soft.cryptongy.feature.account.AccountFragment;
+import crypto.soft.cryptongy.feature.account.AccountActivity;
 import crypto.soft.cryptongy.feature.account.CustomDialog;
+import crypto.soft.cryptongy.feature.main.MainActivity;
 import crypto.soft.cryptongy.feature.setting.SettingActivity;
 import crypto.soft.cryptongy.feature.shared.json.action.Cancel;
 import crypto.soft.cryptongy.feature.shared.json.openorder.OpenOrder;
@@ -18,7 +19,6 @@ import crypto.soft.cryptongy.feature.shared.json.orderhistory.Result;
 import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
 import crypto.soft.cryptongy.feature.shared.module.Account;
 import crypto.soft.cryptongy.utils.CoinApplication;
-import crypto.soft.cryptongy.utils.GlobalUtil;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -52,7 +52,10 @@ public class OrderPresenter<T extends MvpView> extends MvpBasePresenter<T> {
                 getData("");
                 break;
             case R.id.imgAccSetting:
-                GlobalUtil.addFragment(context, new AccountFragment(), R.id.container, true);
+                if (context instanceof MainActivity)
+                    ((MainActivity) context).getPresenter().replaceAccountFragment();
+                else
+                    context.startActivity(new Intent(context, AccountActivity.class));
                 break;
         }
     }

@@ -32,7 +32,10 @@ public class MainPresenter extends MvpBasePresenter<MainView> {
     public void replaceFragment(Fragment fragment) {
         GlobalUtil.addFragment(context, fragment, R.id.container, false);
     }
-
+    public void replaceAccountFragment() {
+        getView().notifyMenu();
+        GlobalUtil.addFragment(context, new AccountFragment(), R.id.container, true);
+    }
     public void onItemClicked(String name) {
         switch (name) {
             case "Home":

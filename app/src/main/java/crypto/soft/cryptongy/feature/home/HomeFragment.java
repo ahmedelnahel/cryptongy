@@ -42,6 +42,7 @@ import crypto.soft.cryptongy.R;
 import crypto.soft.cryptongy.feature.account.AccountFragment;
 import crypto.soft.cryptongy.feature.account.CustomDialog;
 import crypto.soft.cryptongy.feature.coinHome.CoinHomeActivity;
+import crypto.soft.cryptongy.feature.main.MainActivity;
 import crypto.soft.cryptongy.feature.shared.json.market.MarketSummaries;
 import crypto.soft.cryptongy.feature.shared.json.market.Result;
 import crypto.soft.cryptongy.feature.shared.listner.AdapterItemClickListener;
@@ -261,7 +262,7 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
                 currencyAdapter.setmSelectedItemsIds();
                 break;
             case R.id.imgKey:
-                GlobalUtil.addFragment(getContext(), new AccountFragment(), R.id.container, true);
+                ((MainActivity)getActivity()).getPresenter().replaceAccountFragment();
                 break;
         }
     }

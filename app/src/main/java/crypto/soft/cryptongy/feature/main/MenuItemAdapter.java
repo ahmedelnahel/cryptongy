@@ -148,7 +148,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuIt
                                 menuItems.get(i).setResourceId(R.drawable.ic_bitcoin);
                             }
                             break;
-                        case "About":
+                        case "About Us":
                             if (menuItems.get(i).isSelected) {
                                 menuItems.get(i).setResourceId(R.drawable.ic_about_a);
                             } else {
@@ -162,6 +162,10 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuIt
                 menuItemClickListener.onItemClicked(menuItem, position);
                 menuItemViewHolder.menuName.setTextColor(Color.parseColor("#21bdb9"));
             }
+        }
+
+        public void setPosition(int position) {
+            this.position = position;
         }
     }
 }

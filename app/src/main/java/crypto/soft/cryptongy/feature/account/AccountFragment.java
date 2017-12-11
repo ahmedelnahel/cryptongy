@@ -18,8 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import crypto.soft.cryptongy.R;
-import crypto.soft.cryptongy.feature.shared.module.Account;
 import crypto.soft.cryptongy.feature.shared.listner.OnClickListner;
+import crypto.soft.cryptongy.feature.shared.module.Account;
 import crypto.soft.cryptongy.utils.HideKeyboard;
 
 /**
@@ -64,7 +64,9 @@ public class AccountFragment extends MvpFragment<AccountView, AccountePresenter>
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        menu.findItem(R.id.ic_setting).setVisible(false);
+        MenuItem item = menu.findItem(R.id.ic_setting);
+        if (item != null)
+            item.setVisible(false);
     }
 
     @Override

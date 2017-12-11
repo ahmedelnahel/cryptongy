@@ -16,4 +16,6 @@ public interface MainView extends MvpView {
     void initSideMenu();
 
     void setAdapter();
+
+    void notifyMenu();
 }

@@ -24,6 +24,7 @@ import crypto.soft.cryptongy.feature.setting.SettingActivity;
 import crypto.soft.cryptongy.utils.HideKeyboard;
 
 public class MainActivity extends MvpActivity<MainView, MainPresenter> implements MainView {
+    List<MenuItem> menuItems = new ArrayList<>();
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
     private Toolbar toolbar;
@@ -96,7 +97,6 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
 
     @Override
     public void setAdapter() {
-        List<MenuItem> menuItems = new ArrayList<>();
         menuItems.add(new MenuItem(R.drawable.ic_home_a, "Home", true));
         menuItems.add(new MenuItem(R.drawable.ic_wallet, "Wallet", false));
         menuItems.add(new MenuItem(R.drawable.ic_orders, "Orders", false));
@@ -119,5 +119,20 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
                 presenter.onItemClicked(menuItem.getItemName());
             }
         });
+    }
+
+    @Override
+    public void notifyMenu() {
+        menuItems.clear();
+        menuItems.add(new MenuItem(R.drawable.ic_house, "Home", false));
+        menuItems.add(new MenuItem(R.drawable.ic_wallet, "Wallet", false));
+        menuItems.add(new MenuItem(R.drawable.ic_orders, "Orders", false));
+        menuItems.add(new MenuItem(R.drawable.ic_trade, "Trade", false));
+        menuItems.add(new MenuItem(R.drawable.ic_portfolio, "Conditional", false));
+        menuItems.add(new MenuItem(R.drawable.ic_alert, "Alert", false));
+        menuItems.add(new MenuItem(R.drawable.ic_accounts_a, "Accounts", true));
+        menuItems.add(new MenuItem(R.drawable.ic_bitcoin, "Donate", false));
+        menuItems.add(new MenuItem(R.drawable.ic_about, "About Us", false));
+        menuItemAdapter.notifyDataSetChanged();
     }
 }
