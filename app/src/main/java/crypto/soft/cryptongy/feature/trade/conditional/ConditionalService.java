@@ -144,7 +144,7 @@ public class ConditionalService extends Service {
                     low = conditional.getLast().doubleValue() - (low * conditional.getLast().doubleValue());
 
                 if (low <= ticker.getLast().doubleValue()) {
-                    if (conditional.getPriceType().equalsIgnoreCase(GlobalConstant.Conditional.TYPE_PERCENTAGE))
+                    if (conditional.getPriceType()!=null && conditional.getPriceType().equalsIgnoreCase(GlobalConstant.Conditional.TYPE_PERCENTAGE))
                         rate = ticker.getLast().doubleValue() - (ticker.getLast().doubleValue() * conditional.getLowPrice().doubleValue());
                     else
                         rate = ticker.getLast().doubleValue() - conditional.getLowPrice().doubleValue();
@@ -191,7 +191,7 @@ public class ConditionalService extends Service {
                 low = conditional.getLast().doubleValue() - (low * conditional.getLast().doubleValue());
 
             if (low <= ticker.getLast().doubleValue()) {
-                if (conditional.getPriceType().equalsIgnoreCase(GlobalConstant.Conditional.TYPE_PERCENTAGE))
+                if (conditional.getPriceType()!=null && conditional.getPriceType().equalsIgnoreCase(GlobalConstant.Conditional.TYPE_PERCENTAGE))
                     rate = ticker.getLast().doubleValue() + (ticker.getLast().doubleValue() * conditional.getLowPrice().doubleValue());
                 else
                     rate = ticker.getLast().doubleValue() + conditional.getLowPrice().doubleValue();
