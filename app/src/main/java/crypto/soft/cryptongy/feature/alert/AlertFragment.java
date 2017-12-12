@@ -44,6 +44,7 @@ import crypto.soft.cryptongy.feature.home.CustomArrayAdapter;
 import crypto.soft.cryptongy.feature.main.MainActivity;
 import crypto.soft.cryptongy.feature.shared.json.market.MarketSummaries;
 import crypto.soft.cryptongy.feature.shared.json.market.Result;
+import crypto.soft.cryptongy.feature.shared.json.marketsummary.MarketSummary;
 import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
 import crypto.soft.cryptongy.feature.trade.TradeInteractor;
 import crypto.soft.cryptongy.network.BittrexServices;
@@ -381,15 +382,15 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
 
         @Override
         protected String doInBackground(String... params) {
-            List<Result> resultList = new ArrayList<>();
+            List<crypto.soft.cryptongy.feature.shared.json.marketsummary.Result> resultList = new ArrayList<>();
 
-            MarketSummaries marketSummary = new MarketSummaries();
+            MarketSummary marketSummary;
             BittrexServices bittrexServices = new BittrexServices();
             try {
-                marketSummary = bittrexServices.getMarketSummaries();
+                marketSummary = bittrexServices.getMarketSummary(inputCoin.getText().toString());
                 if (marketSummary.getSuccess()) {
                     resultList = marketSummary.getResult();
-                    Result resultItem = resultList.get(0);
+                    crypto.soft.cryptongy.feature.shared.json.marketsummary.Result resultItem = resultList.get(0);
 
                     lastV = resultItem.getLast();
                     bidV = resultItem.getBid();
