@@ -190,6 +190,7 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
     public void onSummaryDataLoad(MarketSummaries marketSummaries) {
         if (marketSummaries.getSuccess()) {
             ((CoinApplication) getActivity().getApplication()).setUsdt_btc(GlobalUtil.round(marketSummaries.getCoinsMap().get("USDT-BTC").getLast(), 4));
+            ((CoinApplication) getActivity().getApplication()).setbtc_eth(marketSummaries.getCoinsMap().get("BTC-ETH").getLast());
             price.setText("" + ((CoinApplication) getActivity().getApplication()).getUsdt_btc());
             coins.addAll(marketSummaries.getResult());
             adapterCoins.notifyDataSetChanged();

@@ -16,7 +16,7 @@ import io.realm.RealmResults;
 
 public class CoinApplication extends Application {
     private double usdt_btc;
-    private double usdt_eth;
+    private double btc_eth;
     private Account readAccount;
     private Account tradeAccount;
     private Account withdrawAccount;
@@ -64,12 +64,12 @@ public class CoinApplication extends Application {
         this.withdrawAccount = withdrawAccount;
     }
 
-    public double getUsdt_eth() {
-        return usdt_eth;
+    public double getbtc_eth() {
+        return btc_eth;
     }
 
-    public void setUsdt_eth(double usdt_eth) {
-        this.usdt_eth = usdt_eth;
+    public void setbtc_eth(double btc_eth) {
+        this.btc_eth = btc_eth;
     }
 
     public double getUsdt_btc() {

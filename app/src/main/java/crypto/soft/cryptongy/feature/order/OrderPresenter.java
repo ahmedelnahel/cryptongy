@@ -217,26 +217,29 @@ public class OrderPresenter<T extends MvpView> extends MvpBasePresenter<T> {
         if (history == null || history.getResult() == null || history.getResult().size() == 0)
             return;
         double sell = 0d, buy = 0d;
-
+        CoinApplication application = (CoinApplication) context.getApplicationContext();
+ double btcdollar = application.getUsdt_btc();
+  double ethbtc = application.getbtc_eth();
         for (Result data : history.getResult()) {
-            if (data.getExchange().toLowerCase().contains("usdt"))
-                continue;
+            double rate = 1;
+            if (data.getExchange().toLowerCase().contains("usdt-"))
+                rate = btcdollar;
+            else if (data.getExchange().toLowerCase().contains("eth-"))
+                rate = ethbtc;
             if (data.getOrderType().toLowerCase().equals("limit_sell") ||
                     data.getOrderType().toLowerCase().equals("conditional_sell")) {
                 if (data.getLimit() != null) {
                     if (data.getQuantity() != null)
-                        sell += data.getQuantity().doubleValue() * data.getLimit().doubleValue();
-                    else
-                        sell = data.getLimit().doubleValue();
+                        sell += data.getQuantity().doubleValue() * (data.getLimit().doubleValue()/rate);
+
 
                 }
             } else if (data.getOrderType().toLowerCase().equals("limit_buy") ||
                     data.getOrderType().toLowerCase().equals("conditional_buy")) {
                 if (data.getLimit() != null) {
                     if (data.getQuantity() != null)
-                        buy += data.getQuantity().doubleValue() * data.getLimit().doubleValue();
-                    else
-                        buy = data.getLimit().doubleValue();
+                        buy += data.getQuantity().doubleValue() * (data.getLimit().doubleValue()/rate);
+
 
                 }
             }
