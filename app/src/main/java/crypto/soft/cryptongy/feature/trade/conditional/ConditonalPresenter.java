@@ -98,7 +98,7 @@ public class ConditonalPresenter extends TradePresenter<ConditionalView> {
                                 CustomDialog.showMessagePop(context, "Conditional Order has been created sucessfully.", null);
                                 fetchConditionals();
                                 if (!GlobalUtil.isServiceRunning(context, ConditionalService.class))
-                                    GlobalUtil.startAlarm(context.getResources().getInteger(R.integer.service_interval), context);
+                                    GlobalUtil.startAlarm(ConditionalReceiver.class, context.getResources().getInteger(R.integer.service_interval), context);
                             }
 
                             @Override

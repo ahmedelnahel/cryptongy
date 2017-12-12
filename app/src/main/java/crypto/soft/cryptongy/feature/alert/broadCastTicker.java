@@ -4,6 +4,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+import crypto.soft.cryptongy.R;
+import crypto.soft.cryptongy.feature.trade.conditional.ConditionalReceiver;
+import crypto.soft.cryptongy.feature.trade.conditional.ConditionalService;
+import crypto.soft.cryptongy.utils.GlobalUtil;
+
 /**
  * Created by maiAjam on 11/20/2017.
  */
@@ -11,26 +16,11 @@ import android.content.Intent;
 public class broadCastTicker extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
+        boolean isServiceRunning = GlobalUtil.isServiceRunning(context, getTickerService.class);
+        if (isServiceRunning)
+            context.stopService(new Intent(context, getTickerService.class));
 
-
-        String coinName = intent.getStringExtra("coinName");
-        String exchangeName = intent.getStringExtra("exchangeName");
-        Double HighValueEn = intent.getDoubleExtra("high",0);
-        Double LowValueEn = intent.getDoubleExtra("low",0);
-        int alarmFreq = intent.getIntExtra("alarmFreq",1);
-        int checkedHigher =  intent.getIntExtra("higherCh",1);
-        int checkedLower =  intent.getIntExtra("lowerCh",1);
-
-
-
-        Intent intenSer = new Intent(context,getTickerService.class);
-        intenSer.putExtra("coinName",coinName);
-        intenSer.putExtra("exchangeName",exchangeName);
-        intenSer.putExtra("high",HighValueEn);
-        intenSer.putExtra("low",LowValueEn);
-        intenSer.putExtra("alarmFreq",alarmFreq);
-        intenSer.putExtra("higherCh",checkedHigher);
-        intenSer.putExtra("lowerCh",checkedLower);
-        context.startService(intenSer);
+        context.startService(new Intent(context, getTickerService.class));
+        GlobalUtil.startAlarm(broadCastTicker.class,context.getResources().getInteger(R.integer.service_interval), context);
     }
 }

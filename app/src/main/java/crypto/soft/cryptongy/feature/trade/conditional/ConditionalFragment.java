@@ -264,8 +264,8 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
 
     @Override
     public void setMarketSummary(MarketSummary summary) {
-        txtVtc.setVisibility(View.VISIBLE);
-        scrollView.setVisibility(View.VISIBLE);
+        txtVtc.setVisibility(View.GONE);
+        scrollView.setVisibility(View.GONE);
 
         if (summary != null) {
             crypto.soft.cryptongy.feature.shared.json.marketsummary.Result result = summary.getResult().get(0);

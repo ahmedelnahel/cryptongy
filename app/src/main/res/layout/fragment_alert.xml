@@ -268,7 +268,7 @@
                     android:layout_marginBottom="15dp"
                     android:layout_marginLeft="24dp"
                     android:layout_marginTop="17dp"
-                    android:text="Market Trade"
+                    android:text="Alert"
                     android:textColor="@color/order_secondary2"
                     android:textSize="@dimen/orderListTitle"
                     android:visibility="gone" />

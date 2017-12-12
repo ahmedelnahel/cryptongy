@@ -15,7 +15,6 @@ import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
 
-import crypto.soft.cryptongy.feature.trade.conditional.ConditionalReceiver;
 import io.realm.Realm;
 
 import static android.content.Context.ALARM_SERVICE;
@@ -37,8 +36,8 @@ public class GlobalUtil {
         return false;
     }
 
-    public static void startAlarm(int interval, Context context) {
-        Intent intent = new Intent(context, ConditionalReceiver.class);
+    public static void startAlarm(Class cls, int interval, Context context) {
+        Intent intent = new Intent(context, cls);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(
                 context.getApplicationContext(), 234324243, intent, PendingIntent.FLAG_CANCEL_CURRENT);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
