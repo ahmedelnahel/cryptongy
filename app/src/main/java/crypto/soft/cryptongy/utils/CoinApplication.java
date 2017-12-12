@@ -3,9 +3,10 @@ package crypto.soft.cryptongy.utils;
 import android.app.Application;
 
 import crypto.soft.cryptongy.R;
+import crypto.soft.cryptongy.feature.alert.broadCastTicker;
 import crypto.soft.cryptongy.feature.setting.Notification;
 import crypto.soft.cryptongy.feature.shared.module.Account;
-import crypto.soft.cryptongy.feature.trade.conditional.Conditional;
+import crypto.soft.cryptongy.feature.trade.conditional.ConditionalReceiver;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
@@ -130,13 +131,7 @@ public class CoinApplication extends Application {
     }
 
     public void startService() {
-        Realm realm = Realm.getDefaultInstance();
-
-        realm.beginTransaction();
-        long count = realm.where(Conditional.class).equalTo("orderStatus", GlobalConstant.Conditional.TYPE_OPEN).count();
-        realm.commitTransaction();
-        if (count > 0) {
-            GlobalUtil.startAlarm(getResources().getInteger(R.integer.service_interval), this);
-        }
+        GlobalUtil.startAlarm(ConditionalReceiver.class, getResources().getInteger(R.integer.service_interval), this);
+        GlobalUtil.startAlarm(broadCastTicker.class, getResources().getInteger(R.integer.service_interval), this);
     }
 }

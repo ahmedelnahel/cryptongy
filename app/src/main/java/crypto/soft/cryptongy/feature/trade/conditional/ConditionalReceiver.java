@@ -19,6 +19,6 @@ public class ConditionalReceiver extends BroadcastReceiver {
             context.stopService(new Intent(context, ConditionalService.class));
 
         context.startService(new Intent(context, ConditionalService.class));
-        GlobalUtil.startAlarm(context.getResources().getInteger(R.integer.service_interval), context);
+        GlobalUtil.startAlarm(ConditionalReceiver.class,context.getResources().getInteger(R.integer.service_interval), context);
     }
 }

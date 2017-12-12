@@ -1,9 +1,6 @@
 package crypto.soft.cryptongy.feature.alert;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
 import android.widget.CheckBox;
 import android.widget.Toast;
 
@@ -11,6 +8,9 @@ import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
 import java.util.List;
 
+import crypto.soft.cryptongy.R;
+import crypto.soft.cryptongy.utils.GlobalConstant;
+import crypto.soft.cryptongy.utils.GlobalUtil;
 import io.realm.Realm;
 
 /**
@@ -20,12 +20,14 @@ import io.realm.Realm;
 public class AlertPresenter extends MvpBasePresenter<AlertView> {
     public void saveData(Context context, Double LowValueEn, Double HighValueEn, String exchangeName,
                          String coinName, int alarmFreq, int reqCode, CheckBox ch_higher, CheckBox ch_lower) {
-        CoinInfo coinInfo = new CoinInfo(coinName, exchangeName, HighValueEn, LowValueEn);
+        CoinInfo coinInfo = new CoinInfo(coinName, exchangeName, HighValueEn, LowValueEn, alarmFreq, reqCode,
+                ch_higher.isChecked(), ch_lower.isChecked(), GlobalConstant.Conditional.TYPE_OPEN);
         Realm realm = Realm.getDefaultInstance();
         CoinInfo coinInfoResult = realm.where(CoinInfo.class).equalTo("CoinName", coinName).findFirst();
         if (coinInfoResult == null) {
             if (getCoinInfo() != null && getCoinInfo().size() <= 5) {
                 realm.beginTransaction();
+                coinInfo.setId(GlobalUtil.getNextKey(realm, CoinInfo.class, "Id"));
                 realm.copyToRealmOrUpdate(coinInfo);
                 realm.commitTransaction();
                 realm.close();
@@ -37,27 +39,30 @@ public class AlertPresenter extends MvpBasePresenter<AlertView> {
             Toast.makeText(context, "You can only add one alert for one coin", Toast.LENGTH_LONG).show();
             return;
         }
-
-        Intent i = new Intent(context, broadCastTicker.class);
-
-        i.putExtra("coinName", coinName);
-        i.putExtra("exchangeName", exchangeName);
-        i.putExtra("high", HighValueEn);
-        i.putExtra("low", LowValueEn);
-        i.putExtra("reqCode", reqCode);
-        i.putExtra("alarmFreq", alarmFreq);
-        i.putExtra("higherCh", ch_higher.isChecked());
-        i.putExtra("lowerCh", ch_lower.isChecked());
-
-
-        PendingIntent opertaion = PendingIntent.getBroadcast(context, reqCode, i, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        AlarmManager alarmManger = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-
-
-        alarmManger.setRepeating(AlarmManager.RTC_WAKEUP, 30 * 1000,
-                1000 * 30, opertaion);
-
+        boolean isServiceRunning = GlobalUtil.isServiceRunning(context, broadCastTicker.class);
+        if (!isServiceRunning)
+            GlobalUtil.startAlarm(broadCastTicker.class, context.getResources().getInteger(R.integer.service_interval), context);
+//
+//        Intent i = new Intent(context, broadCastTicker.class);
+//
+//        i.putExtra("coinName", coinName);
+//        i.putExtra("exchangeName", exchangeName);
+//        i.putExtra("high", HighValueEn);
+//        i.putExtra("low", LowValueEn);
+//        i.putExtra("reqCode", reqCode);
+//        i.putExtra("alarmFreq", alarmFreq);
+//        i.putExtra("higherCh", ch_higher.isChecked());
+//        i.putExtra("lowerCh", ch_lower.isChecked());
+//
+//
+//        PendingIntent opertaion = PendingIntent.getBroadcast(context, reqCode, i, PendingIntent.FLAG_UPDATE_CURRENT);
+//
+//        AlarmManager alarmManger = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+//
+//
+//        alarmManger.setRepeating(AlarmManager.RTC_WAKEUP, 30 * 1000,
+//                1000 * 30, opertaion);
+//
 
         Toast.makeText(context, "Alert is saved successfully", Toast.LENGTH_LONG).show();
 
