@@ -219,11 +219,9 @@ public class ConditionalService extends Service {
             @Override
             protected LimitOrder doInBackground(Void... voids) {
                 try {
-                    Thread.sleep(2000);
+
                     return new BittrexServices().buyLimit(limit.getMarket(), String.valueOf(limit.getQuantity()), String.valueOf(limit.getRate()), limit.getAccount());
                 } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 return null;
@@ -258,11 +256,9 @@ public class ConditionalService extends Service {
             @Override
             protected LimitOrder doInBackground(Void... voids) {
                 try {
-                    Thread.sleep(2000);
+
                     return new BittrexServices().sellLimit(limit.getMarket(), String.valueOf(limit.getQuantity()), String.valueOf(limit.getRate()), limit.getAccount());
                 } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 return null;

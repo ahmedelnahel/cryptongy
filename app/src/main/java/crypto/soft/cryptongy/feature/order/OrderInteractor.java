@@ -108,11 +108,9 @@ public class OrderInteractor {
             @Override
             protected Cancel doInBackground(Void... voids) {
                 try {
-                    Thread.sleep(2000);
+
                     return new BittrexServices().cancelOrder(uuid, account);
                 } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 return null;
