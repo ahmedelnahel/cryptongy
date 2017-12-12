@@ -113,9 +113,9 @@ public class ConditionalService extends Service {
     private void checkSell(Conditional conditional, Result ticker, Account account, final int id) {
         String market = conditional.getOrderCoin();
         Double quantity = conditional.getUnits();
-        Double rate;
+        Double rate = 0.0;
         if (conditional.isHigh()) {
-            if (conditional.getHighCondition().doubleValue() >= ticker.getLast().doubleValue()) {
+            if (ticker.getLast().doubleValue() >= conditional.getHighCondition().doubleValue()  ) {
                 switch (conditional.getPriceType()) {
                     case GlobalConstant.Conditional.TYPE_BID:
                         rate = ticker.getBid().doubleValue();
@@ -131,9 +131,9 @@ public class ConditionalService extends Service {
         } else {
             if (conditional.getStopLossType().equalsIgnoreCase(GlobalConstant.Conditional.TYPE_TRAILER)) {
                 double low = conditional.getLast().doubleValue() - (conditional.getLowCondition().doubleValue() * conditional.getLast().doubleValue());
-                if (low <= ticker.getLast().doubleValue())
+                if (ticker.getLast().doubleValue() <= low  )
                     rate = ticker.getLast().doubleValue() - (ticker.getLast().doubleValue() * conditional.getLowPrice().doubleValue());
-                else {
+                else if(ticker.getLast().doubleValue() > conditional.getLast()){
                     conditional.setLast(ticker.getLast());
                     updateConditional(conditional);
                     return;
@@ -143,7 +143,7 @@ public class ConditionalService extends Service {
                 if (conditional.getConditionType().equalsIgnoreCase(GlobalConstant.Conditional.TYPE_PERCENTAGE))
                     low = conditional.getLast().doubleValue() - (low * conditional.getLast().doubleValue());
 
-                if (low <= ticker.getLast().doubleValue()) {
+                if (ticker.getLast().doubleValue() <= low  ) {
                     if (conditional.getPriceType().equalsIgnoreCase(GlobalConstant.Conditional.TYPE_PERCENTAGE))
                         rate = ticker.getLast().doubleValue() - (ticker.getLast().doubleValue() * conditional.getLowPrice().doubleValue());
                     else
@@ -172,7 +172,7 @@ public class ConditionalService extends Service {
         Double quantity = conditional.getUnits();
         Double rate;
         if (conditional.isHigh()) {
-            if (conditional.getHighCondition().doubleValue() >= ticker.getLast().doubleValue()) {
+            if (ticker.getLast().doubleValue() >= conditional.getHighCondition().doubleValue() ) {
                 switch (conditional.getPriceType()) {
                     case GlobalConstant.Conditional.TYPE_BID:
                         rate = ticker.getBid().doubleValue();
@@ -190,7 +190,7 @@ public class ConditionalService extends Service {
             if (conditional.getConditionType().equalsIgnoreCase(GlobalConstant.Conditional.TYPE_PERCENTAGE))
                 low = conditional.getLast().doubleValue() - (low * conditional.getLast().doubleValue());
 
-            if (low <= ticker.getLast().doubleValue()) {
+            if ( ticker.getLast().doubleValue() <= low) {
                 if (conditional.getPriceType().equalsIgnoreCase(GlobalConstant.Conditional.TYPE_PERCENTAGE))
                     rate = ticker.getLast().doubleValue() + (ticker.getLast().doubleValue() * conditional.getLowPrice().doubleValue());
                 else
