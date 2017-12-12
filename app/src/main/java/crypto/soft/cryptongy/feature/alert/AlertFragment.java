@@ -55,7 +55,7 @@ import crypto.soft.cryptongy.network.BittrexServices;
 
 public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implements AlertView, View.OnClickListener {
     ProgressBar progressBar;
-    dbHandler db;
+
     //    TextView lastValuInfo_TXT, BidvalueInfo_TXT, Highvalue_Txt, ASKvalu_TXT, LowvalueInfo_TXT, VolumeValue_Txt, HoldingValue_Txt, lastComp_txt;
     EditText lowComp_txt, highValueComp_txt;
     Button save_b;

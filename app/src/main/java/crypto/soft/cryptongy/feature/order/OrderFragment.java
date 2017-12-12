@@ -49,7 +49,7 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter<OrderVi
             isFirst = true;
         } else
             isFirst = false;
-        hideTotal();
+//        hideTotal();
         setTitle();
         return view;
     }
