@@ -24,6 +24,7 @@ import crypto.soft.cryptongy.feature.trade.limit.Limit;
 import crypto.soft.cryptongy.network.BittrexServices;
 import crypto.soft.cryptongy.utils.CoinApplication;
 import crypto.soft.cryptongy.utils.GlobalConstant;
+import crypto.soft.cryptongy.utils.GlobalUtil;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -157,12 +158,12 @@ public class ConditionalService extends Service {
 
             @Override
             public void onComplete(String result) {
-                showNotification("Sell order was placed successfully", result, id);
+                showNotification("Sell order was placed successfully", result, GlobalUtil.getUniqueID());
             }
 
             @Override
             public void onFail(String error) {
-                showNotification("Sell order was failed", error, id);
+                showNotification("Sell order was failed", error, GlobalUtil.getUniqueID());
             }
         });
     }
@@ -206,12 +207,12 @@ public class ConditionalService extends Service {
 
             @Override
             public void onComplete(String result) {
-                showNotification("Buy order was placed successfully", result, id);
+                showNotification("Buy order was placed successfully", result, GlobalUtil.getUniqueID());
             }
 
             @Override
             public void onFail(String error) {
-                showNotification("Buy order was failed", error, id);
+                showNotification("Buy order was failed", error, GlobalUtil.getUniqueID());
             }
         });
     }

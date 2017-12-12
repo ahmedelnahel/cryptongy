@@ -14,6 +14,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import io.realm.Realm;
 
@@ -24,6 +25,7 @@ import static android.content.Context.ALARM_SERVICE;
  */
 
 public class GlobalUtil {
+    static  final  AtomicInteger c = new AtomicInteger(0);
     public static boolean isServiceRunning(Context context, Class<?> serviceClass) {
         final ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         final List<ActivityManager.RunningServiceInfo> services = activityManager.getRunningServices(Integer.MAX_VALUE);
@@ -82,5 +84,11 @@ public class GlobalUtil {
         value = value * factor;
         long tmp = Math.round(value);
         return (double) tmp / factor;
+    }
+
+    public static int getUniqueID() {
+
+
+        return c.incrementAndGet();
     }
 }

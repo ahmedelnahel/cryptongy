@@ -10,12 +10,15 @@ import android.support.annotation.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import crypto.soft.cryptongy.R;
 import crypto.soft.cryptongy.feature.main.MainActivity;
 import crypto.soft.cryptongy.feature.shared.json.ticker.Ticker;
 import crypto.soft.cryptongy.network.BittrexServices;
 import crypto.soft.cryptongy.utils.GlobalConstant;
+import crypto.soft.cryptongy.utils.GlobalUtil;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -54,12 +57,12 @@ public class AlertService extends Service {
             try {
                 Ticker ticker = Tickerservices.getTicker(coinInfo.getCoinName());
                 if (coinInfo.isHigher() && ticker.getResult().getLast().doubleValue() >= coinInfo.getHighValue().doubleValue() ) {
-                    showNotification("Alert", coinInfo.CoinName + " is above " + String.format("%.8f", coinInfo.getHighValue().doubleValue()), coinInfo.getId());
+                    showNotification("Alert", coinInfo.CoinName + " is above " + String.format("%.8f", coinInfo.getHighValue().doubleValue()), GlobalUtil.getUniqueID());
                     met = true;
                 }
 
                 if (coinInfo.isLower() && ticker.getResult().getLast().doubleValue() <= coinInfo.getLowValue().doubleValue() ) {
-                    showNotification("Alert", coinInfo.CoinName + " is below " + String.format("%.8f", coinInfo.getLowValue().doubleValue()), coinInfo.getId()*100);
+                    showNotification("Alert", coinInfo.CoinName + " is below " + String.format("%.8f", coinInfo.getLowValue().doubleValue()), GlobalUtil.getUniqueID());
                    met = true;
                 }
 
@@ -72,6 +75,7 @@ public class AlertService extends Service {
             }
         }
     }
+
 
     private void update(CoinInfo coinInfo) {
         Realm realm = Realm.getDefaultInstance();
