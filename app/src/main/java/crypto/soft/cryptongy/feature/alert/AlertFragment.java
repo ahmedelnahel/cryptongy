@@ -44,11 +44,9 @@ import crypto.soft.cryptongy.feature.home.CustomArrayAdapter;
 import crypto.soft.cryptongy.feature.main.MainActivity;
 import crypto.soft.cryptongy.feature.shared.json.market.MarketSummaries;
 import crypto.soft.cryptongy.feature.shared.json.market.Result;
-import crypto.soft.cryptongy.feature.shared.listner.AdapterItemClickListener;
 import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
 import crypto.soft.cryptongy.feature.trade.TradeInteractor;
 import crypto.soft.cryptongy.network.BittrexServices;
-import crypto.soft.cryptongy.utils.CoinApplication;
 
 /**
  * Created by maiAjam on 11/20/2017.
@@ -76,17 +74,18 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
 //    List<Result> coins;
     Result result;
     TableLayout tblMarketTradeAlert;
-    TextView txtMarket;
 
     // to check one time or every time
     int AlarmFreq = 1;
     private int reqCode, CoinId;
-    private TextView lastValuInfo_Lab, BidvalueInfo_Lab, Highvalue_Lab, ASKvalu_Lab, LowvalueInfo_Lab, VolumeValue_Lab, txtLevel, coinNmae, txtEmpty;
+    private TextView lastValuInfo_Lab, BidvalueInfo_Lab, Highvalue_Lab, ASKvalu_Lab, LowvalueInfo_Lab,
+            VolumeValue_Lab, coinNmae, txtEmpty, txtMarket;
     private ImageView imgSync, imgAccSetting;
 
     private View rootView;
     private HorizontalScrollView scrollView;
-    private TextView lastValuInfo_TXT, BidvalueInfo_TXT, Highvalue_Txt, ASKvalu_TXT, LowvalueInfo_TXT, VolumeValue_Txt, HoldingValue_Txt, lastComp_txt;
+    private TextView lastValuInfo_TXT, BidvalueInfo_TXT, Highvalue_Txt, ASKvalu_TXT, LowvalueInfo_TXT,
+            VolumeValue_Txt, HoldingValue_Txt, lastComp_txt;
     private Spinner spinner;
 
     private List<Result> coins;
@@ -94,6 +93,7 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
     private CustomArrayAdapter adapterCoins;
 
     private RelativeLayout rllContainer;
+    private boolean isDel = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -120,9 +120,9 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
         imgSync.setOnClickListener(this);
         imgAccSetting.setOnClickListener(this);
 
-        txtLevel = (TextView) rootView.findViewById(R.id.txtLevel);
         txtEmpty = (TextView) rootView.findViewById(R.id.txtEmpty);
         rllContainer = rootView.findViewById(R.id.rllContainer);
+        txtMarket = rootView.findViewById(R.id.txtMarket);
 
         // coin detials
         lastValuInfo_TXT = (TextView) rootView.findViewById(R.id.LastValue_Id);
@@ -168,61 +168,53 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
         spinner.setAdapter(adapter);
 
         TradeInteractor interactor = new TradeInteractor();
+        progressBar.setVisibility(View.VISIBLE);
+        txtEmpty.setVisibility(View.GONE);
+        rllContainer.setVisibility(View.GONE);
 
-        CoinApplication application = (CoinApplication) getActivity().getApplicationContext();
-        if (application.getTradeAccount() != null) {
-            if (getView() != null) {
-                progressBar.setVisibility(View.VISIBLE);
-                txtEmpty.setVisibility(View.GONE);
-                rllContainer.setVisibility(View.GONE);
-                setLevel(application.getTradeAccount().getLabel());
-            }
-            interactor.loadSummary(new OnFinishListner<MarketSummaries>() {
-                @Override
-                public void onComplete(MarketSummaries marketSummaries) {
-                    coins = new ArrayList<>();
-                    coins.addAll(marketSummaries.getResult());
-                    adapterCoins = new CustomArrayAdapter(getContext(), coins);
-                    inputCoin.setThreshold(1);
-                    inputCoin.setAdapter(adapterCoins);
+        interactor.loadSummary(new OnFinishListner<MarketSummaries>() {
+            @Override
+            public void onComplete(MarketSummaries marketSummaries) {
+                coins = new ArrayList<>();
+                coins.addAll(marketSummaries.getResult());
+                adapterCoins = new CustomArrayAdapter(getContext(), coins);
+                inputCoin.setThreshold(1);
+                inputCoin.setAdapter(adapterCoins);
 
-                    inputCoin.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                            inputCoin.setText(((Result) ((CustomArrayAdapter) adapterView.getAdapter()).getItem(i)).getMarketName());
-                            inputCoin.setTextSize(12);
-                            Typeface face = Typeface.createFromAsset(getActivity().getAssets(),
-                                    "fonts/calibri.ttf");
-                            inputCoin.setTypeface(face, Typeface.NORMAL);
-                            Result result = (Result) ((CustomArrayAdapter) adapterView.getAdapter()).getItem(i);
-                            coinNmae.setText(result.getMarketName());
+                inputCoin.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        inputCoin.setText(((Result) ((CustomArrayAdapter) adapterView.getAdapter()).getItem(i)).getMarketName());
+                        inputCoin.setTextSize(12);
+                        Typeface face = Typeface.createFromAsset(getActivity().getAssets(),
+                                "fonts/calibri.ttf");
+                        inputCoin.setTypeface(face, Typeface.NORMAL);
+                        Result result = (Result) ((CustomArrayAdapter) adapterView.getAdapter()).getItem(i);
+                        coinNmae.setText(result.getMarketName());
 
-                            sycCoinInfo sycCoinInfo = new sycCoinInfo();
-                            sycCoinInfo.execute(coinNmae.getText().toString());
-                        }
-                    });
-                    progressBar.setVisibility(View.GONE);
-                    txtEmpty.setVisibility(View.VISIBLE);
-                    rllContainer.setVisibility(View.GONE);
-                }
-
-                @Override
-                public void onFail(String error) {
-                    CustomDialog.showMessagePop(getContext(), error, null);
-                    progressBar.setVisibility(View.GONE);
-                    txtEmpty.setVisibility(View.VISIBLE);
-                    rllContainer.setVisibility(View.GONE);
-                }
-            });
-        } else {
-            CustomDialog.showMessagePop(getContext(), getActivity().getString(R.string.noAPI), null);
-            if (getView() != null) {
-                setLevel("No API");
+                        sycCoinInfo sycCoinInfo = new sycCoinInfo();
+                        sycCoinInfo.execute(coinNmae.getText().toString());
+                    }
+                });
                 progressBar.setVisibility(View.GONE);
-                txtEmpty.setVisibility(View.VISIBLE);
                 rllContainer.setVisibility(View.GONE);
+                if (tblMarketTradeAlert.getChildCount() > 0)
+                    txtEmpty.setVisibility(View.GONE);
+                else
+                    txtEmpty.setVisibility(View.VISIBLE);
             }
-        }
+
+            @Override
+            public void onFail(String error) {
+                CustomDialog.showMessagePop(getContext(), error, null);
+                progressBar.setVisibility(View.GONE);
+                rllContainer.setVisibility(View.GONE);
+                if (tblMarketTradeAlert.getChildCount() > 0)
+                    txtEmpty.setVisibility(View.GONE);
+                else
+                    txtEmpty.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
     private void setOnClickListner() {
@@ -307,15 +299,16 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        updateTable();
         getCoins();
     }
 
     @Override
     public void updateTable() {
         tblMarketTradeAlert.removeAllViews();
-
         List<CoinInfo> coinInfoList = presenter.getCoinInfo();
-        if (coinInfoList != null) {
+        if (coinInfoList != null && coinInfoList.size() > 0) {
+            txtMarket.setVisibility(View.VISIBLE);
             View title = getLayoutInflater().inflate(R.layout.table_alert_title, null);
             tblMarketTradeAlert.addView(title);
             for (int i = 0; i < coinInfoList.size(); i++) {
@@ -329,17 +322,17 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
                 holder.txtAction.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        isDel = true;
                         presenter.deleteCoinInfo(holder.txtCoin.getText().toString());
                     }
                 });
             }
+        } else {
+            if (isDel && rllContainer.getVisibility() == View.GONE) {
+                txtEmpty.setVisibility(View.VISIBLE);
+            }
+            txtMarket.setVisibility(View.GONE);
         }
-
-    }
-
-    @Override
-    public void setLevel(String level) {
-        txtLevel.setText(level);
     }
 
     @Override
@@ -347,6 +340,13 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
         int id = view.getId();
         switch (id) {
             case R.id.imgSync:
+                if (coins != null)
+                    coins.clear();
+                if (adapterCoins != null)
+                    adapterCoins.notifyDataSetChanged();
+                inputCoin.setText("");
+                updateTable();
+                getCoins();
                 break;
             case R.id.imgAccSetting:
                 if (getActivity() instanceof MainActivity)
@@ -404,11 +404,6 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
 //                            ((CoinApplication) getActivity().getApplication()).setUsdt_btc(GlobalUtil.round(result.getBtcusdt(), 4));
 //                        }
 //                    }
-                    coins = new ArrayList();
-                    coins.addAll(marketSummary.getResult());
-                    if (adapterCoins == null) {
-                        adapterCoins = new CustomArrayAdapter(getContext(), coins);
-                    }
                     return "Success";
                 } else {
                     Toast.makeText(getContext(), marketSummary.getMessage().toString(), Toast.LENGTH_LONG).show();
@@ -432,10 +427,6 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
             progressBar.setVisibility(View.GONE);
             txtEmpty.setVisibility(View.GONE);
             rllContainer.setVisibility(View.VISIBLE);
-            // set coin info
-            adapterCoins.notifyDataSetChanged();
-
-            progressBar.setVisibility(View.GONE);
             lastValuInfo_TXT.setText(String.valueOf(String.format("%.6f", lastV)));
             BidvalueInfo_TXT.setText(String.valueOf(String.format("%.6f", bidV)));
             ASKvalu_TXT.setText(String.valueOf(String.format("%.6f", askV)));
@@ -463,43 +454,6 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
             VolumeValue_Lab.setTypeface(typeFaceCalibri);
 
             save_b.setTypeface(typeFaceCalibri);
-
-            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
-                    R.array.coin_array, R.layout.drop_down_text);
-            adapter.setDropDownViewResource(R.layout.drop_down_text);
-            spinner.setAdapter(adapter);
-
-            coins = new ArrayList<Result>();
-            adapterCoins = new CustomArrayAdapter(getActivity(), coins);
-            inputCoin.setThreshold(1);
-            inputCoin.setAdapter(adapterCoins);
-            adapterCoins.setAdapterItemClickListener(new AdapterItemClickListener() {
-                @Override
-                public void onItemClicked(Result menuItem, int position) {
-
-                }
-
-                @Override
-                public void onItemLongClicked(Result menuItem, int position) {
-
-                }
-            });
-
-            inputCoin.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    crypto.soft.cryptongy.feature.shared.json.market.Result resultOne = new crypto.soft.cryptongy.feature.shared.json.market.Result();
-                    inputCoin.setText(((crypto.soft.cryptongy.feature.shared.json.market.Result) ((CustomArrayAdapter) adapterView.getAdapter()).getItem(i)).getMarketName());
-                    inputCoin.setTextSize(12);
-                    Typeface face = Typeface.createFromAsset(getActivity().getAssets(),
-                            "fonts/calibri.ttf");
-                    inputCoin.setTypeface(face, Typeface.NORMAL);
-                    resultOne = (crypto.soft.cryptongy.feature.shared.json.market.Result) ((CustomArrayAdapter) adapterView.getAdapter()).getItem(i);
-
-                }
-            });
-
-            updateTable();
         }
     }
 }

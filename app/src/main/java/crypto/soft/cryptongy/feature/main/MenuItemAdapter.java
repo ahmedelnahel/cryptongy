@@ -148,6 +148,13 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuIt
                                 menuItems.get(i).setResourceId(R.drawable.ic_bitcoin);
                             }
                             break;
+                        case "Alert":
+                            if (menuItems.get(i).isSelected) {
+                                menuItems.get(i).setResourceId(R.drawable.ic_alert_a);
+                            } else {
+                                menuItems.get(i).setResourceId(R.drawable.ic_alert);
+                            }
+                            break;
                         case "About Us":
                             if (menuItems.get(i).isSelected) {
                                 menuItems.get(i).setResourceId(R.drawable.ic_about_a);

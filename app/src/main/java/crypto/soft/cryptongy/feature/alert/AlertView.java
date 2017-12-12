@@ -8,6 +8,4 @@ import com.hannesdorfmann.mosby.mvp.MvpView;
 
 public interface AlertView extends MvpView {
     void updateTable();
-
-    void setLevel(String level);
 }

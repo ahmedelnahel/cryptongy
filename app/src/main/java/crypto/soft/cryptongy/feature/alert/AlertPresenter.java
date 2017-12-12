@@ -19,11 +19,7 @@ import io.realm.Realm;
 
 public class AlertPresenter extends MvpBasePresenter<AlertView> {
     public void saveData(Context context, Double LowValueEn, Double HighValueEn, String exchangeName,
-                          String coinName, int alarmFreq, int reqCode, CheckBox ch_higher, CheckBox ch_lower) {
-//        dbHandler db = new dbHandler(context);
-//        CoinInfo coinInfo = new CoinInfo(coinName, exchangeName, HighValueEn, LowValueEn);
-//        db.AddCoinInfo(coinInfo);
-//        db.updateCoinInfo(coinInfo);
+                         String coinName, int alarmFreq, int reqCode, CheckBox ch_higher, CheckBox ch_lower) {
         CoinInfo coinInfo = new CoinInfo(coinName, exchangeName, HighValueEn, LowValueEn);
         Realm realm = Realm.getDefaultInstance();
         CoinInfo coinInfoResult = realm.where(CoinInfo.class).equalTo("CoinName", coinName).findFirst();
@@ -33,11 +29,11 @@ public class AlertPresenter extends MvpBasePresenter<AlertView> {
                 realm.copyToRealmOrUpdate(coinInfo);
                 realm.commitTransaction();
                 realm.close();
-            }else {
+            } else {
                 Toast.makeText(context, "You can only add maximum of 5 alerts", Toast.LENGTH_LONG).show();
                 return;
             }
-        }else {
+        } else {
             Toast.makeText(context, "You can only add one alert for one coin", Toast.LENGTH_LONG).show();
             return;
         }
@@ -63,17 +59,14 @@ public class AlertPresenter extends MvpBasePresenter<AlertView> {
                 1000 * 30, opertaion);
 
 
-        Toast.makeText(context, "Your Values have been saved successfully", Toast.LENGTH_LONG).show();
+        Toast.makeText(context, "Alert is saved successfully", Toast.LENGTH_LONG).show();
 
-        if (isViewAttached()){
+        if (isViewAttached()) {
             getView().updateTable();
         }
     }
 
     public void deleteCoinInfo(String coinName) {
-//        dbHandler db = new dbHandler(context);
-//        db.deleteCoin(coinName);
-
         Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
         CoinInfo coinInfo = realm.where(CoinInfo.class).equalTo("CoinName", coinName).findFirst();
@@ -81,13 +74,13 @@ public class AlertPresenter extends MvpBasePresenter<AlertView> {
         realm.commitTransaction();
         realm.close();
 
-        if (isViewAttached()){
+        if (isViewAttached()) {
             getView().updateTable();
         }
     }
 
-    public List<CoinInfo> getCoinInfo(){
+    public List<CoinInfo> getCoinInfo() {
         Realm realm = Realm.getDefaultInstance();
-        return  realm.where(CoinInfo.class).findAll();
+        return realm.where(CoinInfo.class).findAll();
     }
 }
