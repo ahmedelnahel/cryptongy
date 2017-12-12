@@ -53,7 +53,7 @@ public class AlertService extends Service {
             try {
                 Ticker ticker = Tickerservices.getTicker(coinInfo.getCoinName());
                 if (coinInfo.isHigher() && ticker.getResult().getLast().doubleValue() >= coinInfo.getHighValue().doubleValue() ) {
-                    showNotification("Alert", coinInfo.CoinName + " is above " + String.format("%.8f", ticker.getResult().getLast().doubleValue()), 0);
+                    showNotification("Alert", coinInfo.CoinName + " is above " + String.format("%.8f", coinInfo.getHighValue().doubleValue()), 0);
                     if (coinInfo.getAlarmFreq() == 1) {
                         coinInfo.status = "Closed";
                         update(coinInfo);
@@ -61,7 +61,7 @@ public class AlertService extends Service {
                 }
 
                 if (coinInfo.isLower() && ticker.getResult().getLast().doubleValue() <= coinInfo.getLowValue().doubleValue() ) {
-                    showNotification("Alert", coinInfo.CoinName + " is below " + String.format("%.8f", ticker.getResult().getLast().doubleValue()), 0);
+                    showNotification("Alert", coinInfo.CoinName + " is below " + String.format("%.8f", coinInfo.getLowValue().doubleValue()), 0);
                     if (coinInfo.getAlarmFreq() == 1) {
                         coinInfo.status = "Closed";
                         update(coinInfo);

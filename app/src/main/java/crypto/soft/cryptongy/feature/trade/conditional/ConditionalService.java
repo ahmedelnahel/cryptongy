@@ -170,20 +170,23 @@ public class ConditionalService extends Service {
     private void checkBuy(final Conditional conditional, Result ticker, Account account, final int id) {
         String market = conditional.getOrderCoin();
         Double quantity = conditional.getUnits();
-        Double rate;
+        Double rate = 0.0;
         if (conditional.isHigh()) {
-            if (ticker.getLast().doubleValue() >= conditional.getHighCondition().doubleValue() ) {
-                switch (conditional.getPriceType()) {
-                    case GlobalConstant.Conditional.TYPE_BID:
-                        rate = ticker.getBid().doubleValue();
-                        break;
-                    case GlobalConstant.Conditional.TYPE_ASK:
-                        rate = ticker.getAsk().doubleValue();
-                        break;
-                    default:
-                        rate = ticker.getLast().doubleValue();
-                        break;
-                }
+            if (ticker.getLast().doubleValue() >= conditional.getHighCondition().doubleValue()) {
+                if (conditional.getPriceType() != null)
+                {
+            switch (conditional.getPriceType()) {
+                case GlobalConstant.Conditional.TYPE_BID:
+                    rate = ticker.getBid().doubleValue();
+                    break;
+                case GlobalConstant.Conditional.TYPE_ASK:
+                    rate = ticker.getAsk().doubleValue();
+                    break;
+                default:
+                    rate = ticker.getLast().doubleValue();
+                    break;
+            }
+            }
             } else return;
         } else {
             double low = conditional.getLowCondition().doubleValue();
