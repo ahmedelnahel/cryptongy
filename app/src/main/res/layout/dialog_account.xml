@@ -99,7 +99,7 @@
                     android:textSize="@dimen/account_radio_text"
                     android:layout_height="wrap_content"
                     android:singleLine="true"
-                    android:visibility="gone"
+                    android:enabled="false"
                     android:text="Withdraw" />
 
             </RadioGroup>
