@@ -13,13 +13,15 @@
     <string name="about_title">Cryptongy version 1.0 @ 2017 CryptoSoft</string>
     <string name="about_app">App Features</string>
     <string name="about_feature1">View your exchange wallet</string>
-    <string name="about_feature2">View your opened and closed orders</string>
+    <string name="about_feature2">Control your opened and view closed orders</string>
     <string name="about_feature3">Trade on your coins using standard and advanced conditions </string>
-    <string name="about_feature4">Trade on your portfolio</string>
+    <string name="about_feature4">Put alerts on coin prices</string>
     <string name="about_future">Future Work</string>
-    <string name="about_future1">Withdraw deposit</string>
+    <string name="about_future1">Withdraw and deposit</string>
     <string name="about_future2">More advanced trade</string>
-    <string name="setting">settings</string>
+    <string name="about_disclaimer">All trade communication is direct to the exchange with no intermediate servers.
+    \n Contact us on info@cryptongy.com</string>
+    <string name="setting">Settings</string>
     <string name="order">Orders</string>
     <string name="fetch_msg">Fetching data. Please wait.</string>
     <string name="cancle_msg">Canceling order. Please wait.</string>
@@ -40,11 +42,7 @@
     <string-array name="coin_array">
         <item>Bittrex</item>
     </string-array>
-    <string-array name="coin_array2">
-        <item>BTC:2.56</item>
-        <item>ETH:0</item>
-        <item>USD:500</item>
-    </string-array>
+
     <string name="donnation_title">Thanks for your donation</string>
     <string name="donnation_Address">Payment</string>
     <string name="donnation_send">Please follow the link: </string>
