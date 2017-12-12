@@ -30,7 +30,7 @@
             android:enabled="true"
             android:exported="false" />
         <service
-            android:name=".feature.alert.getTickerService"
+            android:name=".feature.alert.AlertService"
             android:enabled="true"
             android:exported="false" />
 
