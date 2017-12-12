@@ -15,9 +15,99 @@
             android:layout_alignParentTop="true"
             android:background="@color/colorPrimary" />
 
+        <crypto.soft.cryptongy.feature.shared.customView.CabTextView
+            android:id="@+id/txtLevel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/lnlCalculation"
+            android:layout_marginRight="24dp"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/order_secondary"
+            android:textSize="13sp" />
+
+        <View
+            android:id="@+id/view1"
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:layout_alignLeft="@+id/txtLevel"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/txtLevel"
+            android:background="@color/order_primary" />
+
+        <include
+            android:id="@+id/include"
+            layout="@layout/layout_sync_account"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/view1"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp" />
+
+
+        <LinearLayout
+            android:id="@+id/lnlSearch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/include"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/rect_left_right"
+                android:padding="10dp">
+
+                <Spinner
+                    android:id="@+id/spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true">
+
+                </Spinner>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/rect_left_right"
+                android:padding="10dp">
+
+                <ImageView
+                    android:id="@+id/icon_search"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_search" />
+
+                <AutoCompleteTextView
+                    android:id="@+id/inputCoin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/icon_search"
+                    android:background="@android:color/white"
+                    android:hint="Coin"
+                    android:paddingLeft="10dp"
+                    android:singleLine="true"
+                    android:textStyle="italic" />
+            </RelativeLayout>
+        </LinearLayout>
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_below="@+id/lnlSearch"
             android:paddingBottom="@dimen/activity_vertical_margin"
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin"
@@ -32,72 +122,14 @@
                 android:minHeight="50dp"
                 android:minWidth="50dp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginTop="20dp"
-                android:orientation="horizontal">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/rect_left_right"
-                    android:padding="10dp">
-
-                    <Spinner
-                        android:id="@+id/spinner"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true">
-
-                    </Spinner>
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/rect_left_right"
-                    android:padding="10dp">
-
-                    <ImageView
-                        android:id="@+id/icon_search"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_centerVertical="true"
-                        android:src="@drawable/ic_search" />
-
-                    <AutoCompleteTextView
-                        android:id="@+id/inputCoin"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_toRightOf="@+id/icon_search"
-                        android:background="@android:color/white"
-                        android:hint="Coin"
-                        android:paddingLeft="10dp"
-                        android:singleLine="true"
-                        android:textStyle="italic" />
-                </RelativeLayout>
-            </LinearLayout>
-
             <TextView
                 android:id="@+id/vtc_txt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignLeft="@+id/HorScrollView"
                 android:layout_alignStart="@+id/HorScrollView"
-                android:layout_below="@+id/include"
                 android:layout_marginLeft="14dp"
                 android:layout_marginStart="14dp"
-                android:layout_marginTop="37dp"
                 android:textColor="#000000"
                 android:textSize="15dp"
                 android:textStyle="bold" />
@@ -118,6 +150,7 @@
                 android:layout_below="@+id/HorScrollView"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="39dp"
+                android:gravity="center_horizontal"
                 android:orientation="horizontal"
                 android:weightSum="1">
 
@@ -257,7 +290,7 @@
                     android:text="Market Trade"
                     android:textColor="@color/order_secondary2"
                     android:textSize="@dimen/orderListTitle"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
 
                 <android.support.v7.widget.CardView
                     android:layout_width="match_parent"

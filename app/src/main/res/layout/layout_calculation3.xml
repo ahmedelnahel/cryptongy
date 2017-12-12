@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <crypto.soft.cryptongy.feature.shared.customView.CabTextView
+        android:id="@+id/txtLevel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/lnlCalculation"
+        android:layout_marginRight="24dp"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/order_secondary"
+        android:textSize="13sp" />
+
+    <View
+        android:id="@+id/view1"
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:layout_alignLeft="@+id/txtLevel"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/txtLevel"
+        android:background="@color/order_primary" />
+
+    <include
+        android:id="@+id/include"
+        layout="@layout/layout_sync_account"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/view1"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp" />
+
+</merge>
