@@ -50,7 +50,8 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".feature.account.AccountActivity"></activity>
+        <activity android:name=".feature.account.AccountActivity" />
+        <activity android:name=".feature.alert.AlertActivity"></activity>
     </application>
 
 </manifest>

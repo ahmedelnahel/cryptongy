@@ -1,5 +1,6 @@
 package crypto.soft.cryptongy.feature.alert;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -25,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TextView;
@@ -43,7 +45,10 @@ import crypto.soft.cryptongy.feature.main.MainActivity;
 import crypto.soft.cryptongy.feature.shared.json.market.MarketSummaries;
 import crypto.soft.cryptongy.feature.shared.json.market.Result;
 import crypto.soft.cryptongy.feature.shared.listner.AdapterItemClickListener;
+import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
+import crypto.soft.cryptongy.feature.trade.TradeInteractor;
 import crypto.soft.cryptongy.network.BittrexServices;
+import crypto.soft.cryptongy.utils.CoinApplication;
 
 /**
  * Created by maiAjam on 11/20/2017.
@@ -76,7 +81,7 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
     // to check one time or every time
     int AlarmFreq = 1;
     private int reqCode, CoinId;
-    private TextView lastValuInfo_Lab, BidvalueInfo_Lab, Highvalue_Lab, ASKvalu_Lab, LowvalueInfo_Lab, VolumeValue_Lab, txtLevel, coinNmae;
+    private TextView lastValuInfo_Lab, BidvalueInfo_Lab, Highvalue_Lab, ASKvalu_Lab, LowvalueInfo_Lab, VolumeValue_Lab, txtLevel, coinNmae, txtEmpty;
     private ImageView imgSync, imgAccSetting;
 
     private View rootView;
@@ -88,16 +93,23 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
     private AutoCompleteTextView inputCoin;
     private CustomArrayAdapter adapterCoins;
 
+    private RelativeLayout rllContainer;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_alert, container, false);
 
+        setTitle();
         findViews();
         setOnClickListner();
 
         return rootView;
+    }
+
+    public void setTitle() {
+        TextView txtTitle = getActivity().findViewById(R.id.txtTitle);
+        txtTitle.setText(R.string.alert);
     }
 
     private void findViews() {
@@ -109,6 +121,8 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
         imgAccSetting.setOnClickListener(this);
 
         txtLevel = (TextView) rootView.findViewById(R.id.txtLevel);
+        txtEmpty = (TextView) rootView.findViewById(R.id.txtEmpty);
+        rllContainer = rootView.findViewById(R.id.rllContainer);
 
         // coin detials
         lastValuInfo_TXT = (TextView) rootView.findViewById(R.id.LastValue_Id);
@@ -148,16 +162,66 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
     }
 
     private void getCoins() {
-        db = new dbHandler(getContext());
-        CoinInfo coinInfo = db.getCoinInfo(coinName);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
+                R.array.coin_array, R.layout.drop_down_text);
+        adapter.setDropDownViewResource(R.layout.drop_down_text);
+        spinner.setAdapter(adapter);
 
-        if (coinInfo.getCoinName() == null) {
-            highValueComp_txt.setText("");
-            lowComp_txt.setText("");
+        TradeInteractor interactor = new TradeInteractor();
 
+        CoinApplication application = (CoinApplication) getActivity().getApplicationContext();
+        if (application.getTradeAccount() != null) {
+            if (getView() != null) {
+                progressBar.setVisibility(View.VISIBLE);
+                txtEmpty.setVisibility(View.GONE);
+                rllContainer.setVisibility(View.GONE);
+                setLevel(application.getTradeAccount().getLabel());
+            }
+            interactor.loadSummary(new OnFinishListner<MarketSummaries>() {
+                @Override
+                public void onComplete(MarketSummaries marketSummaries) {
+                    coins = new ArrayList<>();
+                    coins.addAll(marketSummaries.getResult());
+                    adapterCoins = new CustomArrayAdapter(getContext(), coins);
+                    inputCoin.setThreshold(1);
+                    inputCoin.setAdapter(adapterCoins);
+
+                    inputCoin.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                            inputCoin.setText(((Result) ((CustomArrayAdapter) adapterView.getAdapter()).getItem(i)).getMarketName());
+                            inputCoin.setTextSize(12);
+                            Typeface face = Typeface.createFromAsset(getActivity().getAssets(),
+                                    "fonts/calibri.ttf");
+                            inputCoin.setTypeface(face, Typeface.NORMAL);
+                            Result result = (Result) ((CustomArrayAdapter) adapterView.getAdapter()).getItem(i);
+                            coinNmae.setText(result.getMarketName());
+
+                            sycCoinInfo sycCoinInfo = new sycCoinInfo();
+                            sycCoinInfo.execute(coinNmae.getText().toString());
+                        }
+                    });
+                    progressBar.setVisibility(View.GONE);
+                    txtEmpty.setVisibility(View.VISIBLE);
+                    rllContainer.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onFail(String error) {
+                    CustomDialog.showMessagePop(getContext(), error, null);
+                    progressBar.setVisibility(View.GONE);
+                    txtEmpty.setVisibility(View.VISIBLE);
+                    rllContainer.setVisibility(View.GONE);
+                }
+            });
         } else {
-            highValueComp_txt.setText(String.valueOf(coinInfo.getHighValue()));
-            lowComp_txt.setText(String.valueOf(coinInfo.getLowValue()));
+            CustomDialog.showMessagePop(getContext(), getActivity().getString(R.string.noAPI), null);
+            if (getView() != null) {
+                setLevel("No API");
+                progressBar.setVisibility(View.GONE);
+                txtEmpty.setVisibility(View.VISIBLE);
+                rllContainer.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -206,7 +270,7 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
 
                 if (error)
                     return;
-                presenter.saveData(getContext(), LowValueEn, HighValueEn, exchangeName, coinName,
+                presenter.saveData(getContext(), LowValueEn, HighValueEn, exchangeName, coinNmae.getText().toString(),
                         AlarmFreq, reqCode, ch_higher, ch_lower);
             }
         });
@@ -243,8 +307,7 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        sycCoinInfo sycCoinInfo = new sycCoinInfo();
-        sycCoinInfo.execute(CoinName.coinName);
+        getCoins();
     }
 
     @Override
@@ -288,6 +351,8 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
             case R.id.imgAccSetting:
                 if (getActivity() instanceof MainActivity)
                     ((MainActivity) getActivity()).getPresenter().replaceAccountFragment();
+                else
+                    startActivity(new Intent(getActivity(), AlertActivity.class));
                 break;
         }
     }
@@ -341,11 +406,11 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
 //                    }
                     coins = new ArrayList();
                     coins.addAll(marketSummary.getResult());
-                    if (adapterCoins==null){
-                        adapterCoins=new CustomArrayAdapter(getContext(),coins);
+                    if (adapterCoins == null) {
+                        adapterCoins = new CustomArrayAdapter(getContext(), coins);
                     }
+                    return "Success";
                 } else {
-
                     Toast.makeText(getContext(), marketSummary.getMessage().toString(), Toast.LENGTH_LONG).show();
                 }
             } catch (IOException e) {
@@ -353,11 +418,20 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
             }
 
 
-            return "";
+            return null;
         }
 
         @Override
         protected void onPostExecute(String s) {
+            if (TextUtils.isEmpty(s)) {
+                progressBar.setVisibility(View.GONE);
+                txtEmpty.setVisibility(View.VISIBLE);
+                rllContainer.setVisibility(View.GONE);
+                return;
+            }
+            progressBar.setVisibility(View.GONE);
+            txtEmpty.setVisibility(View.GONE);
+            rllContainer.setVisibility(View.VISIBLE);
             // set coin info
             adapterCoins.notifyDataSetChanged();
 
