@@ -27,11 +27,8 @@ public class TradeInteractor {
             @Override
             protected MarketSummary doInBackground(Void... voids) {
                 try {
-                    Thread.sleep(2000);
                     return new BittrexServices().getMarketSummary(coinName);
                 } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 return null;
@@ -58,7 +55,6 @@ public class TradeInteractor {
             @Override
             protected Wallet doInBackground(Void... voids) {
                 try {
-                    Thread.sleep(2000);
                     Wallet wallet = new BittrexServices().getWallet(account);
                     if (wallet != null && wallet.getSuccess()) {
                         Iterator iterator = wallet.getResult().iterator();
@@ -73,8 +69,6 @@ public class TradeInteractor {
                     }
                     return wallet;
                 } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 return null;
@@ -102,11 +96,8 @@ public class TradeInteractor {
             @Override
             protected MarketSummaries doInBackground(Void... voids) {
                 try {
-                    Thread.sleep(2000);
                     return new BittrexServices().getMarketSummaries();
                 } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 return null;
@@ -131,11 +122,8 @@ public class TradeInteractor {
             @Override
             protected LimitOrder doInBackground(Void... voids) {
                 try {
-                    Thread.sleep(2000);
                     return new BittrexServices().buyLimit(limit.getMarket(), String.valueOf(limit.getQuantity()), String.valueOf(limit.getRate()), limit.getAccount());
                 } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 return null;
@@ -160,11 +148,8 @@ public class TradeInteractor {
             @Override
             protected LimitOrder doInBackground(Void... voids) {
                 try {
-                    Thread.sleep(2000);
                     return new BittrexServices().sellLimit(limit.getMarket(), String.valueOf(limit.getQuantity()), String.valueOf(limit.getRate()), limit.getAccount());
                 } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 return null;

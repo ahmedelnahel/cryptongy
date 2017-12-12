@@ -20,11 +20,8 @@ public class CoinInteractor {
             @Override
             protected MarketSummary doInBackground(Void... voids) {
                 try {
-                    Thread.sleep(2000);
                     return new BittrexServices().getMarketSummary(coin);
                 } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 return null;

@@ -26,7 +26,6 @@ public class OrderInteractor {
             protected OpenOrder doInBackground(Void... voids) {
                 OpenOrder openOrder = null;
                 try {
-                    Thread.sleep(2000);
                     openOrder = new BittrexServices().getOpnOrders(account);
                     if (openOrder != null && openOrder.getSuccess()) {
                         if (TextUtils.isEmpty(coinName))
@@ -44,8 +43,6 @@ public class OrderInteractor {
                     }
 
                 } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 return openOrder;
