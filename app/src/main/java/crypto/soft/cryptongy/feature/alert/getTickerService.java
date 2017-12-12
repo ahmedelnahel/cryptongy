@@ -52,13 +52,13 @@ public class getTickerService extends Service {
         for (CoinInfo coinInfo : list) {
             try {
                 Ticker ticker = Tickerservices.getTicker(coinInfo.getCoinName());
-                if (coinInfo.isHigher() && coinInfo.getHighValue().doubleValue() >= ticker.getResult().getLast().doubleValue()) {
+                if (coinInfo.isHigher() && ticker.getResult().getLast().doubleValue() >= coinInfo.getHighValue().doubleValue() ) {
                     showNotification("Alert", coinInfo.CoinName + " is above " + String.format("%.8f", ticker.getResult().getLast().doubleValue()), 0);
                     if (coinInfo.getAlarmFreq() == 1) {
                         coinInfo.status = "Closed";
                         update(coinInfo);
                     }
-                } else if (coinInfo.isLower() && coinInfo.getLowValue().doubleValue() < ticker.getResult().getLast().doubleValue()) {
+                } else if (coinInfo.isLower() && ticker.getResult().getLast().doubleValue() <= coinInfo.getLowValue().doubleValue() ) {
                     showNotification("Alert", coinInfo.CoinName + " is below " + String.format("%.8f", ticker.getResult().getLast().doubleValue()), 0);
                     if (coinInfo.getAlarmFreq() == 1) {
                         coinInfo.status = "Closed";
