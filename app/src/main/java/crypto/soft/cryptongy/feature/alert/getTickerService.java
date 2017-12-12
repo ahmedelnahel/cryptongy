@@ -53,13 +53,13 @@ public class getTickerService extends Service {
             try {
                 Ticker ticker = Tickerservices.getTicker(coinInfo.getCoinName());
                 if (coinInfo.isHigher() && coinInfo.getHighValue().doubleValue() >= ticker.getResult().getLast().doubleValue()) {
-                    showNotification("Alert", coinInfo.CoinName + " is above " + ticker.getResult().getLast().doubleValue(), 0);
+                    showNotification("Alert", coinInfo.CoinName + " is above " + String.format("%.8f", ticker.getResult().getLast().doubleValue()), 0);
                     if (coinInfo.getAlarmFreq() == 1) {
                         coinInfo.status = "Closed";
                         update(coinInfo);
                     }
                 } else if (coinInfo.isLower() && coinInfo.getLowValue().doubleValue() < ticker.getResult().getLast().doubleValue()) {
-                    showNotification("Alert", coinInfo.CoinName + " is below " + ticker.getResult().getLast().doubleValue(), 0);
+                    showNotification("Alert", coinInfo.CoinName + " is below " + String.format("%.8f", ticker.getResult().getLast().doubleValue()), 0);
                     if (coinInfo.getAlarmFreq() == 1) {
                         coinInfo.status = "Closed";
                         update(coinInfo);
@@ -85,7 +85,7 @@ public class getTickerService extends Service {
         android.app.Notification n = new android.app.Notification.Builder(this)
                 .setContentTitle(title)
                 .setContentText(content)
-                .setSmallIcon(R.drawable.about_us_icon)
+                .setSmallIcon(R.drawable.ic_notification_icon)
                 .setContentIntent(intent)
                 .setAutoCancel(true)
                 .build();
