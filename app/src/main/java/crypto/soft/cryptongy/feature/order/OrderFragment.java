@@ -110,7 +110,7 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter<OrderVi
     public void setCalculation(double calculation) {
         double priceInDollar = ((CoinApplication) getActivity().getApplication()).getUsdt_btc();
         txtUsd.setText("$" + String.valueOf(GlobalUtil.formatNumber(priceInDollar * calculation, "#.####")));
-        txtBtc.setText(String.valueOf(GlobalUtil.formatNumber(calculation, "#.########") + "฿"));
+        txtBtc.setText(String.valueOf(GlobalUtil.formatNumber(calculation, "#.00000000") + "฿"));
     }
 
     @Override

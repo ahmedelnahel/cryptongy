@@ -139,7 +139,7 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
     public void setCalculation(double calculation) {
         double priceInDollar = ((CoinApplication) getActivity().getApplication()).getUsdt_btc();
         txtUsd.setText( "$" + String.valueOf(GlobalUtil.formatNumber(priceInDollar*calculation, "#.####")));
-        txtBtc.setText(String.valueOf(GlobalUtil.formatNumber(calculation, "#.########") + "฿"));
+        txtBtc.setText(String.valueOf(GlobalUtil.formatNumber(calculation, "0.00000000") + "฿"));
     }
 
     @Override
@@ -243,12 +243,12 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
 
         if (summary != null) {
             crypto.soft.cryptongy.feature.shared.json.marketsummary.Result result = summary.getResult().get(0);
-            lastValuInfo_TXT.setText(String.valueOf(String.format("%.6f", result.getLast().doubleValue())));
-            BidvalueInfo_TXT.setText(String.valueOf(String.format("%.6f", result.getBid().doubleValue())));
-            ASKvalu_TXT.setText(String.valueOf(String.format("%.6f", result.getAsk().doubleValue())));
-            Highvalue_Txt.setText(String.valueOf(String.format("%.6f", result.getHigh().doubleValue())));
+            lastValuInfo_TXT.setText(String.valueOf(String.format("%.8f", result.getLast().doubleValue())));
+            BidvalueInfo_TXT.setText(String.valueOf(String.format("%.8f", result.getBid().doubleValue())));
+            ASKvalu_TXT.setText(String.valueOf(String.format("%.8f", result.getAsk().doubleValue())));
+            Highvalue_Txt.setText(String.valueOf(String.format("%.8f", result.getHigh().doubleValue())));
             VolumeValue_Txt.setText(String.valueOf(String.format("%.6f", result.getVolume().doubleValue())));
-            LowvalueInfo_TXT.setText(String.valueOf(String.format("%.6f", result.getLow().doubleValue())));
+            LowvalueInfo_TXT.setText(String.valueOf(String.format("%.8f", result.getLow().doubleValue())));
         }
     }
 
@@ -268,7 +268,7 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
             View sub = getLayoutInflater().inflate(R.layout.talbe_order_history_sub, null);
             OrderHistoryHolder holder = new OrderHistoryHolder(sub);
 
-            holder.txtType.setText(String.valueOf(GlobalUtil.formatNumber(data.getTotal().doubleValue(), "#.########")));
+            holder.txtType.setText(String.valueOf(GlobalUtil.formatNumber(data.getTotal().doubleValue(), "0.00000000")));
             holder.txtQuantity.setText(String.valueOf(data.getQuantity().doubleValue()));
             holder.txtRate.setText(String.valueOf(GlobalUtil.formatNumber(data.getTotal().doubleValue(), "#.####")));
 

@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,8 +64,13 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
         holder.volume.setText(String.format("%.2f", result.getVolume()));
         holder.low.setText("" + result.getLow());
         holder.high.setText("" + result.getHigh());
-        double s = Double.parseDouble("" + result.getLast());
-        holder.price.setText(String.format("%.8f", s));
+        String price = "";
+        if(result.getMarketName().contains("USDT-"))
+            price = new DecimalFormat("#.####").format(result.getLast());
+        else
+            price = new DecimalFormat("0.00000000").format(result.getLast());
+
+        holder.price.setText(price);
 
         if (!mSelectedItemsIds.get(position)) {
             holder.parent.setBackgroundResource(R.drawable.rect);

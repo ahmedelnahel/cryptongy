@@ -59,6 +59,18 @@ public class HomeInteractor {
                     if (!SharedPreference.getFromPrefs(context, "mockValue").equals("")) {
                         List<Result> results = new Gson().fromJson(SharedPreference.getFromPrefs(context, "mockValue"), new TypeToken<List<Result>>() {
                         }.getType());
+                        if (marketSummaries != null && marketSummaries.getResult() != null &&  marketSummaries.getSuccess()) {
+                            for (Result r:results)
+                            {
+                                Result ms = marketSummaries.getCoinsMap().get(r.getMarketName());
+                               r.setLast(ms.getLast()) ;
+                               r.setVolume(ms.getVolume());
+                            }
+
+                            if (results != null) {
+                                SharedPreference.saveToPrefs(context, "mockValue", new Gson().toJson(results));
+                            }
+                        }
                         this.results.addAll(results);
                     }
                 }

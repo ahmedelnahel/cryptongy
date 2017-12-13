@@ -223,7 +223,7 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
                     if (!TextUtils.isEmpty(str)) {
                         String str2 = edtValue.getText().toString();
                         if (!TextUtils.isEmpty(str2)) {
-                            Double total = GlobalUtil.formatNumber(Double.parseDouble(str) / Double.parseDouble(str2), "#.########");
+                            Double total = GlobalUtil.formatNumber(Double.parseDouble(str) / Double.parseDouble(str2), "#.00000000");
                             edtUnits.removeTextChangedListener(unitWatcher);
                             edtUnits.setText(BigDecimal.valueOf(total).toPlainString());
                             edtUnits.addTextChangedListener(unitWatcher);
