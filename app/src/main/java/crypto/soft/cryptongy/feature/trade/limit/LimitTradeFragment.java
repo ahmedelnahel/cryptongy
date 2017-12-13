@@ -274,7 +274,7 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
             BidvalueInfo_TXT.setText(String.format("%.8f", result.getBid().doubleValue()));
             ASKvalu_TXT.setText(String.format("%.8f", result.getAsk().doubleValue()));
             Highvalue_Txt.setText(String.format("%.8f", result.getHigh().doubleValue()));
-            VolumeValue_Txt.setText(String.format("%.8f", result.getVolume().doubleValue()));
+            VolumeValue_Txt.setText(String.format("%.4f",result.getVolume().doubleValue()));
             LowvalueInfo_TXT.setText(String.format("%.8f", result.getLow().doubleValue()));
         }
     }
@@ -323,7 +323,7 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
                 coinWallet = result;
         }
         lnlHolding.setVisibility(View.VISIBLE);
-        HoldingValue_Txt.setText(String.format("%.8f", baseWallet.getAvailable().doubleValue()));
+        HoldingValue_Txt.setText(String.format("%.4f",coinWallet.getBalance().doubleValue()));
         if (baseWallet.getBalance() > 0d)
             rdbBuy.setEnabled(true);
         else

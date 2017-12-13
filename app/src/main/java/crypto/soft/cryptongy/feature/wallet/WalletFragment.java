@@ -335,7 +335,7 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
             }
             resultList = new ArrayList<>();
             resultList.addAll(wallet.getResult());
-
+            Collections.sort(wallet.getResult(), new Result.HoldingComparator(false));
             coinAdapter.setResultList(wallet.getResult());
             coinAdapter.notifyDataSetChanged();
 
