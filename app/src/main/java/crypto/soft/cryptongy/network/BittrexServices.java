@@ -160,7 +160,7 @@ public class BittrexServices {
     }
 
     public MarketHistory getMarketHistory(String market) throws IOException {
-        final String url = "https://bittrex.com/api/v1.1/public/getmarkethistory?market=+market";
+        final String url = "https://bittrex.com/api/v1.1/public/getmarkethistory?market="+market;
         String mhStr = new RESTUtil().callREST(url);
         ObjectMapper mapper = new ObjectMapper();
         MarketHistory mh = mapper.readValue(mhStr, MarketHistory.class);

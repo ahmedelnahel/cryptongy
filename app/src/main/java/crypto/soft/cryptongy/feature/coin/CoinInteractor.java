@@ -14,13 +14,13 @@ import crypto.soft.cryptongy.network.BittrexServices;
  */
 
 public class CoinInteractor {
-    public void getMarketSummary(final String coin, final OnFinishListner<MarketSummary> listner) {
+    public void getMarketSummary(final String coinName, final OnFinishListner<MarketSummary> listner) {
         new AsyncTask<Void, Void, MarketSummary>() {
 
             @Override
             protected MarketSummary doInBackground(Void... voids) {
                 try {
-                    return new BittrexServices().getMarketSummary(coin);
+                    return new BittrexServices().getMarketSummary(coinName);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -40,13 +40,13 @@ public class CoinInteractor {
         }.execute();
     }
 
-    public void getMarketHistory(final OnFinishListner<MarketHistory> listner) {
+    public void getMarketHistory(final String coinName, final OnFinishListner<MarketHistory> listner) {
         new AsyncTask<Void, Void, MarketHistory>() {
 
             @Override
             protected MarketHistory doInBackground(Void... voids) {
                 try {
-                    return new BittrexServices().getMarketHistory("");
+                    return new BittrexServices().getMarketHistory(coinName);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

@@ -83,7 +83,7 @@ public class CoinPresenter extends OrderPresenter<CoinView> {
                     }
                 }
             };
-            Observable.merge(getMarketSummary(coinName), getOpenOrders(coinName, account), getOrderHistory(coinName, account), getMarketHistory())
+            Observable.merge(getMarketSummary(coinName), getOpenOrders(coinName, account), getOrderHistory(coinName, account), getMarketHistory(coinName))
                     .subscribe(observer);
         } else {
             CustomDialog.showMessagePop(context, context.getString(R.string.noAPI), null);
@@ -94,11 +94,11 @@ public class CoinPresenter extends OrderPresenter<CoinView> {
         }
     }
 
-    public Observable getMarketHistory() {
+    public Observable getMarketHistory(final String coinName) {
         return Observable.create(new ObservableOnSubscribe() {
             @Override
             public void subscribe(final ObservableEmitter e) throws Exception {
-                coinInteractor.getMarketHistory(new OnFinishListner<MarketHistory>() {
+                coinInteractor.getMarketHistory(coinName, new OnFinishListner<MarketHistory>() {
                     @Override
                     public void onComplete(MarketHistory result) {
                         e.onNext(result);
@@ -115,11 +115,11 @@ public class CoinPresenter extends OrderPresenter<CoinView> {
         });
     }
 
-    public Observable<MarketSummary> getMarketSummary(final String coin) {
+    public Observable<MarketSummary> getMarketSummary(final String coinName) {
         return io.reactivex.Observable.create(new ObservableOnSubscribe<MarketSummary>() {
             @Override
             public void subscribe(final ObservableEmitter<MarketSummary> e) throws Exception {
-                coinInteractor.getMarketSummary(coin, new OnFinishListner<MarketSummary>() {
+                coinInteractor.getMarketSummary(coinName, new OnFinishListner<MarketSummary>() {
                     @Override
                     public void onComplete(MarketSummary result) {
                         e.onNext(result);
