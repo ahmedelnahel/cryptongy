@@ -33,7 +33,7 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter<OrderVi
     private TableLayout tblOpenOrders, tblOrderHistory;
 
     private LinearLayout lnlContainer;
-    private TextView txtLevel, txtOpenOrder, txtOrderHistory, txtEmpty, txtBtc, txtUsd, txtGap;
+    private TextView txtLevel, txtOpenOrder, txtOrderHistory, txtEmpty, txtBtc, txtUsd, txtGap,txtProfit;
     private ImageView imgSync, imgAccSetting;
 
     private boolean isFirst = false;
@@ -49,7 +49,7 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter<OrderVi
             isFirst = true;
         } else
             isFirst = false;
-//        hideTotal();
+        hideTotal();
         setTitle();
         return view;
     }
@@ -81,6 +81,7 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter<OrderVi
 
         txtBtc = view.findViewById(R.id.txtBtc);
         txtUsd = view.findViewById(R.id.txtUsd);
+        txtProfit = view.findViewById(R.id.txtProfit);
         txtGap = view.findViewById(R.id.txtGap);
         txtLevel = view.findViewById(R.id.txtLevel);
 
@@ -97,7 +98,8 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter<OrderVi
     public void hideTotal() {
         txtBtc.setVisibility(View.GONE);
         txtUsd.setVisibility(View.GONE);
-        txtGap.setVisibility(View.GONE);
+//        txtGap.setVisibility(View.GONE);
+        txtProfit.setVisibility(View.GONE);
     }
 
     @Override

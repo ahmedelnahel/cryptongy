@@ -43,7 +43,7 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
     private View view;
     private TableLayout tblOpenOrders, tblOrderHistory, tblMarketTrade;
     private LinearLayout lnlContainer;
-    private TextView txtLevel, txtOpenOrder, txtOrderHistory, txtEmpty, txtBtc, txtUsd, txtMarket, txtVtc;
+    private TextView txtLevel, txtOpenOrder, txtOrderHistory, txtEmpty, txtBtc, txtUsd, txtMarket, txtVtc,txtProfit;
     private ImageView imgSync, imgAccSetting;
 
     private HorizontalScrollView scrollView;
@@ -65,9 +65,14 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
         coinName = getArguments().getString("COIN_NAME", "");
         CoinName.coinName = coinName;
         setTitle();
+        hideTotal();
         return view;
     }
-
+    public void hideTotal() {
+        txtBtc.setVisibility(View.GONE);
+        txtUsd.setVisibility(View.GONE);
+        txtProfit.setVisibility(View.GONE);
+    }
     @Override
     public CoinPresenter createPresenter() {
         return new CoinPresenter(getContext());
@@ -107,6 +112,7 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
 
         txtBtc = view.findViewById(R.id.txtBtc);
         txtUsd = view.findViewById(R.id.txtUsd);
+        txtProfit = view.findViewById(R.id.txtProfit);
         txtLevel = view.findViewById(R.id.txtLevel);
 
         imgSync = view.findViewById(R.id.imgSync);

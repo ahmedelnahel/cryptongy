@@ -220,12 +220,17 @@ public class OrderPresenter<T extends MvpView> extends MvpBasePresenter<T> {
         CoinApplication application = (CoinApplication) context.getApplicationContext();
  double btcdollar = application.getUsdt_btc();
   double ethbtc = application.getbtc_eth();
+//        System.out.println("USDT rate " + btcdollar);
+//        System.out.println("ethbtc rate " + ethbtc);
         for (Result data : history.getResult()) {
+
             double rate = 1;
-            if (data.getExchange().toLowerCase().contains("usdt-"))
+            if (data.getExchange().contains("USDT-")) {
                 rate = btcdollar;
-            else if (data.getExchange().toLowerCase().contains("eth-"))
-                rate = ethbtc;
+//                System.out.println("usdt " + data.getLimit() + " " + data.getPrice() + " " + data.getLimit()*data.getQuantity());
+            }
+            else if (data.getExchange().contains("ETH-"))
+                rate = 1/ethbtc;
             if (data.getOrderType().toLowerCase().equals("limit_sell") ||
                     data.getOrderType().toLowerCase().equals("conditional_sell")) {
                 if (data.getLimit() != null) {
