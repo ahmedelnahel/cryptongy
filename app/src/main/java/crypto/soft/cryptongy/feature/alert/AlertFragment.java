@@ -316,8 +316,8 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
                 View sub = getLayoutInflater().inflate(R.layout.table_alert_sub, null);
                 final AlertHolder holder = new AlertHolder(sub);
                 holder.txtCoin.setText(coinInfoList.get(i).getCoinName());
-                holder.txtLowPrice.setText(String.valueOf(coinInfoList.get(i).getLowValue()));
-                holder.txtHighPrice.setText(String.valueOf(coinInfoList.get(i).getHighValue()));
+                holder.txtLowPrice.setText(String.valueOf(String.format("%.8f",coinInfoList.get(i).getLowValue())));
+                holder.txtHighPrice.setText(String.valueOf(String.format("%.8f",coinInfoList.get(i).getHighValue())));
                 tblMarketTradeAlert.addView(sub);
 
                 holder.txtAction.setOnClickListener(new View.OnClickListener() {
@@ -428,14 +428,14 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
             progressBar.setVisibility(View.GONE);
             txtEmpty.setVisibility(View.GONE);
             rllContainer.setVisibility(View.VISIBLE);
-            lastValuInfo_TXT.setText(String.valueOf(String.format("%.6f", lastV)));
-            BidvalueInfo_TXT.setText(String.valueOf(String.format("%.6f", bidV)));
-            ASKvalu_TXT.setText(String.valueOf(String.format("%.6f", askV)));
-            Highvalue_Txt.setText(String.valueOf(String.format("%.6f", highV)));
-            VolumeValue_Txt.setText(String.valueOf(String.format("%.6f", volumeV)));
-            LowvalueInfo_TXT.setText(String.valueOf(String.format("%.6f", lowV)));
+            lastValuInfo_TXT.setText(String.valueOf(String.format("%.8f", lastV)));
+            BidvalueInfo_TXT.setText(String.valueOf(String.format("%.8f", bidV)));
+            ASKvalu_TXT.setText(String.valueOf(String.format("%.8f", askV)));
+            Highvalue_Txt.setText(String.valueOf(String.format("%.8f", highV)));
+            VolumeValue_Txt.setText(String.valueOf(String.format("%.5f", volumeV)));
+            LowvalueInfo_TXT.setText(String.valueOf(String.format("%.8f", lowV)));
 
-            lastComp_txt.setText(String.valueOf(String.format("%.6f", lastV)));
+            lastComp_txt.setText(String.valueOf(String.format("%.8f", lastV)));
 
             Typeface typeFaceCalibri = Typeface.createFromAsset(getContext().getAssets(), "calibri.ttf");
 
