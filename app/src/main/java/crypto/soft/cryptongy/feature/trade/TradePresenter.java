@@ -186,7 +186,7 @@ public class TradePresenter<T extends TradeView> extends MvpBasePresenter<T> {
             public void onError(Throwable e) {
                 if (getView() != null) {
                     getView().hideLoading();
-                    CustomDialog.showMessagePop(context, "No matched coin found. Please try again later.", null);
+                    CustomDialog.showMessagePop(context, e.getMessage(), null);
                     getView().showEmptyView();
                 }
             }

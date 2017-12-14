@@ -1,5 +1,6 @@
 package crypto.soft.cryptongy.feature.trade.conditional;
 
+import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -7,6 +8,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.IBinder;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import java.io.IOException;
@@ -32,14 +34,14 @@ import io.realm.RealmResults;
  * Created by tseringwongelgurung on 12/10/17.
  */
 
-public class ConditionalService extends Service {
+public class ConditionalService extends IntentService {
 
-    public IBinder onBind(Intent arg0) {
-        return null;
+    public ConditionalService() {
+        super("ConditionalService");
     }
 
-    public void onCreate() {
-        super.onCreate();
+    @Override
+    protected void onHandleIntent(@Nullable Intent intent) {
         startService();
     }
 

@@ -1,5 +1,6 @@
 package crypto.soft.cryptongy.feature.alert;
 
+import android.app.IntentService;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -26,17 +27,18 @@ import io.realm.RealmResults;
  * Created by maiAjam on 11/20/2017.
  */
 
-public class AlertService extends Service {
+public class AlertService extends IntentService {
 
-    @Nullable
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
+    public AlertService() {
+        super("AlerService");
     }
 
     @Override
-    public void onCreate() {
-        super.onCreate();
+    protected void onHandleIntent(@Nullable Intent intent) {
+        startAlert();
+    }
+
+    public void startAlert() {
         Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
         RealmResults<CoinInfo> coinInfoResult = realm.where(CoinInfo.class).equalTo("status",
