@@ -83,7 +83,6 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginBottom="-2dp"
                     android:layout_marginLeft="5dp" />
-
                 <SeekBar
                     android:id="@+id/seekBar"
                     android:layout_width="match_parent"
@@ -94,6 +93,15 @@
                     android:progressDrawable="@drawable/seek_progress"
                     android:text="Price"
                     android:thumb="@drawable/thumb" />
+                <TextView
+                    android:id="@+id/pricedollar"
+                    fontPath="fonts/calibri.ttf"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/seekBar"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="-2dp"
+                    android:layout_marginLeft="5dp" />
 
             </RelativeLayout>
 

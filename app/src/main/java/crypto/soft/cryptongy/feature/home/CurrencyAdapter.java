@@ -21,6 +21,7 @@ import butterknife.ButterKnife;
 import crypto.soft.cryptongy.R;
 import crypto.soft.cryptongy.feature.shared.json.market.Result;
 import crypto.soft.cryptongy.feature.shared.listner.AdapterItemClickListener;
+import crypto.soft.cryptongy.utils.CoinApplication;
 
 /**
  * Created by Ajahar on 11/21/2017.
@@ -31,6 +32,8 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
     List<Result> currencyItemsFiltered;
     private SparseBooleanArray mSelectedItemsIds;
     private AdapterItemClickListener adapterItemClickListener;
+    private double btcusdt;
+    private double ethbtc;
 
 
     public CurrencyAdapter(List<Result> currencyItems) {
@@ -54,6 +57,8 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
 
     @Override
     public CurrencyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        btcusdt =  ((CoinApplication) parent.getContext().getApplicationContext()).getUsdt_btc();
+        ethbtc =  ((CoinApplication) parent.getContext().getApplicationContext()).getbtc_eth();
         return new CurrencyViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_currency, parent, false));
     }
 
@@ -64,13 +69,23 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
         holder.volume.setText(String.format("%.2f", result.getVolume()));
         holder.low.setText("" + result.getLow());
         holder.high.setText("" + result.getHigh());
-        String price = "";
-        if(result.getMarketName().contains("USDT-"))
+
+        String price, pricedollar = "";
+        if(result.getMarketName().contains("USDT-")) {
             price = new DecimalFormat("#.####").format(result.getLast());
-        else
+            pricedollar = "";
+        }
+        else {
             price = new DecimalFormat("0.00000000").format(result.getLast());
+            if(result.getMarketName().contains("ETH-"))
+                pricedollar = "$" + new DecimalFormat("#.####").format(result.getLast() * btcusdt * ethbtc);
+            else if(result.getMarketName().contains("BTC-"))
+                pricedollar = "$" + new DecimalFormat("#.####").format(result.getLast() * btcusdt);
+
+        }
 
         holder.price.setText(price);
+        holder.pricedollar.setText( pricedollar);
 
         if (!mSelectedItemsIds.get(position)) {
             holder.parent.setBackgroundResource(R.drawable.rect);
@@ -79,8 +94,10 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
         }
         // holder.seekBar.setProgress(50);
         holder.seekBar.setEnabled(false);
-        // holder.seekBar.setProgress(getProgress(round(Double.parseDouble(holder.price.getText().toString()),2),round(Double.parseDouble(holder.high.getText().toString()),2)));
-        holder.seekBar.setProgress(50);
+        double pricepoint = result.getLast()-result.getLow();
+        double highpoint = result.getHigh()-result.getLow();
+         holder.seekBar.setProgress(getProgress(pricepoint, highpoint));
+//        holder.seekBar.setProgress(50);
         holder.seekBar.setOnSeekBarChangeListener(new OnSeekBarChange(position, holder, currencyItemsFiltered.get(position)));
         holder.parent.setOnLongClickListener(new OnCurrencyItemClick(position, holder, currencyItemsFiltered.get(position)));
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -156,6 +173,8 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
         TextView low;
         @BindView(R.id.price)
         TextView price;
+        @BindView(R.id.pricedollar)
+        TextView pricedollar;
         @BindView(R.id.high)
         TextView high;
 

@@ -200,7 +200,7 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
 
     @Override
     public void onSummaryLoadFailed() {
-        CustomDialog.showMessagePop(getContext(), "Oops! Something not right.", null);
+        CustomDialog.showMessagePop(getContext(), "Oops! Something went w.", null);
         Log.v("Here", "" + "failed");
     }
 
@@ -234,6 +234,11 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
                     }
                     mock.add(result);
                     result = null;
+                }
+                else
+                {
+                    inputCoin.requestFocus();
+                    CustomDialog.showMessagePop(getContext(),"Please select a coin first.",null);
                 }
                 inputCoin.setText("");
                 SharedPreference.saveToPrefs(getContext(), "mockValue", new Gson().toJson(mock));
