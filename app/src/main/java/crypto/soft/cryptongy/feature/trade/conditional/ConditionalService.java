@@ -41,6 +41,7 @@ public class ConditionalService extends Service {
     public void onCreate() {
         super.onCreate();
         Log.d("Ar", "Started");
+        showNotification("Test","msg",12);
         startService();
     }
 
@@ -95,13 +96,16 @@ public class ConditionalService extends Service {
     }
 
     private void showNotification(String title, String content, int id) {
-        PendingIntent intent = PendingIntent.getActivity(this, 0,
-                new Intent(this, MainActivity.class), 0);
+        Intent intent = new Intent(new Intent()).setClass(this, MainActivity.class);
+        intent.putExtra("OPEN", "Conditional");
+        intent.setAction("notification");
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
+                intent, 0);
         Notification n = new Notification.Builder(this)
                 .setContentTitle(title)
                 .setContentText(content)
                 .setSmallIcon(R.drawable.about_us_icon)
-                .setContentIntent(intent)
+                .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
                 .build();
 
@@ -116,7 +120,7 @@ public class ConditionalService extends Service {
         Double quantity = conditional.getUnits();
         Double rate = 0.0;
         if (conditional.isHigh()) {
-            if (ticker.getLast().doubleValue() >= conditional.getHighCondition().doubleValue()  ) {
+            if (ticker.getLast().doubleValue() >= conditional.getHighCondition().doubleValue()) {
                 switch (conditional.getPriceType()) {
                     case GlobalConstant.Conditional.TYPE_BID:
                         rate = ticker.getBid().doubleValue();
@@ -132,9 +136,9 @@ public class ConditionalService extends Service {
         } else {
             if (conditional.getStopLossType().equalsIgnoreCase(GlobalConstant.Conditional.TYPE_TRAILER)) {
                 double low = conditional.getLast().doubleValue() - (conditional.getLowCondition().doubleValue() * conditional.getLast().doubleValue());
-                if (ticker.getLast().doubleValue() <= low  )
+                if (ticker.getLast().doubleValue() <= low)
                     rate = ticker.getLast().doubleValue() - (ticker.getLast().doubleValue() * conditional.getLowPrice().doubleValue());
-                else if(ticker.getLast().doubleValue() > conditional.getLast()){
+                else if (ticker.getLast().doubleValue() > conditional.getLast()) {
                     conditional.setLast(ticker.getLast());
                     updateConditional(conditional);
                     return;
@@ -144,7 +148,7 @@ public class ConditionalService extends Service {
                 if (conditional.getConditionType().equalsIgnoreCase(GlobalConstant.Conditional.TYPE_PERCENTAGE))
                     low = conditional.getLast().doubleValue() - (low * conditional.getLast().doubleValue());
 
-                if (ticker.getLast().doubleValue() <= low  ) {
+                if (ticker.getLast().doubleValue() <= low) {
                     if (conditional.getPriceType().equalsIgnoreCase(GlobalConstant.Conditional.TYPE_PERCENTAGE))
                         rate = ticker.getLast().doubleValue() - (ticker.getLast().doubleValue() * conditional.getLowPrice().doubleValue());
                     else
@@ -174,27 +178,27 @@ public class ConditionalService extends Service {
         Double rate = 0.0;
         if (conditional.isHigh()) {
             if (ticker.getLast().doubleValue() >= conditional.getHighCondition().doubleValue()) {
-                if (conditional.getPriceType() != null)
-                {
-            switch (conditional.getPriceType()) {
-                case GlobalConstant.Conditional.TYPE_BID:
-                    rate = ticker.getBid().doubleValue();
-                    break;
-                case GlobalConstant.Conditional.TYPE_ASK:
-                    rate = ticker.getAsk().doubleValue();
-                    break;
-                default:
+                if (conditional.getPriceType() != null) {
+                    switch (conditional.getPriceType()) {
+                        case GlobalConstant.Conditional.TYPE_BID:
+                            rate = ticker.getBid().doubleValue();
+                            break;
+                        case GlobalConstant.Conditional.TYPE_ASK:
+                            rate = ticker.getAsk().doubleValue();
+                            break;
+                        default:
+                            rate = ticker.getLast().doubleValue();
+                            break;
+                    }
+                }else
                     rate = ticker.getLast().doubleValue();
-                    break;
-            }
-            }
             } else return;
         } else {
             double low = conditional.getLowCondition().doubleValue();
             if (conditional.getConditionType().equalsIgnoreCase(GlobalConstant.Conditional.TYPE_PERCENTAGE))
                 low = conditional.getLast().doubleValue() - (low * conditional.getLast().doubleValue());
 
-            if ( ticker.getLast().doubleValue() <= low) {
+            if (ticker.getLast().doubleValue() <= low) {
                 if (conditional.getPriceType().equalsIgnoreCase(GlobalConstant.Conditional.TYPE_PERCENTAGE))
                     rate = ticker.getLast().doubleValue() + (ticker.getLast().doubleValue() * conditional.getLowPrice().doubleValue());
                 else

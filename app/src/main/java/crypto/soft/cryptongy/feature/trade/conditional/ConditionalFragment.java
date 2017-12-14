@@ -264,8 +264,8 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
 
     @Override
     public void setMarketSummary(MarketSummary summary) {
-        txtVtc.setVisibility(View.GONE);
-        scrollView.setVisibility(View.GONE);
+        txtVtc.setVisibility(View.VISIBLE);
+        scrollView.setVisibility(View.VISIBLE);
 
         if (summary != null) {
             crypto.soft.cryptongy.feature.shared.json.marketsummary.Result result = summary.getResult().get(0);
@@ -346,7 +346,7 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
     @Override
     public void setMax() {
         edtUnits.setError(null);
-        edtUnits.setText(coinWallet.getBalance().toString());
+        edtUnits.setText(String.format("%.8f", coinWallet.getBalance()));
     }
 
     @Override

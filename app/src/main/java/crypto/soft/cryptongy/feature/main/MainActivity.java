@@ -10,6 +10,8 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
@@ -41,7 +43,12 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
         findViews();
         initSideMenu();
         setAdapter();
-        presenter.onItemClicked("Home");
+        String data=getIntent().getStringExtra("OPEN");
+        if (TextUtils.isEmpty(data))
+            data="Home";
+        else
+            Log.d("Ar",data);
+        presenter.onItemClicked(data);
     }
 
     @NonNull

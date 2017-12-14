@@ -87,8 +87,6 @@ public class GlobalUtil {
     }
 
     public static int getUniqueID() {
-
-
         return c.incrementAndGet();
     }
 }
