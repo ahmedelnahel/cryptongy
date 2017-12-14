@@ -40,8 +40,6 @@ public class ConditionalService extends Service {
 
     public void onCreate() {
         super.onCreate();
-        Log.d("Ar", "Started");
-        showNotification("Test","msg",12);
         startService();
     }
 
@@ -62,7 +60,6 @@ public class ConditionalService extends Service {
     }
 
     public void onDestroy() {
-        Log.d("Ar", "destoryed");
         super.onDestroy();
     }
 

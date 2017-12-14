@@ -157,6 +157,11 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
     }
 
     @Override
+    public String getCoin() {
+        return txtVtc.getText().toString();
+    }
+
+    @Override
     public void findViews() {
         nestedScroll = view.findViewById(R.id.nestedScroll);
 
