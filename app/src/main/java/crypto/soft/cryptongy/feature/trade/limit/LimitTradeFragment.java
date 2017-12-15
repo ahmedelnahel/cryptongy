@@ -109,6 +109,11 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
     }
 
     @Override
+    public String getCoin() {
+        return txtVtc.getText().toString();
+    }
+
+    @Override
     public void findViews() {
         txtCoin = view.findViewById(R.id.txtCoin);
         txtBtc = view.findViewById(R.id.txtBtc);

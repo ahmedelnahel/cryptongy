@@ -316,8 +316,8 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
                 View sub = getLayoutInflater().inflate(R.layout.table_alert_sub, null);
                 final AlertHolder holder = new AlertHolder(sub);
                 holder.txtCoin.setText(coinInfoList.get(i).getCoinName());
-                holder.txtLowPrice.setText(String.valueOf(String.format("%.8f",coinInfoList.get(i).getLowValue())));
-                holder.txtHighPrice.setText(String.valueOf(String.format("%.8f",coinInfoList.get(i).getHighValue())));
+                holder.txtLowPrice.setText(String.valueOf(String.format("%.8f", coinInfoList.get(i).getLowValue())));
+                holder.txtHighPrice.setText(String.valueOf(String.format("%.8f", coinInfoList.get(i).getHighValue())));
                 tblMarketTradeAlert.addView(sub);
 
                 holder.txtAction.setOnClickListener(new View.OnClickListener() {
@@ -341,13 +341,13 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
         int id = view.getId();
         switch (id) {
             case R.id.imgSync:
-                if (coins != null)
-                    coins.clear();
-                if (adapterCoins != null)
-                    adapterCoins.notifyDataSetChanged();
-                inputCoin.setText("");
+                if (TextUtils.isEmpty(coinNmae.getText().toString()))
+                    getCoins();
+                else {
+                    sycCoinInfo sycCoinInfo = new sycCoinInfo();
+                    sycCoinInfo.execute(coinNmae.getText().toString());
+                }
                 updateTable();
-                getCoins();
                 break;
             case R.id.imgAccSetting:
                 if (getActivity() instanceof MainActivity)
@@ -363,7 +363,9 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
         @Override
         protected void onPreExecute() {
             //check network conntection
-
+            progressBar.setVisibility(View.VISIBLE);
+            txtEmpty.setVisibility(View.GONE);
+            rllContainer.setVisibility(View.GONE);
             ConnectivityManager cm =
                     (ConnectivityManager) getActivity().getSystemService(getContext().CONNECTIVITY_SERVICE);
 

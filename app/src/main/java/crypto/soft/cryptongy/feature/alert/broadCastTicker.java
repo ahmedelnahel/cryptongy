@@ -14,10 +14,6 @@ import crypto.soft.cryptongy.utils.GlobalUtil;
 public class broadCastTicker extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        boolean isServiceRunning = GlobalUtil.isServiceRunning(context, AlertService.class);
-        if (isServiceRunning)
-            context.stopService(new Intent(context, AlertService.class));
-
         context.startService(new Intent(context, AlertService.class));
         GlobalUtil.startAlarm(broadCastTicker.class,context.getResources().getInteger(R.integer.service_interval), context);
     }

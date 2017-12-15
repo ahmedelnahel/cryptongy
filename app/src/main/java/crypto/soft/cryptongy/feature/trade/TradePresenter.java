@@ -1,11 +1,11 @@
 package crypto.soft.cryptongy.feature.trade;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
 import crypto.soft.cryptongy.R;
-import crypto.soft.cryptongy.feature.account.AccountFragment;
 import crypto.soft.cryptongy.feature.account.CustomDialog;
 import crypto.soft.cryptongy.feature.main.MainActivity;
 import crypto.soft.cryptongy.feature.shared.json.limitorder.LimitOrder;
@@ -16,7 +16,6 @@ import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
 import crypto.soft.cryptongy.feature.shared.module.Account;
 import crypto.soft.cryptongy.feature.trade.limit.Limit;
 import crypto.soft.cryptongy.utils.CoinApplication;
-import crypto.soft.cryptongy.utils.GlobalUtil;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -39,7 +38,11 @@ public class TradePresenter<T extends TradeView> extends MvpBasePresenter<T> {
     public void onClicked(int id) {
         switch (id) {
             case R.id.imgSync:
-                getData();
+                String coin = getView().getCoin();
+                if (!TextUtils.isEmpty(coin))
+                    getData(coin);
+                else
+                    getData();
                 break;
             case R.id.imgAccSetting:
                 ((MainActivity) context).getPresenter().replaceAccountFragment();
@@ -183,7 +186,7 @@ public class TradePresenter<T extends TradeView> extends MvpBasePresenter<T> {
             public void onError(Throwable e) {
                 if (getView() != null) {
                     getView().hideLoading();
-                    CustomDialog.showMessagePop(context, "No matched coin found. Please try again later.", null);
+                    CustomDialog.showMessagePop(context, e.getMessage(), null);
                     getView().showEmptyView();
                 }
             }

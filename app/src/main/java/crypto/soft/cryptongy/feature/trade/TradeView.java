@@ -13,6 +13,8 @@ import crypto.soft.cryptongy.feature.shared.json.wallet.Wallet;
 public interface TradeView extends MvpView {
     void setTitle();
 
+    String getCoin();
+
     void findViews();
 
     void init();
