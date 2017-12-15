@@ -344,6 +344,15 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
 
     @Override
     public void setMax() {
+        if(isBuy())
+        {
+            String value = edtValue.getText().toString();
+            if (!TextUtils.isEmpty(value)) {
+                double units = baseWallet.getBalance() / Double.valueOf(value);
+                edtUnits.setText(""+units);
+            }
+        }
+        else
         edtUnits.setText(coinWallet.getBalance().toString());
     }
 
@@ -361,7 +370,6 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
                 if (!TextUtils.isEmpty(str2)) {
                     Double total = Double.parseDouble(str) * Double.parseDouble(str2);
                     edtTotal.removeTextChangedListener(totalWatcher);
-
                     edtTotal.setText(String.format("%.8f", total));
                     edtTotal.addTextChangedListener(totalWatcher);
                 }
