@@ -426,8 +426,8 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
         if (Double.parseDouble(total) <= result.getBalance()) {
             Limit limit = new Limit();
             limit.setMarket(txtVtc.getText().toString());
-            limit.setRate(Double.parseDouble(txtBtc.getText().toString()));
-            limit.setQuantity(Double.parseDouble(edtTotal.getText().toString()));
+            limit.setRate(Double.parseDouble(edtValue.getText().toString()));
+            limit.setQuantity(Double.parseDouble(edtUnits.getText().toString()));
             return limit;
         } else {
             CustomDialog.showMessagePop(getContext(), "Insufficient balance", null);

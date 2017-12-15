@@ -136,10 +136,11 @@ public class BittrexServices {
         params.put("market", market);
         params.put("quantity", quantity);
         params.put("rate", rate);
+        Log.d("buy limit param ",   market + "quantity "+ quantity + "rate " + rate );
         String buyLimitStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret(), params);
         ObjectMapper mapper = new ObjectMapper();
         LimitOrder limitOrder = mapper.readValue(buyLimitStr, LimitOrder.class);
-
+        Log.d("buy limit st ",buyLimitStr);
         return limitOrder;
 
     }
