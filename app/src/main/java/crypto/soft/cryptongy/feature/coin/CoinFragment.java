@@ -324,6 +324,6 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
     @Override
     public void onClick(View view) {
         int id = view.getId();
-        presenter.onClicked(id);
+        presenter.onClicked(id, coinName);
     }
 }
