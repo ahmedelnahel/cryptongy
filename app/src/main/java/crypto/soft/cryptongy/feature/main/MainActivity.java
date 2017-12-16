@@ -11,7 +11,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
@@ -32,22 +31,21 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
     private Toolbar toolbar;
     private RecyclerView listMenu;
     private MenuItemAdapter menuItemAdapter;
+    private String data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         new HideKeyboard(this).setupUI(findViewById(android.R.id.content));
+        data = getIntent().getStringExtra("OPEN");
+        if (TextUtils.isEmpty(data))
+            data = "Home";
         initToolbar();
         setTitle();
         findViews();
         initSideMenu();
         setAdapter();
-        String data=getIntent().getStringExtra("OPEN");
-        if (TextUtils.isEmpty(data))
-            data="Home";
-        else
-            Log.d("Ar",data);
         presenter.onItemClicked(data);
     }
 
@@ -104,11 +102,17 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
 
     @Override
     public void setAdapter() {
-        menuItems.add(new MenuItem(R.drawable.ic_home_a, "Home", true));
+        if (data.equalsIgnoreCase("home"))
+            menuItems.add(new MenuItem(R.drawable.ic_home_a, "Home", true));
+        else
+            menuItems.add(new MenuItem(R.drawable.ic_house, "Home", false));
         menuItems.add(new MenuItem(R.drawable.ic_wallet, "Wallet", false));
         menuItems.add(new MenuItem(R.drawable.ic_orders, "Orders", false));
         menuItems.add(new MenuItem(R.drawable.ic_trade, "Trade", false));
-        menuItems.add(new MenuItem(R.drawable.ic_portfolio, "Conditional", false));
+        if (data.equalsIgnoreCase("Conditional"))
+            menuItems.add(new MenuItem(R.drawable.ic_portfolio_a, "Conditional", true));
+        else
+            menuItems.add(new MenuItem(R.drawable.ic_portfolio, "Conditional", false));
         menuItems.add(new MenuItem(R.drawable.ic_alert, "Alert", false));
         menuItems.add(new MenuItem(R.drawable.ic_account, "Accounts", false));
         menuItems.add(new MenuItem(R.drawable.ic_bitcoin, "Donate", false));

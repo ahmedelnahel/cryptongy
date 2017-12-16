@@ -1,15 +1,10 @@
 package crypto.soft.cryptongy.feature.trade.conditional;
 
-import android.os.AsyncTask;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import crypto.soft.cryptongy.feature.shared.json.ticker.Ticker;
 import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
 import crypto.soft.cryptongy.feature.trade.TradeInteractor;
-import crypto.soft.cryptongy.network.BittrexServices;
 import crypto.soft.cryptongy.utils.GlobalConstant;
 import crypto.soft.cryptongy.utils.GlobalUtil;
 import io.realm.Realm;
@@ -20,7 +15,7 @@ import io.realm.RealmResults;
  */
 
 public class ConditionalInteractor extends TradeInteractor {
-    public void saveConditional(List<Conditional> conditionals, int limit, OnFinishListner<Void> listner) {
+    public void saveConditional(List<Conditional> conditionals, int limit, int sameLimit, OnFinishListner<Void> listner) {
         Realm realm = Realm.getDefaultInstance();
 
         realm.beginTransaction();
@@ -28,9 +23,9 @@ public class ConditionalInteractor extends TradeInteractor {
             RealmResults<Conditional> sameConditional = realm.where(Conditional.class).equalTo("orderCoin", conditional.getOrderCoin())
                     .equalTo("orderStatus", GlobalConstant.Conditional.TYPE_OPEN).findAll();
             long count = realm.where(Conditional.class).equalTo("orderStatus", GlobalConstant.Conditional.TYPE_OPEN).count();
-            if (sameConditional != null && sameConditional.size()>1) {
+            if (sameConditional != null && sameConditional.size() >= sameLimit) {
                 realm.commitTransaction();
-                listner.onFail("Only 2 order per coin are permitted.");
+                listner.onFail("Only "+sameLimit+" order per coin are permitted.");
                 return;
             } else {
                 if (count < limit) {

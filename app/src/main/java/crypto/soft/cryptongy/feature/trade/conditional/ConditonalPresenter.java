@@ -92,7 +92,8 @@ public class ConditonalPresenter extends TradePresenter<ConditionalView> {
                 if (conditionals != null) {
                     if (conditionals.size() > 0) {
                         int limit = context.getResources().getInteger(R.integer.order_limit);
-                        conditionalInteractor.saveConditional(conditionals, limit, new OnFinishListner<Void>() {
+                        int sameLimit = context.getResources().getInteger(R.integer.coin_order_limit);
+                        conditionalInteractor.saveConditional(conditionals, limit, sameLimit, new OnFinishListner<Void>() {
                             @Override
                             public void onComplete(Void result) {
                                 CustomDialog.showMessagePop(context, "Conditional Order has been created sucessfully.", null);
