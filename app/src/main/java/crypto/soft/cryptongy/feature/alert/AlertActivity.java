@@ -8,6 +8,7 @@ import android.view.MenuItem;
 
 import crypto.soft.cryptongy.R;
 import crypto.soft.cryptongy.feature.account.AccountFragment;
+import crypto.soft.cryptongy.utils.ProgressDialogFactory;
 
 public class AlertActivity extends AppCompatActivity {
     private Toolbar toolbar;
@@ -38,5 +39,11 @@ public class AlertActivity extends AppCompatActivity {
         if (item.getItemId() == android.R.id.home)
             onBackPressed();
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onDestroy() {
+        ProgressDialogFactory.dismiss();
+        super.onDestroy();
     }
 }

@@ -27,6 +27,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import java.util.ArrayList;
@@ -38,6 +39,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import crypto.soft.cryptongy.R;
+import crypto.soft.cryptongy.feature.account.AccountFragment;
 import crypto.soft.cryptongy.feature.account.CustomDialog;
 import crypto.soft.cryptongy.feature.coinHome.CoinHomeActivity;
 import crypto.soft.cryptongy.feature.main.MainActivity;
@@ -122,7 +124,13 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
             adapterCoins = new CustomArrayAdapter(getContext(), coins);
             inputCoin.setThreshold(1);
             inputCoin.setAdapter(adapterCoins);
-//                adapterCoins.setAdapterItemClickListener(this);
+
+            inputCoin.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    inputCoin.setText("");
+                }
+            });
 
             inputCoin.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
@@ -221,20 +229,22 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.imgAdd:
-                if (mock == null)
+                if (mock==null)
                     return;
                 if (result != null) {
-                    for (Result data : mock) {
-                        if (data.getMarketName().equalsIgnoreCase(result.getMarketName())) {
-                            CustomDialog.showMessagePop(getContext(), result.getMarketName() + " has been already added.", null);
+                    for (Result data:mock){
+                        if (data.getMarketName().equalsIgnoreCase(result.getMarketName())){
+                            CustomDialog.showMessagePop(getContext(),result.getMarketName()+" has been already added.",null);
                             return;
                         }
                     }
                     mock.add(result);
                     result = null;
-                } else {
+                }
+                else
+                {
                     inputCoin.requestFocus();
-                    CustomDialog.showMessagePop(getContext(), "Please select a coin first.", null);
+                    CustomDialog.showMessagePop(getContext(),"Please select a coin first.",null);
                 }
                 inputCoin.setText("");
                 SharedPreference.saveToPrefs(getContext(), "mockValue", new Gson().toJson(mock));
@@ -251,7 +261,7 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
                 if (mock == null)
                     return;
                 SparseBooleanArray booleanArray = currencyAdapter.getSelectedIds();
-                if (booleanArray != null && booleanArray.size() > 0) {
+                if (booleanArray!=null && booleanArray.size()>0) {
                     for (int i = 0; i < booleanArray.size(); i++) {
                         try {
                             int pos = booleanArray.keyAt(i);
@@ -267,7 +277,7 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
                 }
                 break;
             case R.id.imgKey:
-                ((MainActivity) getActivity()).getPresenter().replaceAccountFragment();
+                ((MainActivity)getActivity()).getPresenter().replaceAccountFragment();
                 break;
         }
     }

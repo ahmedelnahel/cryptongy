@@ -7,6 +7,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import crypto.soft.cryptongy.R;
+import crypto.soft.cryptongy.utils.ProgressDialogFactory;
 
 public class AccountActivity extends AppCompatActivity {
     private Toolbar toolbar;
@@ -36,5 +37,11 @@ public class AccountActivity extends AppCompatActivity {
         if (item.getItemId() == android.R.id.home)
             onBackPressed();
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onDestroy() {
+        ProgressDialogFactory.dismiss();
+        super.onDestroy();
     }
 }

@@ -243,6 +243,13 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
                 presenter.getData(result.getMarketName());
             }
         });
+
+        inputCoin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                inputCoin.setText("");
+            }
+        });
     }
 
     @Override

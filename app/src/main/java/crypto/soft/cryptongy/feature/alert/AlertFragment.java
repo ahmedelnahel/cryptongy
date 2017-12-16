@@ -196,6 +196,13 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
                         sycCoinInfo.execute(coinNmae.getText().toString());
                     }
                 });
+
+                inputCoin.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        inputCoin.setText("");
+                    }
+                });
                 progressBar.setVisibility(View.GONE);
                 rllContainer.setVisibility(View.GONE);
                 if (tblMarketTradeAlert.getChildCount() > 0)

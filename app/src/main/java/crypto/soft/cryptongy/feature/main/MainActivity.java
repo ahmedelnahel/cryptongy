@@ -23,6 +23,7 @@ import java.util.List;
 import crypto.soft.cryptongy.R;
 import crypto.soft.cryptongy.feature.setting.SettingActivity;
 import crypto.soft.cryptongy.utils.HideKeyboard;
+import crypto.soft.cryptongy.utils.ProgressDialogFactory;
 
 public class MainActivity extends MvpActivity<MainView, MainPresenter> implements MainView {
     List<MenuItem> menuItems = new ArrayList<>();
@@ -145,5 +146,11 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
         menuItems.add(new MenuItem(R.drawable.ic_bitcoin, "Donate", false));
         menuItems.add(new MenuItem(R.drawable.ic_about, "About Us", false));
         menuItemAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onDestroy() {
+        ProgressDialogFactory.dismiss();
+        super.onDestroy();
     }
 }

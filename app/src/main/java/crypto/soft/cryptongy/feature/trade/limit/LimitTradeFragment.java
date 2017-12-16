@@ -1,5 +1,6 @@
 package crypto.soft.cryptongy.feature.trade.limit;
 
+import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -103,6 +104,11 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
     }
 
     @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+    }
+
+    @Override
     public void setTitle() {
         TextView txtTitle = getActivity().findViewById(R.id.txtTitle);
         txtTitle.setText(R.string.trade);
@@ -178,6 +184,13 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
                 Result result = (Result) ((CustomArrayAdapter) adapterView.getAdapter()).getItem(i);
                 txtVtc.setText(result.getMarketName());
                 presenter.getData(result.getMarketName());
+            }
+        });
+
+        inputCoin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                inputCoin.setText("");
             }
         });
     }

@@ -16,6 +16,7 @@ import crypto.soft.cryptongy.feature.alert.AlertFragment;
 import crypto.soft.cryptongy.feature.coin.CoinFragment;
 import crypto.soft.cryptongy.feature.shared.adapter.MainPagerAdaptor;
 import crypto.soft.cryptongy.utils.HideKeyboard;
+import crypto.soft.cryptongy.utils.ProgressDialogFactory;
 
 public class CoinHomeActivity extends MvpActivity<CoinHomeView, CoinHomePresenter> implements CoinHomeView {
     private ViewPager viewPager;
@@ -80,5 +81,11 @@ public class CoinHomeActivity extends MvpActivity<CoinHomeView, CoinHomePresente
         viewPager.setAdapter(adapter);
         viewPager.setOffscreenPageLimit(2);
         tabLayout.setupWithViewPager(viewPager);
+    }
+
+    @Override
+    public void onDestroy() {
+        ProgressDialogFactory.dismiss();
+        super.onDestroy();
     }
 }

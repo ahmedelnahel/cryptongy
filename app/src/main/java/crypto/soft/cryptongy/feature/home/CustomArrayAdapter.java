@@ -27,14 +27,12 @@ public class CustomArrayAdapter extends BaseAdapter implements Filterable {
     Context context;
     List<Result> results = new ArrayList<>();
     List<Result> filteredResults = new ArrayList<>();
-    private AdapterItemClickListener adapterItemClickListener;
 
     public CustomArrayAdapter(Context context, List<Result> results) {
         this.context = context;
         this.filteredResults = results;
         this.results = results;
     }
-
 
     @Override
     public int getCount() {
@@ -63,7 +61,6 @@ public class CustomArrayAdapter extends BaseAdapter implements Filterable {
             viewHolder = (ViewHolder) view.getTag();
         }
         viewHolder.coinName.setText(((Result) getItem(i)).getMarketName());
-        //  viewHolder.coinName.setOnClickListener(new OnCurrencyItemClick(i,viewHolder,(Result)getItem(i)));
         return view;
     }
 
@@ -104,10 +101,6 @@ public class CustomArrayAdapter extends BaseAdapter implements Filterable {
         };
     }
 
-    public void setAdapterItemClickListener(AdapterItemClickListener adapterItemClickListener) {
-        this.adapterItemClickListener = adapterItemClickListener;
-    }
-
     static class ViewHolder {
         @BindView(R.id.coinName)
         TextView coinName;
@@ -118,26 +111,4 @@ public class CustomArrayAdapter extends BaseAdapter implements Filterable {
             ButterKnife.bind(this, view);
         }
     }
-
-    class OnCurrencyItemClick implements View.OnClickListener {
-        int position;
-        ViewHolder currencyViewHolder;
-        Result item;
-
-        public OnCurrencyItemClick(int position, ViewHolder currencyViewHolder, Result item) {
-            this.position = position;
-            this.currencyViewHolder = currencyViewHolder;
-            this.item = item;
-        }
-
-        @Override
-        public void onClick(View view) {
-            if (adapterItemClickListener != null) {
-                adapterItemClickListener.onItemClicked(item, position);
-            }
-        }
-
-    }
-
-
 }
