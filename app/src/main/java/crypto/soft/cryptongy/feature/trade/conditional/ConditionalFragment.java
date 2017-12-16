@@ -329,13 +329,16 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
                 coinWallet = result;
         }
         lnlHolding.setVisibility(View.VISIBLE);
-        HoldingValue_Txt.setText(String.format("%.8f", baseWallet.getAvailable().doubleValue()));
+        if (coinWallet == null)
+            HoldingValue_Txt.setText("0");
+        else
+            HoldingValue_Txt.setText(String.format("%.8f", baseWallet.getAvailable().doubleValue()));
         if (baseWallet.getBalance() > 0d)
             rdbBuy.setEnabled(true);
         else
             rdbBuy.setEnabled(false);
 
-        if (coinWallet.getBalance() > 0d)
+        if (coinWallet != null && coinWallet.getBalance() > 0d)
             rdbSell.setEnabled(true);
         else
             rdbSell.setEnabled(false);
@@ -350,8 +353,14 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
 
     @Override
     public void setMax() {
-        edtUnits.setError(null);
-        edtUnits.setText(String.format("%.8f", coinWallet.getBalance()));
+        if (isBuy()) {
+            edtUnits.setText(String.format("%.8f", baseWallet.getBalance().doubleValue()));
+        } else {
+            if (coinWallet == null)
+                edtUnits.setText("0");
+            else
+                edtUnits.setText(String.format("%.8f", coinWallet.getBalance().doubleValue()));
+        }
     }
 
     @Override
@@ -495,7 +504,7 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
 
         String total = edtUnits.getText().toString();
         if (!isBuy()) {
-            if (Double.parseDouble(total) > coinWallet.getBalance()) {
+            if (coinWallet == null || Double.parseDouble(total) > coinWallet.getBalance()) {
                 CustomDialog.showMessagePop(getContext(), "Insufficient balance", null);
                 return null;
             }

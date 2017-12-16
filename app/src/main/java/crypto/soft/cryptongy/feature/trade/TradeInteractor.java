@@ -80,9 +80,9 @@ public class TradeInteractor {
                 if (wallet == null)
                     listner.onFail("Failed to fetch data");
                 else if (wallet.getSuccess().booleanValue()) {
-                    if (wallet.getResult().size() < 2)
-                        listner.onFail("No coin match found");
-                    else
+//                    if (wallet.getResult().size() < 2)
+//                        listner.onFail("No coin match found");
+//                    else
                         listner.onComplete(wallet);
                 } else
                     listner.onFail(wallet.getMessage());

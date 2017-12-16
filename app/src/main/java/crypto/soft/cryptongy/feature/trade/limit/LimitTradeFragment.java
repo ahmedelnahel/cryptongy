@@ -279,7 +279,7 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
             BidvalueInfo_TXT.setText(String.format("%.8f", result.getBid().doubleValue()));
             ASKvalu_TXT.setText(String.format("%.8f", result.getAsk().doubleValue()));
             Highvalue_Txt.setText(String.format("%.8f", result.getHigh().doubleValue()));
-            VolumeValue_Txt.setText(String.format("%.4f",result.getVolume().doubleValue()));
+            VolumeValue_Txt.setText(String.format("%.4f", result.getVolume().doubleValue()));
             LowvalueInfo_TXT.setText(String.format("%.8f", result.getLow().doubleValue()));
         }
     }
@@ -328,13 +328,16 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
                 coinWallet = result;
         }
         lnlHolding.setVisibility(View.VISIBLE);
-        HoldingValue_Txt.setText(String.format("%.4f",coinWallet.getBalance().doubleValue()));
+        if (coinWallet == null)
+            HoldingValue_Txt.setText("0");
+        else
+            HoldingValue_Txt.setText(String.format("%.4f", coinWallet.getBalance().doubleValue()));
         if (baseWallet.getBalance() > 0d)
             rdbBuy.setEnabled(true);
         else
             rdbBuy.setEnabled(false);
 
-        if (coinWallet.getBalance() > 0d)
+        if (coinWallet != null && coinWallet.getBalance() > 0d)
             rdbSell.setEnabled(true);
         else
             rdbSell.setEnabled(false);
@@ -349,16 +352,18 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
 
     @Override
     public void setMax() {
-        if(isBuy())
-        {
+        if (isBuy()) {
             String value = edtValue.getText().toString();
             if (!TextUtils.isEmpty(value)) {
                 double units = baseWallet.getBalance() / Double.valueOf(value);
-                edtUnits.setText(""+units);
+                edtUnits.setText(String.format("%.8f", units));
             }
+        } else {
+            if (coinWallet == null)
+                edtUnits.setText("0");
+            else
+                edtUnits.setText(String.format("%.8f", coinWallet.getBalance().doubleValue()));
         }
-        else
-        edtUnits.setText(coinWallet.getBalance().toString());
     }
 
     @Override
@@ -423,7 +428,8 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
             total = edtUnits.getText().toString();
             result = coinWallet;
         }
-        if (Double.parseDouble(total) <= result.getBalance()) {
+
+        if (result != null && Double.parseDouble(total) <= result.getBalance()) {
             Limit limit = new Limit();
             limit.setMarket(txtVtc.getText().toString());
             limit.setRate(Double.parseDouble(edtValue.getText().toString()));
