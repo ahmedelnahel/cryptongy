@@ -69,7 +69,9 @@ public class CustomArrayAdapter extends BaseAdapter implements Filterable {
         return new Filter() {
             @Override
             protected FilterResults performFiltering(CharSequence charSequence) {
-                String charString = charSequence.toString();
+                String charString = "";
+                if(charSequence != null)
+                 charString = charSequence.toString();
                 List<Result> filteredList = new ArrayList<>();
                 if (charString.isEmpty()) {
                     filteredList = filteredResults;

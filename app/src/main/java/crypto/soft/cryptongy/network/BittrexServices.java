@@ -98,7 +98,7 @@ public class BittrexServices {
         ObjectMapper mapper = new ObjectMapper();
         Ticker ticker = mapper.readValue(tickerStr, Ticker.class);
         ticker.setJson(tickerStr);
-        Log.i("MarketSummary", tickerStr);
+        Log.i("Ticker", tickerStr);
 
         return ticker;
     }

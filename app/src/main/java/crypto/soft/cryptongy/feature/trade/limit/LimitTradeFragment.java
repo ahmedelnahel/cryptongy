@@ -368,8 +368,10 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
         if (isBuy()) {
             String value = edtValue.getText().toString();
             if (!TextUtils.isEmpty(value)) {
-                double units = baseWallet.getBalance() / Double.valueOf(value);
-                edtUnits.setText(String.format("%.8f", units));
+                if (baseWallet.getBalance() > 0.0025) {
+                    double units = (baseWallet.getBalance() - (baseWallet.getBalance() * 0.0025)) / Double.valueOf(value);
+                    edtUnits.setText("" + units);
+                } else edtUnits.setText("0");
             }
         } else {
             if (coinWallet == null)

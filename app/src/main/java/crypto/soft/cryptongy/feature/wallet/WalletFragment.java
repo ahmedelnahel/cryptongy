@@ -150,15 +150,15 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
         spCurrency.setAdapter(spinnerArrayAdapter);
         editCoinSearch = view.findViewById(R.id.editCoinSearch);
 
-        editCoinSearch.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN)
-                    editCoinSearch.setCursorVisible(true);
-                return false;
-            }
-
-        });
+//        editCoinSearch.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                if (event.getAction() == MotionEvent.ACTION_DOWN)
+//                    editCoinSearch.setCursorVisible(true);
+//                return false;
+//            }
+//
+//        });
 
         editCoinSearch.addTextChangedListener(new TextWatcher() {
             @Override
@@ -177,10 +177,10 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
                     return;
                 }
                 filter(editable.toString());
-                if (editable.toString().length() == 0)
-                    editCoinSearch.setCursorVisible(false);
-                else
-                    editCoinSearch.setCursorVisible(true);
+//                if (editable.toString().length() == 0)
+//                    editCoinSearch.setCursorVisible(false);
+//                else
+//                    editCoinSearch.setCursorVisible(true);
 
             }
         });
