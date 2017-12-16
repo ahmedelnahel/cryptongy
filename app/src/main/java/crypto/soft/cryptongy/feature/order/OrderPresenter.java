@@ -107,7 +107,7 @@ public class OrderPresenter<T extends MvpView> extends MvpBasePresenter<T> {
                 }
             };
 
-            Observable.merge(getOpenOrders("", account), getOrderHistory("", account))
+            Observable.merge(getOpenOrders(coinName, account), getOrderHistory(coinName, account))
                     .subscribe(observer);
         } else {
             CustomDialog.showMessagePop(context, context.getString(R.string.noAPI), null);

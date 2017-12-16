@@ -82,6 +82,7 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setHasOptionsMenu(true);
+        Log.d("Coin screen", "coinName " + coinName );
         if (isFirst) {
             isFirst = false;
             presenter.getData(coinName);
@@ -324,6 +325,7 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
     @Override
     public void onClick(View view) {
         int id = view.getId();
+        Log.d("Coin screen sync", "coinName  " + coinName );
         presenter.onClicked(id, coinName);
     }
 }
