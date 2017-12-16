@@ -93,9 +93,9 @@ public class RESTUtil {
 
 //            myURLConnection.setRequestProperty("Content-Type", "application/json");
             String hash = generateHMAC(secret,serviceURL);
-            Log.i("hash " , ""+ hash);
+//            Log.i("hash " , ""+ hash);
             myURLConnection.addRequestProperty ("apisign", hash);
-            Log.i("header " , myURLConnection.getHeaderField("apisign") +" "+ myURLConnection.getRequestProperty("apisign")+ " "+ myURLConnection.getHeaderFields().keySet() +" "+  myURLConnection.getHeaderFields().values());
+//            Log.i("header " , myURLConnection.getHeaderField("apisign") +" "+ myURLConnection.getRequestProperty("apisign")+ " "+ myURLConnection.getHeaderFields().keySet() +" "+  myURLConnection.getHeaderFields().values());
             int responseCode = myURLConnection.getResponseCode();
             Log.i("responseCode " , ""+ responseCode);
             if (responseCode == 200) {
@@ -131,7 +131,7 @@ public class RESTUtil {
             String serviceURL = baseURL + "?apikey=" + key + "&nonce=" + nonce;
             HttpGet request = new HttpGet(serviceURL);
             String hash = generateHMAC(secret,serviceURL);
-            Log.i("hash " , ""+ hash);
+//            Log.i("hash " , ""+ hash);
             request.addHeader("apisign", hash); // Attaches signature as a header
 
             HttpResponse httpResponse = httpclient.execute(request);
@@ -162,7 +162,7 @@ public class RESTUtil {
             }
             HttpGet request = new HttpGet(serviceURL);
             String hash = generateHMAC(secret,serviceURL);
-            Log.i("hash " , ""+ hash);
+//            Log.i("hash " , ""+ hash);
             request.addHeader("apisign", hash); // Attaches signature as a header
 
             HttpResponse httpResponse = httpclient.execute(request);

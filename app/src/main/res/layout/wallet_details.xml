@@ -41,7 +41,7 @@
             <!--android:drawableLeft="@drawable/ic_menu_camera"-->
 
             <EditText
-                android:textCursorDrawable="@null"
+
                 android:drawableLeft="@mipmap/ic_search"
                 android:id="@+id/editCoinSearch"
                 android:layout_width="0dp"

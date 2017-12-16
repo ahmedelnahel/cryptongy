@@ -72,8 +72,8 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
 
         String price, pricedollar = "";
         if(result.getMarketName().contains("USDT-")) {
-            price = new DecimalFormat("#.####").format(result.getLast());
-            pricedollar = "";
+            price = "";
+            pricedollar = "$" + new DecimalFormat("#.####").format(result.getLast());;
         }
         else {
             price = new DecimalFormat("0.00000000").format(result.getLast());
