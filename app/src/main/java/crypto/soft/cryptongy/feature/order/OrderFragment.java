@@ -69,6 +69,12 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter<OrderVi
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+    }
+
+    @Override
     public void setTitle() {
         TextView txtTitle = getActivity().findViewById(R.id.txtTitle);
         txtTitle.setText(R.string.order);

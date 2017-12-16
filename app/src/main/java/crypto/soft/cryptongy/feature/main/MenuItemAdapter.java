@@ -24,10 +24,12 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuIt
     private Context context;
     private List<MenuItem> menuItems;
     private MenuItemClickListener menuItemClickListener;
+    private String selectedFrag;
 
-    public MenuItemAdapter(Context context, List<MenuItem> menuItems) {
+    public MenuItemAdapter(Context context, List<MenuItem> menuItems, String selectedFrag) {
         this.context = context;
         this.menuItems = menuItems;
+        this.selectedFrag = selectedFrag;
     }
 
     @Override
@@ -65,6 +67,10 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuIt
         return (px / context.getResources().getDisplayMetrics().scaledDensity);
     }
 
+    public String getSelectedFrag() {
+        return selectedFrag;
+    }
+
     public static class MenuItemViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.icon)
         ImageView icon;
@@ -97,6 +103,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuIt
                     menuItems.get(i).setSelected(false);
                     if (i == position) {
                         menuItems.get(i).setSelected(true);
+                        selectedFrag = menuItems.get(i).getItemName();
                     }
                     switch (menuItems.get(i).getItemName()) {
                         case "Trade":

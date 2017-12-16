@@ -16,7 +16,7 @@ import io.realm.RealmResults;
  */
 
 public class CoinApplication extends Application {
-    private double usdt_btc;
+    private double usdt_btc=0;
     private double btc_eth;
     private Account readAccount;
     private Account tradeAccount;
