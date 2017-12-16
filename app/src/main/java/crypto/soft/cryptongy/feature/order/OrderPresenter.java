@@ -46,10 +46,10 @@ public class OrderPresenter<T extends MvpView> extends MvpBasePresenter<T> {
         }
     }
 
-    public void onClicked(int id) {
+    public void onClicked(int id, String coinName) {
         switch (id) {
             case R.id.imgSync:
-                getData("");
+                getData(coinName);
                 break;
             case R.id.imgAccSetting:
                 if (context instanceof MainActivity)
