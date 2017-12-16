@@ -103,16 +103,19 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
 
     @Override
     public void setAdapter() {
-        if (data.equalsIgnoreCase("home"))
+        String selectedFrag = null;
+        if (data.equalsIgnoreCase("home")) {
+            selectedFrag = "Home";
             menuItems.add(new MenuItem(R.drawable.ic_home_a, "Home", true));
-        else
+        } else
             menuItems.add(new MenuItem(R.drawable.ic_house, "Home", false));
         menuItems.add(new MenuItem(R.drawable.ic_wallet, "Wallet", false));
         menuItems.add(new MenuItem(R.drawable.ic_orders, "Orders", false));
         menuItems.add(new MenuItem(R.drawable.ic_trade, "Trade", false));
-        if (data.equalsIgnoreCase("Conditional"))
+        if (data.equalsIgnoreCase("Conditional")) {
+            selectedFrag = "Conditional";
             menuItems.add(new MenuItem(R.drawable.ic_portfolio_a, "Conditional", true));
-        else
+        } else
             menuItems.add(new MenuItem(R.drawable.ic_portfolio, "Conditional", false));
         menuItems.add(new MenuItem(R.drawable.ic_alert, "Alert", false));
         menuItems.add(new MenuItem(R.drawable.ic_account, "Accounts", false));
@@ -122,7 +125,7 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
         listMenu.setLayoutManager(linearLayoutManager);
         listMenu.setHasFixedSize(true);
         listMenu.setItemAnimator(new DefaultItemAnimator());
-        menuItemAdapter = new MenuItemAdapter(this, menuItems);
+        menuItemAdapter = new MenuItemAdapter(this, menuItems, selectedFrag);
         listMenu.setAdapter(menuItemAdapter);
         menuItemAdapter.setOnItemClickListener(new MenuItemClickListener() {
             @Override

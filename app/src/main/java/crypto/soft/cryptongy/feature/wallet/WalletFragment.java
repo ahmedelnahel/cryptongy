@@ -1,5 +1,6 @@
 package crypto.soft.cryptongy.feature.wallet;
 
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -67,11 +68,6 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
     }
 
     @Override

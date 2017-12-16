@@ -107,6 +107,8 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
     Result result;
     private View view;
 
+    private boolean isFirst=false;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -157,13 +159,17 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
                 }
             });
         }
+        isFirst=true;
         return view;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getPresenter().loadSummaries();
+        if (isFirst) {
+            isFirst=false;
+            getPresenter().loadSummaries();
+        }
     }
 
     @Override
