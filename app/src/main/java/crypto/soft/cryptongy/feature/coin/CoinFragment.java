@@ -271,7 +271,7 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
         tblMarketTrade.addView(title);
         for (int i = 0; i < marketHistory.getResult().size(); i++) {
             crypto.soft.cryptongy.feature.shared.json.markethistory.Result data = marketHistory.getResult().get(i);
-            View sub = getLayoutInflater().inflate(R.layout.talbe_order_history_sub, null);
+            View sub = getLayoutInflater().inflate(R.layout.talbe_order_history_coin_sub, null);
             OrderHistoryHolder holder = new OrderHistoryHolder(sub);
 
             holder.txtType.setText(String.valueOf(GlobalUtil.formatNumber(data.getTotal().doubleValue(), "0.00000000")));
