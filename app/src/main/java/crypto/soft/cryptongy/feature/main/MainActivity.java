@@ -121,6 +121,7 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
         menuItems.add(new MenuItem(R.drawable.ic_account, "Accounts", false));
         menuItems.add(new MenuItem(R.drawable.ic_bitcoin, "Donate", false));
         menuItems.add(new MenuItem(R.drawable.ic_about, "About Us", false));
+        menuItems.add(new MenuItem(android.R.drawable.ic_delete, "Exit", false));
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         listMenu.setLayoutManager(linearLayoutManager);
         listMenu.setHasFixedSize(true);
@@ -148,6 +149,7 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
         menuItems.add(new MenuItem(R.drawable.ic_accounts_a, "Accounts", true));
         menuItems.add(new MenuItem(R.drawable.ic_bitcoin, "Donate", false));
         menuItems.add(new MenuItem(R.drawable.ic_about, "About Us", false));
+        menuItems.add(new MenuItem(android.R.drawable.ic_delete, "Exit", false));
         menuItemAdapter.notifyDataSetChanged();
     }
 
@@ -155,5 +157,16 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
     public void onDestroy() {
         ProgressDialogFactory.dismiss();
         super.onDestroy();
+    }
+
+    @Override
+    public void onBackPressed() {
+        int count = getSupportFragmentManager().getBackStackEntryCount();
+        if (count > 0)
+            super.onBackPressed();
+        else {
+            if (drawerLayout.isDrawerOpen(Gravity.LEFT))
+                drawerLayout.closeDrawer(Gravity.LEFT);
+        }
     }
 }

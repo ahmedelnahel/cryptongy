@@ -240,6 +240,6 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter<OrderVi
     @Override
     public void onClick(View view) {
         int id = view.getId();
-        presenter.onClicked(id);
+        presenter.onClicked(id,"");
     }
 }
