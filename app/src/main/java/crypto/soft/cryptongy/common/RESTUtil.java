@@ -50,7 +50,7 @@ public class RESTUtil {
             myURLConnection.setRequestMethod("GET");
             myURLConnection.setRequestProperty("Content-Type", "application/json");
             int responseCode = myURLConnection.getResponseCode();
-            Log.i("responseCode " , ""+ responseCode);
+//            Log.i("responseCode " , ""+ responseCode);
             if (responseCode == 200) {
                 // Read response
                 BufferedReader br = new BufferedReader(new InputStreamReader(myURLConnection.getInputStream()));
@@ -62,7 +62,7 @@ public class RESTUtil {
                 br.close();
                 myURLConnection.disconnect();
                 response = jsonString.toString();
-                Log.i("response " , ""+ response);
+//                Log.i("response " , ""+ response);
             }
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -97,7 +97,7 @@ public class RESTUtil {
             myURLConnection.addRequestProperty ("apisign", hash);
 //            Log.i("header " , myURLConnection.getHeaderField("apisign") +" "+ myURLConnection.getRequestProperty("apisign")+ " "+ myURLConnection.getHeaderFields().keySet() +" "+  myURLConnection.getHeaderFields().values());
             int responseCode = myURLConnection.getResponseCode();
-            Log.i("responseCode " , ""+ responseCode);
+//            Log.i("responseCode " , ""+ responseCode);
             if (responseCode == 200) {
                 // Read response
                 BufferedReader br = new BufferedReader(new InputStreamReader(myURLConnection.getInputStream()));
@@ -109,7 +109,7 @@ public class RESTUtil {
                 br.close();
                 myURLConnection.disconnect();
                 response = jsonString.toString();
-                Log.i("response " , ""+ response);
+//                Log.i("response " , ""+ response);
             }
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -138,7 +138,7 @@ public class RESTUtil {
             StringBuffer resultBuffer = getResponse(httpResponse);
 
             response = resultBuffer.toString();
-            Log.i("response " , ""+ response);
+//            Log.i("response " , ""+ response);
         } catch (UnknownHostException | SocketException  e ) {
             e.printStackTrace();
         } catch (ClientProtocolException e) {
@@ -169,7 +169,7 @@ public class RESTUtil {
             StringBuffer resultBuffer = getResponse(httpResponse);
 
             response = resultBuffer.toString();
-            Log.i("response " , ""+ response);
+//            Log.i("response " , ""+ response);
         } catch (UnknownHostException | SocketException  e ) {
             e.printStackTrace();
         } catch (ClientProtocolException e) {
@@ -210,7 +210,7 @@ public class RESTUtil {
 //            result = new String( hex, "ISO-8859-1" );
 
             result = byteArrayToHexString(macData);
-            Log.d("RESTUtil", result);
+//            Log.d("RESTUtil", result);
         }
         catch ( final NoSuchAlgorithmException e )
         {

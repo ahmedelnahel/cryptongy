@@ -148,6 +148,7 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
         coinNmae = (TextView) rootView.findViewById(R.id.vtc_txt);
 
         lowComp_txt = (EditText) rootView.findViewById(R.id.LowValue_ED);
+
         highValueComp_txt = (EditText) rootView.findViewById(R.id.HighValue_ED);
 
         radioGroup = (RadioGroup) rootView.findViewById(R.id.RadioG);
@@ -442,7 +443,8 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
             Highvalue_Txt.setText(String.valueOf(String.format("%.8f", highV)));
             VolumeValue_Txt.setText(String.valueOf(String.format("%.5f", volumeV)));
             LowvalueInfo_TXT.setText(String.valueOf(String.format("%.8f", lowV)));
-
+            lowComp_txt.setText(String.valueOf(String.format("%.8f", lowV)));
+            highValueComp_txt.setText(String.valueOf(String.format("%.8f", highV)));
             Typeface typeFaceCalibri = Typeface.createFromAsset(getContext().getAssets(), "calibri.ttf");
 
             lastValuInfo_TXT.setTypeface(typeFaceCalibri);

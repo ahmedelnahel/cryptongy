@@ -60,7 +60,7 @@ public class OrderPresenter<T extends MvpView> extends MvpBasePresenter<T> {
         }
     }
 
-    public void getData(String coinName) {
+    public void getData(final String coinName) {
         CoinApplication application = (CoinApplication) context.getApplicationContext();
         Account account = application.getReadAccount();
         if (account != null) {
@@ -86,7 +86,7 @@ public class OrderPresenter<T extends MvpView> extends MvpBasePresenter<T> {
                     } else if (o instanceof OrderHistory) {
                         if (getView() != null) {
                             getV().setOrderHistory((OrderHistory) o);
-                            calculateProfit((OrderHistory) o);
+                            calculateProfit((OrderHistory) o, coinName);
                         }
                     }
                 }
@@ -213,49 +213,56 @@ public class OrderPresenter<T extends MvpView> extends MvpBasePresenter<T> {
         });
     }
 
-    protected void calculateProfit(OrderHistory history) {
+    protected void calculateProfit(OrderHistory history, String coinName) {
         if (history == null || history.getResult() == null || history.getResult().size() == 0)
             return;
         double sell = 0d, buy = 0d;
+        double calculation = 0;
         CoinApplication application = (CoinApplication) context.getApplicationContext();
  double btcdollar = application.getUsdt_btc();
   double ethbtc = application.getbtc_eth();
 //        System.out.println("USDT rate " + btcdollar);
 //        System.out.println("ethbtc rate " + ethbtc);
+        int i = 0;
         for (Result data : history.getResult()) {
 
             double rate = 1;
-            if (data.getExchange().contains("USDT-")) {
-                rate = btcdollar;
-//                System.out.println("usdt " + data.getLimit() + " " + data.getPrice() + " " + data.getLimit()*data.getQuantity());
-            }
-            else if (data.getExchange().contains("ETH-"))
-                rate = 1/ethbtc;
-            if (data.getOrderType().toLowerCase().equals("limit_sell") ||
-                    data.getOrderType().toLowerCase().equals("conditional_sell")) {
-                if (data.getLimit() != null) {
-                    if (data.getQuantity() != null)
-                        sell += data.getQuantity().doubleValue() * (data.getLimit().doubleValue()/rate);
+//            if (data.getExchange().contains("USDT-")) {
+//                rate = btcdollar;
+////                System.out.println("usdt " + data.getLimit() + " " + data.getPrice() + " " + data.getLimit()*data.getQuantity());
+//            }
+//            else if (data.getExchange().contains("ETH-"))
+//                rate = 1/ethbtc;
+            if (coinName.isEmpty() || data.getExchange().equals(coinName)) {
+                if (data.getOrderType().toLowerCase().equals("limit_sell") ||
+                        data.getOrderType().toLowerCase().equals("conditional_sell")) {
+                    if (data.getLimit() != null) {
+                        if (data.getQuantity() != null)
+                            sell += data.getPrice();
 
 
+                    }
+                } else if ((data.getOrderType().toLowerCase().equals("limit_buy") ||
+                        data.getOrderType().toLowerCase().equals("conditional_buy"))&& i!=0) {
+                    if (data.getLimit() != null) {
+                        if (data.getQuantity() != null)
+                            buy += data.getPrice();;
+
+
+                    }
                 }
-            } else if (data.getOrderType().toLowerCase().equals("limit_buy") ||
-                    data.getOrderType().toLowerCase().equals("conditional_buy")) {
-                if (data.getLimit() != null) {
-                    if (data.getQuantity() != null)
-                        buy += data.getQuantity().doubleValue() * (data.getLimit().doubleValue()/rate);
-
-
-                }
+                i++;
             }
+             calculation = sell - buy;
+
+
         }
-        double calculation = buy - sell;
-
         if (getView() != null) {
             getV().setCalculation(calculation);
 //            getV().setCalculation(String.valueOf(GlobalUtil.formatNumber(calculation, "#.########") + "฿"),
 //                    "$" + String.valueOf(GlobalUtil.formatNumber(GlobalUtil.convertBtcToUsd(calculation), "#.####")));
         }
+
     }
 
     public OrderView getV() {

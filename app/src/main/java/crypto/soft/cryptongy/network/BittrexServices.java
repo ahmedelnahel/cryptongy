@@ -32,18 +32,25 @@ public class BittrexServices {
     public MarketSummaries getMarketSummaries() throws IOException {
         final String url = "https://bittrex.com/api/v1.1/public/getmarketsummaries";  //"https://www.coinexchange.io/api/v1/getmarkets";
         String marketSummariesStr = new RESTUtil().callREST(url);
-        ObjectMapper mapper = new ObjectMapper();
-        MarketSummaries marketSummaries_ = mapper.readValue(marketSummariesStr, MarketSummaries.class);
-        marketSummaries_.setJson(marketSummariesStr);
-        Log.i("MarketSummaries", marketSummariesStr);
+        MarketSummaries marketSummaries_ = null;
+        if(marketSummariesStr == null) {
+            marketSummaries_ = new MarketSummaries();
+            marketSummaries_.setSuccess(false);
+            marketSummaries_.setMessage("Connection Error");
+        }
+        else {
+            ObjectMapper mapper = new ObjectMapper();
+             marketSummaries_ = mapper.readValue(marketSummariesStr, MarketSummaries.class);
+            marketSummaries_.setJson(marketSummariesStr);
+//        Log.i("MarketSummaries", marketSummariesStr);
 
-        if (marketSummaries_.getSuccess())
-        {
-            HashMap<String, Result> coinsMap = new HashMap<>();
-            for (Result r : marketSummaries_.getResult()) {
-                coinsMap.put(r.getMarketName(), r) ;
+            if (marketSummaries_.getSuccess()) {
+                HashMap<String, Result> coinsMap = new HashMap<>();
+                for (Result r : marketSummaries_.getResult()) {
+                    coinsMap.put(r.getMarketName(), r);
+                }
+                marketSummaries_.setCoinsMap(coinsMap);
             }
-            marketSummaries_.setCoinsMap(coinsMap);
         }
         return marketSummaries_;
     }
@@ -53,18 +60,25 @@ public class BittrexServices {
 
         final String url = "https://bittrex.com/api/v1.1/account/getbalances";
         String walletStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret());
-        ObjectMapper mapper = new ObjectMapper();
-        Wallet wallet = mapper.readValue(walletStr, Wallet.class);
-        wallet.setJson(walletStr);
+        Wallet wallet = null;
+        if(walletStr == null) {
+            wallet = new Wallet();
+            wallet.setSuccess(false);
+            wallet.setMessage("Connection Error");
+        }
+        else {
+            ObjectMapper mapper = new ObjectMapper();
+            wallet = mapper.readValue(walletStr, Wallet.class);
+            wallet.setJson(walletStr);
 //        Log.i("response " , wallet.getSuccess() + wallet.getJson());
-        if (wallet.getSuccess())
-        {
-            HashMap<String, crypto.soft.cryptongy.feature.shared.json.wallet.Result> coinsMap = new HashMap<>();
-            for (crypto.soft.cryptongy.feature.shared.json.wallet.Result r : wallet.getResult()) {
-                if(r.getBalance() != 0)
-                    coinsMap.put(r.getCurrency(), r) ;
+            if (wallet.getSuccess()) {
+                HashMap<String, crypto.soft.cryptongy.feature.shared.json.wallet.Result> coinsMap = new HashMap<>();
+                for (crypto.soft.cryptongy.feature.shared.json.wallet.Result r : wallet.getResult()) {
+                    if (r.getBalance() != 0)
+                        coinsMap.put(r.getCurrency(), r);
+                }
+                wallet.setCoinsMap(coinsMap);
             }
-            wallet.setCoinsMap(coinsMap);
         }
         return wallet;
     }
@@ -72,11 +86,18 @@ public class BittrexServices {
     public MarketSummary getMarketSummary(String market) throws IOException {
         final String url = "https://bittrex.com/api/v1.1/public/getmarketsummary?market="+market;
         String marketSummaryStr = new RESTUtil().callREST(url);
-        ObjectMapper mapper = new ObjectMapper();
-        MarketSummary marketSummary_ = mapper.readValue(marketSummaryStr, MarketSummary.class);
-        marketSummary_.setJson(marketSummaryStr);
-        Log.i("MarketSummary", marketSummaryStr);
-
+        MarketSummary marketSummary_= null;
+        if(marketSummaryStr == null) {
+            marketSummary_ = new MarketSummary();
+            marketSummary_.setSuccess(false);
+            marketSummary_.setMessage("Connection Error");
+        }
+        else {
+            ObjectMapper mapper = new ObjectMapper();
+            marketSummary_ = mapper.readValue(marketSummaryStr, MarketSummary.class);
+            marketSummary_.setJson(marketSummaryStr);
+//        Log.i("MarketSummary", marketSummaryStr);
+        }
         return marketSummary_;
     }
 
@@ -84,21 +105,38 @@ public class BittrexServices {
 
         final String url = "https://bittrex.com/api/v1.1/market/getopenorders";
         String ordersStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret());
-        ObjectMapper mapper = new ObjectMapper();
-        OpenOrder openOrder = mapper.readValue(ordersStr, OpenOrder.class);
-        openOrder.setJson(ordersStr);
+        OpenOrder openOrder = null;
+        if(ordersStr == null) {
+            openOrder = new OpenOrder();
+            openOrder.setSuccess(false);
+            openOrder.setMessage("Connection Error");
+        }
+        else {
+            ObjectMapper mapper = new ObjectMapper();
+            openOrder = mapper.readValue(ordersStr, OpenOrder.class);
+            openOrder.setJson(ordersStr);
 //        Log.i("response " , wallet.getSuccess() + wallet.getJson());
+        }
         return openOrder;
     }
 
 
     public Ticker getTicker(String market) throws IOException {
         final String url = "https://bittrex.com/api/v1.1/public/getticker?market="+market;
+        Ticker ticker = null;
         String tickerStr = new RESTUtil().callREST(url);
-        ObjectMapper mapper = new ObjectMapper();
-        Ticker ticker = mapper.readValue(tickerStr, Ticker.class);
-        ticker.setJson(tickerStr);
-        Log.i("MarketSummary", tickerStr);
+        if(tickerStr == null) {
+            ticker = new Ticker();
+            ticker.setSuccess(false);
+            ticker.setMessage("Connection Error");
+        }
+        else
+        {
+            ObjectMapper mapper = new ObjectMapper();
+            ticker = mapper.readValue(tickerStr, Ticker.class);
+            ticker.setJson(tickerStr);
+        }
+//        Log.i("MarketSummary", tickerStr);
 
         return ticker;
     }
@@ -108,9 +146,17 @@ public class BittrexServices {
 
         final String url = "https://bittrex.com/api/v1.1/account/getorderhistory";
         String ordersStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret());
-        ObjectMapper mapper = new ObjectMapper();
-        OrderHistory orderHistory = mapper.readValue(ordersStr, OrderHistory.class);
-        orderHistory.setJson(ordersStr);
+        OrderHistory orderHistory = null;
+        if(ordersStr == null) {
+            orderHistory = new OrderHistory();
+            orderHistory.setSuccess(false);
+            orderHistory.setMessage("Connection Error");
+        }
+        else {
+            ObjectMapper mapper = new ObjectMapper();
+            orderHistory = mapper.readValue(ordersStr, OrderHistory.class);
+            orderHistory.setJson(ordersStr);
+        }
 //        Log.i("response " , wallet.getSuccess() + wallet.getJson());
         return orderHistory;
     }
@@ -122,9 +168,16 @@ public class BittrexServices {
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("uuid", uuid);
         String cancelStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret(), params);
-        ObjectMapper mapper = new ObjectMapper();
-        Cancel cancel = mapper.readValue(cancelStr, Cancel.class);
-
+        Cancel cancel = null;
+        if(cancelStr == null) {
+            cancel = new Cancel();
+            cancel.setSuccess(false);
+            cancel.setMessage("Connection Error");
+        }
+        else {
+            ObjectMapper mapper = new ObjectMapper();
+            cancel = mapper.readValue(cancelStr, Cancel.class);
+        }
         return cancel;
 
     }
@@ -137,9 +190,16 @@ public class BittrexServices {
         params.put("quantity", quantity);
         params.put("rate", rate);
         String buyLimitStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret(), params);
-        ObjectMapper mapper = new ObjectMapper();
-        LimitOrder limitOrder = mapper.readValue(buyLimitStr, LimitOrder.class);
-
+        LimitOrder limitOrder = null;
+        if(buyLimitStr == null) {
+            limitOrder = new LimitOrder();
+            limitOrder.setSuccess(false);
+            limitOrder.setMessage("Connection Error");
+        }
+        else {
+            ObjectMapper mapper = new ObjectMapper();
+            limitOrder = mapper.readValue(buyLimitStr, LimitOrder.class);
+        }
         return limitOrder;
 
     }
@@ -151,10 +211,17 @@ public class BittrexServices {
         params.put("market", market);
         params.put("quantity", quantity);
         params.put("rate", rate);
-        String buyLimitStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret(), params);
-        ObjectMapper mapper = new ObjectMapper();
-        LimitOrder limitOrder = mapper.readValue(buyLimitStr, LimitOrder.class);
-
+        String sellLimitStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret(), params);
+        LimitOrder limitOrder = null;
+        if(sellLimitStr == null) {
+            limitOrder = new LimitOrder();
+            limitOrder.setSuccess(false);
+            limitOrder.setMessage("Connection Error");
+        }
+        else {
+            ObjectMapper mapper = new ObjectMapper();
+            limitOrder = mapper.readValue(sellLimitStr, LimitOrder.class);
+        }
         return limitOrder;
 
     }
@@ -162,10 +229,17 @@ public class BittrexServices {
     public MarketHistory getMarketHistory(String market) throws IOException {
         final String url = "https://bittrex.com/api/v1.1/public/getmarkethistory?market="+market;
         String mhStr = new RESTUtil().callREST(url);
-        ObjectMapper mapper = new ObjectMapper();
-        MarketHistory mh = mapper.readValue(mhStr, MarketHistory.class);
-
-        Log.i("MarketSummary", mhStr);
+        MarketHistory mh = null;
+        if(mhStr == null) {
+            mh = new MarketHistory();
+            mh.setSuccess(false);
+            mh.setMessage("Connection Error");
+        }
+        else {
+            ObjectMapper mapper = new ObjectMapper();
+            mh = mapper.readValue(mhStr, MarketHistory.class);
+        }
+//        Log.i("MarketSummary", mhStr);
 
         return mh;
     }

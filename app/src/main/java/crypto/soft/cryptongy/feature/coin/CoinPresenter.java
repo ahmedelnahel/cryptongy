@@ -57,7 +57,7 @@ public class CoinPresenter extends OrderPresenter<CoinView> {
                     } else if (o instanceof OrderHistory) {
                         if (getView() != null) {
                             getV().setOrderHistory((OrderHistory) o);
-                            calculateProfit((OrderHistory) o);
+                            calculateProfit((OrderHistory) o, coinName);
                         }
                     } else if (o instanceof MarketSummary) {
                         if (getView() != null)

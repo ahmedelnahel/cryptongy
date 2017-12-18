@@ -24,7 +24,8 @@ public class CoinApplication extends Application {
     private Notification settings;
 
     public Notification getSettings() {
-        return settings;
+
+        return  getNotification();
     }
 
     public void setSettings(Notification settings) {
@@ -90,7 +91,7 @@ public class CoinApplication extends Application {
                 .build();
         Realm.setDefaultConfiguration(realmConfiguration);
         updateAccount();
-        getNotification();
+
         startService();
     }
 
@@ -115,19 +116,19 @@ public class CoinApplication extends Application {
     }
 
 
-    public void getNotification() {
+    public Notification getNotification() {
         Realm realm = Realm.getDefaultInstance();
 
         realm.beginTransaction();
         Notification notificationDb = realm.where(Notification.class).equalTo("id", 0).findFirst();
-        Notification notification;
+        Notification notification = null;
         if (notificationDb == null) {
             notification = new Notification(true, true);
             realm.copyToRealmOrUpdate(notification);
         } else
             notification = realm.copyFromRealm(notificationDb);
         realm.commitTransaction();
-        setSettings(notification);
+       return notification;
     }
 
     public void startService() {

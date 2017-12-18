@@ -345,7 +345,7 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
             HoldingValue_Txt.setText("0");
         else
             HoldingValue_Txt.setText(String.format("%.4f", coinWallet.getBalance().doubleValue()));
-        if (baseWallet.getBalance() > 0d)
+        if (baseWallet.getAvailable() > 0d)
             rdbBuy.setEnabled(true);
         else
             rdbBuy.setEnabled(false);
@@ -360,7 +360,7 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
         else
             btnOk.setEnabled(true);
         String coin = txtVtc.getText().toString().split("-")[0];
-        setAgaints(coin + "-" + BigDecimal.valueOf(baseWallet.getBalance()).toPlainString());
+        setAgaints(coin + "-" + BigDecimal.valueOf(baseWallet.getAvailable()).toPlainString());
     }
 
     @Override
@@ -368,8 +368,8 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
         if (isBuy()) {
             String value = edtValue.getText().toString();
             if (!TextUtils.isEmpty(value)) {
-                if (baseWallet.getBalance() > 0.0025) {
-                    double units = (baseWallet.getBalance() - (baseWallet.getBalance() * 0.0025)) / Double.valueOf(value);
+                if (baseWallet.getAvailable() > 0.0025) {
+                    double units = (baseWallet.getAvailable() - (baseWallet.getAvailable() * 0.0025)) / Double.valueOf(value);
                     edtUnits.setText("" + units);
                 } else edtUnits.setText("0");
             }

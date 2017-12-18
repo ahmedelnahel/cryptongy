@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_toRightOf="@+id/type"
-            android:text="7050"
+            android:text=""
             android:textColor="@android:color/white"
             android:textSize="35dp"
             android:textStyle="bold" />

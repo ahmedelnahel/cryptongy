@@ -212,7 +212,7 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
 
     @Override
     public void onSummaryLoadFailed() {
-        CustomDialog.showMessagePop(getContext(), "Oops! Something went w.", null);
+        CustomDialog.showMessagePop(getContext(), "Connection Error.", null);
         Log.v("Here", "" + "failed");
     }
 

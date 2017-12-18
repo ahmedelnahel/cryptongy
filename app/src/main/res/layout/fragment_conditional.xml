@@ -67,7 +67,7 @@
                 android:orientation="vertical"
                 android:visibility="gone">
 
-                <include layout="@layout/trade_top_layout" />
+                <include layout="@layout/condtrade_top_layout" />
 
                 <include layout="@layout/layout_conditional" />
 

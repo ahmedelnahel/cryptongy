@@ -9,6 +9,7 @@ import crypto.soft.cryptongy.utils.GlobalConstant;
 import crypto.soft.cryptongy.utils.GlobalUtil;
 import io.realm.Realm;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 /**
  * Created by tseringwongelgurung on 12/2/17.
@@ -56,7 +57,7 @@ public class ConditionalInteractor extends TradeInteractor {
         Realm realm = Realm.getDefaultInstance();
 
         realm.beginTransaction();
-        RealmResults<Conditional> conditionalsDb = realm.where(Conditional.class).findAll();
+        RealmResults<Conditional> conditionalsDb = realm.where(Conditional.class).findAllSorted("orderStatus", Sort.DESCENDING);
         List<Conditional> list = new ArrayList<>();
         if (conditionalsDb != null)
             list.addAll(realm.copyFromRealm(conditionalsDb));

@@ -1,8 +1,10 @@
 package crypto.soft.cryptongy.feature.main;
 
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -156,4 +158,18 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
         ProgressDialogFactory.dismiss();
         super.onDestroy();
     }
+
+//    @Override
+//    public void onBackPressed() {
+//        //FragmentManager manager = getSupportFragmentManager();
+//        int count = getFragmentManager().getBackStackEntryCount();
+//
+//        if (count == 0) {
+//            super.onBackPressed();
+//            //additional code
+//        } else {
+//            getFragmentManager().popBackStack();
+//            setTitle();
+//        }
+//    }
 }

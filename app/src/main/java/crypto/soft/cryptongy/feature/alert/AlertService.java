@@ -1,10 +1,14 @@
 package crypto.soft.cryptongy.feature.alert;
 
 import android.app.IntentService;
+
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 
@@ -18,6 +22,7 @@ import crypto.soft.cryptongy.R;
 import crypto.soft.cryptongy.feature.main.MainActivity;
 import crypto.soft.cryptongy.feature.shared.json.ticker.Ticker;
 import crypto.soft.cryptongy.network.BittrexServices;
+import crypto.soft.cryptongy.utils.CoinApplication;
 import crypto.soft.cryptongy.utils.GlobalConstant;
 import crypto.soft.cryptongy.utils.GlobalUtil;
 import io.realm.Realm;
@@ -58,12 +63,12 @@ public class AlertService extends IntentService {
             boolean met = false;
             try {
                 Ticker ticker = Tickerservices.getTicker(coinInfo.getCoinName());
-                if (coinInfo.isHigher() && ticker.getResult().getLast().doubleValue() >= coinInfo.getHighValue().doubleValue() ) {
+                if (coinInfo.isHigher() && ticker.getSuccess() && ticker.getResult().getLast().doubleValue() >= coinInfo.getHighValue().doubleValue() ) {
                     showNotification("Alert", coinInfo.CoinName + " is above " + String.format("%.8f", coinInfo.getHighValue().doubleValue()), GlobalUtil.getUniqueID());
                     met = true;
                 }
 
-                if (coinInfo.isLower() && ticker.getResult().getLast().doubleValue() <= coinInfo.getLowValue().doubleValue() ) {
+                if (coinInfo.isLower()&& ticker.getSuccess() && ticker.getResult().getLast().doubleValue() <= coinInfo.getLowValue().doubleValue() ) {
                     showNotification("Alert", coinInfo.CoinName + " is below " + String.format("%.8f", coinInfo.getLowValue().doubleValue()), GlobalUtil.getUniqueID());
                    met = true;
                 }
@@ -88,20 +93,37 @@ public class AlertService extends IntentService {
 
     private void showNotification(String title, String content, int id) {
 
+
         PendingIntent intent = PendingIntent.getActivity(this, 0,
-                new Intent(this, MainActivity.class), 0);
-        android.app.Notification n = new android.app.Notification.Builder(this)
+                new Intent(this, AlertActivity.class), 0);
+
+        Notification.Builder b = new Notification.Builder(this)
                 .setContentTitle(title)
                 .setContentText(content)
                 .setSmallIcon(R.drawable.ic_notification_icon)
                 .setContentIntent(intent)
-                .setAutoCancel(true)
-                .build();
+                .setAutoCancel(true);
+
 
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
-        notificationManager.notify(id, n);
+        crypto.soft.cryptongy.feature.setting.Notification globalSetting = ((CoinApplication) getApplication()).getSettings();
+        if(globalSetting != null) {
+            if (Boolean.valueOf(globalSetting.isVibrate())) {
+                long[] pattern = {500, 500, 500, 500, 500, 500, 500, 500, 500};
+                b.setVibrate(pattern);
+
+            }
+            if (Boolean.valueOf(globalSetting.isSound())) {
+
+
+                Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                b.setSound(alarmSound);
+
+            }
+        }
+        notificationManager.notify(id, b.build());
     }
 
 //    private void notifiyme(boolean notifyHigh, boolean notifyLow) {

@@ -4,7 +4,9 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.NestedScrollView;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,7 +55,7 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
         ConditionalView, CompoundButton.OnCheckedChangeListener, RadioGroup.OnCheckedChangeListener, View.OnClickListener {
     private View view;
     private NestedScrollView nestedScroll;
-    private TextView txtCoin, txtBtc, txtLevel, txtVtc, txtEmpty, txtMax, txtAgainst;
+    private TextView txtCoin, txtBtc, txtLevel, txtVtc, txtEmpty, txtMax, txtAgainst, txtTotal;
     private ImageView imgSync, imgAccSetting;
     private LinearLayout lnlContainer, lnlHolding;
     private EditText edtUnits;
@@ -83,6 +85,7 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
     private TableLayout tblConditional;
     private boolean isCoinAscend = true;
     private boolean isStatusAscend = true;
+    private TextWatcher unitWatcher;
 
     @Nullable
     @Override
@@ -97,6 +100,7 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
             setTextWatcher();
             setCoinAdapter();
             isFirst = true;
+
         }
         setTitle();
         return view;
@@ -173,7 +177,7 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
         imgAccSetting = view.findViewById(R.id.imgAccSetting);
         txtMax = view.findViewById(R.id.txtMax);
         txtAgainst = view.findViewById(R.id.txtAgainst);
-
+        txtTotal =  view.findViewById(R.id.txtTotal);
         edtUnits = view.findViewById(R.id.edtUnits);
         rdgUnits = view.findViewById(R.id.rdgUnits);
         rdbSell = view.findViewById(R.id.rdbSell);
@@ -267,6 +271,24 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
 
     @Override
     public void setTextWatcher() {
+
+        unitWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                calculateTotal();
+            }
+        };
+        edtUnits.addTextChangedListener(unitWatcher);
     }
 
     @Override
@@ -355,13 +377,13 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
         else
             btnOk.setEnabled(true);
         String coin = txtVtc.getText().toString().split("-")[0];
-        setAgaints(coin + "-" + BigDecimal.valueOf(baseWallet.getBalance()).toPlainString());
+        setAgaints(coin + "-" + BigDecimal.valueOf(baseWallet.getAvailable()).toPlainString());
     }
 
     @Override
     public void setMax() {
         if (isBuy()) {
-            edtUnits.setText(String.format("%.8f", baseWallet.getBalance().doubleValue()));
+            edtUnits.setText(String.format("%.8f", (baseWallet.getBalance().doubleValue()/Double.valueOf(lastValuInfo_TXT.getText().toString()))));
         } else {
             if (coinWallet == null)
                 edtUnits.setText("0");
@@ -377,6 +399,22 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
 
     @Override
     public void calculateTotal() {
+
+
+                try {
+                String str = edtUnits.getText().toString();
+                if (!TextUtils.isEmpty(str)) {
+                    String str2 = lastValuInfo_TXT.getText().toString();
+                    if (!TextUtils.isEmpty(str2)) {
+                        Double total = Double.parseDouble(str) * Double.parseDouble(str2);
+                        txtTotal.setText(String.format("%.8f", total));
+                    }
+                }
+            } catch(NumberFormatException e){
+                e.printStackTrace();
+            }
+
+
     }
 
     @Override
@@ -397,10 +435,12 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
                 edtProfit.setText(BidvalueInfo_TXT.getText().toString());
                 break;
             case R.id.rdbBuy:
+                txtTotal.setText("");
                 chbTrailerLoss.setChecked(false);
                 chbTrailerLoss.setEnabled(false);
                 break;
             case R.id.rdbSell:
+                txtTotal.setText("");
                 chbTrailerLoss.setEnabled(true);
                 break;
         }
@@ -526,7 +566,7 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
             orderType = GlobalConstant.Conditional.TYPE_BUY;
 
         last = Double.parseDouble(lastValuInfo_TXT.getText().toString());
-        against = baseWallet.getBalance();
+        against = baseWallet.getAvailable();
 
         List<Conditional> conditional = new ArrayList<>();
         if (chbLoss.isChecked()) {

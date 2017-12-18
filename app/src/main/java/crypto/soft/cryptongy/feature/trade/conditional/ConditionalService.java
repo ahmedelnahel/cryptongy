@@ -5,6 +5,8 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.annotation.Nullable;
 
@@ -49,7 +51,7 @@ public class ConditionalService extends IntentService {
             for (int i = 0; i < list.size(); i++) {
                 Conditional conditional = list.get(i);
                 Ticker ticker = getTicker(conditional.getOrderCoin());
-                if (conditional.getOrderType().equalsIgnoreCase(GlobalConstant.Conditional.TYPE_BUY)) {
+                if (ticker != null && conditional.getOrderType().equalsIgnoreCase(GlobalConstant.Conditional.TYPE_BUY)) {
                     checkBuy(conditional, ticker.getResult(), account, i);
                 } else {
                     checkSell(conditional, ticker.getResult(), account, i);
@@ -97,18 +99,32 @@ public class ConditionalService extends IntentService {
         intent.setAction("notification");
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
                 intent, 0);
-        Notification n = new Notification.Builder(this)
+        Notification.Builder b = new Notification.Builder(this)
                 .setContentTitle(title)
                 .setContentText(content)
-                .setSmallIcon(R.drawable.about_us_icon)
-                .setContentIntent(pendingIntent)
-                .setAutoCancel(true)
-                .build();
+                .setSmallIcon(R.drawable.ic_notification_icon)
+                .setAutoCancel(true);
+
 
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
-        notificationManager.notify(id, n);
+        crypto.soft.cryptongy.feature.setting.Notification globalSetting = ((CoinApplication) getApplication()).getSettings();
+        if(globalSetting != null) {
+            if (Boolean.valueOf(globalSetting.isVibrate())) {
+                long[] pattern = {500, 500, 500, 500, 500, 500, 500, 500, 500};
+                b.setVibrate(pattern);
+
+            }
+            if (Boolean.valueOf(globalSetting.isSound())) {
+
+
+                Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                b.setSound(alarmSound);
+
+            }
+        }
+        notificationManager.notify(id, b.build());
     }
 
     private void checkSell(Conditional conditional, Result ticker, Account account, final int id) {
@@ -131,22 +147,23 @@ public class ConditionalService extends IntentService {
             } else return;
         } else {
             if (conditional.getStopLossType().equalsIgnoreCase(GlobalConstant.Conditional.TYPE_TRAILER)) {
-                double low = conditional.getLast().doubleValue() - (conditional.getLowCondition().doubleValue() * conditional.getLast().doubleValue());
+                double low = conditional.getLast().doubleValue() - ((conditional.getLowCondition().doubleValue()/100) * conditional.getLast().doubleValue());
                 if (ticker.getLast().doubleValue() <= low)
-                    rate = ticker.getLast().doubleValue() - (ticker.getLast().doubleValue() * conditional.getLowPrice().doubleValue());
+                    rate = ticker.getLast().doubleValue() - (ticker.getLast().doubleValue() * (conditional.getLowPrice().doubleValue()/100));
                 else if (ticker.getLast().doubleValue() > conditional.getLast()) {
                     conditional.setLast(ticker.getLast());
                     updateConditional(conditional);
                     return;
                 }
+                else return;
             } else {
                 double low = conditional.getLowCondition().doubleValue();
                 if (conditional.getConditionType().equalsIgnoreCase(GlobalConstant.Conditional.TYPE_PERCENTAGE))
-                    low = conditional.getLast().doubleValue() - (low * conditional.getLast().doubleValue());
+                    low = conditional.getLast().doubleValue() - ((low/100) * conditional.getLast().doubleValue());
 
                 if (ticker.getLast().doubleValue() <= low) {
                     if (conditional.getPriceType().equalsIgnoreCase(GlobalConstant.Conditional.TYPE_PERCENTAGE))
-                        rate = ticker.getLast().doubleValue() - (ticker.getLast().doubleValue() * conditional.getLowPrice().doubleValue());
+                        rate = ticker.getLast().doubleValue() - (ticker.getLast().doubleValue() * (conditional.getLowPrice().doubleValue()/100));
                     else
                         rate = ticker.getLast().doubleValue() - conditional.getLowPrice().doubleValue();
                 } else return;
@@ -192,7 +209,7 @@ public class ConditionalService extends IntentService {
         } else {
             double low = conditional.getLowCondition().doubleValue();
             if (conditional.getConditionType().equalsIgnoreCase(GlobalConstant.Conditional.TYPE_PERCENTAGE))
-                low = conditional.getLast().doubleValue() - (low * conditional.getLast().doubleValue());
+                low = conditional.getLast().doubleValue() - ((low/100) * conditional.getLast().doubleValue());
 
             if (ticker.getLast().doubleValue() <= low) {
                 if (conditional.getPriceType().equalsIgnoreCase(GlobalConstant.Conditional.TYPE_PERCENTAGE))

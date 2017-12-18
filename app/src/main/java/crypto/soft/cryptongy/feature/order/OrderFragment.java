@@ -2,6 +2,7 @@ package crypto.soft.cryptongy.feature.order;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -242,4 +243,5 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter<OrderVi
         int id = view.getId();
         presenter.onClicked(id, "" );
     }
+
 }
