@@ -14,7 +14,7 @@ import com.hannesdorfmann.mosby.mvp.MvpActivity;
 import crypto.soft.cryptongy.R;
 
 public class SettingActivity extends MvpActivity<SettingView, SettingPresenter> implements SettingView {
-    private ToggleButton tgbSound, tgbVibration;
+        private ToggleButton tgbSound, tgbVibration,tgbAutomaticSync;
     private Notification notification;
 
     @Override
@@ -50,6 +50,7 @@ public class SettingActivity extends MvpActivity<SettingView, SettingPresenter> 
     public void findViews() {
         tgbSound = findViewById(R.id.tgbSound);
         tgbVibration = findViewById(R.id.tgbVibration);
+        tgbAutomaticSync = findViewById(R.id.tgbAutomaticSync);
     }
 
     @Override
@@ -69,6 +70,14 @@ public class SettingActivity extends MvpActivity<SettingView, SettingPresenter> 
                 presenter.updateNotification(notification);
             }
         });
+
+        tgbAutomaticSync.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                notification.setAutomSync(b);
+                presenter.updateNotification(notification);
+            }
+        });
     }
 
     @Override
@@ -76,6 +85,7 @@ public class SettingActivity extends MvpActivity<SettingView, SettingPresenter> 
         this.notification=notification;
         tgbSound.setChecked(notification.isSound());
         tgbVibration.setChecked(notification.isVibrate());
+        tgbAutomaticSync.setChecked(notification.isAutomSync());
     }
 
     @Override

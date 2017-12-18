@@ -84,8 +84,7 @@
                     android:orientation="horizontal"
                     android:layout_marginTop="18dp"
                     android:layout_marginLeft="40dp"
-                    android:layout_marginRight="40dp"
-                    android:layout_marginBottom="18dp">
+                    android:layout_marginRight="40dp">
 
                     <crypto.soft.cryptongy.feature.shared.customView.CalTextView
                         android:layout_width="0dp"
@@ -97,6 +96,33 @@
 
                     <ToggleButton
                         android:id="@+id/tgbSound"
+                        android:layout_width="54dp"
+                        android:layout_height="20dp"
+                        android:background="@drawable/ic_setting_toggle"
+                        android:textOn=""
+                        android:textOff=""/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="18dp"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginRight="40dp"
+                    android:layout_marginBottom="18dp">
+
+                    <crypto.soft.cryptongy.feature.shared.customView.CalTextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/setting_text"
+                        android:text="@string/setting_sync"
+                        android:textColor="@color/setting_text" />
+
+                    <ToggleButton
+                        android:id="@+id/tgbAutomaticSync"
                         android:layout_width="54dp"
                         android:layout_height="20dp"
                         android:background="@drawable/ic_setting_toggle"

@@ -23,7 +23,7 @@ public class SettingInteractor {
         Notification notificationDb = realm.where(Notification.class).equalTo("id", 0).findFirst();
         Notification notification;
         if (notificationDb == null) {
-            notification = new Notification(false, false);
+            notification = new Notification(false, false,false);
             realm.copyToRealmOrUpdate(notification);
         } else
             notification = realm.copyFromRealm(notificationDb);
