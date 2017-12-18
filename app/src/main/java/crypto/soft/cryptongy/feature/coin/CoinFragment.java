@@ -83,10 +83,11 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
         super.onViewCreated(view, savedInstanceState);
         setHasOptionsMenu(true);
 //        Log.d("Coin screen", "coinName " + coinName );
-        if (isFirst) {
-            isFirst = false;
-            presenter.getData(coinName);
-        }
+        double last = 0;
+        if (!lastValuInfo_TXT.getText().toString().isEmpty()) last = Double.valueOf(lastValuInfo_TXT.getText().toString());
+        Log.d("Coin screen", "last " + last );
+        presenter.getData(coinName, last);
+
     }
 
     @Override
@@ -172,7 +173,7 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
             holder.txtType.setText(data.getOrderType());
             holder.txtCoin.setText(data.getExchange());
             holder.txtQuantity.setText(String.valueOf(data.getQuantity()) + "\n" + String.valueOf(data.getQuantityRemaining()));
-            holder.txtRate.setText(String.valueOf(data.getPrice()));
+            holder.txtRate.setText(String.valueOf(data.getLimit()));
             String date = data.getOpened();
             if (!TextUtils.isEmpty(date)) {
                 String[] arr = date.split("T");
@@ -218,9 +219,10 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
             crypto.soft.cryptongy.feature.shared.json.orderhistory.Result data = orderHistory.getResult().get(i);
             View sub = getLayoutInflater().inflate(R.layout.talbe_order_history_sub, null);
             OrderHistoryHolder holder = new OrderHistoryHolder(sub);
+            holder.txtCoin.setText(data.getExchange());
             holder.txtType.setText(data.getOrderType());
             holder.txtQuantity.setText(String.valueOf(data.getQuantity()));
-            holder.txtRate.setText(String.valueOf(data.getPrice()));
+            holder.txtRate.setText(String.valueOf(data.getLimit()));
             String date = data.getClosed();
             if (!TextUtils.isEmpty(date)) {
                 String[] arr = date.split("T");
@@ -275,7 +277,7 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
             View sub = getLayoutInflater().inflate(R.layout.talbe_order_history_sub, null);
             OrderHistoryHolder holder = new OrderHistoryHolder(sub);
 
-            holder.txtType.setText(String.valueOf(GlobalUtil.formatNumber(data.getTotal().doubleValue(), "0.00000000")));
+            holder.txtType.setText(String.valueOf(GlobalUtil.formatNumber(data.getPrice().doubleValue(), "0.00000000")));
             holder.txtQuantity.setText(String.valueOf(data.getQuantity().doubleValue()));
             holder.txtRate.setText(String.valueOf(GlobalUtil.formatNumber(data.getTotal().doubleValue(), "#.####")));
 
@@ -326,6 +328,8 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
     public void onClick(View view) {
         int id = view.getId();
 //        Log.d("Coin screen sync", "coinName  " + coinName );
-        presenter.onClicked(id, coinName);
+        double last = 0;
+        if (!lastValuInfo_TXT.getText().toString().isEmpty()) last = Double.valueOf(lastValuInfo_TXT.getText().toString());
+        presenter.onClicked(id, coinName, last);
     }
 }

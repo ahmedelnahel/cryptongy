@@ -31,7 +31,7 @@ public class CoinPresenter extends OrderPresenter<CoinView> {
     }
 
     @Override
-    public void getData(final String coinName) {
+    public void getData(final String coinName, final double last) {
         CoinApplication application = (CoinApplication) context.getApplicationContext();
         Account account = application.getReadAccount();
         if (account != null) {
@@ -57,7 +57,7 @@ public class CoinPresenter extends OrderPresenter<CoinView> {
                     } else if (o instanceof OrderHistory) {
                         if (getView() != null) {
                             getV().setOrderHistory((OrderHistory) o);
-                            calculateProfit((OrderHistory) o, coinName);
+                            calculateProfit((OrderHistory) o, coinName, last);
                         }
                     } else if (o instanceof MarketSummary) {
                         if (getView() != null)

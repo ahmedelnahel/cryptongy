@@ -46,10 +46,10 @@ public class OrderPresenter<T extends MvpView> extends MvpBasePresenter<T> {
         }
     }
 
-    public void onClicked(int id, String coinName) {
+    public void onClicked(int id, String coinName, double last) {
         switch (id) {
             case R.id.imgSync:
-                getData(coinName);
+                getData(coinName, last);
                 break;
             case R.id.imgAccSetting:
                 if (context instanceof MainActivity)
@@ -60,7 +60,7 @@ public class OrderPresenter<T extends MvpView> extends MvpBasePresenter<T> {
         }
     }
 
-    public void getData(final String coinName) {
+    public void getData(final String coinName, final double last) {
         CoinApplication application = (CoinApplication) context.getApplicationContext();
         Account account = application.getReadAccount();
         if (account != null) {
@@ -86,7 +86,7 @@ public class OrderPresenter<T extends MvpView> extends MvpBasePresenter<T> {
                     } else if (o instanceof OrderHistory) {
                         if (getView() != null) {
                             getV().setOrderHistory((OrderHistory) o);
-                            calculateProfit((OrderHistory) o, coinName);
+                            calculateProfit((OrderHistory) o, coinName, last);
                         }
                     }
                 }
@@ -213,19 +213,22 @@ public class OrderPresenter<T extends MvpView> extends MvpBasePresenter<T> {
         });
     }
 
-    protected void calculateProfit(OrderHistory history, String coinName) {
+    protected void calculateProfit(OrderHistory history, String coinName, double last) {
         if (history == null || history.getResult() == null || history.getResult().size() == 0)
             return;
-        double sell = 0d, buy = 0d;
+        double sell = 0d, buy = 0d, sq= 0d, bq = 0d, limit = 0d;
         double calculation = 0;
         CoinApplication application = (CoinApplication) context.getApplicationContext();
  double btcdollar = application.getUsdt_btc();
   double ethbtc = application.getbtc_eth();
 //        System.out.println("USDT rate " + btcdollar);
 //        System.out.println("ethbtc rate " + ethbtc);
-        int i = 0;
+        int i =0;
         for (Result data : history.getResult()) {
-
+            if (i==0) {
+                limit = data.getLimit();
+                i++;
+            }
             double rate = 1;
 //            if (data.getExchange().contains("USDT-")) {
 //                rate = btcdollar;
@@ -239,21 +242,23 @@ public class OrderPresenter<T extends MvpView> extends MvpBasePresenter<T> {
                     if (data.getLimit() != null) {
                         if (data.getQuantity() != null)
                             sell += data.getPrice();
-
+                            sq += data.getQuantity();
 
                     }
                 } else if ((data.getOrderType().toLowerCase().equals("limit_buy") ||
-                        data.getOrderType().toLowerCase().equals("conditional_buy"))&& i!=0) {
+                        data.getOrderType().toLowerCase().equals("conditional_buy"))) {
                     if (data.getLimit() != null) {
                         if (data.getQuantity() != null)
-                            buy += data.getPrice();;
-
+                            buy += data.getPrice();
+                            bq += data.getQuantity();
 
                     }
                 }
-                i++;
+
             }
-             calculation = sell - buy;
+            double currentHolding =0;
+            if(bq>=sq)currentHolding = (bq-sq)*limit;
+             calculation = sell - buy + currentHolding;
 
 
         }
