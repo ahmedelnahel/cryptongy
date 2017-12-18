@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <integer name="order_limit">3</integer>
+    <integer name="order_limit">10</integer>
     <integer name="service_interval">30000</integer>
     <integer name="coin_order_limit">2</integer>
 </resources>

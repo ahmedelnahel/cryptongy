@@ -304,7 +304,7 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
         if (summary != null) {
             crypto.soft.cryptongy.feature.shared.json.marketsummary.Result result = summary.getResult().get(0);
             lastValuInfo_TXT.setText(String.format("%.8f", result.getLast().doubleValue()));
-            edtProfit.setText(String.format("%.8f", result.getLast().doubleValue()));
+            edtProfit.setText(String.format("%.8f", result.getHigh().doubleValue()));
             BidvalueInfo_TXT.setText(String.format("%.8f", result.getBid().doubleValue()));
             ASKvalu_TXT.setText(String.format("%.8f", result.getAsk().doubleValue()));
             Highvalue_Txt.setText(String.format("%.8f", result.getHigh().doubleValue()));
@@ -425,15 +425,7 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
     @Override
     public void onCheckedChanged(RadioGroup radioGroup, int i) {
         switch (radioGroup.getCheckedRadioButtonId()) {
-            case R.id.rdbLast:
-                edtProfit.setText(lastValuInfo_TXT.getText().toString());
-                break;
-            case R.id.rdbAsk:
-                edtProfit.setText(ASKvalu_TXT.getText().toString());
-                break;
-            case R.id.rdbBid:
-                edtProfit.setText(BidvalueInfo_TXT.getText().toString());
-                break;
+
             case R.id.rdbBuy:
                 txtTotal.setText("");
                 chbTrailerLoss.setChecked(false);
