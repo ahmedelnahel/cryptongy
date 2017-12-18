@@ -4,7 +4,6 @@ package crypto.soft.cryptongy.feature.main;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -153,23 +152,39 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
         menuItemAdapter.notifyDataSetChanged();
     }
 
+    public void notifyMenuHome() {
+        menuItems.clear();
+        menuItems.add(new MenuItem(R.drawable.ic_home_a, "Home", true));
+        menuItems.add(new MenuItem(R.drawable.ic_wallet, "Wallet", false));
+        menuItems.add(new MenuItem(R.drawable.ic_orders, "Orders", false));
+        menuItems.add(new MenuItem(R.drawable.ic_trade, "Trade", false));
+        menuItems.add(new MenuItem(R.drawable.ic_portfolio, "Conditional", false));
+        menuItems.add(new MenuItem(R.drawable.ic_alert, "Alert", false));
+        menuItems.add(new MenuItem(R.drawable.ic_account, "Accounts", false));
+        menuItems.add(new MenuItem(R.drawable.ic_bitcoin, "Donate", false));
+        menuItems.add(new MenuItem(R.drawable.ic_about, "About Us", false));
+        menuItemAdapter.notifyDataSetChanged();
+    }
+
     @Override
     public void onDestroy() {
         ProgressDialogFactory.dismiss();
         super.onDestroy();
     }
 
-//    @Override
-//    public void onBackPressed() {
-//        //FragmentManager manager = getSupportFragmentManager();
-//        int count = getFragmentManager().getBackStackEntryCount();
-//
-//        if (count == 0) {
-//            super.onBackPressed();
-//            //additional code
-//        } else {
-//            getFragmentManager().popBackStack();
-//            setTitle();
-//        }
-//    }
+    @Override
+    public void onBackPressed() {
+        int count = getFragmentManager().getBackStackEntryCount();
+
+        if (count > 0) {
+            super.onBackPressed();
+        } else {
+            if (drawerLayout.isDrawerOpen(Gravity.LEFT))
+                drawerLayout.closeDrawer(Gravity.LEFT);
+            else {
+                presenter.onItemClicked("Home");
+                notifyMenuHome();
+            }
+        }
+    }
 }
