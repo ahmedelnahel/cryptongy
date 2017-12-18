@@ -5,12 +5,13 @@ import com.hannesdorfmann.mosby.mvp.MvpView;
 import crypto.soft.cryptongy.feature.shared.json.market.MarketSummaries;
 import crypto.soft.cryptongy.feature.shared.json.marketsummary.MarketSummary;
 import crypto.soft.cryptongy.feature.shared.json.wallet.Wallet;
+import crypto.soft.cryptongy.feature.shared.ticker.TickerView;
 
 /**
  * Created by tseringwongelgurung on 11/28/17.
  */
 
-public interface TradeView extends MvpView {
+public interface TradeView extends TickerView {
     void setTitle();
 
     String getCoin();

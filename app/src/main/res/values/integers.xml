@@ -3,5 +3,5 @@
     <integer name="order_limit">3</integer>
     <integer name="service_interval">30000</integer>
     <integer name="coin_order_limit">2</integer>
-    <integer name="sync_interval">30000</integer>
+    <integer name="sync_interval">3000</integer>
 </resources>
