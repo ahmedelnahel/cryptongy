@@ -3,6 +3,7 @@ package crypto.soft.cryptongy.feature.main;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
@@ -64,6 +65,9 @@ public class MainPresenter extends MvpBasePresenter<MainView> {
                 break;
             case "About Us":
                 context.startActivity(new Intent(context, AboutUsActivity.class));
+                break;
+            case "Exit":
+                ((AppCompatActivity)context).finish();
                 break;
         }
     }
