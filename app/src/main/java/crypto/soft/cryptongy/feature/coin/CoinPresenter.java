@@ -122,6 +122,7 @@ public class CoinPresenter extends OrderPresenter<CoinView> {
                 coinInteractor.getMarketSummary(coinName, new OnFinishListner<MarketSummary>() {
                     @Override
                     public void onComplete(MarketSummary result) {
+                        startTicker(coinName);
                         e.onNext(result);
                         e.onComplete();
                     }
