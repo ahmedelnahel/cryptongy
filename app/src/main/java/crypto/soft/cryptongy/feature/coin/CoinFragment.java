@@ -85,10 +85,9 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
         super.onViewCreated(view, savedInstanceState);
         setHasOptionsMenu(true);
 //        Log.d("Coin screen", "coinName " + coinName );
-        if (isFirst) {
-            isFirst = false;
-            presenter.getData(coinName);
-        }
+        double last = 0;
+        presenter.getData(coinName);
+
     }
 
     @Override
@@ -146,9 +145,24 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
 
     @Override
     public void setCalculation(double calculation) {
-        double priceInDollar = ((CoinApplication) getActivity().getApplication()).getUsdt_btc();
-        txtUsd.setText( "$" + String.valueOf(GlobalUtil.formatNumber(priceInDollar*calculation, "#.####")));
-        txtBtc.setText(String.valueOf(GlobalUtil.formatNumber(calculation, "0.00000000") + "฿"));
+        double priceInDollar = 1.0;
+        String syumpol = "";
+        if(!coinName.contains("USDT-"))
+        {
+            priceInDollar = ((CoinApplication) getActivity().getApplication()).getUsdt_btc();
+            syumpol = "฿";
+
+        }
+        double ethinbtc = 1.0;
+        if(coinName.contains("ETH-"))
+        {
+            ethinbtc = ((CoinApplication) getActivity().getApplication()).getbtc_eth();
+            syumpol = "Ξ";
+        }
+        Log.d("Profit ", "Coin Name " + priceInDollar+ " eth " + ethinbtc + " calculation " + calculation  );
+        txtUsd.setText( "$" + String.valueOf(GlobalUtil.formatNumber(priceInDollar*ethinbtc*calculation, "#.####")));
+
+        txtBtc.setText(String.valueOf(GlobalUtil.formatNumber(calculation, "0.00000000"))+ syumpol);
     }
 
     @Override
@@ -174,7 +188,7 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
             holder.txtType.setText(data.getOrderType());
             holder.txtCoin.setText(data.getExchange());
             holder.txtQuantity.setText(String.valueOf(data.getQuantity()) + "\n" + String.valueOf(data.getQuantityRemaining()));
-            holder.txtRate.setText(String.valueOf(data.getPrice()));
+            holder.txtRate.setText(String.valueOf(data.getLimit()));
             String date = data.getOpened();
             if (!TextUtils.isEmpty(date)) {
                 String[] arr = date.split("T");
@@ -220,9 +234,10 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
             crypto.soft.cryptongy.feature.shared.json.orderhistory.Result data = orderHistory.getResult().get(i);
             View sub = getLayoutInflater().inflate(R.layout.talbe_order_history_sub, null);
             OrderHistoryHolder holder = new OrderHistoryHolder(sub);
+            holder.txtCoin.setText(data.getExchange());
             holder.txtType.setText(data.getOrderType());
             holder.txtQuantity.setText(String.valueOf(data.getQuantity()));
-            holder.txtRate.setText(String.valueOf(data.getPrice()));
+            holder.txtRate.setText(String.valueOf(data.getLimit()));
             String date = data.getClosed();
             if (!TextUtils.isEmpty(date)) {
                 String[] arr = date.split("T");
@@ -277,7 +292,7 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
             View sub = getLayoutInflater().inflate(R.layout.talbe_order_history_coin_sub, null);
             OrderHistoryHolder holder = new OrderHistoryHolder(sub);
 
-            holder.txtType.setText(String.valueOf(GlobalUtil.formatNumber(data.getTotal().doubleValue(), "0.00000000")));
+            holder.txtType.setText(String.valueOf(GlobalUtil.formatNumber(data.getPrice().doubleValue(), "0.00000000")));
             holder.txtQuantity.setText(String.valueOf(data.getQuantity().doubleValue()));
             holder.txtRate.setText(String.valueOf(GlobalUtil.formatNumber(data.getTotal().doubleValue(), "#.####")));
 

@@ -34,6 +34,7 @@ public class CoinPresenter extends OrderPresenter<CoinView> {
     public void getData(final String coinName) {
         CoinApplication application = (CoinApplication) context.getApplicationContext();
         Account account = application.getReadAccount();
+
         if (account != null) {
             if (getView() != null) {
                 getV().showLoading(context.getString(R.string.fetch_msg));
@@ -42,7 +43,8 @@ public class CoinPresenter extends OrderPresenter<CoinView> {
 
             Observer observer = new Observer() {
                 private int count = 4;
-
+                OrderHistory orderhistory;
+                double last = 0;
                 @Override
                 public void onSubscribe(Disposable d) {
                     count = 4;
@@ -54,14 +56,16 @@ public class CoinPresenter extends OrderPresenter<CoinView> {
                     if (o instanceof OpenOrder) {
                         if (getView() != null)
                             getV().setOpenOrders((OpenOrder) o);
-                    } else if (o instanceof OrderHistory) {
-                        if (getView() != null) {
-                            getV().setOrderHistory((OrderHistory) o);
-                            calculateProfit((OrderHistory) o, coinName);
-                        }
                     } else if (o instanceof MarketSummary) {
                         if (getView() != null)
                             getView().setMarketSummary((MarketSummary) o);
+                        if( ((MarketSummary) o).getSuccess())
+                            last = ((MarketSummary) o).getResult().get(0).getLast();
+                    } else if (o instanceof OrderHistory) {
+                        if (getView() != null) {
+                            getV().setOrderHistory((OrderHistory) o);
+                            orderhistory = (OrderHistory) o;
+                        }
                     } else if (o instanceof MarketHistory) {
                         if (getView() != null)
                             getView().setMarketTrade((MarketHistory) o);
@@ -80,6 +84,7 @@ public class CoinPresenter extends OrderPresenter<CoinView> {
                             getV().showEmptyView();
                         } else
                             getView().hideEmptyView();
+                        calculateProfit(orderhistory, coinName, last);
                     }
                 }
             };
