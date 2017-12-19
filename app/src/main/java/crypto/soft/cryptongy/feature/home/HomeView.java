@@ -14,7 +14,7 @@ import crypto.soft.cryptongy.feature.shared.json.market.Result;
 public interface HomeView extends MvpView {
     void initRecycler();
 
-    void setAdapter(List<Result> results);
+    void setAdapter(List<Result> results,List<Integer> colorlist);
 
     void onSummaryDataLoad(MarketSummaries marketSummaries);
 
