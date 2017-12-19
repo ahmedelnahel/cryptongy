@@ -482,4 +482,10 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
     public void resetView() {
         new TickerV().reset(ContextCompat.getColor(getContext(),R.color.setting_text),lastValuInfo_TXT, ASKvalu_TXT, BidvalueInfo_TXT);
     }
+
+    @Override
+    public void onDestroy() {
+        presenter.stopTimer();
+        super.onDestroy();
+    }
 }

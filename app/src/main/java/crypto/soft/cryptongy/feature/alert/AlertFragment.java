@@ -477,4 +477,10 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
             presenter.startTicker(inputCoin.getText().toString());
         }
     }
+
+    @Override
+    public void onDestroy() {
+        presenter.stopTimer();
+        super.onDestroy();
+    }
 }

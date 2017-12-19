@@ -29,7 +29,6 @@ import crypto.soft.cryptongy.feature.shared.json.openorder.OpenOrder;
 import crypto.soft.cryptongy.feature.shared.json.openorder.Result;
 import crypto.soft.cryptongy.feature.shared.json.orderhistory.OrderHistory;
 import crypto.soft.cryptongy.feature.shared.json.ticker.Ticker;
-import crypto.soft.cryptongy.feature.shared.module.Account;
 import crypto.soft.cryptongy.utils.CoinApplication;
 import crypto.soft.cryptongy.utils.GlobalUtil;
 import crypto.soft.cryptongy.utils.HideKeyboard;
@@ -45,7 +44,7 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
     private View view;
     private TableLayout tblOpenOrders, tblOrderHistory, tblMarketTrade;
     private LinearLayout lnlContainer;
-    private TextView txtLevel, txtOpenOrder, txtOrderHistory, txtEmpty, txtBtc, txtUsd, txtMarket, txtVtc,txtProfit;
+    private TextView txtLevel, txtOpenOrder, txtOrderHistory, txtEmpty, txtBtc, txtUsd, txtMarket, txtVtc, txtProfit;
     private ImageView imgSync, imgAccSetting;
 
     private HorizontalScrollView scrollView;
@@ -67,14 +66,16 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
         coinName = getArguments().getString("COIN_NAME", "");
         CoinName.coinName = coinName;
         setTitle();
-       // hideTotal();
+        // hideTotal();
         return view;
     }
+
     public void hideTotal() {
         txtBtc.setVisibility(View.GONE);
         txtUsd.setVisibility(View.GONE);
         txtProfit.setVisibility(View.GONE);
     }
+
     @Override
     public CoinPresenter createPresenter() {
         return new CoinPresenter(getContext());
@@ -147,22 +148,20 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
     public void setCalculation(double calculation) {
         double priceInDollar = 1.0;
         String syumpol = "";
-        if(!coinName.contains("USDT-"))
-        {
+        if (!coinName.contains("USDT-")) {
             priceInDollar = ((CoinApplication) getActivity().getApplication()).getUsdt_btc();
             syumpol = "฿";
 
         }
         double ethinbtc = 1.0;
-        if(coinName.contains("ETH-"))
-        {
+        if (coinName.contains("ETH-")) {
             ethinbtc = ((CoinApplication) getActivity().getApplication()).getbtc_eth();
             syumpol = "Ξ";
         }
-        Log.d("Profit ", "Coin Name " + priceInDollar+ " eth " + ethinbtc + " calculation " + calculation  );
-        txtUsd.setText( "$" + String.valueOf(GlobalUtil.formatNumber(priceInDollar*ethinbtc*calculation, "#.####")));
+        Log.d("Profit ", "Coin Name " + priceInDollar + " eth " + ethinbtc + " calculation " + calculation);
+        txtUsd.setText("$" + String.valueOf(GlobalUtil.formatNumber(priceInDollar * ethinbtc * calculation, "#.####")));
 
-        txtBtc.setText(String.valueOf(GlobalUtil.formatNumber(calculation, "0.00000000"))+ syumpol);
+        txtBtc.setText(String.valueOf(GlobalUtil.formatNumber(calculation, "0.00000000")) + syumpol);
     }
 
     @Override
@@ -208,7 +207,7 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
                 @Override
                 public void onClick(View view) {
                     final CoinApplication application = (CoinApplication) getActivity().getApplicationContext();
-                    presenter.cancleOrder(coinName, data.getOrderUuid(), application.getReadAccount() );
+                    presenter.cancleOrder(coinName, data.getOrderUuid(), application.getReadAccount());
                 }
             });
 
@@ -292,7 +291,7 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
             View sub = getLayoutInflater().inflate(R.layout.talbe_order_history_coin_sub, null);
             OrderHistoryHolder holder = new OrderHistoryHolder(sub);
 
-            holder.txtType.setText(String.valueOf(GlobalUtil.formatNumber(data.getPrice().doubleValue(), "0.00000000")));
+            holder.txtType.setText(String.format("%.8f", data.getPrice().doubleValue()));
             holder.txtQuantity.setText(String.valueOf(data.getQuantity().doubleValue()));
             holder.txtRate.setText(String.valueOf(GlobalUtil.formatNumber(data.getTotal().doubleValue(), "#.####")));
 
@@ -353,6 +352,12 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
 
     @Override
     public void resetView() {
-        new TickerV().reset(ContextCompat.getColor(getContext(),R.color.setting_text),lastValuInfo_TXT, ASKvalu_TXT, BidvalueInfo_TXT);
+        new TickerV().reset(ContextCompat.getColor(getContext(), R.color.setting_text), lastValuInfo_TXT, ASKvalu_TXT, BidvalueInfo_TXT);
+    }
+
+    @Override
+    public void onDestroy() {
+        presenter.stopTimer();
+        super.onDestroy();
     }
 }
