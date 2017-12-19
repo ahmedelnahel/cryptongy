@@ -13,14 +13,16 @@ public class Notification extends RealmObject {
     private boolean vibrate;
     private boolean sound;
     private boolean automSync;
+    private int syncInterval;
 
     public Notification() {
     }
 
-    public Notification(boolean vibrate, boolean sound, boolean automSync) {
+    public Notification(boolean vibrate, boolean sound, boolean automSync, int syncInterval) {
         this.vibrate = vibrate;
         this.sound = sound;
         this.automSync = automSync;
+        this.syncInterval = syncInterval;
     }
 
     public boolean isVibrate() {
@@ -45,5 +47,13 @@ public class Notification extends RealmObject {
 
     public void setAutomSync(boolean automSync) {
         this.automSync = automSync;
+    }
+
+    public int getSyncInterval() {
+        return syncInterval;
+    }
+
+    public void setSyncInterval(int syncInterval) {
+        this.syncInterval = syncInterval;
     }
 }

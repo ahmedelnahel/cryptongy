@@ -16,6 +16,8 @@ import crypto.soft.cryptongy.feature.shared.json.ticker.Ticker;
 public interface TickerView extends MvpView {
     void setTicker(Ticker ticker);
 
+    void resetView();
+
     class TickerV {
         public void setData(Context context, Ticker ticker, TextView txtLast, TextView txtAsk, TextView txtBid) {
             if (ticker != null && ticker.getResult() != null) {
@@ -48,6 +50,13 @@ public interface TickerView extends MvpView {
                         txtBid.setTextColor(ContextCompat.getColor(context, R.color.color_red));
                 }
             }
+        }
+
+
+        public void reset(int color, TextView txtLast, TextView txtAsk, TextView txtBid) {
+            txtLast.setTextColor(color);
+            txtAsk.setTextColor(color);
+            txtBid.setTextColor(color);
         }
     }
 }

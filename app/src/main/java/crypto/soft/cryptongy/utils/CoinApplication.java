@@ -16,7 +16,7 @@ import io.realm.RealmResults;
  */
 
 public class CoinApplication extends Application {
-    private double usdt_btc=0;
+    private double usdt_btc = 0;
     private double btc_eth;
     private Account readAccount;
     private Account tradeAccount;
@@ -25,7 +25,7 @@ public class CoinApplication extends Application {
 
     public Notification getSettings() {
 
-        return  getNotification();
+        return getNotification();
     }
 
     public void setSettings(Notification settings) {
@@ -123,12 +123,12 @@ public class CoinApplication extends Application {
         Notification notificationDb = realm.where(Notification.class).equalTo("id", 0).findFirst();
         Notification notification = null;
         if (notificationDb == null) {
-            notification = new Notification(true, true,true);
+            notification = new Notification(true, true, true, 30);
             realm.copyToRealmOrUpdate(notification);
         } else
             notification = realm.copyFromRealm(notificationDb);
         realm.commitTransaction();
-       return notification;
+        return notification;
     }
 
     public void startService() {

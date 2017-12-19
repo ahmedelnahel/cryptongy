@@ -4,6 +4,7 @@ import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -475,5 +476,10 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
     @Override
     public void setTicker(Ticker ticker) {
         new TickerV().setData(getContext(), ticker, lastValuInfo_TXT, ASKvalu_TXT, BidvalueInfo_TXT);
+    }
+
+    @Override
+    public void resetView() {
+        new TickerV().reset(ContextCompat.getColor(getContext(),R.color.setting_text),lastValuInfo_TXT, ASKvalu_TXT, BidvalueInfo_TXT);
     }
 }

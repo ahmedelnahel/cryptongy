@@ -30,8 +30,9 @@ public class TickerPresenter<T extends TickerView> extends MvpBasePresenter<T> {
     public void startTicker(String coinName) {
         Notification notification = ((CoinApplication) context.getApplicationContext()).getNotification();
         if (notification.isAutomSync()) {
-            int interval = context.getResources().getInteger(R.integer.sync_interval);
-            timer.scheduleAtFixedRate(new TickerTimer(coinName), interval, interval);
+            int timerInterval=notification.getSyncInterval()*1000;
+            timer.scheduleAtFixedRate(new TickerTimer(coinName), timerInterval,
+                    timerInterval);
         }
     }
 

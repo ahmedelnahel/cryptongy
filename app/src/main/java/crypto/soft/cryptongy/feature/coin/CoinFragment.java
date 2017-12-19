@@ -2,6 +2,7 @@ package crypto.soft.cryptongy.feature.coin;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -273,7 +274,7 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
         tblMarketTrade.addView(title);
         for (int i = 0; i < marketHistory.getResult().size(); i++) {
             crypto.soft.cryptongy.feature.shared.json.markethistory.Result data = marketHistory.getResult().get(i);
-            View sub = getLayoutInflater().inflate(R.layout.talbe_order_history_sub, null);
+            View sub = getLayoutInflater().inflate(R.layout.talbe_order_history_coin_sub, null);
             OrderHistoryHolder holder = new OrderHistoryHolder(sub);
 
             holder.txtType.setText(String.valueOf(GlobalUtil.formatNumber(data.getTotal().doubleValue(), "0.00000000")));
@@ -333,5 +334,10 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
     @Override
     public void setTicker(Ticker ticker) {
         new TickerV().setData(getContext(), ticker, lastValuInfo_TXT, ASKvalu_TXT, BidvalueInfo_TXT);
+    }
+
+    @Override
+    public void resetView() {
+        new TickerV().reset(ContextCompat.getColor(getContext(),R.color.setting_text),lastValuInfo_TXT, ASKvalu_TXT, BidvalueInfo_TXT);
     }
 }

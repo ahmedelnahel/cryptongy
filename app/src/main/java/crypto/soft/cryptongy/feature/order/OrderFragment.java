@@ -249,4 +249,9 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter<OrderVi
     public void setTicker(Ticker ticker) {
         //ignore in this class
     }
+
+    @Override
+    public void resetView() {
+        //ignore in this class
+    }
 }

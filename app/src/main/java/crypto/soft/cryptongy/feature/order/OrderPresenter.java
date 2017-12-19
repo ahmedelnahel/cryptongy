@@ -65,6 +65,7 @@ public class OrderPresenter<T extends MvpView & TickerView> extends TickerPresen
         Account account = application.getReadAccount();
         if (account != null) {
             if (getView() != null) {
+                getV().resetView();
                 getV().showLoading(context.getString(R.string.fetch_msg));
                 getV().setLevel(account.getLabel());
             }

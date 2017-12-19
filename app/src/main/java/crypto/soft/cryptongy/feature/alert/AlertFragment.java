@@ -11,6 +11,7 @@ import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -164,6 +165,7 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
     }
 
     private void getCoins() {
+        resetView();
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
                 R.array.coin_array, R.layout.drop_down_text);
         adapter.setDropDownViewResource(R.layout.drop_down_text);
@@ -369,6 +371,11 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
     @Override
     public void setTicker(Ticker ticker) {
         new TickerV().setData(getContext(), ticker, lastValuInfo_TXT, ASKvalu_TXT, BidvalueInfo_TXT);
+    }
+
+    @Override
+    public void resetView() {
+        new TickerV().reset(ContextCompat.getColor(getContext(),R.color.setting_text),lastValuInfo_TXT, ASKvalu_TXT, BidvalueInfo_TXT);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)

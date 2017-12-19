@@ -56,6 +56,7 @@ public class TradePresenter<T extends TradeView> extends TickerPresenter<T> {
         CoinApplication application = (CoinApplication) context.getApplicationContext();
         if (application.getTradeAccount() != null) {
             if (getView() != null) {
+                getView().resetView();
                 getView().showLoading(context.getString(R.string.fetch_msg));
                 getView().setLevel(application.getTradeAccount().getLabel());
             }
@@ -162,8 +163,10 @@ public class TradePresenter<T extends TradeView> extends TickerPresenter<T> {
     }
 
     public void getData(String marketName) {
-        if (getView() != null)
+        if (getView() != null) {
             getView().showLoading(context.getString(R.string.fetch_msg));
+            getView().resetView();
+        }
         Observer observer = new Observer() {
 
             @Override

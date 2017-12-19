@@ -14,4 +14,6 @@ public interface SettingView extends MvpView {
     void setListner();
 
     void setNotification(Notification notification);
+
+    void intervalTextwatcher();
 }
