@@ -66,7 +66,7 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter<OrderVi
         super.onViewCreated(view, savedInstanceState);
         if (isFirst) {
             isFirst = false;
-            presenter.getData("",0);
+            presenter.getData("");
         }
     }
 
@@ -242,7 +242,7 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter<OrderVi
     @Override
     public void onClick(View view) {
         int id = view.getId();
-        presenter.onClicked(id, "",0 );
+        presenter.onClicked(id, "" );
     }
 
     @Override

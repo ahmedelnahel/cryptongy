@@ -85,9 +85,7 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
         setHasOptionsMenu(true);
 //        Log.d("Coin screen", "coinName " + coinName );
         double last = 0;
-        if (!lastValuInfo_TXT.getText().toString().isEmpty()) last = Double.valueOf(lastValuInfo_TXT.getText().toString());
-        Log.d("Coin screen", "last " + last );
-        presenter.getData(coinName, last);
+        presenter.getData(coinName);
 
     }
 
@@ -146,9 +144,24 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
 
     @Override
     public void setCalculation(double calculation) {
-        double priceInDollar = ((CoinApplication) getActivity().getApplication()).getUsdt_btc();
-        txtUsd.setText( "$" + String.valueOf(GlobalUtil.formatNumber(priceInDollar*calculation, "#.####")));
-        txtBtc.setText(String.valueOf(GlobalUtil.formatNumber(calculation, "0.00000000") + "฿"));
+        double priceInDollar = 1.0;
+        String syumpol = "";
+        if(!coinName.contains("USDT-"))
+        {
+            priceInDollar = ((CoinApplication) getActivity().getApplication()).getUsdt_btc();
+            syumpol = "฿";
+
+        }
+        double ethinbtc = 1.0;
+        if(coinName.contains("ETH-"))
+        {
+            ethinbtc = ((CoinApplication) getActivity().getApplication()).getbtc_eth();
+            syumpol = "Ξ";
+        }
+        Log.d("Profit ", "Coin Name " + priceInDollar+ " eth " + ethinbtc + " calculation " + calculation  );
+        txtUsd.setText( "$" + String.valueOf(GlobalUtil.formatNumber(priceInDollar*ethinbtc*calculation, "#.####")));
+
+        txtBtc.setText(String.valueOf(GlobalUtil.formatNumber(calculation, "0.00000000"))+ syumpol);
     }
 
     @Override
@@ -329,9 +342,7 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
     public void onClick(View view) {
         int id = view.getId();
 //        Log.d("Coin screen sync", "coinName  " + coinName );
-        double last = 0;
-        if (!lastValuInfo_TXT.getText().toString().isEmpty()) last = Double.valueOf(lastValuInfo_TXT.getText().toString());
-        presenter.onClicked(id, coinName, last);
+        presenter.onClicked(id, coinName);
     }
 
     @Override
