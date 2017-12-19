@@ -360,4 +360,10 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
                 break;
         }
     }
+
+    @Override
+    public void onDestroy() {
+        presenter.stopTimer();
+        super.onDestroy();
+    }
 }

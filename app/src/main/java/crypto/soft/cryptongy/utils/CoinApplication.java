@@ -123,7 +123,7 @@ public class CoinApplication extends Application {
         Notification notificationDb = realm.where(Notification.class).equalTo("id", 0).findFirst();
         Notification notification = null;
         if (notificationDb == null) {
-            notification = new Notification(true, true, true, 30);
+            notification = new Notification(true, true, true, 15);
             realm.copyToRealmOrUpdate(notification);
         } else
             notification = realm.copyFromRealm(notificationDb);

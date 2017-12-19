@@ -1,6 +1,7 @@
 package crypto.soft.cryptongy.feature.home;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
@@ -21,7 +22,7 @@ import crypto.soft.cryptongy.utils.CoinApplication;
  */
 
 public class HomePresenter extends MvpBasePresenter<HomeView> implements OnMultiFinishListner<List<Result>, MarketSummaries> {
-    private static Timer timer = new Timer();
+    private static Timer timer;
     private HomeInteractor homeInteractor;
     private Context context;
     private List<Result> prevResults = new ArrayList<>();
@@ -40,7 +41,7 @@ public class HomePresenter extends MvpBasePresenter<HomeView> implements OnMulti
     @Override
     public void onComplete(List<Result> results, MarketSummaries marketSummaries) {
         if (getView() != null) {
-            getView().setAdapter(results,getColors(results));
+            getView().setAdapter(results, getColors(results));
             prevResults = results;
             getView().onSummaryDataLoad(marketSummaries);
             startTimer();
@@ -55,10 +56,16 @@ public class HomePresenter extends MvpBasePresenter<HomeView> implements OnMulti
         }
     }
 
+    public void stopTimer() {
+        if (timer != null)
+            timer.cancel();
+    }
+
     public void startTimer() {
         Notification notification = ((CoinApplication) context.getApplicationContext()).getNotification();
         if (notification.isAutomSync()) {
             int timerInterval = notification.getSyncInterval() * 1000;
+            timer = new Timer();
             timer.scheduleAtFixedRate(new TickerTimer(), timerInterval,
                     timerInterval);
         }
@@ -91,7 +98,7 @@ public class HomePresenter extends MvpBasePresenter<HomeView> implements OnMulti
                 @Override
                 public void onComplete(List<Result> results, MarketSummaries summaries) {
                     if (getView() != null) {
-                        getView().setAdapter(results,getColors(results));
+                        getView().setAdapter(results, getColors(results));
                         getView().onSummaryDataLoad(summaries);
                         prevResults = results;
                     }
