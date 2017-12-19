@@ -34,7 +34,7 @@ public class ConditionalInteractor extends TradeInteractor {
                     realm.copyToRealmOrUpdate(conditional);
                 } else {
                     realm.commitTransaction();
-                    listner.onFail("No more than " + limit + " open Orders are permitted.");
+                    listner.onFail("Lite App version max " + limit + " open Orders allowed, please try the pro version.");
                     return;
                 }
             }

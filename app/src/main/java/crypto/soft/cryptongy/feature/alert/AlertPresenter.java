@@ -6,6 +6,7 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import crypto.soft.cryptongy.BuildConfig;
 import crypto.soft.cryptongy.R;
 import crypto.soft.cryptongy.feature.shared.ticker.TickerPresenter;
 import crypto.soft.cryptongy.utils.GlobalConstant;
@@ -26,22 +27,18 @@ public class AlertPresenter extends TickerPresenter<AlertView> {
         CoinInfo coinInfo = new CoinInfo(coinName, exchangeName, HighValueEn, LowValueEn, alarmFreq, reqCode,
                 ch_higher.isChecked(), ch_lower.isChecked(), GlobalConstant.Conditional.TYPE_OPEN);
         Realm realm = Realm.getDefaultInstance();
-        CoinInfo coinInfoResult = realm.where(CoinInfo.class).equalTo("CoinName", coinName).findFirst();
-        if (coinInfoResult == null) {
-            if (getCoinInfo() != null && getCoinInfo().size() <= 5) {
+
+            if (getCoinInfo() != null && getCoinInfo().size() < BuildConfig.MAX_ALERT) {
                 realm.beginTransaction();
                 coinInfo.setId(GlobalUtil.getNextKey(realm, CoinInfo.class, "Id"));
                 realm.copyToRealmOrUpdate(coinInfo);
                 realm.commitTransaction();
                 realm.close();
             } else {
-                Toast.makeText(context, "You can only add maximum of 5 alerts", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "Lite version max " + BuildConfig.MAX_ALERT +" alerts, please try the pro version", Toast.LENGTH_LONG).show();
                 return;
             }
-        } else {
-            Toast.makeText(context, "You can only add one alert for one coin", Toast.LENGTH_LONG).show();
-            return;
-        }
+
         boolean isServiceRunning = GlobalUtil.isServiceRunning(context, broadCastTicker.class);
         if (!isServiceRunning)
             GlobalUtil.startAlarm(broadCastTicker.class, context.getResources().getInteger(R.integer.service_interval), context);

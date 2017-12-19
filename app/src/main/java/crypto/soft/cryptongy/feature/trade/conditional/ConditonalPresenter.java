@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import crypto.soft.cryptongy.BuildConfig;
 import crypto.soft.cryptongy.R;
 import crypto.soft.cryptongy.feature.account.CustomDialog;
 import crypto.soft.cryptongy.feature.shared.json.market.MarketSummaries;
@@ -91,12 +92,12 @@ public class ConditonalPresenter extends TradePresenter<ConditionalView> {
                 List<Conditional> conditionals = getView().getConditionals();
                 if (conditionals != null) {
                     if (conditionals.size() > 0) {
-                        int limit = context.getResources().getInteger(R.integer.order_limit);
-                        int sameLimit = context.getResources().getInteger(R.integer.coin_order_limit);
+                        int limit = BuildConfig.MAX_ORDER;
+                        int sameLimit = BuildConfig.MAX_ORDER_COIN;
                         conditionalInteractor.saveConditional(conditionals, limit, sameLimit, new OnFinishListner<Void>() {
                             @Override
                             public void onComplete(Void result) {
-                                CustomDialog.showMessagePop(context, "Conditional Order has been created sucessfully.", null);
+                                CustomDialog.showMessagePop(context, "Created sucessfully.", null);
                                 fetchConditionals();
                                 if (!GlobalUtil.isServiceRunning(context, ConditionalService.class))
                                     GlobalUtil.startAlarm(ConditionalReceiver.class, context.getResources().getInteger(R.integer.service_interval), context);
@@ -109,7 +110,7 @@ public class ConditonalPresenter extends TradePresenter<ConditionalView> {
                             }
                         });
                     } else
-                        CustomDialog.showMessagePop(context, "Please choose any option", null);
+                        CustomDialog.showMessagePop(context, "Please choose atleast one option", null);
                 }
                 break;
             default:
