@@ -45,6 +45,7 @@ import crypto.soft.cryptongy.feature.main.MainActivity;
 import crypto.soft.cryptongy.feature.shared.json.market.MarketSummaries;
 import crypto.soft.cryptongy.feature.shared.json.market.Result;
 import crypto.soft.cryptongy.feature.shared.json.marketsummary.MarketSummary;
+import crypto.soft.cryptongy.feature.shared.json.ticker.Ticker;
 import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
 import crypto.soft.cryptongy.feature.trade.TradeInteractor;
 import crypto.soft.cryptongy.network.BittrexServices;
@@ -280,7 +281,7 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
     @NonNull
     @Override
     public AlertPresenter createPresenter() {
-        return new AlertPresenter();
+        return new AlertPresenter(getContext());
     }
 
     @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
@@ -363,6 +364,11 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
                     startActivity(new Intent(getActivity(), AlertActivity.class));
                 break;
         }
+    }
+
+    @Override
+    public void setTicker(Ticker ticker) {
+        new TickerV().setData(getContext(), ticker, lastValuInfo_TXT, ASKvalu_TXT, BidvalueInfo_TXT);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
@@ -461,6 +467,7 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
             VolumeValue_Lab.setTypeface(typeFaceCalibri);
 
             save_b.setTypeface(typeFaceCalibri);
+            presenter.startTicker(inputCoin.getText().toString());
         }
     }
 }

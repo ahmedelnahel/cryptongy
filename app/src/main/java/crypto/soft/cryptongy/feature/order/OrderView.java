@@ -4,12 +4,13 @@ import com.hannesdorfmann.mosby.mvp.MvpView;
 
 import crypto.soft.cryptongy.feature.shared.json.openorder.OpenOrder;
 import crypto.soft.cryptongy.feature.shared.json.orderhistory.OrderHistory;
+import crypto.soft.cryptongy.feature.shared.ticker.TickerView;
 
 /**
  * Created by tseringwongelgurung on 11/23/17.
  */
 
-public interface OrderView extends MvpView {
+public interface OrderView extends TickerView {
     void setTitle();
 
     void findViews();

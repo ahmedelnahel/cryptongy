@@ -18,6 +18,7 @@ import crypto.soft.cryptongy.R;
 import crypto.soft.cryptongy.feature.shared.json.openorder.OpenOrder;
 import crypto.soft.cryptongy.feature.shared.json.openorder.Result;
 import crypto.soft.cryptongy.feature.shared.json.orderhistory.OrderHistory;
+import crypto.soft.cryptongy.feature.shared.json.ticker.Ticker;
 import crypto.soft.cryptongy.utils.CoinApplication;
 import crypto.soft.cryptongy.utils.GlobalUtil;
 import crypto.soft.cryptongy.utils.HideKeyboard;
@@ -244,4 +245,8 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter<OrderVi
         presenter.onClicked(id, "",0 );
     }
 
+    @Override
+    public void setTicker(Ticker ticker) {
+        //ignore in this class
+    }
 }

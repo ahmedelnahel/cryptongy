@@ -1,9 +1,6 @@
 package crypto.soft.cryptongy.feature.coin;
 
-import com.hannesdorfmann.mosby.mvp.MvpView;
-
 import crypto.soft.cryptongy.feature.order.OrderView;
-import crypto.soft.cryptongy.feature.shared.json.market.MarketSummaries;
 import crypto.soft.cryptongy.feature.shared.json.markethistory.MarketHistory;
 import crypto.soft.cryptongy.feature.shared.json.marketsummary.MarketSummary;
 

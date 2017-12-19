@@ -35,6 +35,7 @@ import crypto.soft.cryptongy.feature.home.CustomArrayAdapter;
 import crypto.soft.cryptongy.feature.shared.json.market.MarketSummaries;
 import crypto.soft.cryptongy.feature.shared.json.market.Result;
 import crypto.soft.cryptongy.feature.shared.json.marketsummary.MarketSummary;
+import crypto.soft.cryptongy.feature.shared.json.ticker.Ticker;
 import crypto.soft.cryptongy.feature.shared.json.wallet.Wallet;
 import crypto.soft.cryptongy.utils.CoinApplication;
 import crypto.soft.cryptongy.utils.GlobalUtil;
@@ -469,5 +470,10 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
         edtUnits.setText("");
         rdbLast.setChecked(true);
         edtTotal.setText("");
+    }
+
+    @Override
+    public void setTicker(Ticker ticker) {
+        new TickerV().setData(getContext(), ticker, lastValuInfo_TXT, ASKvalu_TXT, BidvalueInfo_TXT);
     }
 }

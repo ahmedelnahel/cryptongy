@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
 
-import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 import com.hannesdorfmann.mosby.mvp.MvpView;
 
 import crypto.soft.cryptongy.R;
@@ -18,6 +17,8 @@ import crypto.soft.cryptongy.feature.shared.json.orderhistory.OrderHistory;
 import crypto.soft.cryptongy.feature.shared.json.orderhistory.Result;
 import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
 import crypto.soft.cryptongy.feature.shared.module.Account;
+import crypto.soft.cryptongy.feature.shared.ticker.TickerPresenter;
+import crypto.soft.cryptongy.feature.shared.ticker.TickerView;
 import crypto.soft.cryptongy.utils.CoinApplication;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -29,12 +30,11 @@ import io.reactivex.disposables.Disposable;
  * Created by tseringwongelgurung on 11/23/17.
  */
 
-public class OrderPresenter<T extends MvpView> extends MvpBasePresenter<T> {
-    protected Context context;
+public class OrderPresenter<T extends MvpView & TickerView> extends TickerPresenter<T> {
     protected OrderInteractor interactor;
 
     public OrderPresenter(Context context) {
-        this.context = context;
+        super(context);
         interactor = new OrderInteractor();
     }
 
@@ -219,8 +219,8 @@ public class OrderPresenter<T extends MvpView> extends MvpBasePresenter<T> {
         double sell = 0d, buy = 0d, sq= 0d, bq = 0d, limit = 0d;
         double calculation = 0;
         CoinApplication application = (CoinApplication) context.getApplicationContext();
- double btcdollar = application.getUsdt_btc();
-  double ethbtc = application.getbtc_eth();
+        double btcdollar = application.getUsdt_btc();
+        double ethbtc = application.getbtc_eth();
 //        System.out.println("USDT rate " + btcdollar);
 //        System.out.println("ethbtc rate " + ethbtc);
         int i =0;

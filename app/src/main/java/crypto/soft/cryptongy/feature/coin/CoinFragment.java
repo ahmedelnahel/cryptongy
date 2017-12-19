@@ -27,6 +27,7 @@ import crypto.soft.cryptongy.feature.shared.json.marketsummary.MarketSummary;
 import crypto.soft.cryptongy.feature.shared.json.openorder.OpenOrder;
 import crypto.soft.cryptongy.feature.shared.json.openorder.Result;
 import crypto.soft.cryptongy.feature.shared.json.orderhistory.OrderHistory;
+import crypto.soft.cryptongy.feature.shared.json.ticker.Ticker;
 import crypto.soft.cryptongy.feature.shared.module.Account;
 import crypto.soft.cryptongy.utils.CoinApplication;
 import crypto.soft.cryptongy.utils.GlobalUtil;
@@ -331,5 +332,10 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
         double last = 0;
         if (!lastValuInfo_TXT.getText().toString().isEmpty()) last = Double.valueOf(lastValuInfo_TXT.getText().toString());
         presenter.onClicked(id, coinName, last);
+    }
+
+    @Override
+    public void setTicker(Ticker ticker) {
+        new TickerV().setData(getContext(), ticker, lastValuInfo_TXT, ASKvalu_TXT, BidvalueInfo_TXT);
     }
 }

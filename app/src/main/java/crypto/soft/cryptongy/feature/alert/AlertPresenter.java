@@ -4,11 +4,10 @@ import android.content.Context;
 import android.widget.CheckBox;
 import android.widget.Toast;
 
-import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
-
 import java.util.List;
 
 import crypto.soft.cryptongy.R;
+import crypto.soft.cryptongy.feature.shared.ticker.TickerPresenter;
 import crypto.soft.cryptongy.utils.GlobalConstant;
 import crypto.soft.cryptongy.utils.GlobalUtil;
 import io.realm.Realm;
@@ -17,7 +16,11 @@ import io.realm.Realm;
  * Created by prajwal on 12/1/17.
  */
 
-public class AlertPresenter extends MvpBasePresenter<AlertView> {
+public class AlertPresenter extends TickerPresenter<AlertView> {
+    public AlertPresenter(Context context) {
+        super(context);
+    }
+
     public void saveData(Context context, Double LowValueEn, Double HighValueEn, String exchangeName,
                          String coinName, int alarmFreq, int reqCode, CheckBox ch_higher, CheckBox ch_lower) {
         CoinInfo coinInfo = new CoinInfo(coinName, exchangeName, HighValueEn, LowValueEn, alarmFreq, reqCode,

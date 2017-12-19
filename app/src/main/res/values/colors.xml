@@ -20,4 +20,6 @@
     <color name="color_component">#21BDB9</color>
     <color name="color_text">#FFF</color>
     <color name="color_back">#F3F3F9</color>
+    <color name="color_red">#fc0905</color>
+    <color name="color_green">#05d12e</color>
 </resources>

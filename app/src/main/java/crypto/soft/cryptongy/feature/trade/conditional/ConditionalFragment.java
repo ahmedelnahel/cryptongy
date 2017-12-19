@@ -40,6 +40,7 @@ import crypto.soft.cryptongy.feature.order.OpenOrderHolder;
 import crypto.soft.cryptongy.feature.shared.json.market.MarketSummaries;
 import crypto.soft.cryptongy.feature.shared.json.market.Result;
 import crypto.soft.cryptongy.feature.shared.json.marketsummary.MarketSummary;
+import crypto.soft.cryptongy.feature.shared.json.ticker.Ticker;
 import crypto.soft.cryptongy.feature.shared.json.wallet.Wallet;
 import crypto.soft.cryptongy.utils.CoinApplication;
 import crypto.soft.cryptongy.utils.GlobalConstant;
@@ -177,7 +178,7 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
         imgAccSetting = view.findViewById(R.id.imgAccSetting);
         txtMax = view.findViewById(R.id.txtMax);
         txtAgainst = view.findViewById(R.id.txtAgainst);
-        txtTotal =  view.findViewById(R.id.txtTotal);
+        txtTotal = view.findViewById(R.id.txtTotal);
         edtUnits = view.findViewById(R.id.edtUnits);
         rdgUnits = view.findViewById(R.id.rdgUnits);
         rdbSell = view.findViewById(R.id.rdbSell);
@@ -383,7 +384,7 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
     @Override
     public void setMax() {
         if (isBuy()) {
-            edtUnits.setText(String.format("%.8f", (baseWallet.getBalance().doubleValue()/Double.valueOf(lastValuInfo_TXT.getText().toString()))));
+            edtUnits.setText(String.format("%.8f", (baseWallet.getBalance().doubleValue() / Double.valueOf(lastValuInfo_TXT.getText().toString()))));
         } else {
             if (coinWallet == null)
                 edtUnits.setText("0");
@@ -401,18 +402,18 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
     public void calculateTotal() {
 
 
-                try {
-                String str = edtUnits.getText().toString();
-                if (!TextUtils.isEmpty(str)) {
-                    String str2 = lastValuInfo_TXT.getText().toString();
-                    if (!TextUtils.isEmpty(str2)) {
-                        Double total = Double.parseDouble(str) * Double.parseDouble(str2);
-                        txtTotal.setText(String.format("%.8f", total));
-                    }
+        try {
+            String str = edtUnits.getText().toString();
+            if (!TextUtils.isEmpty(str)) {
+                String str2 = lastValuInfo_TXT.getText().toString();
+                if (!TextUtils.isEmpty(str2)) {
+                    Double total = Double.parseDouble(str) * Double.parseDouble(str2);
+                    txtTotal.setText(String.format("%.8f", total));
                 }
-            } catch(NumberFormatException e){
-                e.printStackTrace();
             }
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
 
 
     }
@@ -659,5 +660,10 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
 
         return new Conditional(true, orderType, coin, units, last, against, highCondition, conditionType,
                 highPrice, priceType, stopLossType, orderStatus);
+    }
+
+    @Override
+    public void setTicker(Ticker ticker) {
+        new TickerV().setData(getContext(), ticker, lastValuInfo_TXT, ASKvalu_TXT, BidvalueInfo_TXT);
     }
 }

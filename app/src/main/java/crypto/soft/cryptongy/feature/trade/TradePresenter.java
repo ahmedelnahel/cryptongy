@@ -3,8 +3,6 @@ package crypto.soft.cryptongy.feature.trade;
 import android.content.Context;
 import android.text.TextUtils;
 
-import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
-
 import crypto.soft.cryptongy.R;
 import crypto.soft.cryptongy.feature.account.CustomDialog;
 import crypto.soft.cryptongy.feature.main.MainActivity;
@@ -14,6 +12,7 @@ import crypto.soft.cryptongy.feature.shared.json.marketsummary.MarketSummary;
 import crypto.soft.cryptongy.feature.shared.json.wallet.Wallet;
 import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
 import crypto.soft.cryptongy.feature.shared.module.Account;
+import crypto.soft.cryptongy.feature.shared.ticker.TickerPresenter;
 import crypto.soft.cryptongy.feature.trade.limit.Limit;
 import crypto.soft.cryptongy.utils.CoinApplication;
 import io.reactivex.Observable;
@@ -26,12 +25,11 @@ import io.reactivex.disposables.Disposable;
  * Created by tseringwongelgurung on 11/28/17.
  */
 
-public class TradePresenter<T extends TradeView> extends MvpBasePresenter<T> {
-    protected Context context;
+public class TradePresenter<T extends TradeView> extends TickerPresenter<T> {
     protected TradeInteractor tradeInteractor;
 
     public TradePresenter(Context context) {
-        this.context = context;
+        super(context);
         tradeInteractor = new TradeInteractor();
     }
 
@@ -109,6 +107,7 @@ public class TradePresenter<T extends TradeView> extends MvpBasePresenter<T> {
                 tradeInteractor.getMarketSummary(coinName, new OnFinishListner<MarketSummary>() {
                     @Override
                     public void onComplete(MarketSummary result) {
+                        startTicker(coinName);
                         e.onNext(result);
                         e.onComplete();
                     }
