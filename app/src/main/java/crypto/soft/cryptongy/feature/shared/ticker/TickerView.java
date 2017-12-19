@@ -32,6 +32,8 @@ public interface TickerView extends MvpView {
                         txtLast.setTextColor(ContextCompat.getColor(context, R.color.color_green));
                     else if (dblLast.doubleValue() > result.getLast().doubleValue())
                         txtLast.setTextColor(ContextCompat.getColor(context, R.color.color_red));
+                    else
+                        txtLast.setTextColor(ContextCompat.getColor(context, R.color.black_text));
                 }
 
                 if (dblAsk != null && result.getAsk() != null) {
@@ -40,6 +42,8 @@ public interface TickerView extends MvpView {
                         txtAsk.setTextColor(ContextCompat.getColor(context, R.color.color_green));
                     else if (dblAsk.doubleValue() > result.getAsk().doubleValue())
                         txtAsk.setTextColor(ContextCompat.getColor(context, R.color.color_red));
+                    else
+                        txtAsk.setTextColor(ContextCompat.getColor(context, R.color.black_text));
                 }
 
                 if (dblBid != null && result.getBid() != null) {
@@ -48,6 +52,8 @@ public interface TickerView extends MvpView {
                         txtBid.setTextColor(ContextCompat.getColor(context, R.color.color_green));
                     else if (dblBid.doubleValue() > result.getBid().doubleValue())
                         txtBid.setTextColor(ContextCompat.getColor(context, R.color.color_red));
+                    else
+                        txtBid.setTextColor(ContextCompat.getColor(context, R.color.black_text));
                 }
             }
         }
