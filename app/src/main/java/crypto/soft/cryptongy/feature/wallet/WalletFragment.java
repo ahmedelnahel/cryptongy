@@ -1,17 +1,16 @@
 package crypto.soft.cryptongy.feature.wallet;
 
-import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -52,11 +51,11 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
     private RecyclerView rvCoinList;
     private WalletAdapter coinAdapter;
     private Spinner spCurrency;
-    private EditText editCoinSearch;
+    private TextView txtCoinSearch;
     private ImageView ivRefresh, imgAccount;
     private List<Result> resultList;
     private double BTCSum = 0;
-    private ScrollView baseView;
+    private NestedScrollView baseView;
     private TextView tvHolding, tvPrice;
 
     public WalletFragment() {
@@ -144,45 +143,9 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout
                 .simple_spinner_dropdown_item);
         spCurrency.setAdapter(spinnerArrayAdapter);
-        editCoinSearch = view.findViewById(R.id.editCoinSearch);
-
-//        editCoinSearch.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                if (event.getAction() == MotionEvent.ACTION_DOWN)
-//                    editCoinSearch.setCursorVisible(true);
-//                return false;
-//            }
-//
-//        });
-
-        editCoinSearch.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if (resultList == null) {
-                    return;
-                }
-                filter(editable.toString());
-//                if (editable.toString().length() == 0)
-//                    editCoinSearch.setCursorVisible(false);
-//                else
-//                    editCoinSearch.setCursorVisible(true);
-
-            }
-        });
-//        appBarLayout = view.findViewById(R.id.app_bar);
-//        linlaySummary = view.findViewById(R.id.linlaySummary);
-//        linlayOperationButton = view.findViewById(R.id.linlayOperationButton);
+        txtCoinSearch = view.findViewById(R.id.txtCoinSearch);
+        txtCoinSearch.setTag(R.id.txtCoinSearch, Boolean.TRUE);
+        txtCoinSearch.setOnClickListener(this);
         rvCoinList = view.findViewById(R.id.rvCoinList);
         rvCoinList.setNestedScrollingEnabled(false);
         coinAdapter = new WalletAdapter(new ArrayList<Result>(), getActivity(), this);
@@ -191,22 +154,6 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
         rvCoinList.setLayoutManager(mLayoutManager);
         rvCoinList.setItemAnimator(new DefaultItemAnimator());
         rvCoinList.setAdapter(coinAdapter);
-    }
-
-    private void filter(String text) {
-        ArrayList<Result> filterdCurrency = new ArrayList<>();
-
-        for (Result result : resultList) {
-            //if the existing elements contains the search input
-            if (result.getCurrency().toLowerCase().contains(text.toLowerCase())) {
-                //adding the element to filtered list
-                filterdCurrency.add(result);
-            }
-        }
-
-        //calling a method of the adapter class and passing the filtered list
-        coinAdapter.setResultList(filterdCurrency);
-        coinAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -235,6 +182,9 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
                 break;
             case R.id.tvHolding:
                 Collections.sort(results, new Result.HoldingComparator((Boolean) v.getTag(v.getId())));
+                break;
+            case R.id.txtCoinSearch:
+                Collections.sort(results, new Result.CoinComparator((Boolean) v.getTag(v.getId())));
                 break;
 
         }

@@ -21,8 +21,7 @@ import java.util.Map;
         "Requested",
         "Uuid"
 })
-public class Result
-{
+public class Result {
 
     @JsonProperty("Currency")
     private String currency;
@@ -46,124 +45,103 @@ public class Result
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     @JsonProperty("Currency")
-    public String getCurrency()
-    {
+    public String getCurrency() {
         return currency;
     }
 
     @JsonProperty("Currency")
-    public void setCurrency(String currency)
-    {
+    public void setCurrency(String currency) {
         this.currency = currency;
     }
 
     @JsonProperty("Balance")
-    public Double getBalance()
-    {
+    public Double getBalance() {
         return balance;
     }
 
     @JsonProperty("Balance")
-    public void setBalance(Double balance)
-    {
+    public void setBalance(Double balance) {
         this.balance = balance;
     }
 
     @JsonProperty("Available")
-    public Double getAvailable()
-    {
+    public Double getAvailable() {
         return available;
     }
 
     @JsonProperty("Available")
-    public void setAvailable(Double available)
-    {
+    public void setAvailable(Double available) {
         this.available = available;
     }
 
     @JsonProperty("Pending")
-    public Double getPending()
-    {
+    public Double getPending() {
         return pending;
     }
 
     @JsonProperty("Pending")
-    public void setPending(Double pending)
-    {
+    public void setPending(Double pending) {
         this.pending = pending;
     }
 
     @JsonProperty("CryptoAddress")
-    public String getCryptoAddress()
-    {
+    public String getCryptoAddress() {
         return cryptoAddress;
     }
 
     @JsonProperty("CryptoAddress")
-    public void setCryptoAddress(String cryptoAddress)
-    {
+    public void setCryptoAddress(String cryptoAddress) {
         this.cryptoAddress = cryptoAddress;
     }
 
     @JsonProperty("Requested")
-    public Boolean getRequested()
-    {
+    public Boolean getRequested() {
         return requested;
     }
 
     @JsonProperty("Requested")
-    public void setRequested(Boolean requested)
-    {
+    public void setRequested(Boolean requested) {
         this.requested = requested;
     }
 
     @JsonProperty("Uuid")
-    public Object getUuid()
-    {
+    public Object getUuid() {
         return uuid;
     }
 
     @JsonProperty("Uuid")
-    public void setUuid(Object uuid)
-    {
+    public void setUuid(Object uuid) {
         this.uuid = uuid;
     }
 
     @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties()
-    {
+    public Map<String, Object> getAdditionalProperties() {
         return this.additionalProperties;
     }
 
     @JsonAnySetter
-    public void setAdditionalProperty(String name, Object value)
-    {
+    public void setAdditionalProperty(String name, Object value) {
         this.additionalProperties.put(name, value);
     }
 
-    public Double getPrice()
-    {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(Double price)
-    {
+    public void setPrice(Double price) {
         this.price = price;
     }
 
 
-    public static class HoldingComparator implements Comparator<Result>
-    {
+    public static class HoldingComparator implements Comparator<Result> {
         private boolean isAscending = true;
 
-        public HoldingComparator(boolean bIsAscending)
-        {
+        public HoldingComparator(boolean bIsAscending) {
             this.isAscending = bIsAscending;
         }
 
         @Override
-        public int compare(Result o1, Result o2)
-        {
+        public int compare(Result o1, Result o2) {
             if (o1.getBalance() > o2.getBalance())
                 return isAscending ? 1 : -1;
             if (o1.getBalance() < o2.getBalance())
@@ -173,19 +151,16 @@ public class Result
 
     }
 
-    public static class PriceComparator implements Comparator<Result>
-    {
+    public static class PriceComparator implements Comparator<Result> {
 
         private boolean isAscending = true;
 
-        public PriceComparator(boolean bIsAscending)
-        {
+        public PriceComparator(boolean bIsAscending) {
             this.isAscending = bIsAscending;
         }
 
         @Override
-        public int compare(Result o1, Result o2)
-        {
+        public int compare(Result o1, Result o2) {
             if (o1.getPrice() > o2.getPrice())
                 return isAscending ? 1 : -1;
             if (o1.getPrice() < o2.getPrice())
@@ -194,6 +169,20 @@ public class Result
             return 0;
         }
 
+    }
+
+    public static class CoinComparator implements Comparator<Result> {
+        private boolean isAscending = true;
+
+        public CoinComparator(boolean bIsAscending) {
+            this.isAscending = bIsAscending;
+        }
+
+        @Override
+        public int compare(Result o1, Result o2) {
+            return isAscending ? o1.getCurrency().compareTo(o2.getCurrency()) :
+                    -o1.getCurrency().compareTo(o2.getCurrency());
+        }
     }
 
 }
