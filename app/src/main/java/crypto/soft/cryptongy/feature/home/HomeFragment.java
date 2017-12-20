@@ -188,10 +188,10 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
     }
 
     @Override
-    public void setAdapter(List<Result> results, List<Integer> colorList) {
+    public void setAdapter(List<Result> results) {
         mock.clear();
         mock.addAll(results);
-        currencyAdapter = new CurrencyAdapter(mock,colorList);
+        currencyAdapter = new CurrencyAdapter(mock);
         listCurrency.setAdapter(currencyAdapter);
         currencyAdapter.setAdapterItemClickListener(this);
     }
@@ -267,7 +267,7 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
                     for (int i = 0; i < booleanArray.size(); i++) {
                         try {
                             int pos = booleanArray.keyAt(i);
-                            mock.remove(mock.get(pos));
+                            mock.remove(pos);
                         } catch (IndexOutOfBoundsException e) {
                             e.printStackTrace();
                         }

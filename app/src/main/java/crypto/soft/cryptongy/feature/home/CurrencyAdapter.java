@@ -35,13 +35,11 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
     private AdapterItemClickListener adapterItemClickListener;
     private double btcusdt;
     private double ethbtc;
-    private List<Integer> colorList;
 
 
-    public CurrencyAdapter(List<Result> currencyItems, List<Integer> colorList) {
+    public CurrencyAdapter(List<Result> currencyItems) {
         this.currencyItems = currencyItems;
         this.currencyItemsFiltered = currencyItems;
-        this.colorList = colorList;
         mSelectedItemsIds = new SparseBooleanArray();
     }
 
@@ -100,7 +98,7 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
         double pricepoint = result.getLast() - result.getLow();
         double highpoint = result.getHigh() - result.getLow();
         holder.seekBar.setProgress(getProgress(pricepoint, highpoint));
-        holder.seekBar.setProgressDrawable(ContextCompat.getDrawable(holder.itemView.getContext(), colorList.get(position)));
+        holder.seekBar.setProgressDrawable(ContextCompat.getDrawable(holder.itemView.getContext(),result.getDrawable()));
         holder.seekBar.setOnSeekBarChangeListener(new OnSeekBarChange(position, holder, currencyItemsFiltered.get(position)));
         holder.parent.setOnLongClickListener(new OnCurrencyItemClick(position, holder, currencyItemsFiltered.get(position)));
         holder.itemView.setOnClickListener(new View.OnClickListener() {

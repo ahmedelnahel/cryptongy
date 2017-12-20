@@ -9,6 +9,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.HashMap;
 import java.util.Map;
 
+import crypto.soft.cryptongy.R;
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 
 public class Result {
@@ -43,6 +45,8 @@ public class Result {
     private Object displayMarketName;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    @JsonIgnore
+    private int drawable= R.drawable.seek_progress;
 
     @JsonProperty("MarketName")
     public String getMarketName() {
@@ -194,4 +198,11 @@ public class Result {
         this.additionalProperties.put(name, value);
     }
 
+    public int getDrawable() {
+        return drawable;
+    }
+
+    public void setDrawable(int drawable) {
+        this.drawable = drawable;
+    }
 }

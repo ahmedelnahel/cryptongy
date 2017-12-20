@@ -41,7 +41,8 @@ public class HomePresenter extends MvpBasePresenter<HomeView> implements OnMulti
     @Override
     public void onComplete(List<Result> results, MarketSummaries marketSummaries) {
         if (getView() != null) {
-            getView().setAdapter(results, getColors(results));
+            results=setDrawable(results);
+            getView().setAdapter(results);
             prevResults = results;
             getView().onSummaryDataLoad(marketSummaries);
             startTimer();
@@ -71,23 +72,22 @@ public class HomePresenter extends MvpBasePresenter<HomeView> implements OnMulti
         }
     }
 
-    private List<Integer> getColors(List<Result> list) {
-        List<Integer> colorList = new ArrayList<>();
+    private List<Result> setDrawable(List<Result> list) {
         for (int i = 0; i < list.size(); i++) {
             Result result = list.get(i);
             if (prevResults == null)
-                colorList.add(R.drawable.seek_progress);
+               result.setDrawable(R.drawable.seek_progress);
             else if (i < prevResults.size()) {
                 if (result.getVolume().doubleValue() < prevResults.get(i).getVolume().doubleValue())
-                    colorList.add(R.drawable.seek_progress_red);
+                    result.setDrawable(R.drawable.seek_progress_red);
                 else if (result.getVolume().doubleValue() > prevResults.get(i).getVolume().doubleValue())
-                    colorList.add(R.drawable.seek_progress_green);
+                    result.setDrawable(R.drawable.seek_progress_green);
                 else
-                    colorList.add(R.drawable.seek_progress);
+                    result.setDrawable(R.drawable.seek_progress);
             } else
-                colorList.add(R.drawable.seek_progress);
+                result.setDrawable(R.drawable.seek_progress);
         }
-        return colorList;
+        return list;
     }
 
     class TickerTimer extends TimerTask {
@@ -98,7 +98,8 @@ public class HomePresenter extends MvpBasePresenter<HomeView> implements OnMulti
                 @Override
                 public void onComplete(List<Result> results, MarketSummaries summaries) {
                     if (getView() != null) {
-                        getView().setAdapter(results, getColors(results));
+                        results=setDrawable(results);
+                        getView().setAdapter(results);
                         getView().onSummaryDataLoad(summaries);
                         prevResults = results;
                     }
