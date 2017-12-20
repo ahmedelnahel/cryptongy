@@ -114,7 +114,6 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
             view = inflater.inflate(R.layout.fragment_watch_list, container, false);
             new HideKeyboard(getContext()).setupUI(view);
             ButterKnife.bind(this, view);
-            setTitle();
             coins = new ArrayList<>();
             ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
                     R.array.coin_array, R.layout.drop_down_text);
@@ -157,6 +156,7 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
                 }
             });
         }
+        setTitle();
         isFirst = true;
         return view;
     }

@@ -34,7 +34,7 @@ public class MainPresenter extends MvpBasePresenter<MainView> {
         GlobalUtil.addFragment(context, fragment, R.id.container, false);
     }
     public void replaceAccountFragment() {
-        getView().notifyMenu();
+        getView().notifyMenu("Accounts");
         GlobalUtil.addFragment(context, new AccountFragment(), R.id.container, true);
     }
     public void onItemClicked(String name) {

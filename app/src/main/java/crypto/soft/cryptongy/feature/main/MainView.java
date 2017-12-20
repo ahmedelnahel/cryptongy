@@ -9,13 +9,11 @@ import com.hannesdorfmann.mosby.mvp.MvpView;
 public interface MainView extends MvpView {
     void initToolbar();
 
-    void setTitle();
-
     void findViews();
 
     void initSideMenu();
 
     void setAdapter();
 
-    void notifyMenu();
+    void notifyMenu(String menu);
 }

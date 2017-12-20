@@ -15,6 +15,7 @@ import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
+import android.widget.TextView;
 
 import com.hannesdorfmann.mosby.mvp.MvpActivity;
 
@@ -44,7 +45,6 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
         if (TextUtils.isEmpty(data))
             data = "Home";
         initToolbar();
-        setTitle();
         findViews();
         initSideMenu();
         setAdapter();
@@ -81,7 +81,9 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
         return super.onOptionsItemSelected(item);
     }
 
-    public void setTitle() {
+    public String getFragTitle() {
+        TextView txtTitle = findViewById(R.id.txtTitle);
+        return txtTitle.getText().toString();
     }
 
     public void findViews() {
@@ -104,9 +106,7 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
 
     @Override
     public void setAdapter() {
-        String selectedFrag = null;
         if (data.equalsIgnoreCase("home")) {
-            selectedFrag = "Home";
             menuItems.add(new MenuItem(R.drawable.ic_home_a, "Home", true));
         } else
             menuItems.add(new MenuItem(R.drawable.ic_house, "Home", false));
@@ -114,7 +114,6 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
         menuItems.add(new MenuItem(R.drawable.ic_orders, "Orders", false));
         menuItems.add(new MenuItem(R.drawable.ic_trade, "Trade", false));
         if (data.equalsIgnoreCase("Conditional")) {
-            selectedFrag = "Conditional";
             menuItems.add(new MenuItem(R.drawable.ic_portfolio_a, "Conditional", true));
         } else
             menuItems.add(new MenuItem(R.drawable.ic_portfolio, "Conditional", false));
@@ -126,7 +125,7 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
         listMenu.setLayoutManager(linearLayoutManager);
         listMenu.setHasFixedSize(true);
         listMenu.setItemAnimator(new DefaultItemAnimator());
-        menuItemAdapter = new MenuItemAdapter(this, menuItems, selectedFrag);
+        menuItemAdapter = new MenuItemAdapter(this, menuItems);
         listMenu.setAdapter(menuItemAdapter);
         menuItemAdapter.setOnItemClickListener(new MenuItemClickListener() {
             @Override
@@ -138,31 +137,44 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
     }
 
     @Override
-    public void notifyMenu() {
+    public void notifyMenu(String menu) {
         menuItems.clear();
-        menuItems.add(new MenuItem(R.drawable.ic_house, "Home", false));
-        menuItems.add(new MenuItem(R.drawable.ic_wallet, "Wallet", false));
-        menuItems.add(new MenuItem(R.drawable.ic_orders, "Orders", false));
-        menuItems.add(new MenuItem(R.drawable.ic_trade, "Trade", false));
-        menuItems.add(new MenuItem(R.drawable.ic_portfolio, "Conditional", false));
-        menuItems.add(new MenuItem(R.drawable.ic_alert, "Alert", false));
-        menuItems.add(new MenuItem(R.drawable.ic_accounts_a, "Accounts", true));
-        menuItems.add(new MenuItem(R.drawable.ic_bitcoin, "Donate", false));
-        menuItems.add(new MenuItem(R.drawable.ic_about, "About Us", false));
-        menuItemAdapter.notifyDataSetChanged();
-    }
-
-    public void notifyMenuHome() {
-        menuItems.clear();
-        menuItems.add(new MenuItem(R.drawable.ic_home_a, "Home", true));
-        menuItems.add(new MenuItem(R.drawable.ic_wallet, "Wallet", false));
-        menuItems.add(new MenuItem(R.drawable.ic_orders, "Orders", false));
-        menuItems.add(new MenuItem(R.drawable.ic_trade, "Trade", false));
-        menuItems.add(new MenuItem(R.drawable.ic_portfolio, "Conditional", false));
-        menuItems.add(new MenuItem(R.drawable.ic_alert, "Alert", false));
-        menuItems.add(new MenuItem(R.drawable.ic_account, "Accounts", false));
-        menuItems.add(new MenuItem(R.drawable.ic_bitcoin, "Donate", false));
-        menuItems.add(new MenuItem(R.drawable.ic_about, "About Us", false));
+        if (menu.equalsIgnoreCase("Home"))
+            menuItems.add(new MenuItem(R.drawable.ic_home_a, "Home", true));
+        else
+            menuItems.add(new MenuItem(R.drawable.ic_house, "Home", false));
+        if (menu.equalsIgnoreCase("Wallet"))
+            menuItems.add(new MenuItem(R.drawable.ic_wallet_a, "Wallet", true));
+        else
+            menuItems.add(new MenuItem(R.drawable.ic_wallet, "Wallet", false));
+        if (menu.equalsIgnoreCase("Orders"))
+            menuItems.add(new MenuItem(R.drawable.ic_orders_a, "Orders", true));
+        else
+            menuItems.add(new MenuItem(R.drawable.ic_orders, "Orders", false));
+        if (menu.equalsIgnoreCase("Trade"))
+            menuItems.add(new MenuItem(R.drawable.ic_trade_a, "Trade", true));
+        else
+            menuItems.add(new MenuItem(R.drawable.ic_trade, "Trade", false));
+        if (menu.equalsIgnoreCase("Conditional"))
+            menuItems.add(new MenuItem(R.drawable.ic_portfolio_a, "Conditional", true));
+        else
+            menuItems.add(new MenuItem(R.drawable.ic_portfolio, "Conditional", false));
+        if (menu.equalsIgnoreCase("Alert"))
+            menuItems.add(new MenuItem(R.drawable.ic_alert_a, "Alert", true));
+        else
+            menuItems.add(new MenuItem(R.drawable.ic_alert, "Alert", false));
+        if (menu.equalsIgnoreCase("Accounts"))
+            menuItems.add(new MenuItem(R.drawable.ic_accounts_a, "Accounts", true));
+        else
+            menuItems.add(new MenuItem(R.drawable.ic_account, "Accounts", false));
+        if (menu.equalsIgnoreCase("Donate"))
+            menuItems.add(new MenuItem(R.drawable.ic_bitcoin_a, "Donate", true));
+        else
+            menuItems.add(new MenuItem(R.drawable.ic_bitcoin, "Donate", false));
+        if (menu.equalsIgnoreCase("About Us"))
+            menuItems.add(new MenuItem(R.drawable.ic_about_a, "About Us", true));
+        else
+            menuItems.add(new MenuItem(R.drawable.ic_about, "About Us", false));
         menuItemAdapter.notifyDataSetChanged();
     }
 
@@ -174,16 +186,27 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
 
     @Override
     public void onBackPressed() {
-        int count = getFragmentManager().getBackStackEntryCount();
+        int count = getSupportFragmentManager().getBackStackEntryCount();
 
         if (count > 0) {
             super.onBackPressed();
+            String string=getFragTitle();
+            if (string.equalsIgnoreCase("conditional trade"))
+                string="Conditional";
+            else if (string.equalsIgnoreCase("Watch List"))
+                string="Home";
+            notifyMenu(string);
+            drawerLayout.closeDrawer(Gravity.LEFT);
         } else {
             if (drawerLayout.isDrawerOpen(Gravity.LEFT))
                 drawerLayout.closeDrawer(Gravity.LEFT);
             else {
-                presenter.onItemClicked("Home");
-                notifyMenuHome();
+                if (getFragTitle().equalsIgnoreCase(getString(R.string.home)))
+                    super.onBackPressed();
+                else {
+                    presenter.onItemClicked("Home");
+                    notifyMenu("Home");
+                }
             }
         }
     }
