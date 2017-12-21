@@ -1,26 +1,31 @@
 package crypto.soft.cryptongy.feature.order;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.text.TextUtils;
-import android.util.Log;
 
-import com.hannesdorfmann.mosby.mvp.MvpView;
+import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 import crypto.soft.cryptongy.R;
 import crypto.soft.cryptongy.feature.account.AccountActivity;
 import crypto.soft.cryptongy.feature.account.CustomDialog;
 import crypto.soft.cryptongy.feature.main.MainActivity;
+import crypto.soft.cryptongy.feature.setting.Notification;
 import crypto.soft.cryptongy.feature.setting.SettingActivity;
 import crypto.soft.cryptongy.feature.shared.json.action.Cancel;
 import crypto.soft.cryptongy.feature.shared.json.openorder.OpenOrder;
+import crypto.soft.cryptongy.feature.shared.json.order.Order;
 import crypto.soft.cryptongy.feature.shared.json.orderhistory.OrderHistory;
 import crypto.soft.cryptongy.feature.shared.json.orderhistory.Result;
 import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
 import crypto.soft.cryptongy.feature.shared.module.Account;
-import crypto.soft.cryptongy.feature.shared.ticker.TickerPresenter;
-import crypto.soft.cryptongy.feature.shared.ticker.TickerView;
 import crypto.soft.cryptongy.utils.CoinApplication;
+import crypto.soft.cryptongy.utils.GlobalUtil;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -31,10 +36,15 @@ import io.reactivex.disposables.Disposable;
  * Created by tseringwongelgurung on 11/23/17.
  */
 
-public class OrderPresenter<T extends MvpView & TickerView> extends TickerPresenter<T> {
+public class OrderPresenter extends MvpBasePresenter<OrderView> {
     protected OrderInteractor interactor;
+    private Context context;
+    private OrderReceiver receiver;
+    private Timer timer;
+    private OpenOrder openOrder;
+
     public OrderPresenter(Context context) {
-        super(context);
+        this.context = context;
         interactor = new OrderInteractor();
     }
 
@@ -46,10 +56,10 @@ public class OrderPresenter<T extends MvpView & TickerView> extends TickerPresen
         }
     }
 
-    public void onClicked(int id, String coinName) {
+    public void onClicked(int id) {
         switch (id) {
             case R.id.imgSync:
-                getData(coinName);
+                getData();
                 break;
             case R.id.imgAccSetting:
                 if (context instanceof MainActivity)
@@ -60,14 +70,14 @@ public class OrderPresenter<T extends MvpView & TickerView> extends TickerPresen
         }
     }
 
-    public void getData(final String coinName) {
+    public void getData() {
         CoinApplication application = (CoinApplication) context.getApplicationContext();
         Account account = application.getReadAccount();
         if (account != null) {
             if (getView() != null) {
-                getV().resetView();
-                getV().showLoading(context.getString(R.string.fetch_msg));
-                getV().setLevel(account.getLabel());
+                getView().resetView();
+                getView().showLoading(context.getString(R.string.fetch_msg));
+                getView().setLevel(account.getLabel());
             }
 
             Observer observer = new Observer() {
@@ -82,12 +92,14 @@ public class OrderPresenter<T extends MvpView & TickerView> extends TickerPresen
                 public void onNext(Object o) {
                     count--;
                     if (o instanceof OpenOrder) {
-                        if (getView() != null)
-                            getV().setOpenOrders((OpenOrder) o);
+                        if (getView() != null) {
+                            openOrder = (OpenOrder) o;
+                            getView().setOpenOrders(openOrder);
+                        }
                     } else if (o instanceof OrderHistory) {
                         if (getView() != null) {
-                            getV().setOrderHistory((OrderHistory) o);
-                            calculateProfit((OrderHistory) o, coinName, 0);
+                            getView().setOrderHistory((OrderHistory) o);
+                            calculateProfit((OrderHistory) o, 0);
                         }
                     }
                 }
@@ -99,22 +111,24 @@ public class OrderPresenter<T extends MvpView & TickerView> extends TickerPresen
                 @Override
                 public void onComplete() {
                     if (getView() != null) {
-                        getV().hideLoading();
+                        getView().hideLoading();
                         if (count == 2) {
-                            getV().showEmptyView();
-                        } else
-                            getV().hideEmptyView();
+                            getView().showEmptyView();
+                        } else {
+                            startTimer();
+                            getView().hideEmptyView();
+                        }
                     }
                 }
             };
 
-            Observable.merge(getOpenOrders(coinName, account), getOrderHistory(coinName, account))
+            Observable.merge(getOpenOrders("", account), getOrderHistory("", account))
                     .subscribe(observer);
         } else {
             CustomDialog.showMessagePop(context, context.getString(R.string.noAPI), null);
             if (getView() != null) {
-                getV().setLevel("No API");
-                getV().showEmptyView();
+                getView().setLevel("No API");
+                getView().showEmptyView();
             }
         }
     }
@@ -163,7 +177,7 @@ public class OrderPresenter<T extends MvpView & TickerView> extends TickerPresen
 
     public void cancleOrder(final String coinName, String orderUuid, final Account account) {
         if (getView() != null)
-            getV().showLoading(context.getString(R.string.cancle_msg));
+            getView().showLoading(context.getString(R.string.cancle_msg));
         interactor.cancleOrder(orderUuid, account, new OnFinishListner<Cancel>() {
 
             @Override
@@ -178,8 +192,8 @@ public class OrderPresenter<T extends MvpView & TickerView> extends TickerPresen
                             @Override
                             public void onNext(Object o) {
                                 if (getView() != null) {
-                                    getV().setOpenOrders((OpenOrder) o);
-                                    getV().hideEmptyView();
+                                    getView().setOpenOrders((OpenOrder) o);
+                                    getView().hideEmptyView();
                                     String msg = ((OpenOrder) o).getMessage();
                                     if (TextUtils.isEmpty(msg))
                                         msg = "Order has been cancled successfully.";
@@ -195,7 +209,7 @@ public class OrderPresenter<T extends MvpView & TickerView> extends TickerPresen
                             @Override
                             public void onComplete() {
                                 if (getView() != null)
-                                    getV().hideLoading();
+                                    getView().hideLoading();
                             }
                         };
 
@@ -208,65 +222,163 @@ public class OrderPresenter<T extends MvpView & TickerView> extends TickerPresen
             @Override
             public void onFail(String error) {
                 if (getView() != null)
-                    getV().hideLoading();
+                    getView().hideLoading();
                 CustomDialog.showMessagePop(context, error, null);
             }
         });
     }
 
-    protected void calculateProfit(OrderHistory history, String coinName, double last) {
+    protected void calculateProfit(OrderHistory history, double last) {
         if (history == null || history.getResult() == null || history.getResult().size() == 0)
             return;
-        double sell = 0d, buy = 0d, sq= 0d, bq = 0d, limit = 0d;
+        double sell = 0d, buy = 0d, sq = 0d, bq = 0d;
         double calculation = 0;
-        CoinApplication application = (CoinApplication) context.getApplicationContext();
-        int i =0;
+        int i = 0;
         for (Result data : history.getResult()) {
-            if (i==0) {
-                limit = data.getLimit();
+            if (i == 0)
                 i++;
-            }
 
-            if (coinName.isEmpty() || data.getExchange().equals(coinName)) {
-                if (data.getOrderType().toLowerCase().equals("limit_sell") ||
-                        data.getOrderType().toLowerCase().equals("conditional_sell")) {
-                    if (data.getLimit() != null) {
-                        if (data.getQuantity() != null)
-                            sell += data.getPrice();
-                            sq += data.getQuantity();
+            if (data.getOrderType().toLowerCase().equals("limit_sell") ||
+                    data.getOrderType().toLowerCase().equals("conditional_sell")) {
+                if (data.getLimit() != null) {
+                    if (data.getQuantity() != null)
+                        sell += data.getPrice();
+                    sq += data.getQuantity();
 
-                    }
-                } else if ((data.getOrderType().toLowerCase().equals("limit_buy") ||
-                        data.getOrderType().toLowerCase().equals("conditional_buy"))) {
-                    if (data.getLimit() != null) {
-                        if (data.getQuantity() != null)
-                            buy += data.getPrice();
-                            bq += data.getQuantity();
-
-                    }
                 }
+            } else if ((data.getOrderType().toLowerCase().equals("limit_buy") ||
+                    data.getOrderType().toLowerCase().equals("conditional_buy"))) {
+                if (data.getLimit() != null) {
+                    if (data.getQuantity() != null)
+                        buy += data.getPrice();
+                    bq += data.getQuantity();
 
+                }
             }
-
-//            Log.d("Profit ", "Coin Name " + data.getExchange() + " sell " + sell + " sellq " + sq + " bq " + bq );
-
         }
 
-        double currentHolding =0;
-        if(bq>=sq)currentHolding = (bq-sq)*last;
-        Log.d("Profit ", "bq-sq  " +(bq-sq) + " currentHolding  " + currentHolding + " sell - buy " +  (sell - buy ));
+        double currentHolding = 0;
+        if (bq >= sq) currentHolding = (bq - sq) * last;
         calculation = sell - buy + currentHolding;
         if (getView() != null) {
-            getV().setCalculation(calculation);
+            getView().setCalculation(calculation);
         }
-
     }
 
-    public OrderView getV() {
-        T view = super.getView();
-        if (view == null)
-            return null;
-        else
-            return (OrderView) view;
+    public void stopTimer() {
+        if (timer != null)
+            timer.cancel();
+    }
+
+    public void unregisterReceiver() {
+        if (receiver != null)
+            context.unregisterReceiver(receiver);
+    }
+
+    public void startTimer() {
+        Notification notification = ((CoinApplication) context.getApplicationContext()).getNotification();
+        if (notification.isAutomSync()) {
+            int timerInterval = notification.getSyncInterval() * 1000;
+            timer = new Timer();
+            timer.scheduleAtFixedRate(new TickerTimer(), timerInterval,
+                    timerInterval);
+            registerReceiver();
+        }
+    }
+
+    public void restartTimer(int timerInterval) {
+        if (timer != null) {
+            timer.cancel();
+            timer = new Timer();
+            timerInterval *= 1000;
+            timer.scheduleAtFixedRate(new TickerTimer(), timerInterval,
+                    timerInterval);
+        }
+    }
+
+    public void registerReceiver() {
+        IntentFilter filter = new IntentFilter(".feature.order.OrderPresenter$OrderReceiver");
+
+        receiver = new OrderReceiver();
+        context.registerReceiver(receiver, filter);
+    }
+
+    public void startOpenOrder(String coinName, Account account) {
+        getOpenOrders(coinName, account).subscribe(new Observer<OpenOrder>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(OpenOrder openOrder) {
+                if (getView() != null) {
+                    OrderPresenter.this.openOrder = openOrder;
+                    getView().setOpenOrders(OrderPresenter.this.openOrder);
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
+
+
+    class TickerTimer extends TimerTask {
+
+        @Override
+        public void run() {
+            final Account account = ((CoinApplication) context.getApplicationContext()).getReadAccount();
+            for (int i = 0; i < openOrder.getResult().size(); i++) {
+                final crypto.soft.cryptongy.feature.shared.json.openorder.Result data = openOrder.getResult().get(i);
+                final int finalI = i;
+                interactor.getOrders(data.getOrderUuid(), account, new OnFinishListner<Order>() {
+
+                    @Override
+                    public void onComplete(Order result) {
+                        if (getView() != null) {
+                            crypto.soft.cryptongy.feature.shared.json.order.Result order = result.getResult();
+                            if (!result.getResult().getIsOpen()) {
+                                GlobalUtil.showNotification(context, "Open Order status", order.getExchange() + "(" + String.format("%.8f", order.getQuantity().doubleValue()) +
+                                        ")" + "of " + order.getType() + " is now closed.", finalI);
+                                startOpenOrder("", account);
+                            } else if (result.getResult().getCancelInitiated()) {
+                                GlobalUtil.showNotification(context, "Open Order status", order.getExchange() + "(" + String.format("%.8f", order.getQuantity().doubleValue()) +
+                                        ")" + "of " + order.getType() + " is now cancelled.", finalI);
+                                startOpenOrder("", account);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFail(String error) {
+
+                    }
+                });
+            }
+        }
+    }
+
+    public class OrderReceiver extends BroadcastReceiver {
+
+        public OrderReceiver() {
+        }
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            boolean isSyncEnabled = intent.getBooleanExtra("NOTI_SYNC", true);
+            int timeInterval = intent.getIntExtra("NOTI_INTERVAL", 15);
+            if (isSyncEnabled)
+                restartTimer(timeInterval);
+            else
+                stopTimer();
+        }
     }
 }

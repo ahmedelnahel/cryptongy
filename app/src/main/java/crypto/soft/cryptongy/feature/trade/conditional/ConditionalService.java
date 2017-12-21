@@ -1,12 +1,7 @@
 package crypto.soft.cryptongy.feature.trade.conditional;
 
 import android.app.IntentService;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Intent;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.annotation.Nullable;
 
@@ -14,8 +9,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import crypto.soft.cryptongy.R;
-import crypto.soft.cryptongy.feature.main.MainActivity;
 import crypto.soft.cryptongy.feature.shared.json.limitorder.LimitOrder;
 import crypto.soft.cryptongy.feature.shared.json.ticker.Result;
 import crypto.soft.cryptongy.feature.shared.json.ticker.Ticker;
@@ -51,7 +44,7 @@ public class ConditionalService extends IntentService {
             for (int i = 0; i < list.size(); i++) {
                 Conditional conditional = list.get(i);
                 Ticker ticker = getTicker(conditional.getOrderCoin());
-                if(ticker != null && ticker.getSuccess() ) {
+                if (ticker != null && ticker.getSuccess()) {
                     if (conditional.getOrderType().equalsIgnoreCase(GlobalConstant.Conditional.TYPE_BUY)) {
                         checkBuy(conditional, ticker.getResult(), account, i);
                     } else {
@@ -95,40 +88,6 @@ public class ConditionalService extends IntentService {
         realm.commitTransaction();
     }
 
-    private void showNotification(String title, String content, int id) {
-        Intent intent = new Intent(new Intent()).setClass(this, MainActivity.class);
-        intent.putExtra("OPEN", "Conditional");
-        intent.setAction("notification");
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
-                intent, 0);
-        Notification.Builder b = new Notification.Builder(this)
-                .setContentTitle(title)
-                .setContentText(content)
-                .setSmallIcon(R.drawable.ic_notification_icon)
-                .setAutoCancel(true);
-
-
-        NotificationManager notificationManager =
-                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
-        crypto.soft.cryptongy.feature.setting.Notification globalSetting = ((CoinApplication) getApplication()).getSettings();
-        if(globalSetting != null) {
-            if (Boolean.valueOf(globalSetting.isVibrate())) {
-                long[] pattern = {500, 500, 500, 500, 500, 500, 500, 500, 500};
-                b.setVibrate(pattern);
-
-            }
-            if (Boolean.valueOf(globalSetting.isSound())) {
-
-
-                Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-                b.setSound(alarmSound);
-
-            }
-        }
-        notificationManager.notify(id, b.build());
-    }
-
     private void checkSell(Conditional conditional, Result ticker, Account account, final int id) {
         String market = conditional.getOrderCoin();
         Double quantity = conditional.getUnits();
@@ -149,23 +108,22 @@ public class ConditionalService extends IntentService {
             } else return;
         } else {
             if (conditional.getStopLossType().equalsIgnoreCase(GlobalConstant.Conditional.TYPE_TRAILER)) {
-                double low = conditional.getLast().doubleValue() - ((conditional.getLowCondition().doubleValue()/100) * conditional.getLast().doubleValue());
+                double low = conditional.getLast().doubleValue() - ((conditional.getLowCondition().doubleValue() / 100) * conditional.getLast().doubleValue());
                 if (ticker.getLast().doubleValue() <= low)
-                    rate = ticker.getLast().doubleValue() - (ticker.getLast().doubleValue() * (conditional.getLowPrice().doubleValue()/100));
+                    rate = ticker.getLast().doubleValue() - (ticker.getLast().doubleValue() * (conditional.getLowPrice().doubleValue() / 100));
                 else if (ticker.getLast().doubleValue() > conditional.getLast()) {
                     conditional.setLast(ticker.getLast());
                     updateConditional(conditional);
                     return;
-                }
-                else return;
+                } else return;
             } else {
                 double low = conditional.getLowCondition().doubleValue();
                 if (conditional.getConditionType().equalsIgnoreCase(GlobalConstant.Conditional.TYPE_PERCENTAGE))
-                    low = conditional.getLast().doubleValue() - ((low/100) * conditional.getLast().doubleValue());
+                    low = conditional.getLast().doubleValue() - ((low / 100) * conditional.getLast().doubleValue());
 
                 if (ticker.getLast().doubleValue() <= low) {
                     if (conditional.getPriceType().equalsIgnoreCase(GlobalConstant.Conditional.TYPE_PERCENTAGE))
-                        rate = ticker.getLast().doubleValue() - (ticker.getLast().doubleValue() * (conditional.getLowPrice().doubleValue()/100));
+                        rate = ticker.getLast().doubleValue() - (ticker.getLast().doubleValue() * (conditional.getLowPrice().doubleValue() / 100));
                     else
                         rate = ticker.getLast().doubleValue() - conditional.getLowPrice().doubleValue();
                 } else return;
@@ -177,12 +135,12 @@ public class ConditionalService extends IntentService {
 
             @Override
             public void onComplete(String result) {
-                showNotification("Sell order was placed successfully", result, GlobalUtil.getUniqueID());
+                GlobalUtil.showNotification(getApplicationContext(), "Sell order was placed successfully", result, GlobalUtil.getUniqueID());
             }
 
             @Override
             public void onFail(String error) {
-                showNotification("Sell order was failed", error, GlobalUtil.getUniqueID());
+                GlobalUtil.showNotification(getApplicationContext(), "Sell order was failed", error, GlobalUtil.getUniqueID());
             }
         });
     }
@@ -205,13 +163,13 @@ public class ConditionalService extends IntentService {
                             rate = ticker.getLast().doubleValue();
                             break;
                     }
-                }else
+                } else
                     rate = ticker.getLast().doubleValue();
             } else return;
         } else {
             double low = conditional.getLowCondition().doubleValue();
             if (conditional.getConditionType().equalsIgnoreCase(GlobalConstant.Conditional.TYPE_PERCENTAGE))
-                low = conditional.getLast().doubleValue() - ((low/100) * conditional.getLast().doubleValue());
+                low = conditional.getLast().doubleValue() - ((low / 100) * conditional.getLast().doubleValue());
 
             if (ticker.getLast().doubleValue() <= low) {
                 if (conditional.getPriceType().equalsIgnoreCase(GlobalConstant.Conditional.TYPE_PERCENTAGE))
@@ -226,12 +184,12 @@ public class ConditionalService extends IntentService {
 
             @Override
             public void onComplete(String result) {
-                showNotification("Buy order was placed successfully", result, GlobalUtil.getUniqueID());
+                GlobalUtil.showNotification(getApplicationContext(), "Buy order was placed successfully", result, GlobalUtil.getUniqueID());
             }
 
             @Override
             public void onFail(String error) {
-                showNotification("Buy order was failed", error, GlobalUtil.getUniqueID());
+                GlobalUtil.showNotification(getApplicationContext(), "Buy order was failed", error, GlobalUtil.getUniqueID());
             }
         });
     }
@@ -259,7 +217,7 @@ public class ConditionalService extends IntentService {
                     conditional.setOrderStatus(GlobalConstant.Conditional.TYPE_CLOSED);
                     updateConditional(conditional);
                     String msg = conditional.getOrderType() + " of " + conditional.getOrderCoin() + "   is placed successfully with rate " +
-                            String.format("%.8f",limit.getRate().doubleValue());
+                            String.format("%.8f", limit.getRate().doubleValue());
                     listner.onComplete(msg);
                 } else {
                     conditional.setOrderStatus(GlobalConstant.Conditional.TYPE_ERROR);
@@ -296,7 +254,7 @@ public class ConditionalService extends IntentService {
                     conditional.setOrderStatus(GlobalConstant.Conditional.TYPE_CLOSED);
                     updateConditional(conditional);
                     String msg = conditional.getOrderType() + " of " + conditional.getOrderCoin() + "   is placed successfully with rate " +
-                            String.format("%.8f",limit.getRate().doubleValue());
+                            String.format("%.8f", limit.getRate().doubleValue());
                     listner.onComplete(msg);
                 } else {
                     conditional.setOrderStatus(GlobalConstant.Conditional.TYPE_ERROR);

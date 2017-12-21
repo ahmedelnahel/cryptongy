@@ -9,6 +9,7 @@ import java.util.Iterator;
 import crypto.soft.cryptongy.feature.shared.json.action.Cancel;
 import crypto.soft.cryptongy.feature.shared.json.openorder.OpenOrder;
 import crypto.soft.cryptongy.feature.shared.json.openorder.Result;
+import crypto.soft.cryptongy.feature.shared.json.order.Order;
 import crypto.soft.cryptongy.feature.shared.json.orderhistory.OrderHistory;
 import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
 import crypto.soft.cryptongy.feature.shared.module.Account;
@@ -19,7 +20,7 @@ import crypto.soft.cryptongy.network.BittrexServices;
  */
 
 public class OrderInteractor {
-    void getOpenOrder(final String coinName, final Account account, final OnFinishListner<OpenOrder> listner) {
+    public void getOpenOrder(final String coinName, final Account account, final OnFinishListner<OpenOrder> listner) {
         new AsyncTask<Void, Void, OpenOrder>() {
 
             @Override
@@ -61,7 +62,7 @@ public class OrderInteractor {
         }.execute();
     }
 
-    void getOrderHistory(final String coinName, final Account account, final OnFinishListner<OrderHistory> listner) {
+    public void getOrderHistory(final String coinName, final Account account, final OnFinishListner<OrderHistory> listner) {
         new AsyncTask<Void, Void, OrderHistory>() {
 
             @Override
@@ -127,5 +128,20 @@ public class OrderInteractor {
                     listner.onFail(cancel.getMessage());
             }
         }.execute();
+    }
+
+    public void getOrders(String orderUuid, Account account, OnFinishListner<Order> listner) {
+        try {
+            Order order= new BittrexServices().getOrder(orderUuid,account);
+            if (order == null)
+                listner.onFail("Failed to cancle data");
+            else if (order.getSuccess().booleanValue())
+                listner.onComplete(order);
+            else
+                listner.onFail(order.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
+            listner.onFail(e.getMessage());
+        }
     }
 }

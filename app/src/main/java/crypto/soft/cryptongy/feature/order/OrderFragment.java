@@ -17,6 +17,7 @@ import com.hannesdorfmann.mosby.mvp.MvpFragment;
 import crypto.soft.cryptongy.R;
 import crypto.soft.cryptongy.feature.shared.json.openorder.OpenOrder;
 import crypto.soft.cryptongy.feature.shared.json.openorder.Result;
+import crypto.soft.cryptongy.feature.shared.json.order.Order;
 import crypto.soft.cryptongy.feature.shared.json.orderhistory.OrderHistory;
 import crypto.soft.cryptongy.feature.shared.json.ticker.Ticker;
 import crypto.soft.cryptongy.utils.CoinApplication;
@@ -28,7 +29,7 @@ import crypto.soft.cryptongy.utils.ProgressDialogFactory;
  * Created by tseringwongelgurung on 11/23/17.
  */
 
-public class OrderFragment extends MvpFragment<OrderView, OrderPresenter<OrderView>> implements OrderView,
+public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implements OrderView,
         View.OnClickListener {
     private View view;
 
@@ -66,7 +67,7 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter<OrderVi
         super.onViewCreated(view, savedInstanceState);
         if (isFirst) {
             isFirst = false;
-            presenter.getData("");
+            presenter.getData();
         }
     }
 
@@ -240,18 +241,25 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter<OrderVi
     }
 
     @Override
-    public void onClick(View view) {
-        int id = view.getId();
-        presenter.onClicked(id, "" );
-    }
+    public void setOrder(Order order) {
 
-    @Override
-    public void setTicker(Ticker ticker) {
-        //ignore in this class
     }
 
     @Override
     public void resetView() {
-        //ignore in this class
+
+    }
+
+    @Override
+    public void onDestroy() {
+        presenter.stopTimer();
+        presenter.unregisterReceiver();
+        super.onDestroy();
+    }
+
+    @Override
+    public void onClick(View view) {
+        int id = view.getId();
+        presenter.onClicked(id );
     }
 }

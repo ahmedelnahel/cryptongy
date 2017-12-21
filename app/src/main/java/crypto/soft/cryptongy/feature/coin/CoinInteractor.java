@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 
 import java.io.IOException;
 
+import crypto.soft.cryptongy.feature.order.OrderInteractor;
 import crypto.soft.cryptongy.feature.shared.json.markethistory.MarketHistory;
 import crypto.soft.cryptongy.feature.shared.json.marketsummary.MarketSummary;
 import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
@@ -13,7 +14,7 @@ import crypto.soft.cryptongy.network.BittrexServices;
  * Created by tseringwongelgurung on 11/25/17.
  */
 
-public class CoinInteractor {
+public class CoinInteractor extends OrderInteractor{
     public void getMarketSummary(final String coinName, final OnFinishListner<MarketSummary> listner) {
         new AsyncTask<Void, Void, MarketSummary>() {
 
