@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import crypto.soft.cryptongy.feature.setting.Notification;
 import io.realm.Realm;
 
 import static android.content.Context.ALARM_SERVICE;
@@ -88,5 +89,15 @@ public class GlobalUtil {
 
     public static int getUniqueID() {
         return c.incrementAndGet();
+    }
+
+
+    public static void sendBroadcast(Context context, Notification notification) {
+        Intent intent = new Intent();
+        intent.setAction(".feature.shared.ticker.TickerPresenter$TickerBroadcastReceiver");
+        intent.setAction(".feature.home.HomePresenter$HomeReceiver");
+        intent.putExtra("NOTI_SYNC", notification.isAutomSync());
+        intent.putExtra("NOTI_INTERVAL", notification.getSyncInterval());
+        context.sendBroadcast(intent);
     }
 }

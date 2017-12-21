@@ -481,6 +481,7 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
     @Override
     public void onDestroy() {
         presenter.stopTimer();
+        presenter.unregisterReceiver();
         super.onDestroy();
     }
 }

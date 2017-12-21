@@ -364,6 +364,7 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
     @Override
     public void onDestroy() {
         presenter.stopTimer();
+        presenter.unregisterReceiver();
         super.onDestroy();
     }
 }

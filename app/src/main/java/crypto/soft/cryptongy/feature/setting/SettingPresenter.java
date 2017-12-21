@@ -6,6 +6,7 @@ import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
 import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
 import crypto.soft.cryptongy.utils.CoinApplication;
+import crypto.soft.cryptongy.utils.GlobalUtil;
 
 /**
  * Created by tseringwongelgurung on 11/21/17.
@@ -38,5 +39,6 @@ public class SettingPresenter extends MvpBasePresenter<SettingView> {
     public void updateNotification(Notification notification) {
         interactor.updateNotification(notification);
         ((CoinApplication) context.getApplicationContext()).setSettings(notification);
+        GlobalUtil.sendBroadcast(context,notification);
     }
 }

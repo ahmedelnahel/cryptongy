@@ -31,8 +31,6 @@ public class SettingActivity extends MvpActivity<SettingView, SettingPresenter> 
         setContentView(R.layout.activity_setting);
         initToolbar();
         findViews();
-        setListner();
-        intervalTextwatcher();
         presenter.getNotification();
     }
 
@@ -106,6 +104,8 @@ public class SettingActivity extends MvpActivity<SettingView, SettingPresenter> 
         else
             lnlInterval.setVisibility(View.GONE);
         edtInterval.setText(String.valueOf(notification.getSyncInterval()));
+        setListner();
+        intervalTextwatcher();
     }
 
     @Override

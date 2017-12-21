@@ -486,6 +486,7 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
     @Override
     public void onDestroy() {
         presenter.stopTimer();
+        presenter.unregisterReceiver();
         super.onDestroy();
     }
 }

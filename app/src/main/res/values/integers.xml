@@ -2,6 +2,4 @@
 <resources>
 
     <integer name="service_interval">30000</integer>
-
-    <integer name="sync_interval">30000</integer>
 </resources>

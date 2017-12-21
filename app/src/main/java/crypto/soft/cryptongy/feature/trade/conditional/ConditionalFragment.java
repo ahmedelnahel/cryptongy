@@ -676,6 +676,7 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
     @Override
     public void onDestroy() {
         presenter.stopTimer();
+        presenter.unregisterReceiver();
         super.onDestroy();
     }
 }

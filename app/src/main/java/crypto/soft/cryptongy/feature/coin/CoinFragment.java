@@ -358,6 +358,7 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
     @Override
     public void onDestroy() {
         presenter.stopTimer();
+        presenter.unregisterReceiver();
         super.onDestroy();
     }
 }
