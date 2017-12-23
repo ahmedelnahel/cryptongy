@@ -453,6 +453,8 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
         edtUnits.setText("");
         rdbLast.setChecked(true);
         rdbBuy.setChecked(true);
+        tgbPrice.setChecked(true);
+        tgbLoss.setChecked(true);
     }
 
     @Override
