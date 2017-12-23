@@ -37,10 +37,10 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
     private double ethbtc;
 
 
-    public CurrencyAdapter(List<Result> currencyItems) {
+    public CurrencyAdapter(List<Result> currencyItems,SparseBooleanArray mSelectedItemsIds) {
         this.currencyItems = currencyItems;
         this.currencyItemsFiltered = currencyItems;
-        mSelectedItemsIds = new SparseBooleanArray();
+        this.mSelectedItemsIds =mSelectedItemsIds;
     }
 
     public static double round(double value, int places) {
@@ -239,5 +239,9 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
         public void onStopTrackingTouch(SeekBar seekBar) {
             Log.v("progress", "" + progressChangedValue);
         }
+    }
+
+    public SparseBooleanArray getmSelectedItemsIds() {
+        return mSelectedItemsIds;
     }
 }
