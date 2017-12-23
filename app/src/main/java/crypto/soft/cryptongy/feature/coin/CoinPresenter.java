@@ -102,7 +102,7 @@ public class CoinPresenter extends TickerPresenter<CoinView> {
                     }
                 }
             };
-            Observable.merge(getMarketSummary(coinName), getOpenOrders(coinName, account), getOrderHistory(coinName, account), getMarketHistory(coinName))
+            Observable.merge(getMarketSummary(coinName), getOpenOrders(coinName, account), getOrderHistory(coinName, account))
                     .subscribe(observer);
         } else {
             CustomDialog.showMessagePop(context, context.getString(R.string.noAPI), null);
