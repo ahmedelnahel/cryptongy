@@ -356,9 +356,15 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
     }
 
     @Override
-    public void onDestroy() {
+    public void onStart() {
+        super.onStart();
+        if (!TextUtils.isEmpty(coinName))
+            presenter.startTicker(coinName);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
         presenter.stopTimer();
-        presenter.unregisterReceiver();
-        super.onDestroy();
     }
 }

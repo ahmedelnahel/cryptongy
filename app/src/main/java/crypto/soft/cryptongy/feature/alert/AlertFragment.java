@@ -375,7 +375,21 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
 
     @Override
     public void resetView() {
-        new TickerV().reset(ContextCompat.getColor(getContext(),R.color.setting_text),lastValuInfo_TXT, ASKvalu_TXT, BidvalueInfo_TXT);
+        new TickerV().reset(ContextCompat.getColor(getContext(), R.color.setting_text), lastValuInfo_TXT, ASKvalu_TXT, BidvalueInfo_TXT);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        String coinNam = inputCoin.getText().toString();
+        if (!TextUtils.isEmpty(coinNam))
+            presenter.startTicker(coinNam);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        presenter.stopTimer();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
@@ -476,12 +490,5 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
             save_b.setTypeface(typeFaceCalibri);
             presenter.startTicker(inputCoin.getText().toString());
         }
-    }
-
-    @Override
-    public void onDestroy() {
-        presenter.stopTimer();
-        presenter.unregisterReceiver();
-        super.onDestroy();
     }
 }

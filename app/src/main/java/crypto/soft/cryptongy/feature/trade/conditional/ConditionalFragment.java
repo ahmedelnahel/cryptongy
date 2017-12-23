@@ -674,9 +674,16 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
     }
 
     @Override
-    public void onDestroy() {
+    public void onStart() {
+        super.onStart();
+        String coinNam = inputCoin.getText().toString();
+        if (!TextUtils.isEmpty(coinNam))
+            presenter.startTicker(coinNam);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
         presenter.stopTimer();
-        presenter.unregisterReceiver();
-        super.onDestroy();
     }
 }

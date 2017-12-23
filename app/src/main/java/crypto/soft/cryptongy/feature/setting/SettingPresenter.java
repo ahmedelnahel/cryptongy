@@ -39,6 +39,5 @@ public class SettingPresenter extends MvpBasePresenter<SettingView> {
     public void updateNotification(Notification notification) {
         interactor.updateNotification(notification);
         ((CoinApplication) context.getApplicationContext()).setSettings(notification);
-        GlobalUtil.sendBroadcast(context,notification);
     }
 }
