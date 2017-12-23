@@ -39,10 +39,12 @@ public class OrderPresenter extends MvpBasePresenter<OrderView> {
     private Context context;
     private Timer timer;
     private OpenOrder openOrder;
+    private boolean isStarted=false;
 
     public OrderPresenter(Context context) {
         this.context = context;
         interactor = new OrderInteractor();
+        isStarted=false;
     }
 
     public void onOptionItemClicked(int id) {
@@ -112,6 +114,7 @@ public class OrderPresenter extends MvpBasePresenter<OrderView> {
                         if (count == 2) {
                             getView().showEmptyView();
                         } else {
+                            isStarted=true;
                             startTimer();
                             getView().hideEmptyView();
                         }
@@ -268,13 +271,15 @@ public class OrderPresenter extends MvpBasePresenter<OrderView> {
     }
 
     public void startTimer() {
-        stopTimer();
-        Notification notification = ((CoinApplication) context.getApplicationContext()).getNotification();
-        if (notification.isAutomSync()) {
-            int timerInterval = notification.getSyncInterval() * 1000;
-            timer = new Timer();
-            timer.scheduleAtFixedRate(new TickerTimer(), timerInterval,
-                    timerInterval);
+        if (isStarted) {
+            stopTimer();
+            Notification notification = ((CoinApplication) context.getApplicationContext()).getNotification();
+            if (notification.isAutomSync()) {
+                int timerInterval = notification.getSyncInterval() * 1000;
+                timer = new Timer();
+                timer.scheduleAtFixedRate(new TickerTimer(), timerInterval,
+                        timerInterval);
+            }
         }
     }
 

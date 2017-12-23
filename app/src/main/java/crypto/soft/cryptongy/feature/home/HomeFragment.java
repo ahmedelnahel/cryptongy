@@ -192,11 +192,11 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
         mock.clear();
         mock.addAll(results);
         SparseBooleanArray mSelectedItemsIds;
-        if (currencyAdapter!=null && currencyAdapter.getmSelectedItemsIds()!=null)
-            mSelectedItemsIds=currencyAdapter.getmSelectedItemsIds();
+        if (currencyAdapter != null && currencyAdapter.getmSelectedItemsIds() != null)
+            mSelectedItemsIds = currencyAdapter.getmSelectedItemsIds();
         else
-            mSelectedItemsIds=new SparseBooleanArray();
-        currencyAdapter = new CurrencyAdapter(mock,mSelectedItemsIds);
+            mSelectedItemsIds = new SparseBooleanArray();
+        currencyAdapter = new CurrencyAdapter(mock, mSelectedItemsIds);
         listCurrency.setAdapter(currencyAdapter);
         currencyAdapter.setAdapterItemClickListener(this);
     }
@@ -370,8 +370,7 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
     @Override
     public void onStart() {
         super.onStart();
-        if (!isFirst)
-            presenter.startTimer();
+        presenter.startTimer();
     }
 
     @Override

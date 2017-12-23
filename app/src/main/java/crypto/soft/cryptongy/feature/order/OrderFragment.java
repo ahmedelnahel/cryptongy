@@ -257,8 +257,7 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implem
     @Override
     public void onPause() {
         super.onPause();
-        if (!isFirst)
-            presenter.stopTimer();
+        presenter.stopTimer();
     }
 
     @Override

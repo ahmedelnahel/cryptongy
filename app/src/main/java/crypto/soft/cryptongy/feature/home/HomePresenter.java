@@ -25,10 +25,12 @@ public class HomePresenter extends MvpBasePresenter<HomeView> implements OnMulti
     private HomeInteractor homeInteractor;
     private Context context;
     private List<Result> prevResults = new ArrayList<>();
+    private boolean isStarted = false;
 
     public HomePresenter(Context context) {
         this.homeInteractor = new HomeInteractor();
         this.context = context;
+        isStarted = false;
     }
 
     public void loadSummaries() {
@@ -44,6 +46,7 @@ public class HomePresenter extends MvpBasePresenter<HomeView> implements OnMulti
             getView().setAdapter(results);
             prevResults = results;
             getView().onSummaryDataLoad(marketSummaries);
+            isStarted=true;
             startTimer();
         }
     }
@@ -62,13 +65,15 @@ public class HomePresenter extends MvpBasePresenter<HomeView> implements OnMulti
     }
 
     public void startTimer() {
-        stopTimer();
-        Notification notification = ((CoinApplication) context.getApplicationContext()).getNotification();
-        if (notification.isAutomSync()) {
-            int timerInterval = notification.getSyncInterval() * 1000;
-            timer = new Timer();
-            timer.scheduleAtFixedRate(new TickerTimer(), timerInterval,
-                    timerInterval);
+        if (isStarted) {
+            stopTimer();
+            Notification notification = ((CoinApplication) context.getApplicationContext()).getNotification();
+            if (notification.isAutomSync()) {
+                int timerInterval = notification.getSyncInterval() * 1000;
+                timer = new Timer();
+                timer.scheduleAtFixedRate(new TickerTimer(), timerInterval,
+                        timerInterval);
+            }
         }
     }
 
