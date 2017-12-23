@@ -483,10 +483,18 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
         new TickerV().reset(ContextCompat.getColor(getContext(),R.color.setting_text),lastValuInfo_TXT, ASKvalu_TXT, BidvalueInfo_TXT);
     }
 
+
     @Override
-    public void onDestroy() {
+    public void onStart() {
+        super.onStart();
+        String coinNam = inputCoin.getText().toString();
+        if (!TextUtils.isEmpty(coinNam))
+            presenter.startTicker(coinNam);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
         presenter.stopTimer();
-        presenter.unregisterReceiver();
-        super.onDestroy();
     }
 }

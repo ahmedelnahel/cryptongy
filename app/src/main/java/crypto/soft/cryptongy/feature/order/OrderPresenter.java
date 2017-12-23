@@ -1,9 +1,7 @@
 package crypto.soft.cryptongy.feature.order;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.text.TextUtils;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
@@ -39,7 +37,6 @@ import io.reactivex.disposables.Disposable;
 public class OrderPresenter extends MvpBasePresenter<OrderView> {
     protected OrderInteractor interactor;
     private Context context;
-    private OrderReceiver receiver;
     private Timer timer;
     private OpenOrder openOrder;
 
@@ -270,37 +267,15 @@ public class OrderPresenter extends MvpBasePresenter<OrderView> {
             timer.cancel();
     }
 
-    public void unregisterReceiver() {
-        if (receiver != null)
-            context.unregisterReceiver(receiver);
-    }
-
     public void startTimer() {
+        stopTimer();
         Notification notification = ((CoinApplication) context.getApplicationContext()).getNotification();
         if (notification.isAutomSync()) {
             int timerInterval = notification.getSyncInterval() * 1000;
             timer = new Timer();
             timer.scheduleAtFixedRate(new TickerTimer(), timerInterval,
                     timerInterval);
-            registerReceiver();
         }
-    }
-
-    public void restartTimer(int timerInterval) {
-        if (timer != null) {
-            timer.cancel();
-            timer = new Timer();
-            timerInterval *= 1000;
-            timer.scheduleAtFixedRate(new TickerTimer(), timerInterval,
-                    timerInterval);
-        }
-    }
-
-    public void registerReceiver() {
-        IntentFilter filter = new IntentFilter(".feature.order.OrderPresenter$OrderReceiver");
-
-        receiver = new OrderReceiver();
-        context.registerReceiver(receiver, filter);
     }
 
     public void startOpenOrder(String coinName, Account account) {
@@ -363,22 +338,6 @@ public class OrderPresenter extends MvpBasePresenter<OrderView> {
                     }
                 });
             }
-        }
-    }
-
-    public class OrderReceiver extends BroadcastReceiver {
-
-        public OrderReceiver() {
-        }
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            boolean isSyncEnabled = intent.getBooleanExtra("NOTI_SYNC", true);
-            int timeInterval = intent.getIntExtra("NOTI_INTERVAL", 15);
-            if (isSyncEnabled)
-                restartTimer(timeInterval);
-            else
-                stopTimer();
         }
     }
 }

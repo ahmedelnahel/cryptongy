@@ -361,10 +361,17 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
         }
     }
 
+
     @Override
-    public void onDestroy() {
+    public void onStart() {
+        super.onStart();
+        if (!isFirst)
+            presenter.startTimer();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
         presenter.stopTimer();
-        presenter.unregisterReceiver();
-        super.onDestroy();
     }
 }

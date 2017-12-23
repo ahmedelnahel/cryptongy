@@ -2,7 +2,6 @@ package crypto.soft.cryptongy.feature.order;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +18,6 @@ import crypto.soft.cryptongy.feature.shared.json.openorder.OpenOrder;
 import crypto.soft.cryptongy.feature.shared.json.openorder.Result;
 import crypto.soft.cryptongy.feature.shared.json.order.Order;
 import crypto.soft.cryptongy.feature.shared.json.orderhistory.OrderHistory;
-import crypto.soft.cryptongy.feature.shared.json.ticker.Ticker;
 import crypto.soft.cryptongy.utils.CoinApplication;
 import crypto.soft.cryptongy.utils.GlobalUtil;
 import crypto.soft.cryptongy.utils.HideKeyboard;
@@ -36,7 +34,7 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implem
     private TableLayout tblOpenOrders, tblOrderHistory;
 
     private LinearLayout lnlContainer;
-    private TextView txtLevel, txtOpenOrder, txtOrderHistory, txtEmpty, txtBtc, txtUsd, txtGap,txtProfit;
+    private TextView txtLevel, txtOpenOrder, txtOrderHistory, txtEmpty, txtBtc, txtUsd, txtGap, txtProfit;
     private ImageView imgSync, imgAccSetting;
 
     private boolean isFirst = false;
@@ -144,9 +142,9 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implem
             final Result data = openOrders.getResult().get(i);
             View sub = getLayoutInflater().inflate(R.layout.table_open_order_sub, null);
             OpenOrderHolder holder = new OpenOrderHolder(sub);
-            holder.txtType.setText(data.getOrderType().replace("LIMIT_",""));
+            holder.txtType.setText(data.getOrderType().replace("LIMIT_", ""));
             holder.txtCoin.setText(data.getExchange());
-            holder.txtQuantity.setText(String.format("%.2f",data.getQuantity()) + "\n" + String.format("%.2f",data.getQuantityRemaining()));
+            holder.txtQuantity.setText(String.format("%.2f", data.getQuantity()) + "\n" + String.format("%.2f", data.getQuantityRemaining()));
             holder.txtRate.setText(String.format("%.8f", data.getLimit()));
             String date = data.getOpened();
             if (!TextUtils.isEmpty(date)) {
@@ -193,10 +191,10 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implem
             crypto.soft.cryptongy.feature.shared.json.orderhistory.Result data = orderHistory.getResult().get(i);
             View sub = getLayoutInflater().inflate(R.layout.talbe_order_history_sub, null);
             OrderHistoryHolder holder = new OrderHistoryHolder(sub);
-            holder.txtType.setText(data.getOrderType().replace("LIMIT_",""));
+            holder.txtType.setText(data.getOrderType().replace("LIMIT_", ""));
             holder.txtCoin.setText(data.getExchange());
-            holder.txtQuantity.setText(String.format("%.2f",data.getQuantity()));
-            holder.txtRate.setText(String.format("%.8f",data.getLimit()));
+            holder.txtQuantity.setText(String.format("%.2f", data.getQuantity()));
+            holder.txtRate.setText(String.format("%.8f", data.getLimit()));
             String date = data.getClosed();
             if (!TextUtils.isEmpty(date)) {
                 String[] arr = date.split("T");
@@ -251,15 +249,21 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implem
     }
 
     @Override
-    public void onDestroy() {
-        presenter.stopTimer();
-        presenter.unregisterReceiver();
-        super.onDestroy();
+    public void onStart() {
+        super.onStart();
+        presenter.startTimer();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (!isFirst)
+            presenter.stopTimer();
     }
 
     @Override
     public void onClick(View view) {
         int id = view.getId();
-        presenter.onClicked(id );
+        presenter.onClicked(id);
     }
 }

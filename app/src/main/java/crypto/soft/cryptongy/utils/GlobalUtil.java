@@ -97,17 +97,6 @@ public class GlobalUtil {
         return c.incrementAndGet();
     }
 
-
-    public static void sendBroadcast(Context context, Notification notification) {
-        Intent intent = new Intent();
-        intent.setAction(".feature.shared.ticker.TickerPresenter$TickerBroadcastReceiver");
-        intent.setAction(".feature.home.HomePresenter$HomeReceiver");
-        intent.setAction(".feature.order.OrderPresenter$OrderReceiver");
-        intent.putExtra("NOTI_SYNC", notification.isAutomSync());
-        intent.putExtra("NOTI_INTERVAL", notification.getSyncInterval());
-        context.sendBroadcast(intent);
-    }
-
     public static void showNotification(Context context,String title, String content, int id) {
         Intent intent = new Intent(new Intent()).setClass(context, MainActivity.class);
         intent.putExtra("OPEN", "Conditional");
