@@ -31,7 +31,7 @@ public class CoinInteractor extends OrderInteractor{
             @Override
             protected void onPostExecute(MarketSummary marketSummary) {
                 super.onPostExecute(marketSummary);
-                if (marketSummary == null)
+                if (marketSummary == null || !marketSummary.getSuccess())
                     listner.onFail("Failed to fetch data");
                 else if (marketSummary.getSuccess().booleanValue())
                     listner.onComplete(marketSummary);
@@ -46,23 +46,24 @@ public class CoinInteractor extends OrderInteractor{
 
             @Override
             protected MarketHistory doInBackground(Void... voids) {
-                try {
-                    return new BittrexServices().getMarketHistory(coinName);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+//                try {
+//                    return new BittrexServices().getMarketHistory(coinName);
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
                 return null;
             }
 
             @Override
             protected void onPostExecute(MarketHistory marketSummary) {
                 super.onPostExecute(marketSummary);
-                if (marketSummary == null)
-                    listner.onFail("Failed to fetch data");
-                else if (marketSummary.getSuccess().booleanValue())
-                    listner.onComplete(marketSummary);
-                else
-                    listner.onFail(marketSummary.getMessage());
+//                if (marketSummary == null || !marketSummary.getSuccess())
+//                    listner.onFail("Failed to fetch data");
+//                else if (marketSummary.getSuccess().booleanValue())
+//                    listner.onComplete(marketSummary);
+//                else
+//                    listner.onFail(marketSummary.getMessage());
+                listner.onComplete(marketSummary);
             }
         }.execute();
     }

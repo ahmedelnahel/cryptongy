@@ -48,9 +48,10 @@ public class HomeInteractor {
                     if (marketSummaries != null && marketSummaries.getResult() != null &&  marketSummaries.getSuccess()) {
 
 
-                        results.add(marketSummaries.getCoinsMap().get("USDT-LTC"));
-                        results.add(marketSummaries.getCoinsMap().get("USDT-ETH"));
+                        results.add(marketSummaries.getCoinsMap().get("BTC-LTC"));
+                        results.add(marketSummaries.getCoinsMap().get("BTC-ETH"));
                         results.add(marketSummaries.getCoinsMap().get("BTC-VTC"));
+                        results.add(marketSummaries.getCoinsMap().get("BTC-SYS"));
                         results.add(marketSummaries.getCoinsMap().get("BTC-XVG"));
                         if (results != null) {
                             SharedPreference.saveToPrefs(context, "isCoinAdded", false);

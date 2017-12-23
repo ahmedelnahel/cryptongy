@@ -187,7 +187,7 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
             holder.txtType.setText(data.getOrderType());
             holder.txtCoin.setText(data.getExchange());
             holder.txtQuantity.setText(String.valueOf(data.getQuantity()) + "\n" + String.valueOf(data.getQuantityRemaining()));
-            holder.txtRate.setText(String.valueOf(data.getLimit()));
+            holder.txtRate.setText(String.valueOf(String.format("%.8f", data.getLimit())));
             String date = data.getOpened();
             if (!TextUtils.isEmpty(date)) {
                 String[] arr = date.split("T");
@@ -236,7 +236,7 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
             holder.txtCoin.setText(data.getExchange());
             holder.txtType.setText(data.getOrderType());
             holder.txtQuantity.setText(String.valueOf(data.getQuantity()));
-            holder.txtRate.setText(String.valueOf(data.getLimit()));
+            holder.txtRate.setText(String.valueOf(String.format("%.8f", data.getLimit())));
             String date = data.getClosed();
             if (!TextUtils.isEmpty(date)) {
                 String[] arr = date.split("T");
