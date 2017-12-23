@@ -346,12 +346,12 @@ public class OrderPresenter extends MvpBasePresenter<OrderView> {
                         if (getView() != null) {
                             crypto.soft.cryptongy.feature.shared.json.order.Result order = result.getResult();
                             if (!result.getResult().getIsOpen()) {
-                                GlobalUtil.showNotification(context, "Open Order status", order.getExchange() + "(" + String.format("%.8f", order.getQuantity().doubleValue()) +
-                                        ")" + "of " + order.getType() + " is now closed.", finalI);
+                                GlobalUtil.showNotification(context, "Order Status",  order.getType() + "(" + String.format("%.8f", order.getQuantity().doubleValue()) +
+                                        ")" + "of " +  order.getExchange() + " is filled.", finalI);
                                 startOpenOrder("", account);
                             } else if (result.getResult().getCancelInitiated()) {
-                                GlobalUtil.showNotification(context, "Open Order status", order.getExchange() + "(" + String.format("%.8f", order.getQuantity().doubleValue()) +
-                                        ")" + "of " + order.getType() + " is now cancelled.", finalI);
+                                GlobalUtil.showNotification(context, "Order status",  order.getType() + "(" + String.format("%.8f", order.getQuantity().doubleValue()) +
+                                        ")" + "of " +  order.getExchange() + " is now cancelled.", finalI);
                                 startOpenOrder("", account);
                             }
                         }
