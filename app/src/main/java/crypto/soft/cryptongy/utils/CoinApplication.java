@@ -1,9 +1,12 @@
 package crypto.soft.cryptongy.utils;
 
 import android.app.Application;
+import android.content.Intent;
 
 import crypto.soft.cryptongy.R;
 import crypto.soft.cryptongy.feature.alert.broadCastTicker;
+import crypto.soft.cryptongy.feature.order.OrderReceiver;
+import crypto.soft.cryptongy.feature.order.OrderService;
 import crypto.soft.cryptongy.feature.setting.Notification;
 import crypto.soft.cryptongy.feature.shared.json.openorder.OpenOrder;
 import crypto.soft.cryptongy.feature.shared.module.Account;
@@ -93,6 +96,8 @@ public class CoinApplication extends Application {
         Realm.setDefaultConfiguration(realmConfiguration);
         updateAccount();
 
+        getNotification();
+
         startService();
     }
 
@@ -129,12 +134,17 @@ public class CoinApplication extends Application {
         } else
             notification = realm.copyFromRealm(notificationDb);
         realm.commitTransaction();
+        settings=notification;
         return notification;
     }
 
     public void startService() {
         GlobalUtil.startAlarm(ConditionalReceiver.class, getResources().getInteger(R.integer.service_interval), this);
         GlobalUtil.startAlarm(broadCastTicker.class, getResources().getInteger(R.integer.service_interval), this);
+
+        if (settings.isAutomSync()) {
+            GlobalUtil.startAlarm(OrderReceiver.class, settings.getSyncInterval() * 1000, this);
+        }
     }
 
     public OpenOrder getOpenOrder() {

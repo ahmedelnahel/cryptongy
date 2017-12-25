@@ -6,24 +6,18 @@ import android.text.TextUtils;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 import crypto.soft.cryptongy.R;
 import crypto.soft.cryptongy.feature.account.AccountActivity;
 import crypto.soft.cryptongy.feature.account.CustomDialog;
 import crypto.soft.cryptongy.feature.main.MainActivity;
-import crypto.soft.cryptongy.feature.setting.Notification;
 import crypto.soft.cryptongy.feature.setting.SettingActivity;
 import crypto.soft.cryptongy.feature.shared.json.action.Cancel;
 import crypto.soft.cryptongy.feature.shared.json.openorder.OpenOrder;
-import crypto.soft.cryptongy.feature.shared.json.order.Order;
 import crypto.soft.cryptongy.feature.shared.json.orderhistory.OrderHistory;
 import crypto.soft.cryptongy.feature.shared.json.orderhistory.Result;
 import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
 import crypto.soft.cryptongy.feature.shared.module.Account;
 import crypto.soft.cryptongy.utils.CoinApplication;
-import crypto.soft.cryptongy.utils.GlobalUtil;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -37,14 +31,10 @@ import io.reactivex.disposables.Disposable;
 public class OrderPresenter extends MvpBasePresenter<OrderView> {
     protected OrderInteractor interactor;
     private Context context;
-    private Timer timer;
-    private OpenOrder openOrder;
-    private boolean isStarted=false;
 
     public OrderPresenter(Context context) {
         this.context = context;
         interactor = new OrderInteractor();
-        isStarted=false;
     }
 
     public void onOptionItemClicked(int id) {
@@ -92,8 +82,7 @@ public class OrderPresenter extends MvpBasePresenter<OrderView> {
                     count--;
                     if (o instanceof OpenOrder) {
                         if (getView() != null) {
-                            openOrder = (OpenOrder) o;
-                            getView().setOpenOrders(openOrder);
+                            getView().setOpenOrders((OpenOrder) o);
                         }
                     } else if (o instanceof OrderHistory) {
                         if (getView() != null) {
@@ -114,8 +103,6 @@ public class OrderPresenter extends MvpBasePresenter<OrderView> {
                         if (count == 2) {
                             getView().showEmptyView();
                         } else {
-                            isStarted=true;
-                            startTimer();
                             getView().hideEmptyView();
                         }
                     }
@@ -262,87 +249,6 @@ public class OrderPresenter extends MvpBasePresenter<OrderView> {
         calculation = sell - buy + currentHolding;
         if (getView() != null) {
             getView().setCalculation(calculation);
-        }
-    }
-
-    public void stopTimer() {
-        if (timer != null)
-            timer.cancel();
-    }
-
-    public void startTimer() {
-        if (isStarted) {
-            stopTimer();
-            Notification notification = ((CoinApplication) context.getApplicationContext()).getNotification();
-            if (notification.isAutomSync()) {
-                int timerInterval = notification.getSyncInterval() * 1000;
-                timer = new Timer();
-                timer.scheduleAtFixedRate(new TickerTimer(), timerInterval,
-                        timerInterval);
-            }
-        }
-    }
-
-    public void startOpenOrder(String coinName, Account account) {
-        getOpenOrders(coinName, account).subscribe(new Observer<OpenOrder>() {
-            @Override
-            public void onSubscribe(Disposable d) {
-
-            }
-
-            @Override
-            public void onNext(OpenOrder openOrder) {
-                if (getView() != null) {
-                    OrderPresenter.this.openOrder = openOrder;
-                    getView().setOpenOrders(OrderPresenter.this.openOrder);
-                }
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-
-            @Override
-            public void onComplete() {
-
-            }
-        });
-    }
-
-
-    class TickerTimer extends TimerTask {
-
-        @Override
-        public void run() {
-            final Account account = ((CoinApplication) context.getApplicationContext()).getReadAccount();
-            for (int i = 0; i < openOrder.getResult().size(); i++) {
-                final crypto.soft.cryptongy.feature.shared.json.openorder.Result data = openOrder.getResult().get(i);
-                final int finalI = i;
-                interactor.getOrders(data.getOrderUuid(), account, new OnFinishListner<Order>() {
-
-                    @Override
-                    public void onComplete(Order result) {
-                        if (getView() != null) {
-                            crypto.soft.cryptongy.feature.shared.json.order.Result order = result.getResult();
-                            if (!result.getResult().getIsOpen()) {
-                                GlobalUtil.showNotification(context, "Order Status",  order.getType() + "(" + String.format("%.8f", order.getQuantity().doubleValue()) +
-                                        ")" + "of " +  order.getExchange() + " is filled.", finalI);
-                                startOpenOrder("", account);
-                            } else if (result.getResult().getCancelInitiated()) {
-                                GlobalUtil.showNotification(context, "Order status",  order.getType() + "(" + String.format("%.8f", order.getQuantity().doubleValue()) +
-                                        ")" + "of " +  order.getExchange() + " is now cancelled.", finalI);
-                                startOpenOrder("", account);
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onFail(String error) {
-
-                    }
-                });
-            }
         }
     }
 }

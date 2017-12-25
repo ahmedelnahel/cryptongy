@@ -36,6 +36,11 @@
             android:enabled="true"
             android:exported="false" />
 
+        <service
+            android:name=".feature.order.OrderService"
+            android:enabled="true"
+            android:exported="false" />
+
         <receiver
             android:name=".feature.alert.broadCastTicker"
             android:enabled="true"
@@ -46,6 +51,13 @@
         </receiver>
         <receiver
             android:name=".feature.trade.conditional.ConditionalReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".feature.order.OrderReceiver"
             android:enabled="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />

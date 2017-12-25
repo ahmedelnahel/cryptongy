@@ -249,18 +249,6 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implem
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        presenter.startTimer();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        presenter.stopTimer();
-    }
-
-    @Override
     public void onClick(View view) {
         int id = view.getId();
         presenter.onClicked(id);

@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
+import crypto.soft.cryptongy.feature.order.OrderReceiver;
 import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
 import crypto.soft.cryptongy.utils.CoinApplication;
 import crypto.soft.cryptongy.utils.GlobalUtil;
@@ -39,5 +40,9 @@ public class SettingPresenter extends MvpBasePresenter<SettingView> {
     public void updateNotification(Notification notification) {
         interactor.updateNotification(notification);
         ((CoinApplication) context.getApplicationContext()).setSettings(notification);
+
+        if (notification.isAutomSync()) {
+            GlobalUtil.startAlarm(OrderReceiver.class, notification.getSyncInterval() * 1000, context);
+        }
     }
 }
