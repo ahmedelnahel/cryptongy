@@ -89,7 +89,8 @@ public class HomePresenter extends MvpBasePresenter<HomeView> implements OnMulti
                     result.setDrawable(R.drawable.seek_progress_green);
                 else
                     result.setDrawable(R.drawable.seek_progress);
-            } else
+            }
+            else
                 result.setDrawable(R.drawable.seek_progress);
         }
         return list;

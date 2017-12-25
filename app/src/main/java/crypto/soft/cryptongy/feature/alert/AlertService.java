@@ -56,19 +56,19 @@ public class AlertService extends IntentService {
         }
         list.addAll(realm.copyFromRealm(coinInfoResult));
         realm.commitTransaction();
-
+        realm.close();
         BittrexServices Tickerservices = new BittrexServices();
 
         for (CoinInfo coinInfo : list) {
             boolean met = false;
             try {
                 Ticker ticker = Tickerservices.getTicker(coinInfo.getCoinName());
-                if (coinInfo.isHigher() && ticker.getSuccess() && ticker.getResult().getLast().doubleValue() >= coinInfo.getHighValue().doubleValue() ) {
+                if (coinInfo.isHigher() && ticker.getResult()!=null && ticker.getSuccess() && ticker.getResult().getLast().doubleValue() >= coinInfo.getHighValue().doubleValue() ) {
                     showNotification("Alert", coinInfo.CoinName + " is above " + String.format("%.8f", coinInfo.getHighValue().doubleValue()), GlobalUtil.getUniqueID());
                     met = true;
                 }
 
-                if (coinInfo.isLower()&& ticker.getSuccess() && ticker.getResult().getLast().doubleValue() <= coinInfo.getLowValue().doubleValue() ) {
+                if (coinInfo.isLower()&& ticker.getResult()!=null && ticker.getSuccess() && ticker.getResult().getLast().doubleValue() <= coinInfo.getLowValue().doubleValue() ) {
                     showNotification("Alert", coinInfo.CoinName + " is below " + String.format("%.8f", coinInfo.getLowValue().doubleValue()), GlobalUtil.getUniqueID());
                    met = true;
                 }
@@ -89,6 +89,7 @@ public class AlertService extends IntentService {
         realm.beginTransaction();
         realm.copyToRealmOrUpdate(coinInfo);
         realm.commitTransaction();
+        realm.close();
     }
 
     private void showNotification(String title, String content, int id) {
