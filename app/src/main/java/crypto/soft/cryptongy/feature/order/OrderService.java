@@ -31,7 +31,7 @@ public class OrderService extends IntentService {
         final CoinApplication application = (CoinApplication) getApplication();
         OpenOrder order = application.getOpenOrder();
         if (order == null)
-            getOpenOrder(application, true);
+            getOpenOrder(application, false);
         else
             checkOrder(order, application);
 
