@@ -61,16 +61,19 @@ public class OrderService extends IntentService {
 
                 @Override
                 public void onComplete(Order result) {
-                    Result order = result.getResult();
-                    if (!result.getResult().getIsOpen()) {
-                        GlobalUtil.showNotification(OrderService.this, "Order Status", order.getType() + "(" + String.format("%.8f", order.getQuantity().doubleValue()) +
-                                ")" + "of " + order.getExchange() + " is filled.", finalI);
-                        getOpenOrder(application, false);
-                    } else if (result.getResult().getCancelInitiated()) {
-                        GlobalUtil.showNotification(OrderService.this, "Order status", order.getType() + "(" + String.format("%.8f", order.getQuantity().doubleValue()) +
-                                ")" + "of " + order.getExchange() + " is now cancelled.", finalI);
-                        getOpenOrder(application, false);
+                    if(result!=null && result.getSuccess() && result.getResult()!= null) {
+                        Result order = result.getResult();
+                        if (!result.getResult().getIsOpen()) {
+                            GlobalUtil.showNotification(OrderService.this, "Order Status", order.getType() + "(" + String.format("%.8f", order.getQuantity().doubleValue()) +
+                                    ")" + "of " + order.getExchange() + " is filled.", finalI);
+
+                        } else if (result.getResult().getCancelInitiated()) {
+                            GlobalUtil.showNotification(OrderService.this, "Order status", order.getType() + "(" + String.format("%.8f", order.getQuantity().doubleValue()) +
+                                    ")" + "of " + order.getExchange() + " is now cancelled.", finalI);
+
+                        }
                     }
+
                 }
 
                 @Override
@@ -79,5 +82,6 @@ public class OrderService extends IntentService {
                 }
             });
         }
+        getOpenOrder(application, false);
     }
 }
