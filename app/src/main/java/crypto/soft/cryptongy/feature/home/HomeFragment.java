@@ -264,6 +264,7 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
                         }
                     }
                     mock.add(result);
+                    CustomDialog.showMessagePop(getContext(), result.getMarketName() + " Coin is added successfully.", null);
                     result = null;
                 } else {
                     inputCoin.requestFocus();
@@ -290,7 +291,9 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
                         iterator.remove();
                     currencyAdapter.notifyDataSetChanged();
                     SharedPreference.saveToPrefs(getContext(), "mockValue", new Gson().toJson(mock));
+
                 }
+                CustomDialog.showMessagePop(getContext(), "Coins is deleted successfully.", null);
                 break;
             case R.id.imgKey:
                 ((MainActivity) getActivity()).getPresenter().replaceAccountFragment();

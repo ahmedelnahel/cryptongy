@@ -3,6 +3,7 @@ package crypto.soft.cryptongy.feature.order;
 import android.app.IntentService;
 import android.content.Intent;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import crypto.soft.cryptongy.feature.shared.json.openorder.OpenOrder;
 import crypto.soft.cryptongy.feature.shared.json.order.Order;
@@ -48,7 +49,7 @@ public class OrderService extends IntentService {
 
             @Override
             public void onFail(String error) {
-
+                Log.e("orderService", error);
             }
         });
     }
