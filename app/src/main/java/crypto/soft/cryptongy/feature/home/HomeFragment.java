@@ -9,6 +9,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.util.SparseBooleanArray;
@@ -32,6 +33,7 @@ import com.hannesdorfmann.mosby.mvp.MvpFragment;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -155,9 +157,9 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
                     imm.showSoftInput(search, InputMethodManager.SHOW_IMPLICIT);
                 }
             });
+            isFirst = true;
         }
         setTitle();
-        isFirst = true;
         return view;
     }
 
@@ -189,16 +191,30 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
 
     @Override
     public void setAdapter(List<Result> results) {
+        results=restoreData(results);
         mock.clear();
         mock.addAll(results);
-        SparseBooleanArray mSelectedItemsIds;
-        if (currencyAdapter != null && currencyAdapter.getmSelectedItemsIds() != null)
-            mSelectedItemsIds = currencyAdapter.getmSelectedItemsIds();
-        else
-            mSelectedItemsIds = new SparseBooleanArray();
-        currencyAdapter = new CurrencyAdapter(mock, mSelectedItemsIds);
-        listCurrency.setAdapter(currencyAdapter);
-        currencyAdapter.setAdapterItemClickListener(this);
+        if (currencyAdapter == null) {
+            currencyAdapter = new CurrencyAdapter(mock);
+            listCurrency.setAdapter(currencyAdapter);
+            currencyAdapter.setAdapterItemClickListener(this);
+        } else {
+            String txtSearch = search.getText().toString();
+            if (!TextUtils.isEmpty(txtSearch))
+                currencyAdapter.getFilter().filter(txtSearch);
+        }
+    }
+
+    private List<Result> restoreData(List<Result> results){
+        for (Result result:mock){
+            for (Result result1:results){
+                if (result.getMarketName().equalsIgnoreCase(result1.getMarketName())){
+                    result1.setSelected(result.isSelected());
+                    break;
+                }
+            }
+        }
+        return results;
     }
 
     @Override
@@ -267,20 +283,13 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
             case R.id.imgDelete:
                 if (mock == null)
                     return;
-                SparseBooleanArray booleanArray = currencyAdapter.getSelectedIds();
-                if (booleanArray != null && booleanArray.size() > 0) {
-                    for (int i = 0; i < booleanArray.size(); i++) {
-                        try {
-                            int pos = booleanArray.keyAt(i);
-                            mock.remove(pos);
-                        } catch (IndexOutOfBoundsException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
+                Iterator iterator=mock.iterator();
+                while (iterator.hasNext()){
+                    Result result= (Result) iterator.next();
+                    if (result.isSelected())
+                        iterator.remove();
                     currencyAdapter.notifyDataSetChanged();
                     SharedPreference.saveToPrefs(getContext(), "mockValue", new Gson().toJson(mock));
-                    currencyAdapter.setmSelectedItemsIds();
                 }
                 break;
             case R.id.imgKey:

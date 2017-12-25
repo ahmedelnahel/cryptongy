@@ -31,16 +31,14 @@ import crypto.soft.cryptongy.utils.CoinApplication;
 public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.CurrencyViewHolder> implements Filterable {
     List<Result> currencyItems;
     List<Result> currencyItemsFiltered;
-    private SparseBooleanArray mSelectedItemsIds;
     private AdapterItemClickListener adapterItemClickListener;
     private double btcusdt;
     private double ethbtc;
 
 
-    public CurrencyAdapter(List<Result> currencyItems,SparseBooleanArray mSelectedItemsIds) {
+    public CurrencyAdapter(List<Result> currencyItems) {
         this.currencyItems = currencyItems;
         this.currencyItemsFiltered = currencyItems;
-        this.mSelectedItemsIds =mSelectedItemsIds;
     }
 
     public static double round(double value, int places) {
@@ -88,7 +86,7 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
         holder.price.setText(price);
         holder.pricedollar.setText(pricedollar);
 
-        if (!mSelectedItemsIds.get(position)) {
+        if (!result.isSelected()) {
             holder.parent.setBackgroundResource(R.drawable.rect);
         } else {
             holder.parent.setBackgroundResource(R.drawable.rect_fill_selected);
@@ -98,7 +96,7 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
         double pricepoint = result.getLast() - result.getLow();
         double highpoint = result.getHigh() - result.getLow();
         holder.seekBar.setProgress(getProgress(pricepoint, highpoint));
-        holder.seekBar.setProgressDrawable(ContextCompat.getDrawable(holder.itemView.getContext(),result.getDrawable()));
+        holder.seekBar.setProgressDrawable(ContextCompat.getDrawable(holder.itemView.getContext(), result.getDrawable()));
         holder.seekBar.setOnSeekBarChangeListener(new OnSeekBarChange(position, holder, currencyItemsFiltered.get(position)));
         holder.parent.setOnLongClickListener(new OnCurrencyItemClick(position, holder, currencyItemsFiltered.get(position)));
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -125,40 +123,31 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
             @Override
             protected FilterResults performFiltering(CharSequence charSequence) {
                 String charString = charSequence.toString();
-                if (charString.isEmpty()) {
-                    currencyItemsFiltered = currencyItems;
-                } else {
-                    List<Result> filteredList = new ArrayList<>();
-                    for (Result row : currencyItems) {
-
+                List<Result> filteredList = new ArrayList<>();
+                if (charString.isEmpty())
+                    filteredList= currencyItems;
+                 else {
+                    for (int i = 0; i < currencyItems.size(); i++) {
+                        Result row = currencyItems.get(i);
                         // name match condition. this might differ depending on your requirement
                         // here we are looking for name or phone number match
                         if (row.getMarketName().toLowerCase().contains(charString.toLowerCase())) {
                             filteredList.add(row);
                         }
                     }
-                    currencyItemsFiltered = filteredList;
                 }
 
                 FilterResults filterResults = new FilterResults();
-                filterResults.values = currencyItemsFiltered;
+                filterResults.values = filteredList;
                 return filterResults;
             }
 
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-                currencyItemsFiltered = (ArrayList<Result>) filterResults.values;
+                currencyItemsFiltered = (List<Result>) filterResults.values;
                 notifyDataSetChanged();
             }
         };
-    }
-
-    public SparseBooleanArray getSelectedIds() {
-        return mSelectedItemsIds;
-    }
-
-    public void setmSelectedItemsIds() {
-        mSelectedItemsIds.clear();
     }
 
     public static class CurrencyViewHolder extends RecyclerView.ViewHolder {
@@ -200,11 +189,12 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
         @Override
         public boolean onLongClick(View view) {
             if (adapterItemClickListener != null) {
-                if (!mSelectedItemsIds.get(position)) {
-                    mSelectedItemsIds.put(position, true);
+                Result result=currencyItemsFiltered.get(position);
+                if (!result.isSelected()) {
+                    result.setSelected(true);
                     currencyViewHolder.parent.setBackgroundResource(R.drawable.rect_fill_selected);
                 } else {
-                    mSelectedItemsIds.delete(position);
+                    result.setSelected(false);
                     currencyViewHolder.parent.setBackgroundResource(R.drawable.rect);
                 }
                 adapterItemClickListener.onItemLongClicked(item, position);
@@ -239,9 +229,5 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
         public void onStopTrackingTouch(SeekBar seekBar) {
             Log.v("progress", "" + progressChangedValue);
         }
-    }
-
-    public SparseBooleanArray getmSelectedItemsIds() {
-        return mSelectedItemsIds;
     }
 }

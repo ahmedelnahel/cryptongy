@@ -5,6 +5,7 @@ import android.app.Application;
 import crypto.soft.cryptongy.R;
 import crypto.soft.cryptongy.feature.alert.broadCastTicker;
 import crypto.soft.cryptongy.feature.setting.Notification;
+import crypto.soft.cryptongy.feature.shared.json.openorder.OpenOrder;
 import crypto.soft.cryptongy.feature.shared.module.Account;
 import crypto.soft.cryptongy.feature.trade.conditional.ConditionalReceiver;
 import io.realm.Realm;
@@ -22,9 +23,9 @@ public class CoinApplication extends Application {
     private Account tradeAccount;
     private Account withdrawAccount;
     private Notification settings;
+    private OpenOrder openOrder;
 
     public Notification getSettings() {
-
         return getNotification();
     }
 
@@ -134,5 +135,13 @@ public class CoinApplication extends Application {
     public void startService() {
         GlobalUtil.startAlarm(ConditionalReceiver.class, getResources().getInteger(R.integer.service_interval), this);
         GlobalUtil.startAlarm(broadCastTicker.class, getResources().getInteger(R.integer.service_interval), this);
+    }
+
+    public OpenOrder getOpenOrder() {
+        return openOrder;
+    }
+
+    public void setOpenOrder(OpenOrder openOrder) {
+        this.openOrder = openOrder;
     }
 }

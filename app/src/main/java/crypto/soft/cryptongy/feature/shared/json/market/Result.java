@@ -14,7 +14,6 @@ import crypto.soft.cryptongy.R;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 
 public class Result {
-
     @JsonProperty("MarketName")
     private String marketName;
     @JsonProperty("High")
@@ -47,6 +46,8 @@ public class Result {
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
     @JsonIgnore
     private int drawable= R.drawable.seek_progress;
+    @JsonIgnore
+    private boolean isSelected=false;
 
     @JsonProperty("MarketName")
     public String getMarketName() {
@@ -204,5 +205,13 @@ public class Result {
 
     public void setDrawable(int drawable) {
         this.drawable = drawable;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
     }
 }
