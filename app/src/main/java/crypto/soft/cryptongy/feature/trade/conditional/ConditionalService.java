@@ -40,11 +40,11 @@ public class ConditionalService extends IntentService {
     private void startService() {
         List<Conditional> list = getConditionals();
         Account account = ((CoinApplication) getApplicationContext()).getTradeAccount();
-        if (list != null) {
+        if (account != null && list != null) {
             for (int i = 0; i < list.size(); i++) {
                 Conditional conditional = list.get(i);
                 Ticker ticker = getTicker(conditional.getOrderCoin());
-                if (ticker != null && ticker.getSuccess()) {
+                if (ticker != null && ticker.getSuccess() && ticker.getResult() != null) {
                     if (conditional.getOrderType().equalsIgnoreCase(GlobalConstant.Conditional.TYPE_BUY)) {
                         checkBuy(conditional, ticker.getResult(), account, i);
                     } else {

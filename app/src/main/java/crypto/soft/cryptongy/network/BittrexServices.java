@@ -58,27 +58,34 @@ public class BittrexServices {
 
     //
     public Wallet getWallet(Account account) throws IOException {
-
-        final String url = "https://bittrex.com/api/v1.1/account/getbalances";
-        String walletStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret());
         Wallet wallet = null;
-        if(walletStr == null) {
+
+        if(account == null) {
             wallet = new Wallet();
             wallet.setSuccess(false);
             wallet.setMessage("Connection Error");
         }
         else {
-            ObjectMapper mapper = new ObjectMapper();
-            wallet = mapper.readValue(walletStr, Wallet.class);
-            wallet.setJson(walletStr);
+            final String url = "https://bittrex.com/api/v1.1/account/getbalances";
+            String walletStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret());
+
+            if (walletStr == null) {
+                wallet = new Wallet();
+                wallet.setSuccess(false);
+                wallet.setMessage("Connection Error");
+            } else {
+                ObjectMapper mapper = new ObjectMapper();
+                wallet = mapper.readValue(walletStr, Wallet.class);
+                wallet.setJson(walletStr);
 //        Log.i("response " , wallet.getSuccess() + wallet.getJson());
-            if (wallet.getSuccess()) {
-                HashMap<String, crypto.soft.cryptongy.feature.shared.json.wallet.Result> coinsMap = new HashMap<>();
-                for (crypto.soft.cryptongy.feature.shared.json.wallet.Result r : wallet.getResult()) {
-                    if (r.getBalance() != 0)
-                        coinsMap.put(r.getCurrency(), r);
+                if (wallet.getSuccess()) {
+                    HashMap<String, crypto.soft.cryptongy.feature.shared.json.wallet.Result> coinsMap = new HashMap<>();
+                    for (crypto.soft.cryptongy.feature.shared.json.wallet.Result r : wallet.getResult()) {
+                        if (r.getBalance() != 0)
+                            coinsMap.put(r.getCurrency(), r);
+                    }
+                    wallet.setCoinsMap(coinsMap);
                 }
-                wallet.setCoinsMap(coinsMap);
             }
         }
         return wallet;
@@ -103,20 +110,28 @@ public class BittrexServices {
     }
 
     public OpenOrder getOpnOrders( Account account) throws IOException {
-
-        final String url = "https://bittrex.com/api/v1.1/market/getopenorders";
-        String ordersStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret());
         OpenOrder openOrder = null;
-        if(ordersStr == null) {
+
+        if(account == null)
+        {
             openOrder = new OpenOrder();
             openOrder.setSuccess(false);
-            openOrder.setMessage("Connection Error");
+            openOrder.setMessage("No API");
         }
         else {
-            ObjectMapper mapper = new ObjectMapper();
-            openOrder = mapper.readValue(ordersStr, OpenOrder.class);
-            openOrder.setJson(ordersStr);
+            final String url = "https://bittrex.com/api/v1.1/market/getopenorders";
+            String ordersStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret());
+
+            if (ordersStr == null) {
+                openOrder = new OpenOrder();
+                openOrder.setSuccess(false);
+                openOrder.setMessage("Connection Error");
+            } else {
+                ObjectMapper mapper = new ObjectMapper();
+                openOrder = mapper.readValue(ordersStr, OpenOrder.class);
+                openOrder.setJson(ordersStr);
 //        Log.i("response " , wallet.getSuccess() + wallet.getJson());
+            }
         }
         return openOrder;
     }
@@ -144,40 +159,55 @@ public class BittrexServices {
 
 
     public OrderHistory getOrderHistory(Account account) throws IOException {
-
-        final String url = "https://bittrex.com/api/v1.1/account/getorderhistory";
-        String ordersStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret());
         OrderHistory orderHistory = null;
-        if(ordersStr == null) {
+
+        if(account == null)
+        {
             orderHistory = new OrderHistory();
             orderHistory.setSuccess(false);
-            orderHistory.setMessage("Connection Error");
+            orderHistory.setMessage("No API");
         }
         else {
-            ObjectMapper mapper = new ObjectMapper();
-            orderHistory = mapper.readValue(ordersStr, OrderHistory.class);
-            orderHistory.setJson(ordersStr);
+            final String url = "https://bittrex.com/api/v1.1/account/getorderhistory";
+            String ordersStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret());
+            if (ordersStr == null) {
+                orderHistory = new OrderHistory();
+                orderHistory.setSuccess(false);
+                orderHistory.setMessage("Connection Error");
+            } else {
+                ObjectMapper mapper = new ObjectMapper();
+                orderHistory = mapper.readValue(ordersStr, OrderHistory.class);
+                orderHistory.setJson(ordersStr);
+            }
         }
 //        Log.i("response " , wallet.getSuccess() + wallet.getJson());
-        return orderHistory;
+            return orderHistory;
+
     }
 
 
     public Cancel cancelOrder(String uuid, Account account) throws IOException
     {
-        final String url = "https://bittrex.com/api/v1.1/market/cancel";
-        HashMap<String, String> params = new HashMap<String, String>();
-        params.put("uuid", uuid);
-        String cancelStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret(), params);
         Cancel cancel = null;
-        if(cancelStr == null) {
+        if(account == null) {
             cancel = new Cancel();
             cancel.setSuccess(false);
-            cancel.setMessage("Connection Error");
-        }
-        else {
-            ObjectMapper mapper = new ObjectMapper();
-            cancel = mapper.readValue(cancelStr, Cancel.class);
+            cancel.setMessage("No API");
+        }else
+        {
+            final String url = "https://bittrex.com/api/v1.1/market/cancel";
+            HashMap<String, String> params = new HashMap<String, String>();
+            params.put("uuid", uuid);
+            String cancelStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret(), params);
+
+            if (cancelStr == null) {
+                cancel = new Cancel();
+                cancel.setSuccess(false);
+                cancel.setMessage("Connection Error");
+            } else {
+                ObjectMapper mapper = new ObjectMapper();
+                cancel = mapper.readValue(cancelStr, Cancel.class);
+            }
         }
         return cancel;
 
@@ -185,21 +215,28 @@ public class BittrexServices {
 
     public LimitOrder buyLimit(String market, String quantity, String rate, Account account) throws IOException
     {
-        final String url = "https://bittrex.com/api/v1.1/market/buylimit";
-        HashMap<String, String> params = new HashMap<String, String>();
-        params.put("market", market);
-        params.put("quantity", quantity);
-        params.put("rate", rate);
-        String buyLimitStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret(), params);
         LimitOrder limitOrder = null;
-        if(buyLimitStr == null) {
+        if(account == null) {
             limitOrder = new LimitOrder();
             limitOrder.setSuccess(false);
-            limitOrder.setMessage("Connection Error");
+            limitOrder.setMessage("No API");
         }
         else {
-            ObjectMapper mapper = new ObjectMapper();
-            limitOrder = mapper.readValue(buyLimitStr, LimitOrder.class);
+            final String url = "https://bittrex.com/api/v1.1/market/buylimit";
+            HashMap<String, String> params = new HashMap<String, String>();
+            params.put("market", market);
+            params.put("quantity", quantity);
+            params.put("rate", rate);
+            String buyLimitStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret(), params);
+
+            if (buyLimitStr == null) {
+                limitOrder = new LimitOrder();
+                limitOrder.setSuccess(false);
+                limitOrder.setMessage("Connection Error");
+            } else {
+                ObjectMapper mapper = new ObjectMapper();
+                limitOrder = mapper.readValue(buyLimitStr, LimitOrder.class);
+            }
         }
         return limitOrder;
 
@@ -207,21 +244,28 @@ public class BittrexServices {
 
     public LimitOrder sellLimit(String market, String quantity, String rate, Account account) throws IOException
     {
-        final String url = "https://bittrex.com/api/v1.1/market/selllimit";
-        HashMap<String, String> params = new HashMap<String, String>();
-        params.put("market", market);
-        params.put("quantity", quantity);
-        params.put("rate", rate);
-        String sellLimitStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret(), params);
         LimitOrder limitOrder = null;
-        if(sellLimitStr == null) {
+        if(account == null) {
             limitOrder = new LimitOrder();
             limitOrder.setSuccess(false);
-            limitOrder.setMessage("Connection Error");
+            limitOrder.setMessage("No API");
         }
         else {
-            ObjectMapper mapper = new ObjectMapper();
-            limitOrder = mapper.readValue(sellLimitStr, LimitOrder.class);
+            final String url = "https://bittrex.com/api/v1.1/market/selllimit";
+            HashMap<String, String> params = new HashMap<String, String>();
+            params.put("market", market);
+            params.put("quantity", quantity);
+            params.put("rate", rate);
+            String sellLimitStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret(), params);
+
+            if (sellLimitStr == null) {
+                limitOrder = new LimitOrder();
+                limitOrder.setSuccess(false);
+                limitOrder.setMessage("Connection Error");
+            } else {
+                ObjectMapper mapper = new ObjectMapper();
+                limitOrder = mapper.readValue(sellLimitStr, LimitOrder.class);
+            }
         }
         return limitOrder;
 
@@ -248,18 +292,25 @@ public class BittrexServices {
 
     public Order getOrder(String orderUUID, Account account) throws IOException
     {
-        final String url = "https://bittrex.com/api/v1.1/account/getorder?uuid="+orderUUID;
-
-        String orderStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret());
         Order order = null;
-        if(orderStr == null) {
+        if(account != null) {
             order = new Order();
             order.setSuccess(false);
-            order.setMessage("Connection Error");
+            order.setMessage("No API");
         }
         else {
-            ObjectMapper mapper = new ObjectMapper();
-            order = mapper.readValue(orderStr, Order.class);
+            final String url = "https://bittrex.com/api/v1.1/account/getorder?uuid=" + orderUUID;
+
+            String orderStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret());
+
+            if (orderStr == null) {
+                order = new Order();
+                order.setSuccess(false);
+                order.setMessage("Connection Error");
+            } else {
+                ObjectMapper mapper = new ObjectMapper();
+                order = mapper.readValue(orderStr, Order.class);
+            }
         }
         return order;
 

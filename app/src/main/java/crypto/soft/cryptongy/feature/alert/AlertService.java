@@ -63,12 +63,12 @@ public class AlertService extends IntentService {
             boolean met = false;
             try {
                 Ticker ticker = Tickerservices.getTicker(coinInfo.getCoinName());
-                if (coinInfo.isHigher() && ticker.getResult()!=null && ticker.getSuccess() && ticker.getResult().getLast().doubleValue() >= coinInfo.getHighValue().doubleValue() ) {
+                if (coinInfo.isHigher()&& ticker!= null && ticker.getResult()!=null && ticker.getSuccess() && ticker.getResult().getLast().doubleValue() >= coinInfo.getHighValue().doubleValue() ) {
                     showNotification("Alert", coinInfo.CoinName + " is above " + String.format("%.8f", coinInfo.getHighValue().doubleValue()), GlobalUtil.getUniqueID());
                     met = true;
                 }
 
-                if (coinInfo.isLower()&& ticker.getResult()!=null && ticker.getSuccess() && ticker.getResult().getLast().doubleValue() <= coinInfo.getLowValue().doubleValue() ) {
+                if (coinInfo.isLower() && ticker!= null&& ticker.getResult()!=null && ticker.getSuccess() && ticker.getResult().getLast().doubleValue() <= coinInfo.getLowValue().doubleValue() ) {
                     showNotification("Alert", coinInfo.CoinName + " is below " + String.format("%.8f", coinInfo.getLowValue().doubleValue()), GlobalUtil.getUniqueID());
                    met = true;
                 }

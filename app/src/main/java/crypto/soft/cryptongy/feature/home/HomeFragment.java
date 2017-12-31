@@ -160,6 +160,7 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
             isFirst = true;
         }
         setTitle();
+
         return view;
     }
 
@@ -223,8 +224,10 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
             ((CoinApplication) getActivity().getApplication()).setUsdt_btc(GlobalUtil.round(marketSummaries.getCoinsMap().get("USDT-BTC").getLast(), 4));
             ((CoinApplication) getActivity().getApplication()).setbtc_eth(marketSummaries.getCoinsMap().get("BTC-ETH").getLast());
             price.setText("" + ((CoinApplication) getActivity().getApplication()).getUsdt_btc());
+            coins.clear();
             coins.addAll(marketSummaries.getResult());
             adapterCoins.notifyDataSetChanged();
+            currencyAdapter.notifyDataSetChanged();
         }
         hideProgressBar();
     }
@@ -277,9 +280,9 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
             case R.id.imgRefresh:
                 if (coins != null)
                     coins.clear();
+                presenter.loadSummaries();
                 if (adapterCoins != null)
                     adapterCoins.notifyDataSetChanged();
-                presenter.loadSummaries();
                 break;
             case R.id.imgDelete:
                 if (mock == null)
@@ -382,6 +385,12 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
     @Override
     public void onStart() {
         super.onStart();
+        presenter.startTimer();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         presenter.startTimer();
     }
 

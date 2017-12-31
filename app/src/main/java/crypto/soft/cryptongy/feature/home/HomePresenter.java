@@ -65,16 +65,16 @@ public class HomePresenter extends MvpBasePresenter<HomeView> implements OnMulti
     }
 
     public void startTimer() {
-        if (isStarted) {
-            stopTimer();
-            Notification notification = ((CoinApplication) context.getApplicationContext()).getNotification();
-            if (notification.isAutomSync()) {
-                int timerInterval = notification.getSyncInterval() * 1000;
-                timer = new Timer();
-                timer.scheduleAtFixedRate(new TickerTimer(), timerInterval,
-                        timerInterval);
-            }
+        if (timer != null)
+            timer.cancel();
+        Notification notification = ((CoinApplication) context.getApplicationContext()).getNotification();
+        if (notification.isAutomSync()) {
+            int timerInterval = notification.getSyncInterval() * 1000;
+            timer = new Timer();
+            timer.scheduleAtFixedRate(new TickerTimer(), timerInterval,
+                    timerInterval);
         }
+
     }
 
     private List<Result> setDrawable(List<Result> list) {
@@ -87,8 +87,8 @@ public class HomePresenter extends MvpBasePresenter<HomeView> implements OnMulti
                     result.setDrawable(R.drawable.seek_progress_red);
                 else if (result.getVolume().doubleValue() > prevResults.get(i).getVolume().doubleValue())
                     result.setDrawable(R.drawable.seek_progress_green);
-                else
-                    result.setDrawable(R.drawable.seek_progress);
+//                else
+//                    result.setDrawable(R.drawable.seek_progress);
             }
             else
                 result.setDrawable(R.drawable.seek_progress);
