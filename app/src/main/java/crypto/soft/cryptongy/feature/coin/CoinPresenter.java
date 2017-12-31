@@ -313,7 +313,7 @@ public class CoinPresenter extends TickerPresenter<CoinView> {
 
         double currentHolding =0;
         if(bq>=sq)currentHolding = (bq-sq)*last;
-        Log.d("Profit ", "bq-sq  " +(bq-sq) + " currentHolding  " + currentHolding + " sell - buy " +  (sell - buy ));
+//        Log.d("Profit ", "bq-sq  " +(bq-sq) + " currentHolding  " + currentHolding + " sell - buy " +  (sell - buy ));
         calculation = sell - buy + currentHolding;
         if (getView() != null) {
             getView().setCalculation(calculation);

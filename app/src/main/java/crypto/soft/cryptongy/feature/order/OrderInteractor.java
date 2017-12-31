@@ -130,7 +130,7 @@ public class OrderInteractor {
         }.execute();
     }
 
-    public void getOrders(String orderUuid, Account account, OnFinishListner<Order> listner) {
+    public void getOrders(String orderUuid, Account account,  OnFinishListner< Order> listner) {
         try {
             Order order= new BittrexServices().getOrder(orderUuid,account);
             if (order == null || !order.getSuccess())
