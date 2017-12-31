@@ -292,7 +292,7 @@ public class CoinPresenter extends TickerPresenter<CoinView> {
                     if (data.getLimit() != null) {
                         if (data.getQuantity() != null)
                             sell += data.getPrice();
-                        sq += data.getQuantity();
+                        sq += data.getQuantity()-data.getQuantityRemaining();
 
                     }
                 } else if ((data.getOrderType().toLowerCase().equals("limit_buy") ||
@@ -300,7 +300,7 @@ public class CoinPresenter extends TickerPresenter<CoinView> {
                     if (data.getLimit() != null) {
                         if (data.getQuantity() != null)
                             buy += data.getPrice();
-                        bq += data.getQuantity();
+                        bq += data.getQuantity()-data.getQuantityRemaining();
 
                     }
                 }

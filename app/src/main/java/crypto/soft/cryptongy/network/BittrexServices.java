@@ -293,16 +293,18 @@ public class BittrexServices {
     public Order getOrder(String orderUUID, Account account) throws IOException
     {
         Order order = null;
-        if(account != null) {
+        if(account == null) {
             order = new Order();
             order.setSuccess(false);
             order.setMessage("No API");
+            Log.d("Order Status", "No API");
         }
         else {
-            final String url = "https://bittrex.com/api/v1.1/account/getorder?uuid=" + orderUUID;
-
-            String orderStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret());
-
+            final String url = "https://bittrex.com/api/v1.1/account/getorder";
+            HashMap<String, String> params = new HashMap<String, String>();
+            params.put("uuid", orderUUID);
+            String orderStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret(), params);
+            Log.d("Order Status", orderStr);
             if (orderStr == null) {
                 order = new Order();
                 order.setSuccess(false);
