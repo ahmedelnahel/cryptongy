@@ -74,6 +74,7 @@ public class HomeInteractor {
                                 SharedPreference.saveToPrefs(context, "mockValue", new Gson().toJson(results));
                             }
                         }
+                        this.results.clear();
                         this.results.addAll(results);
                     }
                 }
@@ -87,7 +88,7 @@ public class HomeInteractor {
         @Override
         protected void onPostExecute(MarketSummaries marketSummaries) {
             super.onPostExecute(marketSummaries);
-            if (marketSummaries != null && marketSummaries.getSuccess()) {
+            if (marketSummaries != null && marketSummaries.getSuccess() && marketSummaries.getResult()!=null) {
                 onBitrexLoadListener.onComplete(results, marketSummaries);
             } else {
                 onBitrexLoadListener.onFail("");

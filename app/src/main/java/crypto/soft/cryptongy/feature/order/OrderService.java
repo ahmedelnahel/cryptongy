@@ -30,10 +30,10 @@ public class OrderService extends IntentService {
 
     private void startService() {
         final CoinApplication application = (CoinApplication) getApplication();
-        GlobalUtil.showNotification(OrderService.this, "Error in Order Service","Order check started", 0);
+        GlobalUtil.showNotification(OrderService.this, "Error in Order Service", "Order check started", 101);
         OpenOrder order = application.getOpenOrder();
         if (order == null)
-            getOpenOrder(application, true);
+            getOpenOrder(application, false);
         else
             checkOrder(order, application);
 
@@ -44,19 +44,21 @@ public class OrderService extends IntentService {
         if (account == null)
             return;
         else
-            GlobalUtil.showNotification(OrderService.this, "Error in Order Service","No account available", 0);
+            GlobalUtil.showNotification(OrderService.this, "Error in Order Service", "No account available", 102);
 
         interactor.getOpenOrder("", account, new OnFinishListner<OpenOrder>() {
             @Override
             public void onComplete(OpenOrder result) {
-                application.setOpenOrder(result);
-                if (check)
-                    checkOrder(result, application);
+                if (result != null && result.getSuccess() && result.getResult() != null) {
+                    application.setOpenOrder(result);
+                    if (check)
+                        checkOrder(result, application);
+                }
             }
 
             @Override
             public void onFail(String error) {
-                GlobalUtil.showNotification(OrderService.this, "Error in Order Service",error, 0);
+                GlobalUtil.showNotification(OrderService.this, "Error in Order Service", error, 103);
             }
         });
     }
@@ -65,7 +67,7 @@ public class OrderService extends IntentService {
         for (int i = 0; i < openOrder.getResult().size(); i++) {
             final crypto.soft.cryptongy.feature.shared.json.openorder.Result data = openOrder.getResult().get(i);
             interactor.getOrders(data.getOrderUuid(), application.getReadAccount(), new OnFinishListner<Order>() {
-                private int j=0;
+                private int j = 0;
 
                 @Override
                 public void onComplete(Order result) {
@@ -76,7 +78,7 @@ public class OrderService extends IntentService {
                     } else if (result.getResult().getCancelInitiated()) {
                         GlobalUtil.showNotification(OrderService.this, "Order status", order.getType() + "(" + String.format("%.8f", order.getQuantity().doubleValue()) +
                                 ")" + "of " + order.getExchange() + " is now cancelled.", j);
-                    }else
+                    } else
                         GlobalUtil.showNotification(OrderService.this, "Order status", order.getType() + "(" + String.format("%.8f", order.getQuantity().doubleValue()) +
                                 ")" + "of " + order.getExchange() + " is still open.", j);
                     j++;
@@ -87,7 +89,7 @@ public class OrderService extends IntentService {
                 @Override
                 public void onFail(String error) {
                     GlobalUtil.showNotification(OrderService.this, "Error in Order Service",
-                            error +" for order for "+openOrder.getResult().get(j), 0);
+                            error + " for order for " + openOrder.getResult().get(j), 104);
                 }
             });
         }

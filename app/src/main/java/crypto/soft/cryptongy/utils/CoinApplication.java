@@ -143,7 +143,7 @@ public class CoinApplication extends Application {
         GlobalUtil.startAlarm(broadCastTicker.class, getResources().getInteger(R.integer.service_interval), this);
 
         if (settings.isAutomSync()) {
-            GlobalUtil.startAlarm(OrderReceiver.class, settings.getSyncInterval() * 1000, this);
+            GlobalUtil.startAlarm(OrderReceiver.class, 30000, this);
         }
     }
 

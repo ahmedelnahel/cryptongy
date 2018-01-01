@@ -29,6 +29,16 @@ public class OpenOrder {
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
     @JsonIgnore
     private String json;
+    @JsonIgnore
+    boolean isChange = false;
+
+    public boolean isChange() {
+        return isChange;
+    }
+
+    public void setChange(boolean change) {
+        isChange = change;
+    }
 
     public String getJson() {
         return json;

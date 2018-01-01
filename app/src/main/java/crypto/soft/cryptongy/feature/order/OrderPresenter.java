@@ -200,7 +200,7 @@ public class OrderPresenter extends MvpBasePresenter<OrderView> {
                             }
                         };
 
-                        getOpenOrders(coinName, account).subscribe(observer);
+                        getOpenOrders(null, account).subscribe(observer);
                     } else
                         onFail(result.getMessage());
                 }

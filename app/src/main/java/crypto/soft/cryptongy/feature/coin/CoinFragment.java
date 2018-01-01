@@ -158,7 +158,7 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
             ethinbtc = ((CoinApplication) getActivity().getApplication()).getbtc_eth();
             syumpol = "Ξ";
         }
-        Log.d("Profit ", "Coin Name " + priceInDollar + " eth " + ethinbtc + " calculation " + calculation);
+//        Log.d("Profit ", "Coin Name " + priceInDollar + " eth " + ethinbtc + " calculation " + calculation);
         txtUsd.setText("$" + String.valueOf(GlobalUtil.formatNumber(priceInDollar * ethinbtc * calculation, "#.####")));
 
         txtBtc.setText(String.valueOf(GlobalUtil.formatNumber(calculation, "0.00000000")) + syumpol);

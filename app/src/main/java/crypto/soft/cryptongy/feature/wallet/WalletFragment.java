@@ -210,7 +210,7 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
                 Account account = application.getReadAccount();
                 wallet = bittrexServices.getWallet(account);
 
-                if (wallet != null && wallet.getSuccess()) {
+                if (wallet != null && wallet.getSuccess() && wallet.getResult() != null) {
                     // List<Result> walletResults = wallet.getResult();
 
                     List<Result> filteredWalletResults = new ArrayList<Result>(wallet.getCoinsMap().values());
@@ -275,7 +275,7 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
             AlertUtility.dismissDialog();
 
             txtEmpty.setVisibility(View.GONE);
-            if (!wallet.getSuccess()) {
+            if ( !wallet.getSuccess() || wallet.getResult() == null) {
                 Toast.makeText(getActivity(), wallet.getMessage(), Toast.LENGTH_SHORT).show();
                 return;
             }
