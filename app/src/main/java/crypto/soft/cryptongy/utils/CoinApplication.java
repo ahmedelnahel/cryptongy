@@ -2,6 +2,7 @@ package crypto.soft.cryptongy.utils;
 
 import android.app.Application;
 import android.content.Intent;
+import android.util.Log;
 
 import crypto.soft.cryptongy.R;
 import crypto.soft.cryptongy.feature.alert.broadCastTicker;
@@ -142,9 +143,7 @@ public class CoinApplication extends Application {
         GlobalUtil.startAlarm(ConditionalReceiver.class, getResources().getInteger(R.integer.service_interval), this);
         GlobalUtil.startAlarm(broadCastTicker.class, getResources().getInteger(R.integer.service_interval), this);
 
-        if (settings.isAutomSync()) {
-            GlobalUtil.startAlarm(OrderReceiver.class, 30000, this);
-        }
+
     }
 
     public OpenOrder getOpenOrder() {
@@ -153,5 +152,11 @@ public class CoinApplication extends Application {
 
     public void setOpenOrder(OpenOrder openOrder) {
         this.openOrder = openOrder;
+    }
+
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+
     }
 }

@@ -185,6 +185,8 @@ public class OrderPresenter extends MvpBasePresenter<OrderView> {
                                     if (TextUtils.isEmpty(msg))
                                         msg = "Order has been cancled successfully.";
                                     CustomDialog.showMessagePop(context, msg, null);
+
+
                                 }
                             }
 
@@ -195,8 +197,12 @@ public class OrderPresenter extends MvpBasePresenter<OrderView> {
 
                             @Override
                             public void onComplete() {
-                                if (getView() != null)
+                                if (getView() != null) {
                                     getView().hideLoading();
+
+                                }
+                                if(((CoinApplication) context.getApplicationContext()).getOpenOrder() != null)
+                                    ((CoinApplication) context.getApplicationContext()).getOpenOrder().setChange(true);
                             }
                         };
 

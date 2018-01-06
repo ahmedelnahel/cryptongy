@@ -57,7 +57,7 @@ public class OrderService extends IntentService {
     }
 
     private void checkOrder(final OpenOrder openOrder, final CoinApplication application) {
-        openOrder.setChange(false);
+
         for (int i = 0; i < openOrder.getResult().size(); i++) {
             final crypto.soft.cryptongy.feature.shared.json.openorder.Result data = openOrder.getResult().get(i);
             final int finalI = i;
@@ -74,7 +74,7 @@ public class OrderService extends IntentService {
 
                         } else if (!result.getResult().getIsOpen() && !result.getResult().getCancelInitiated()) {
                              GlobalUtil.showNotification(OrderService.this, "Order Status", order.getType() + "(" + String.format("%.8f", order.getQuantity().doubleValue()) +
-                                     ")" + "of " + order.getExchange() + " is filled.", finalI);
+                                     ")" + "of " + order.getExchange() + " is now closed.", finalI);
                              openOrder.setChange(true);
 
                          }
@@ -88,7 +88,9 @@ public class OrderService extends IntentService {
                 }
             });
         }
-        if(openOrder.isChange())
-        getOpenOrder(application, false);
+        if(openOrder.isChange()) {
+            getOpenOrder(application, false);
+            openOrder.setChange(false);
+        }
     }
 }

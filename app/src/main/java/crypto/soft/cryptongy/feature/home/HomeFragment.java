@@ -43,6 +43,7 @@ import crypto.soft.cryptongy.R;
 import crypto.soft.cryptongy.feature.account.CustomDialog;
 import crypto.soft.cryptongy.feature.coinHome.CoinHomeActivity;
 import crypto.soft.cryptongy.feature.main.MainActivity;
+import crypto.soft.cryptongy.feature.order.OrderReceiver;
 import crypto.soft.cryptongy.feature.shared.json.market.MarketSummaries;
 import crypto.soft.cryptongy.feature.shared.json.market.Result;
 import crypto.soft.cryptongy.feature.shared.listner.AdapterItemClickListener;
@@ -404,6 +405,7 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
     public void onDestroy() {
         super.onDestroy();
         presenter.stopTimer();
+
     }
 
     @Override

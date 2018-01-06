@@ -123,6 +123,7 @@ public class OrderInteractor {
                 if (cancel == null)
                     listner.onFail("Failed to cancle data");
                 else if (cancel.getSuccess().booleanValue())
+
                     listner.onComplete(cancel);
                 else
                     listner.onFail(cancel.getMessage());

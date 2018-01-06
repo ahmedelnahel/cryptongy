@@ -8,16 +8,16 @@ android {
     productFlavors {
         lite {
             applicationId = 'crypto.soft.cryptongy'
-            versionCode 8
-            versionName '1.4.3'
+            versionCode 9
+            versionName '1.4.4'
             buildConfigField "int", "MAX_ORDER", "100"
             buildConfigField "int", "MAX_ORDER_COIN", "100"
             buildConfigField "int", "MAX_ALERT", "100"
         }
         pro {
             applicationId = 'crypto.soft.pro.cryptongy'
-            versionCode 8
-            versionName '1.4.3'
+            versionCode 9
+            versionName '1.4.4'
             buildConfigField "int", "MAX_ORDER", "100"
             buildConfigField "int", "MAX_ALERT", "100"
             buildConfigField "int", "MAX_ORDER_COIN", "100"
@@ -27,8 +27,8 @@ android {
         applicationId "crypto.soft.cryptongy"
         minSdkVersion 23
         targetSdkVersion 25
-        versionCode 8
-        versionName '1.4.3'
+        versionCode 9
+        versionName '1.4.4'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         packagingOptions {
             exclude 'META-INF/DEPENDENCIES'

@@ -228,6 +228,8 @@ public class CoinPresenter extends TickerPresenter<CoinView> {
             @Override
             public void onComplete(Cancel result) {
                 if (result.getSuccess()) {
+                    if(((CoinApplication) context.getApplicationContext()).getOpenOrder() != null)
+                        ((CoinApplication) context.getApplicationContext()).getOpenOrder().setChange(true);
                     if (getView() != null) {
                         Observer observer = new Observer() {
                             @Override

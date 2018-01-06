@@ -33,6 +33,7 @@ import static android.content.Context.NOTIFICATION_SERVICE;
 
 public class GlobalUtil {
     static  final  AtomicInteger c = new AtomicInteger(0);
+
     public static boolean isServiceRunning(Context context, Class<?> serviceClass) {
         final ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         final List<ActivityManager.RunningServiceInfo> services = activityManager.getRunningServices(Integer.MAX_VALUE);
@@ -52,6 +53,15 @@ public class GlobalUtil {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()
                 + interval, pendingIntent);
+    }
+
+    public static void stopAlarm(Class cls, Context context)
+    {
+        Intent intent = new Intent(context, cls);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                context.getApplicationContext(), 234324243, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
+        alarmManager.cancel(pendingIntent);
     }
 
     public static void showToast(String msg, Context context) {

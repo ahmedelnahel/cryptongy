@@ -75,12 +75,15 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
             pricedollar = "$" + new DecimalFormat("#.####").format(result.getLast());
             ;
         } else {
-            price = "฿" + new DecimalFormat("0.00000000").format(result.getLast());
-            if (result.getMarketName().contains("ETH-"))
+
+           String symbol = "฿";
+            if (result.getMarketName().contains("ETH-")) {
                 pricedollar = "$" + new DecimalFormat("#.####").format(result.getLast() * btcusdt * ethbtc);
+                symbol = "Ξ";
+            }
             else if (result.getMarketName().contains("BTC-"))
                 pricedollar = "$" + new DecimalFormat("#.####").format(result.getLast() * btcusdt);
-
+            price =  symbol + new DecimalFormat("0.00000000").format(result.getLast());
         }
 
         holder.price.setText(price);
