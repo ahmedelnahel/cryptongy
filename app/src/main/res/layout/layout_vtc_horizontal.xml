@@ -13,6 +13,7 @@
         android:orientation="horizontal">
 
         <LinearLayout
+            android:id="@+id/lnlLast"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="15dp"
@@ -38,6 +39,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/lnlBid"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
@@ -62,6 +64,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/lnlAsk"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
@@ -86,6 +89,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/lnlHigh"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
@@ -110,6 +114,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/lnlLow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
@@ -135,6 +140,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/lnlVolume"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"

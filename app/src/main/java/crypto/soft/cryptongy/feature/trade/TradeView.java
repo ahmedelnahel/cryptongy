@@ -1,7 +1,5 @@
 package crypto.soft.cryptongy.feature.trade;
 
-import com.hannesdorfmann.mosby.mvp.MvpView;
-
 import crypto.soft.cryptongy.feature.shared.json.market.MarketSummaries;
 import crypto.soft.cryptongy.feature.shared.json.marketsummary.MarketSummary;
 import crypto.soft.cryptongy.feature.shared.json.wallet.Wallet;
@@ -49,4 +47,6 @@ public interface TradeView extends TickerView {
     boolean isBuy();
 
     void resetAll();
+
+    void setValue(String value);
 }

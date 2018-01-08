@@ -59,7 +59,7 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
     private NestedScrollView nestedScroll;
     private TextView txtCoin, txtBtc, txtLevel, txtVtc, txtEmpty, txtMax, txtAgainst, txtTotal;
     private ImageView imgSync, imgAccSetting;
-    private LinearLayout lnlContainer, lnlHolding;
+    private LinearLayout lnlContainer, lnlLast, lnlBid, lnlAsk, lnlLow, lnlHigh, lnlHolding;
     private EditText edtUnits;
 
     private RadioGroup rdgUnits;
@@ -198,6 +198,11 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
 
         lnlContainer = view.findViewById(R.id.lnlContainer);
         lnlHolding = view.findViewById(R.id.lnlHolding);
+        lnlLast = view.findViewById(R.id.lnlLast);
+        lnlBid = view.findViewById(R.id.lnlBid);
+        lnlAsk = view.findViewById(R.id.lnlAsk);
+        lnlLow = view.findViewById(R.id.lnlLow);
+        lnlHigh = view.findViewById(R.id.lnlHigh);
 
         spinner = view.findViewById(R.id.spinner);
 
@@ -269,6 +274,13 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
         chbTrailerLoss.setOnCheckedChangeListener(this);
         chbProfit.setOnCheckedChangeListener(this);
         rdgUnits.setOnCheckedChangeListener(this);
+
+        lnlHolding.setOnClickListener(this);
+        lnlLast.setOnClickListener(this);
+        lnlAsk.setOnClickListener(this);
+        lnlBid.setOnClickListener(this);
+        lnlHigh.setOnClickListener(this);
+        lnlLow.setOnClickListener(this);
     }
 
     @Override
@@ -421,7 +433,26 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
 
     @Override
     public void onClick(View view) {
-        presenter.onClicked(view.getId());
+        int id = view.getId();
+        switch (id) {
+            case R.id.lnlLast:
+                setValue(lastValuInfo_TXT.getText().toString());
+                break;
+            case R.id.lnlBid:
+                setValue(BidvalueInfo_TXT.getText().toString());
+                break;
+            case R.id.lnlHigh:
+                setValue(Highvalue_Txt.getText().toString());
+                break;
+            case R.id.lnlAsk:
+                setValue(ASKvalu_TXT.getText().toString());
+                break;
+            case R.id.lnlLow:
+                setValue(LowvalueInfo_TXT.getText().toString());
+                break;
+            default:
+                presenter.onClicked(view.getId());
+        }
     }
 
     @Override
@@ -455,6 +486,12 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
         rdbBuy.setChecked(true);
         tgbPrice.setChecked(true);
         tgbLoss.setChecked(true);
+    }
+
+    @Override
+    public void setValue(String value) {
+        if (!TextUtils.isEmpty(value))
+            edtUnits.setText(value);
     }
 
     @Override
@@ -672,7 +709,7 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
 
     @Override
     public void resetView() {
-        new TickerV().reset(ContextCompat.getColor(getContext(),R.color.setting_text),lastValuInfo_TXT, ASKvalu_TXT, BidvalueInfo_TXT);
+        new TickerV().reset(ContextCompat.getColor(getContext(), R.color.setting_text), lastValuInfo_TXT, ASKvalu_TXT, BidvalueInfo_TXT);
     }
 
     @Override
