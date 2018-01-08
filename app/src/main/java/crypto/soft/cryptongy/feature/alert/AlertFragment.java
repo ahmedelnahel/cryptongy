@@ -24,6 +24,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -58,7 +59,6 @@ import crypto.soft.cryptongy.network.BittrexServices;
 public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implements AlertView, View.OnClickListener {
     ProgressBar progressBar;
 
-    //    TextView lastValuInfo_TXT, BidvalueInfo_TXT, Highvalue_Txt, ASKvalu_TXT, LowvalueInfo_TXT, VolumeValue_Txt, HoldingValue_Txt, lastComp_txt;
     EditText lowComp_txt, highValueComp_txt;
     Button save_b;
     RadioGroup radioGroup;
@@ -96,6 +96,8 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
     private CustomArrayAdapter adapterCoins;
 
     private RelativeLayout rllContainer;
+    private LinearLayout lnlLast, lnlBid, lnlAsk, lnlLow, lnlHigh;
+
     private boolean isDel = false;
 
     @Override
@@ -141,6 +143,12 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
         ASKvalu_Lab = (TextView) rootView.findViewById(R.id.LabAsk);
         LowvalueInfo_Lab = (TextView) rootView.findViewById(R.id.LabLow);
         VolumeValue_Lab = (TextView) rootView.findViewById(R.id.LabVolume);
+
+        lnlLast = rootView.findViewById(R.id.lnlLast);
+        lnlBid = rootView.findViewById(R.id.lnlBid);
+        lnlAsk = rootView.findViewById(R.id.lnlAsk);
+        lnlLow = rootView.findViewById(R.id.lnlLow);
+        lnlHigh = rootView.findViewById(R.id.lnlHigh);
 
         inputCoin = rootView.findViewById(R.id.inputCoin);
         spinner = rootView.findViewById(R.id.spinner);
@@ -229,6 +237,11 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
     }
 
     private void setOnClickListner() {
+        lnlLast.setOnClickListener(this);
+        lnlAsk.setOnClickListener(this);
+        lnlBid.setOnClickListener(this);
+        lnlHigh.setOnClickListener(this);
+        lnlLow.setOnClickListener(this);
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
@@ -365,7 +378,29 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
                 else
                     startActivity(new Intent(getActivity(), AlertActivity.class));
                 break;
+            case R.id.lnlLast:
+                setValue(lastValuInfo_TXT.getText().toString());
+                break;
+            case R.id.lnlBid:
+                setValue(BidvalueInfo_TXT.getText().toString());
+                break;
+            case R.id.lnlHigh:
+                setValue(Highvalue_Txt.getText().toString());
+                break;
+            case R.id.lnlAsk:
+                setValue(ASKvalu_TXT.getText().toString());
+                break;
+            case R.id.lnlLow:
+                setValue(LowvalueInfo_TXT.getText().toString());
+                break;
         }
+    }
+
+    private void setValue(String value) {
+        if (highValueComp_txt.hasFocus())
+            highValueComp_txt.setText(value);
+        else if (lowComp_txt.hasFocus())
+            lowComp_txt.setText(value);
     }
 
     @Override

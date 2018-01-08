@@ -210,7 +210,6 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
         btnOk.setOnClickListener(this);
         rdgValue.setOnCheckedChangeListener(this);
 
-        lnlHolding.setOnClickListener(this);
         lnlLast.setOnClickListener(this);
         lnlAsk.setOnClickListener(this);
         lnlBid.setOnClickListener(this);

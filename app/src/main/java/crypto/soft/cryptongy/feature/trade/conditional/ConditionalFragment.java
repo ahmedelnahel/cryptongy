@@ -275,7 +275,6 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
         chbProfit.setOnCheckedChangeListener(this);
         rdgUnits.setOnCheckedChangeListener(this);
 
-        lnlHolding.setOnClickListener(this);
         lnlLast.setOnClickListener(this);
         lnlAsk.setOnClickListener(this);
         lnlBid.setOnClickListener(this);
