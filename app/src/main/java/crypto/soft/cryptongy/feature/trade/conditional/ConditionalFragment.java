@@ -569,9 +569,14 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
 
             holder.txtAction.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View view) {
-                    if (((TextView) view).getText().toString().equalsIgnoreCase("cancel"))
-                        presenter.delete(conditional.getId());
+                public void onClick(final View view) {
+                    CustomDialog.showConfirmation(getContext(), getString(R.string.cancle_confirm), new DialogListner() {
+                        @Override
+                        public void onOkClicked() {
+                            if (((TextView) view).getText().toString().equalsIgnoreCase("cancel"))
+                                presenter.delete(conditional.getId());
+                        }
+                    });
                 }
             });
 

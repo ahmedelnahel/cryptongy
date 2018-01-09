@@ -11,6 +11,7 @@ import crypto.soft.cryptongy.BuildConfig;
 import crypto.soft.cryptongy.R;
 import crypto.soft.cryptongy.feature.account.CustomDialog;
 import crypto.soft.cryptongy.feature.shared.json.market.MarketSummaries;
+import crypto.soft.cryptongy.feature.shared.listner.DialogListner;
 import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
 import crypto.soft.cryptongy.feature.trade.TradePresenter;
 import crypto.soft.cryptongy.utils.CoinApplication;
@@ -89,24 +90,30 @@ public class ConditonalPresenter extends TradePresenter<ConditionalView> {
     public void onClicked(int id) {
         switch (id) {
             case R.id.btnOk:
-                List<Conditional> conditionals = getView().getConditionals();
+                final List<Conditional> conditionals = getView().getConditionals();
                 if (conditionals != null) {
                     if (conditionals.size() > 0) {
-                        int limit = BuildConfig.MAX_ORDER;
-                        int sameLimit = BuildConfig.MAX_ORDER_COIN;
-                        conditionalInteractor.saveConditional(conditionals, limit, sameLimit, new OnFinishListner<Void>() {
-                            @Override
-                            public void onComplete(Void result) {
-                                CustomDialog.showMessagePop(context, "Created sucessfully.", null);
-                                fetchConditionals();
-                                if (!GlobalUtil.isServiceRunning(context, ConditionalService.class))
-                                    GlobalUtil.startAlarm(ConditionalReceiver.class, context.getResources().getInteger(R.integer.service_interval), context);
-                            }
 
+                        CustomDialog.showConfirmation(context, context.getString(R.string.limit_msg), new DialogListner() {
                             @Override
-                            public void onFail(String error) {
-                                fetchConditionals();
-                                CustomDialog.showMessagePop(context, error, null);
+                            public void onOkClicked() {
+                                int limit = BuildConfig.MAX_ORDER;
+                                int sameLimit = BuildConfig.MAX_ORDER_COIN;
+                                conditionalInteractor.saveConditional(conditionals, limit, sameLimit, new OnFinishListner<Void>() {
+                                    @Override
+                                    public void onComplete(Void result) {
+                                        CustomDialog.showMessagePop(context, "Created sucessfully.", null);
+                                        fetchConditionals();
+                                        if (!GlobalUtil.isServiceRunning(context, ConditionalService.class))
+                                            GlobalUtil.startAlarm(ConditionalReceiver.class, context.getResources().getInteger(R.integer.service_interval), context);
+                                    }
+
+                                    @Override
+                                    public void onFail(String error) {
+                                        fetchConditionals();
+                                        CustomDialog.showMessagePop(context, error, null);
+                                    }
+                                });
                             }
                         });
                     } else
