@@ -27,7 +27,7 @@ public interface TickerView extends MvpView {
                 Double dblBid = Double.parseDouble(txtBid.getText().toString());
 
                 if (dblLast != null && result.getLast() != null) {
-                    txtLast.setText(String.format("%.8f", dblLast.doubleValue()));
+                    txtLast.setText(String.format("%.8f", result.getLast().doubleValue()));
                     if (dblLast.doubleValue() < result.getLast().doubleValue())
                         txtLast.setTextColor(ContextCompat.getColor(context, R.color.color_green));
                     else if (dblLast.doubleValue() > result.getLast().doubleValue())
@@ -37,7 +37,7 @@ public interface TickerView extends MvpView {
                 }
 
                 if (dblAsk != null && result.getAsk() != null) {
-                    txtAsk.setText(String.format("%.8f", dblAsk.doubleValue()));
+                    txtAsk.setText(String.format("%.8f", result.getAsk().doubleValue()));
                     if (dblAsk.doubleValue() < result.getAsk().doubleValue())
                         txtAsk.setTextColor(ContextCompat.getColor(context, R.color.color_green));
                     else if (dblAsk.doubleValue() > result.getAsk().doubleValue())
@@ -47,7 +47,7 @@ public interface TickerView extends MvpView {
                 }
 
                 if (dblBid != null && result.getBid() != null) {
-                    txtBid.setText(String.format("%.8f", dblBid.doubleValue()));
+                    txtBid.setText(String.format("%.8f", result.getBid().doubleValue()));
                     if (dblBid.doubleValue() < result.getBid().doubleValue())
                         txtBid.setTextColor(ContextCompat.getColor(context, R.color.color_green));
                     else if (dblBid.doubleValue() > result.getBid().doubleValue())
