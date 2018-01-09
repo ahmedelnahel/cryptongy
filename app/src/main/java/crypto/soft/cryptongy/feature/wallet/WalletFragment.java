@@ -56,7 +56,7 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
     private List<Result> resultList;
     private double BTCSum = 0;
     private NestedScrollView baseView;
-    private TextView tvHolding, tvPrice;
+    private TextView tvHolding, tvPrice,txtPrice;
 
     public WalletFragment() {
 
@@ -96,6 +96,7 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
                 coinAdapter.notifyDataSetChanged();
             }
         } else {
+            txtPrice.setText("" + ((CoinApplication) getActivity().getApplication()).getUsdt_btc());
             setLevel(account.getLabel());
             new GetCoinDetails().execute();
         }
@@ -112,6 +113,7 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
         txtLevel = view.findViewById(R.id.txtLevel);
         txtEmpty = view.findViewById(R.id.txtEmpty);
         txtProfit = view.findViewById(R.id.txtProfit);
+        txtPrice = view.findViewById(R.id.price);
 
         tvHolding = view.findViewById(R.id.tvHolding);
         tvHolding.setTag(R.id.tvHolding, Boolean.TRUE);
