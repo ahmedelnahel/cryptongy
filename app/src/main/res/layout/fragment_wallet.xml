@@ -18,7 +18,7 @@
             android:layout_alignParentTop="true"
             android:background="@color/colorPrimary" />
 
-        <include layout="@layout/layout_calculation" />
+        <include layout="@layout/layout_calculation_wallet" />
 
         <crypto.soft.cryptongy.feature.shared.customView.MspTextView
             android:id="@+id/txtEmpty"
