@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/toolbar_account"/>
+
+    <crypto.soft.cryptongy.feature.shared.customView.CalTextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginTop="10dp"
+        android:paddingBottom="5dp"
+        android:text="Stop Loss "
+        android:textStyle="bold"
+        android:textColor="@color/colorAccent"
+        android:textSize="18sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="right"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+        <crypto.soft.cryptongy.feature.shared.customView.CalTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginTop="10dp"
+            android:paddingBottom="5dp"
+            android:text="Market "
+            android:textStyle="bold"
+            android:textColor="@color/colorAccent"
+            android:textSize="18sp" />
+
+        <crypto.soft.cryptongy.feature.shared.customView.CalTextView
+            android:id="@+id/txtMarket"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginTop="10dp"
+            android:paddingBottom="5dp"
+            android:textColor="@color/colorPrimary"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="right"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+        <crypto.soft.cryptongy.feature.shared.customView.CalTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginTop="10dp"
+            android:paddingBottom="5dp"
+            android:text="Rate "
+            android:textStyle="bold"
+            android:textColor="@color/colorAccent"
+            android:textSize="18sp" />
+
+        <crypto.soft.cryptongy.feature.shared.customView.CalTextView
+            android:id="@+id/txtRate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginTop="10dp"
+            android:paddingBottom="5dp"
+            android:textColor="@color/colorPrimary"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="right"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+        <crypto.soft.cryptongy.feature.shared.customView.CalTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginTop="10dp"
+            android:paddingBottom="5dp"
+            android:text="Quantity "
+            android:textStyle="bold"
+            android:textColor="@color/colorAccent"
+            android:textSize="18sp" />
+
+        <crypto.soft.cryptongy.feature.shared.customView.CalTextView
+            android:id="@+id/txtQuantity"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginTop="10dp"
+            android:paddingBottom="5dp"
+            android:textColor="@color/colorPrimary"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+</LinearLayout>
