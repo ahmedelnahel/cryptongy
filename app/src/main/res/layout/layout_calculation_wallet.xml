@@ -2,56 +2,41 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/topLayout"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
+        android:paddingRight="10dp"
+        android:layout_alignParentRight="true"
+        android:orientation="horizontal"
         tools:ignore="MissingPrefix">
 
-        <RelativeLayout
-            android:id="@+id/center"
+        <TextView
+            fontPath="fonts/calibri.ttf"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true">
+            android:layout_alignRight="@+id/price"
+            android:layout_below="@id/price"
+            android:text="@string/watch_btc"
+            android:textColor="@color/order_secondary"
+            android:textSize="13sp"
+            android:textStyle="bold" />
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:orientation="horizontal">
+        <TextView
+            android:id="@+id/price"
+            fontPath="fonts/calibri.ttf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:text="7050"
+            android:textColor="@color/order_secondary"
+            android:textSize="13sp"
+            android:textStyle="bold" />
 
-                <TextView
-                    fontPath="fonts/calibri.ttf"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignRight="@+id/price"
-                    android:layout_below="@id/price"
-                    android:text="@string/watch_btc"
-                    android:textColor="@color/order_secondary"
-                    android:textSize="13sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/price"
-                    fontPath="fonts/calibri.ttf"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:text="7050"
-                    android:textColor="@color/order_secondary"
-                    android:textSize="13sp"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
-
-        </RelativeLayout>
-
-    </RelativeLayout>
+    </LinearLayout>
 
     <crypto.soft.cryptongy.feature.shared.customView.CabTextView
         android:id="@+id/txtProfit"
