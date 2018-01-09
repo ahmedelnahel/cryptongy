@@ -38,6 +38,7 @@ import crypto.soft.cryptongy.feature.shared.json.market.Result;
 import crypto.soft.cryptongy.feature.shared.json.marketsummary.MarketSummary;
 import crypto.soft.cryptongy.feature.shared.json.ticker.Ticker;
 import crypto.soft.cryptongy.feature.shared.json.wallet.Wallet;
+import crypto.soft.cryptongy.feature.shared.listner.DialogListner;
 import crypto.soft.cryptongy.utils.CoinApplication;
 import crypto.soft.cryptongy.utils.GlobalUtil;
 import crypto.soft.cryptongy.utils.HideKeyboard;
@@ -324,7 +325,12 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
 
     @Override
     public void showLoading(String msg) {
-        ProgressDialogFactory.getInstance(getContext(), msg).show();
+        ProgressDialogFactory.getInstance(getContext(), msg).show(new DialogListner() {
+            @Override
+            public void onOkClicked() {
+                getActivity().onBackPressed();
+            }
+        });
     }
 
     @Override

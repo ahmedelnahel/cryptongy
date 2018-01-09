@@ -225,7 +225,12 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implem
 
     @Override
     public void showLoading(String msg) {
-        ProgressDialogFactory.getInstance(getContext(), msg).show();
+        ProgressDialogFactory.getInstance(getContext(), msg).show(new DialogListner() {
+            @Override
+            public void onOkClicked() {
+                getActivity().onBackPressed();
+            }
+        });
     }
 
     @Override
