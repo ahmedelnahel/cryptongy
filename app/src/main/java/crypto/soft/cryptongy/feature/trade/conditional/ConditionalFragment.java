@@ -489,8 +489,18 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
 
     @Override
     public void setValue(String value) {
-        if (!TextUtils.isEmpty(value))
-            edtUnits.setText(value);
+        if (TextUtils.isEmpty(value))
+            return;
+        if (edtProfit.isFocused())
+            edtProfit.setText(value);
+        else if (edtPrice.isFocused())
+            edtPrice.setText(value);
+        else if (edtLoss.isFocused())
+            edtLoss.setText(value);
+        else if (edtTrailerPrice.isFocused())
+            edtTrailerPrice.setText(value);
+        else if (edtTrailerLoss.isFocused())
+            edtTrailerLoss.setText(value);
     }
 
     @Override
