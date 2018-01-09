@@ -194,7 +194,7 @@ public class CustomDialog {
 
         txtTitle.setText("Limit Detail");
         txtMarket.setText(limit.getMarket());
-        txtRate.setText(limit.getRate().toString());
+        txtRate.setText(String.format("%.8f", limit.getRate().doubleValue()));
         txtQunatity.setText(limit.getQuantity().toString());
 
         alertDialogBuilder.setView(view);
