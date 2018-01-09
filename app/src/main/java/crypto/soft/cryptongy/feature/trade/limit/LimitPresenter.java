@@ -24,7 +24,7 @@ public class LimitPresenter extends TradePresenter<LimitView> {
                 if (getView() != null) {
                     final Limit limit = ((LimitView) getView()).getLimit();
                     if (limit != null) {
-                        CustomDialog.showConfirmation(context, context.getString(R.string.limit_msg), new DialogListner() {
+                        CustomDialog.showLimitConfirm(context, limit, new DialogListner() {
                             @Override
                             public void onOkClicked() {
                                 CoinApplication application = (CoinApplication) context.getApplicationContext();
