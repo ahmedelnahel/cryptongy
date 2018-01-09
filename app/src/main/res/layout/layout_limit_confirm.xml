@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/toolbar_account"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="right"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+        <crypto.soft.cryptongy.feature.shared.customView.CalTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginTop="10dp"
+            android:paddingBottom="5dp"
+            android:text="Market "
+            android:textStyle="bold"
+            android:textColor="@color/colorAccent"
+            android:textSize="18sp" />
+
+        <crypto.soft.cryptongy.feature.shared.customView.CalTextView
+            android:id="@+id/txtMarket"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginTop="10dp"
+            android:paddingBottom="5dp"
+            android:textColor="@color/colorPrimary"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="right"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+        <crypto.soft.cryptongy.feature.shared.customView.CalTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginTop="10dp"
+            android:paddingBottom="5dp"
+            android:text="Rate "
+            android:textStyle="bold"
+            android:textColor="@color/colorAccent"
+            android:textSize="18sp" />
+
+        <crypto.soft.cryptongy.feature.shared.customView.CalTextView
+            android:id="@+id/txtRate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginTop="10dp"
+            android:paddingBottom="5dp"
+            android:textColor="@color/colorPrimary"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="right"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+        <crypto.soft.cryptongy.feature.shared.customView.CalTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginTop="10dp"
+            android:paddingBottom="5dp"
+            android:text="Quantity "
+            android:textStyle="bold"
+            android:textColor="@color/colorAccent"
+            android:textSize="18sp" />
+
+        <crypto.soft.cryptongy.feature.shared.customView.CalTextView
+            android:id="@+id/txtQuantity"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginTop="10dp"
+            android:paddingBottom="5dp"
+            android:textColor="@color/colorPrimary"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="right">
+
+        <crypto.soft.cryptongy.feature.shared.customView.CalButton
+            android:id="@+id/btnCancle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:background="@null"
+            android:text="Cancle"
+            android:textColor="@color/color_red"
+            android:textSize="16sp" />
+
+        <crypto.soft.cryptongy.feature.shared.customView.CalButton
+            android:id="@+id/btnOk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:background="@null"
+            android:text="Ok"
+            android:textColor="@color/colorAccent"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+</LinearLayout>

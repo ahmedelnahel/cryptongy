@@ -3,6 +3,8 @@ package crypto.soft.cryptongy.feature.trade.limit;
 import android.content.Context;
 
 import crypto.soft.cryptongy.R;
+import crypto.soft.cryptongy.feature.account.CustomDialog;
+import crypto.soft.cryptongy.feature.shared.listner.DialogListner;
 import crypto.soft.cryptongy.feature.trade.TradePresenter;
 import crypto.soft.cryptongy.utils.CoinApplication;
 
@@ -20,15 +22,20 @@ public class LimitPresenter extends TradePresenter<LimitView> {
         switch (id) {
             case R.id.btnOk:
                 if (getView() != null) {
-                    Limit limit = ((LimitView) getView()).getLimit();
+                    final Limit limit = ((LimitView) getView()).getLimit();
                     if (limit != null) {
-                        CoinApplication application = (CoinApplication) context.getApplicationContext();
-                        limit.setAccount(application.getTradeAccount());
-                        getView().showLoading("Please wait.");
-                        if (getView().isBuy())
-                            buyLimit(limit);
-                        else
-                            sellLimit(limit);
+                        CustomDialog.showLimitConfirm(context, limit, new DialogListner() {
+                            @Override
+                            public void onOkClicked() {
+                                CoinApplication application = (CoinApplication) context.getApplicationContext();
+                                limit.setAccount(application.getTradeAccount());
+                                getView().showLoading("Please wait.");
+                                if (getView().isBuy())
+                                    buyLimit(limit);
+                                else
+                                    sellLimit(limit);
+                            }
+                        });
                     }
                 }
                 break;

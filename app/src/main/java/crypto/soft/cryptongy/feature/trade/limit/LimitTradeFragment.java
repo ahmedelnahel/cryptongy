@@ -378,6 +378,7 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
 
     @Override
     public void setMax() {
+        edtUnits.setError(null);
         if (isBuy()) {
             String value = edtValue.getText().toString();
             if (!TextUtils.isEmpty(value)) {

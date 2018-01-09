@@ -18,6 +18,7 @@ import android.widget.Toast;
 import java.util.List;
 
 import crypto.soft.cryptongy.feature.shared.listner.DialogListner;
+import crypto.soft.cryptongy.feature.trade.limit.Limit;
 import io.realm.Realm;
 import io.realm.RealmQuery;
 import crypto.soft.cryptongy.R;
@@ -147,6 +148,45 @@ public class CustomDialog {
                 originalDialog.dismiss();
             }
         });
+        originalDialog.setCanceledOnTouchOutside(true);
+        originalDialog.show();
+    }
+
+    public static void showLimitConfirm(Context context, Limit limit, final DialogListner dialogListner) {
+        final android.support.v7.app.AlertDialog.Builder alertDialogBuilder = new android.support.v7.app.AlertDialog.Builder(context);
+        final View view = View.inflate(context, R.layout.layout_limit_confirm, null);
+        TextView txtRate = (TextView) view.findViewById(R.id.txtRate);
+        TextView txtMarket = (TextView) view.findViewById(R.id.txtMarket);
+        TextView txtQunatity = (TextView) view.findViewById(R.id.txtQuantity);
+        TextView txtTitle = (TextView) view.findViewById(R.id.txtTitle);
+
+        Button buttonOk = (Button) view.findViewById(R.id.btnOk);
+        Button btnCancle = (Button) view.findViewById(R.id.btnCancle);
+
+        txtTitle.setText("Limit Detail");
+        txtMarket.setText(limit.getMarket());
+        txtRate.setText(limit.getRate().toString());
+        txtQunatity.setText(limit.getQuantity().toString());
+
+        alertDialogBuilder.setView(view);
+        final Dialog originalDialog = alertDialogBuilder.create();
+        originalDialog.getWindow().setDimAmount(0.7f);
+        buttonOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (dialogListner != null)
+                    dialogListner.onOkClicked();
+                originalDialog.dismiss();
+            }
+        });
+
+        btnCancle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                originalDialog.dismiss();
+            }
+        });
+
         originalDialog.setCanceledOnTouchOutside(true);
         originalDialog.show();
     }

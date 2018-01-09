@@ -375,7 +375,7 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
         if (coinWallet != null && coinWallet.getBalance() > 0d)
             rdbSell.setEnabled(true);
         else
-            rdbSell.setEnabled(true);
+            rdbSell.setEnabled(false);
 
         if (!rdbBuy.isEnabled() && !rdbSell.isEnabled())
             btnOk.setEnabled(false);
@@ -387,6 +387,7 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
 
     @Override
     public void setMax() {
+        edtUnits.setError(null);
         if (isBuy()) {
             edtUnits.setText(String.format("%.8f", (baseWallet.getBalance().doubleValue() / Double.valueOf(lastValuInfo_TXT.getText().toString()))));
         } else {
