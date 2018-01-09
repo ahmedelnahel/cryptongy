@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import crypto.soft.cryptongy.R;
+import crypto.soft.cryptongy.feature.account.CustomDialog;
 import crypto.soft.cryptongy.feature.alert.CoinName;
 import crypto.soft.cryptongy.feature.order.OpenOrderHolder;
 import crypto.soft.cryptongy.feature.order.OrderHistoryHolder;
@@ -29,6 +30,7 @@ import crypto.soft.cryptongy.feature.shared.json.openorder.OpenOrder;
 import crypto.soft.cryptongy.feature.shared.json.openorder.Result;
 import crypto.soft.cryptongy.feature.shared.json.orderhistory.OrderHistory;
 import crypto.soft.cryptongy.feature.shared.json.ticker.Ticker;
+import crypto.soft.cryptongy.feature.shared.listner.DialogListner;
 import crypto.soft.cryptongy.utils.CoinApplication;
 import crypto.soft.cryptongy.utils.GlobalUtil;
 import crypto.soft.cryptongy.utils.HideKeyboard;
@@ -206,8 +208,13 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
             holder.txtAction.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    final CoinApplication application = (CoinApplication) getActivity().getApplicationContext();
-                    presenter.cancleOrder(coinName, data.getOrderUuid(), application.getReadAccount());
+                    CustomDialog.showConfirmation(getContext(), getString(R.string.cancle_confirm), new DialogListner() {
+                        @Override
+                        public void onOkClicked() {
+                            final CoinApplication application = (CoinApplication) getActivity().getApplicationContext();
+                            presenter.cancleOrder(coinName, data.getOrderUuid(), application.getReadAccount());
+                        }
+                    });
                 }
             });
 

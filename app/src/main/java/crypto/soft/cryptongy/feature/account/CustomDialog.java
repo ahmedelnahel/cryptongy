@@ -152,6 +152,34 @@ public class CustomDialog {
         originalDialog.show();
     }
 
+    public static void showConfirmation(Context context, String msg, final DialogListner dialogListner) {
+        final android.support.v7.app.AlertDialog.Builder alertDialogBuilder = new android.support.v7.app.AlertDialog.Builder(context);
+        final View view = View.inflate(context, R.layout.layout_msg_confirm, null);
+        TextView errorText = (TextView) view.findViewById(R.id.error_text);
+        Button buttonOk = (Button) view.findViewById(R.id.btnOk);
+        Button btnCancle = (Button) view.findViewById(R.id.btnCancle);
+        errorText.setText(msg);
+        alertDialogBuilder.setView(view);
+        final Dialog originalDialog = alertDialogBuilder.create();
+        originalDialog.getWindow().setDimAmount(0.7f);
+        buttonOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (dialogListner != null)
+                    dialogListner.onOkClicked();
+                originalDialog.dismiss();
+            }
+        });
+        btnCancle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                originalDialog.dismiss();
+            }
+        });
+        originalDialog.setCanceledOnTouchOutside(true);
+        originalDialog.show();
+    }
+
     public static void showLimitConfirm(Context context, Limit limit, final DialogListner dialogListner) {
         final android.support.v7.app.AlertDialog.Builder alertDialogBuilder = new android.support.v7.app.AlertDialog.Builder(context);
         final View view = View.inflate(context, R.layout.layout_limit_confirm, null);

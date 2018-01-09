@@ -14,10 +14,12 @@ import android.widget.TextView;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import crypto.soft.cryptongy.R;
+import crypto.soft.cryptongy.feature.account.CustomDialog;
 import crypto.soft.cryptongy.feature.shared.json.openorder.OpenOrder;
 import crypto.soft.cryptongy.feature.shared.json.openorder.Result;
 import crypto.soft.cryptongy.feature.shared.json.order.Order;
 import crypto.soft.cryptongy.feature.shared.json.orderhistory.OrderHistory;
+import crypto.soft.cryptongy.feature.shared.listner.DialogListner;
 import crypto.soft.cryptongy.utils.CoinApplication;
 import crypto.soft.cryptongy.utils.GlobalUtil;
 import crypto.soft.cryptongy.utils.HideKeyboard;
@@ -164,8 +166,13 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implem
             holder.txtAction.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    final CoinApplication application = (CoinApplication) getActivity().getApplicationContext();
-                    presenter.cancleOrder(data.getExchange(), data.getOrderUuid(), application.getReadAccount());
+                    CustomDialog.showConfirmation(getContext(), getString(R.string.cancle_confirm), new DialogListner() {
+                        @Override
+                        public void onOkClicked() {
+                            final CoinApplication application = (CoinApplication) getActivity().getApplicationContext();
+                            presenter.cancleOrder(data.getExchange(), data.getOrderUuid(), application.getReadAccount());
+                        }
+                    });
                 }
             });
 
