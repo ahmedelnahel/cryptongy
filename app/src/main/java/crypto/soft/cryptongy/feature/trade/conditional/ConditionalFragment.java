@@ -140,14 +140,6 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
                 else
                     edtPrice.setText(LowvalueInfo_TXT.getText());
                 break;
-            case R.id.chbLoss:
-                if (b && chbTrailerLoss.isChecked())
-                    chbTrailerLoss.setChecked(false);
-                break;
-            case R.id.chbTrailerLoss:
-                if (b && chbLoss.isChecked())
-                    chbLoss.setChecked(false);
-                break;
         }
     }
 
@@ -383,7 +375,7 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
         if (coinWallet != null && coinWallet.getBalance() > 0d)
             rdbSell.setEnabled(true);
         else
-            rdbSell.setEnabled(false);
+            rdbSell.setEnabled(true);
 
         if (!rdbBuy.isEnabled() && !rdbSell.isEnabled())
             btnOk.setEnabled(false);
@@ -613,7 +605,9 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
         List<Conditional> conditional = new ArrayList<>();
         if (chbLoss.isChecked()) {
             conditional.add(getStop(coin, units, last, against, orderType));
-        } else if (chbTrailerLoss.isChecked())
+        }
+
+        if (chbTrailerLoss.isChecked())
             conditional.add(getTrailerStop(coin, units, last, against, orderType));
 
         if (chbProfit.isChecked())
