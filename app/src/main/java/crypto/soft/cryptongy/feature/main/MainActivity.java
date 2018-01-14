@@ -12,6 +12,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
@@ -23,7 +24,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import crypto.soft.cryptongy.R;
+import crypto.soft.cryptongy.feature.order.OrderReceiver;
+import crypto.soft.cryptongy.feature.setting.Notification;
 import crypto.soft.cryptongy.feature.setting.SettingActivity;
+import crypto.soft.cryptongy.utils.CoinApplication;
+import crypto.soft.cryptongy.utils.GlobalUtil;
 import crypto.soft.cryptongy.utils.HideKeyboard;
 import crypto.soft.cryptongy.utils.ProgressDialogFactory;
 
@@ -49,6 +54,7 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
         initSideMenu();
         setAdapter();
         presenter.onItemClicked(data);
+        GlobalUtil.startAlarm(OrderReceiver.class, 30000, this);
     }
 
     @NonNull
@@ -178,11 +184,7 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
         menuItemAdapter.notifyDataSetChanged();
     }
 
-    @Override
-    public void onDestroy() {
-        ProgressDialogFactory.dismiss();
-        super.onDestroy();
-    }
+
 
     @Override
     public void onBackPressed() {
@@ -209,5 +211,46 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
                 }
             }
         }
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        ProgressDialogFactory.dismiss();
+        GlobalUtil.stopAlarm(OrderReceiver.class, this);
+//        Log.d("Cryptongy", "alarm stoped");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        ProgressDialogFactory.dismiss();
+        GlobalUtil.stopAlarm(OrderReceiver.class, this);
+//        Log.d("Cryptongy", "alarm stoped");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Notification notification = ((CoinApplication) this.getApplication()).getSettings();
+
+        GlobalUtil.startAlarm(OrderReceiver.class, 30000, this);
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        GlobalUtil.startAlarm(OrderReceiver.class, 30000, this);
+        Log.d("Cryptongy", "alarm started");
+    }
+
+    @Override
+    public void onDestroy() {
+        ProgressDialogFactory.dismiss();
+        GlobalUtil.stopAlarm(OrderReceiver.class, this);
+        super.onDestroy();
+
     }
 }

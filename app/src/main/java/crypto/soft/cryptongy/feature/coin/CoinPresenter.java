@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
+import android.webkit.WebView;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
@@ -243,7 +245,7 @@ public class CoinPresenter extends TickerPresenter<CoinView> {
                                     getView().hideEmptyView();
                                     String msg = ((OpenOrder) o).getMessage();
                                     if (TextUtils.isEmpty(msg))
-                                        msg = "Order has been cancled successfully.";
+                                        msg = "Cancel order is placed successfully.";
                                     CustomDialog.showMessagePop(context, msg, null);
                                 }
                             }
@@ -320,5 +322,32 @@ public class CoinPresenter extends TickerPresenter<CoinView> {
         if (getView() != null) {
             getView().setCalculation(calculation);
         }
+    }
+
+    public void loadTradingView(WebView webView)
+    {
+        String htmlPre = "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"utf-8\"></head>" +
+                "<body style='margin:0; pading:0; background-color: black;'>";
+        String htmlCode = "<!-- TradingView Widget BEGIN -->\n" +
+                "<script type=\"text/javascript\" src=\"https://s3.tradingview.com/tv.js\"></script>\n" +
+                "<script type=\"text/javascript\">\n" +
+                "new TradingView.widget({\n" +
+                "  \"autosize\": true,\n" +
+                "  \"symbol\": \"BITTREX:BTCUSDT\",\n" +
+                "  \"interval\": \"D\",\n" +
+                "  \"timezone\": \"Etc/UTC\",\n" +
+                "  \"theme\": \"Light\",\n" +
+                "  \"style\": \"1\",\n" +
+                "  \"locale\": \"en\",\n" +
+                "  \"toolbar_bg\": \"#f1f3f6\",\n" +
+                "  \"enable_publishing\": false,\n" +
+                "  \"hideideas\": true\n" +
+                "});\n" +
+                "</script>\n" +
+                "<!-- TradingView Widget END -->\n";
+        String htmlPost = "</body></html>";
+
+        webView.loadDataWithBaseURL(null,htmlPre+htmlCode+htmlPost, "text/html", "UTF-8", null);
+        webView.setVisibility(View.VISIBLE);
     }
 }

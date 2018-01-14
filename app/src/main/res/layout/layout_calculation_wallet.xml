@@ -31,7 +31,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:text="7050"
+            android:text=""
             android:textColor="@color/order_secondary"
             android:textSize="13sp"
             android:textStyle="bold" />
@@ -47,7 +47,7 @@
         android:layout_marginTop="10dp"
         android:text="Profit / Loss"
         android:textColor="@color/order_secondary"
-        android:textSize="13sp" />
+        android:textSize="16sp" />
 
     <LinearLayout
         android:id="@+id/lnlCalculation"
@@ -63,9 +63,9 @@
             android:id="@+id/txtBtc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="0 ฿"
+            android:text=""
             android:textColor="@color/order_primary"
-            android:textSize="15sp" />
+            android:textSize="20sp" />
 
         <crypto.soft.cryptongy.feature.shared.customView.CabTextView
             android:id="@+id/txtGap"
@@ -82,9 +82,9 @@
             android:id="@+id/txtUsd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="$ 0"
+            android:text=""
             android:textColor="@color/order_primary"
-            android:textSize="15sp" />
+            android:textSize="20sp" />
 
     </LinearLayout>
 

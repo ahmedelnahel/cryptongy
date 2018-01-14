@@ -51,7 +51,7 @@
     <string name="conditional_trade">Conditional Trade</string>
     <string name="alert">Alert</string>
     <string name="setting_sync">Automatic Sync</string>
-    <string name="watch_btc">BTC: $ </string>
+    <string name="watch_btc">BTC </string>
     <string name="watch_coin">Coin</string>
     <string name="watch_price">Price</string>
     <string name="watch_volume">Volume</string>

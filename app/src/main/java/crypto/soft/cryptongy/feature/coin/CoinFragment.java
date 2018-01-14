@@ -11,6 +11,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -48,7 +49,7 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
     private LinearLayout lnlContainer;
     private TextView txtLevel, txtOpenOrder, txtOrderHistory, txtEmpty, txtBtc, txtUsd, txtMarket, txtVtc, txtProfit;
     private ImageView imgSync, imgAccSetting;
-
+//    private WebView webView;
     private HorizontalScrollView scrollView;
 
     private boolean isFirst = false;
@@ -69,6 +70,7 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
         CoinName.coinName = coinName;
         setTitle();
         // hideTotal();
+
         return view;
     }
 
@@ -90,6 +92,7 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
 //        Log.d("Coin screen", "coinName " + coinName );
         double last = 0;
         presenter.getData(coinName);
+//        presenter.loadTradingView(webView);
 
     }
 
@@ -138,6 +141,9 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
         LowvalueInfo_TXT = view.findViewById(R.id.LowValue_Id);
         VolumeValue_Txt = view.findViewById(R.id.VolumeValue_Id);
         scrollView = view.findViewById(R.id.HorScrollView);
+//        webView = (WebView) view.findViewById(R.id.tradingView);
+//        webView.getSettings().setJavaScriptEnabled(true);
+
     }
 
     @Override

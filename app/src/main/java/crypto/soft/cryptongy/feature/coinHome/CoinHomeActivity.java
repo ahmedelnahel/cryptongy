@@ -37,11 +37,7 @@ public class CoinHomeActivity extends MvpActivity<CoinHomeView, CoinHomePresente
         findViews();
         initTab();
         setTitle();
-        Notification notification = ((CoinApplication) this.getApplication()).getSettings();
-        if (notification.isAutomSync()) {
-            GlobalUtil.startAlarm(OrderReceiver.class, 30000, this);
-        }
-        Log.d("Cryptongy", "alarm started");
+
     }
 
     @NonNull
@@ -100,31 +96,8 @@ public class CoinHomeActivity extends MvpActivity<CoinHomeView, CoinHomePresente
         super.onDestroy();
         ProgressDialogFactory.dismiss();
         GlobalUtil.stopAlarm(OrderReceiver.class, this);
-        Log.d("Cryptongy", "alarm stoped");
+//        Log.d("Cryptongy", "alarm stoped");
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        ProgressDialogFactory.dismiss();
-        GlobalUtil.stopAlarm(OrderReceiver.class, this);
-        Log.d("Cryptongy", "alarm stoped");
-    }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        ProgressDialogFactory.dismiss();
-        GlobalUtil.stopAlarm(OrderReceiver.class, this);
-        Log.d("Cryptongy", "alarm stoped");
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Notification notification = ((CoinApplication) this.getApplication()).getSettings();
-        if (notification.isAutomSync()) {
-            GlobalUtil.startAlarm(OrderReceiver.class, 30000, this);
-        }
-    }
 }

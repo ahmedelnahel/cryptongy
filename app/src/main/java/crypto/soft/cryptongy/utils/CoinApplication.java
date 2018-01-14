@@ -157,6 +157,8 @@ public class CoinApplication extends Application {
     @Override
     public void onTerminate() {
         super.onTerminate();
-
+        GlobalUtil.stopAlarm(OrderReceiver.class, this);
     }
+
+
 }
