@@ -64,51 +64,52 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
     @Override
     public void onBindViewHolder(CurrencyViewHolder holder, final int position) {
         Result result = currencyItemsFiltered.get(position);
-        holder.coin.setText(result.getMarketName());
-        holder.volume.setText(String.format("%.2f", result.getVolume()));
-        holder.low.setText("" + result.getLow());
-        holder.high.setText("" + result.getHigh());
+        if (result != null) {
+            holder.coin.setText(result.getMarketName());
+            holder.volume.setText(String.format("%.2f", result.getVolume()));
+            holder.low.setText("" + result.getLow());
+            holder.high.setText("" + result.getHigh());
 
-        String price, pricedollar = "";
-        if (result.getMarketName().contains("USDT-")) {
-            price = "";
-            pricedollar = "$" + new DecimalFormat("#.####").format(result.getLast());
-            ;
-        } else {
+            String price, pricedollar = "";
+            if (result.getMarketName().contains("USDT-")) {
+                price = "";
+                pricedollar = "$" + new DecimalFormat("#.####").format(result.getLast());
+                ;
+            } else {
 
-           String symbol = "฿";
-            if (result.getMarketName().contains("ETH-")) {
-                pricedollar = "$" + new DecimalFormat("#.####").format(result.getLast() * btcusdt * ethbtc);
-                symbol = "Ξ";
+                String symbol = "฿";
+                if (result.getMarketName().contains("ETH-")) {
+                    pricedollar = "$" + new DecimalFormat("#.####").format(result.getLast() * btcusdt * ethbtc);
+                    symbol = "Ξ";
+                } else if (result.getMarketName().contains("BTC-"))
+                    pricedollar = "$" + new DecimalFormat("#.####").format(result.getLast() * btcusdt);
+                price = symbol + new DecimalFormat("0.00000000").format(result.getLast());
             }
-            else if (result.getMarketName().contains("BTC-"))
-                pricedollar = "$" + new DecimalFormat("#.####").format(result.getLast() * btcusdt);
-            price =  symbol + new DecimalFormat("0.00000000").format(result.getLast());
-        }
 
-        holder.price.setText(price);
-        holder.pricedollar.setText(pricedollar);
+            holder.price.setText(price);
+            holder.pricedollar.setText(pricedollar);
 
-        if (!result.isSelected()) {
-            holder.parent.setBackgroundResource(R.drawable.rect);
-        } else {
-            holder.parent.setBackgroundResource(R.drawable.rect_fill_selected);
-        }
-        // holder.seekBar.setProgress(50);
-        holder.seekBar.setEnabled(false);
-        double pricepoint = result.getLast() - result.getLow();
-        double highpoint = result.getHigh() - result.getLow();
-        holder.seekBar.setProgress(getProgress(pricepoint, highpoint));
-        holder.seekBar.setProgressDrawable(ContextCompat.getDrawable(holder.itemView.getContext(), result.getDrawable()));
-        holder.seekBar.setOnSeekBarChangeListener(new OnSeekBarChange(position, holder, currencyItemsFiltered.get(position)));
-        holder.parent.setOnLongClickListener(new OnCurrencyItemClick(position, holder, currencyItemsFiltered.get(position)));
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (adapterItemClickListener != null)
-                    adapterItemClickListener.onItemClicked(currencyItemsFiltered.get(position), position);
+            if (!result.isSelected()) {
+                holder.parent.setBackgroundResource(R.drawable.rect);
+            } else {
+                holder.parent.setBackgroundResource(R.drawable.rect_fill_selected);
             }
-        });
+            // holder.seekBar.setProgress(50);
+            holder.seekBar.setEnabled(false);
+            double pricepoint = result.getLast() - result.getLow();
+            double highpoint = result.getHigh() - result.getLow();
+            holder.seekBar.setProgress(getProgress(pricepoint, highpoint));
+            holder.seekBar.setProgressDrawable(ContextCompat.getDrawable(holder.itemView.getContext(), result.getDrawable()));
+            holder.seekBar.setOnSeekBarChangeListener(new OnSeekBarChange(position, holder, currencyItemsFiltered.get(position)));
+            holder.parent.setOnLongClickListener(new OnCurrencyItemClick(position, holder, currencyItemsFiltered.get(position)));
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (adapterItemClickListener != null)
+                        adapterItemClickListener.onItemClicked(currencyItemsFiltered.get(position), position);
+                }
+            });
+        }
     }
 
     @Override

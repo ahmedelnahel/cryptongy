@@ -44,13 +44,13 @@ public class RESTUtil {
 
             URL myURL = new URL(url);
             HttpURLConnection myURLConnection = (HttpURLConnection)myURL.openConnection();
-            myURLConnection.setUseCaches(false);
-            myURLConnection.setDoInput(true);
-            myURLConnection.setDoOutput(true);
+//            myURLConnection.setUseCaches(false);
+//            myURLConnection.setDoInput(true);
+//            myURLConnection.setDoOutput(true);
             myURLConnection.setRequestMethod("GET");
-            myURLConnection.setRequestProperty("Content-Type", "application/json");
+//            myURLConnection.setRequestProperty("Content-Type", "application/json");
             int responseCode = myURLConnection.getResponseCode();
-//            Log.i("responseCode " , ""+ responseCode);
+            Log.i("responseCode " , ""+ responseCode);
             if (responseCode == 200) {
                 // Read response
                 BufferedReader br = new BufferedReader(new InputStreamReader(myURLConnection.getInputStream()));
@@ -62,7 +62,7 @@ public class RESTUtil {
                 br.close();
                 myURLConnection.disconnect();
                 response = jsonString.toString();
-//                Log.i("response " , ""+ response);
+                Log.i("response " , ""+ response);
             }
         } catch (MalformedURLException e) {
             e.printStackTrace();

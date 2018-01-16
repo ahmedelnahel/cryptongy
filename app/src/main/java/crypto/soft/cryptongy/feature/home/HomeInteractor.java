@@ -14,6 +14,7 @@ import java.util.List;
 import crypto.soft.cryptongy.feature.shared.json.market.MarketSummaries;
 import crypto.soft.cryptongy.feature.shared.json.market.Result;
 import crypto.soft.cryptongy.feature.shared.listner.OnMultiFinishListner;
+import crypto.soft.cryptongy.network.BinanceServices;
 import crypto.soft.cryptongy.network.BittrexServices;
 import crypto.soft.cryptongy.utils.SharedPreference;
 
@@ -43,17 +44,18 @@ public class HomeInteractor {
         protected MarketSummaries doInBackground(AssetManager... voids) {
             try {
                 MarketSummaries marketSummaries = new BittrexServices().getMarketSummaries();
+
                 boolean isFirst = SharedPreference.isFirst(context, "isCoinAdded");
                 if (isFirst) {
                     if (marketSummaries != null && marketSummaries.getResult() != null &&  marketSummaries.getSuccess()) {
 
 
-                        results.add(marketSummaries.getCoinsMap().get("BTC-LTC"));
-                        results.add(marketSummaries.getCoinsMap().get("BTC-ETH"));
-                        results.add(marketSummaries.getCoinsMap().get("BTC-VTC"));
-                        results.add(marketSummaries.getCoinsMap().get("BTC-SYS"));
-                        results.add(marketSummaries.getCoinsMap().get("BTC-XVG"));
-                        if (results != null) {
+                        if(marketSummaries.getCoinsMap().get("BTC-LTC")!= null)results.add(marketSummaries.getCoinsMap().get("BTC-LTC"));
+                        if(marketSummaries.getCoinsMap().get("BTC-ETH")!= null)results.add(marketSummaries.getCoinsMap().get("BTC-ETH"));
+                        if(marketSummaries.getCoinsMap().get("BTC-VTC")!= null) results.add(marketSummaries.getCoinsMap().get("BTC-VTC"));
+                        if(marketSummaries.getCoinsMap().get("BTC-SYS")!= null)results.add(marketSummaries.getCoinsMap().get("BTC-SYS"));
+                        if(marketSummaries.getCoinsMap().get("BTC-XVG")!= null) results.add(marketSummaries.getCoinsMap().get("BTC-XVG"));
+                        if (results != null && results.size()!= 0) {
                             SharedPreference.saveToPrefs(context, "isCoinAdded", false);
                             SharedPreference.saveToPrefs(context, "mockValue", new Gson().toJson(results));
                         }
@@ -65,9 +67,11 @@ public class HomeInteractor {
                         if (marketSummaries != null && marketSummaries.getResult() != null &&  marketSummaries.getSuccess()) {
                             for (Result r:results)
                             {
-                                Result ms = marketSummaries.getCoinsMap().get(r.getMarketName());
-                               r.setLast(ms.getLast()) ;
-                               r.setVolume(ms.getVolume());
+                                if(r != null) {
+                                    Result ms = marketSummaries.getCoinsMap().get(r.getMarketName());
+                                    r.setLast(ms.getLast());
+                                    r.setVolume(ms.getVolume());
+                                }
                             }
 
                             if (results != null) {

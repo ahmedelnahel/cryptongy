@@ -210,7 +210,7 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
     private List<Result> restoreData(List<Result> results){
         for (Result result:mock){
             for (Result result1:results){
-                if (result.getMarketName().equalsIgnoreCase(result1.getMarketName())){
+                if (result != null && result.getMarketName().equalsIgnoreCase(result1.getMarketName())){
                     result1.setSelected(result.isSelected());
                     break;
                 }

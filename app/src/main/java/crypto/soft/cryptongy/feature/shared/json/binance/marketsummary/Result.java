@@ -69,15 +69,15 @@ public class Result {
     @JsonProperty("quoteVolume")
     private String quoteVolume;
     @JsonProperty("openTime")
-    private Integer openTime;
+    private Long openTime;
     @JsonProperty("closeTime")
-    private Integer closeTime;
+    private Long closeTime;
     @JsonProperty("firstId")
-    private Integer firstId;
+    private Long firstId;
     @JsonProperty("lastId")
-    private Integer lastId;
+    private Long lastId;
     @JsonProperty("count")
-    private Integer count;
+    private Long count;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -242,52 +242,52 @@ public class Result {
     }
 
     @JsonProperty("openTime")
-    public Integer getOpenTime() {
+    public Long getOpenTime() {
         return openTime;
     }
 
     @JsonProperty("openTime")
-    public void setOpenTime(Integer openTime) {
+    public void setOpenTime(Long openTime) {
         this.openTime = openTime;
     }
 
     @JsonProperty("closeTime")
-    public Integer getCloseTime() {
+    public Long getCloseTime() {
         return closeTime;
     }
 
     @JsonProperty("closeTime")
-    public void setCloseTime(Integer closeTime) {
+    public void setCloseTime(Long closeTime) {
         this.closeTime = closeTime;
     }
 
     @JsonProperty("firstId")
-    public Integer getFirstId() {
+    public Long getFirstId() {
         return firstId;
     }
 
     @JsonProperty("firstId")
-    public void setFirstId(Integer firstId) {
+    public void setFirstId(Long firstId) {
         this.firstId = firstId;
     }
 
     @JsonProperty("lastId")
-    public Integer getLastId() {
+    public Long getLastId() {
         return lastId;
     }
 
     @JsonProperty("lastId")
-    public void setLastId(Integer lastId) {
+    public void setLastId(Long lastId) {
         this.lastId = lastId;
     }
 
     @JsonProperty("count")
-    public Integer getCount() {
+    public Long getCount() {
         return count;
     }
 
     @JsonProperty("count")
-    public void setCount(Integer count) {
+    public void setCount(Long count) {
         this.count = count;
     }
 

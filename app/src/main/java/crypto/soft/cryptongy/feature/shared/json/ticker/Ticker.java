@@ -33,6 +33,14 @@ public class Ticker {
         return json;
     }
 
+
+    public void setBinanceResult(crypto.soft.cryptongy.feature.shared.json.binance.marketsummary.Result r)
+    {
+     this.result = new Result();
+     result.setLast(r.getLastPrice()==null?0.0:Double.valueOf(r.getLastPrice()));
+     result.setAsk(r.getAskPrice()==null?0.0:Double.valueOf(r.getAskPrice()));
+     result.setBid(r.getBidPrice()==null?0.0:Double.valueOf(r.getBidPrice()));
+    }
     public void setJson(String json) {
         this.json = json;
     }

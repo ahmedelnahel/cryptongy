@@ -37,28 +37,33 @@ public class BinanceServices {
     public MarketSummaries getMarketSummaries() throws IOException {
         final String url = "https://api.binance.com/api/v1/ticker/24hr";  //"https://www.coinexchange.io/api/v1/getmarkets";
         String marketSummariesStr = new RESTUtil().callREST(url);
-        MarketSummaries marketSummaries_ = new MarketSummaries();;
+        MarketSummaries marketSummaries_ = new MarketSummaries();
+        Log.d("Binance MarketSummaries", "response " + marketSummariesStr);
         if(marketSummariesStr == null || "".equals(marketSummariesStr)) {
-
+            Log.d("Binance MarketSummaries", "response in error " + marketSummariesStr);
             marketSummaries_.setSuccess(false);
             marketSummaries_.setMessage("Connection Error");
         }
         else {
-            marketSummariesStr = "{\"result\":[" + marketSummariesStr + " ]}";
+            marketSummariesStr = "{\"result\":" + marketSummariesStr + " }";
             ObjectMapper mapper = new ObjectMapper();
             BinanceMarket binanceMarket = mapper.readValue(marketSummariesStr, BinanceMarket.class);
 
             marketSummaries_.setJson(marketSummariesStr);
             marketSummaries_.setSuccess(true);
-            Log.i("Binance MarketSummaries", marketSummariesStr);
 
-            if (binanceMarket.getMsg().equals(null)) {
+
+            if (binanceMarket.getMsg() == null || "".equals(binanceMarket.getMsg())) {
                 HashMap<String, Result> coinsMap = new HashMap<>();
+                ArrayList<Result> results = new ArrayList();
                 for (crypto.soft.cryptongy.feature.shared.json.binance.marketsummary.Result r : binanceMarket.getResult()) {
                     Result mr = new Result(r);
+                    results.add(mr);
                     coinsMap.put(r.getSymbol(), mr);
                 }
+
                 marketSummaries_.setCoinsMap(coinsMap);
+                marketSummaries_.setResult(results);
             }
             else
             {
@@ -98,18 +103,19 @@ public class BinanceServices {
         final String url = "https://api.binance.com/api/v1/ticker/24hr?symbol="+market;
         Ticker ticker = new Ticker();
         String tickerStr = new RESTUtil().callREST(url);
-        if(tickerStr == null) {
-            ticker = new Ticker();
+        if(tickerStr == null || "".equals(tickerStr)) {
             ticker.setSuccess(false);
             ticker.setMessage("Connection Error");
         }
         else
         {
+
             ObjectMapper mapper = new ObjectMapper();
-            ticker = mapper.readValue(tickerStr, Ticker.class);
+            crypto.soft.cryptongy.feature.shared.json.binance.marketsummary.Result r = mapper.readValue(tickerStr, crypto.soft.cryptongy.feature.shared.json.binance.marketsummary.Result.class);
+            ticker.setBinanceResult(r);
             ticker.setJson(tickerStr);
         }
-//        Log.i("MarketSummary", tickerStr);
+        Log.i("MarketSummary", tickerStr);
 
         return ticker;
     }
