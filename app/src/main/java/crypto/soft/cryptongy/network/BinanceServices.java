@@ -1,12 +1,17 @@
 package crypto.soft.cryptongy.network;
 
+import android.util.Log;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import crypto.soft.cryptongy.common.RESTUtil;
 import crypto.soft.cryptongy.feature.shared.json.action.Cancel;
+import crypto.soft.cryptongy.feature.shared.json.binance.marketsummary.BinanceMarket;
 import crypto.soft.cryptongy.feature.shared.json.limitorder.LimitOrder;
 import crypto.soft.cryptongy.feature.shared.json.market.MarketSummaries;
 import crypto.soft.cryptongy.feature.shared.json.market.Result;
@@ -18,6 +23,7 @@ import crypto.soft.cryptongy.feature.shared.json.orderhistory.OrderHistory;
 import crypto.soft.cryptongy.feature.shared.json.ticker.Ticker;
 import crypto.soft.cryptongy.feature.shared.json.wallet.Wallet;
 import crypto.soft.cryptongy.feature.shared.module.Account;
+import crypto.soft.cryptongy.utils.GlobalUtil;
 
 
 /**
@@ -31,30 +37,111 @@ public class BinanceServices {
     public MarketSummaries getMarketSummaries() throws IOException {
         final String url = "https://api.binance.com/api/v1/ticker/24hr";  //"https://www.coinexchange.io/api/v1/getmarkets";
         String marketSummariesStr = new RESTUtil().callREST(url);
-        MarketSummaries marketSummaries_ = null;
-        if(marketSummariesStr == null) {
-            marketSummaries_ = new MarketSummaries();
+        MarketSummaries marketSummaries_ = new MarketSummaries();;
+        if(marketSummariesStr == null || "".equals(marketSummariesStr)) {
+
             marketSummaries_.setSuccess(false);
             marketSummaries_.setMessage("Connection Error");
         }
         else {
+            marketSummariesStr = "{\"result\":[" + marketSummariesStr + " ]}";
             ObjectMapper mapper = new ObjectMapper();
-            marketSummaries_ = mapper.readValue(marketSummariesStr, MarketSummaries.class);
-            marketSummaries_.setJson(marketSummariesStr);
-//        Log.i("MarketSummaries", marketSummariesStr);
+            BinanceMarket binanceMarket = mapper.readValue(marketSummariesStr, BinanceMarket.class);
 
-            if (marketSummaries_.getSuccess()) {
+            marketSummaries_.setJson(marketSummariesStr);
+            marketSummaries_.setSuccess(true);
+            Log.i("Binance MarketSummaries", marketSummariesStr);
+
+            if (binanceMarket.getMsg().equals(null)) {
                 HashMap<String, Result> coinsMap = new HashMap<>();
-                for (Result r : marketSummaries_.getResult()) {
-                    coinsMap.put(r.getMarketName(), r);
+                for (crypto.soft.cryptongy.feature.shared.json.binance.marketsummary.Result r : binanceMarket.getResult()) {
+                    Result mr = new Result(r);
+                    coinsMap.put(r.getSymbol(), mr);
                 }
                 marketSummaries_.setCoinsMap(coinsMap);
+            }
+            else
+            {
+                marketSummaries_.setSuccess(false);
+                marketSummaries_.setMessage(binanceMarket.getMsg());
+
             }
         }
         return marketSummaries_;
     }
 
     //
+
+
+    public MarketSummary getMarketSummary(String market) throws IOException {
+        final String url = "https://api.binance.com/api/v1/ticker/24hr?symbol="+market;
+        String marketSummaryStr = new RESTUtil().callREST(url);
+        MarketSummary marketSummary_= new MarketSummary();
+        if(marketSummaryStr == null || "".equals(marketSummaryStr)) {
+            marketSummary_.setSuccess(false);
+            marketSummary_.setMessage("Connection Error");
+        }
+        else {
+            ObjectMapper mapper = new ObjectMapper();
+            crypto.soft.cryptongy.feature.shared.json.binance.marketsummary.Result r = mapper.readValue(marketSummaryStr, crypto.soft.cryptongy.feature.shared.json.binance.marketsummary.Result.class);
+            Result mr = new Result(r);
+            List rl = new ArrayList();
+            rl.add(mr);
+            marketSummary_.setResult(rl);
+            marketSummary_.setJson(marketSummaryStr);
+        Log.i("MarketSummary", marketSummaryStr);
+        }
+        return marketSummary_;
+    }
+
+    public Ticker getTicker(String market) throws IOException {
+        final String url = "https://api.binance.com/api/v1/ticker/24hr?symbol="+market;
+        Ticker ticker = new Ticker();
+        String tickerStr = new RESTUtil().callREST(url);
+        if(tickerStr == null) {
+            ticker = new Ticker();
+            ticker.setSuccess(false);
+            ticker.setMessage("Connection Error");
+        }
+        else
+        {
+            ObjectMapper mapper = new ObjectMapper();
+            ticker = mapper.readValue(tickerStr, Ticker.class);
+            ticker.setJson(tickerStr);
+        }
+//        Log.i("MarketSummary", tickerStr);
+
+        return ticker;
+    }
+
+    public OpenOrder getOpnOrders( Account account) throws IOException {
+        OpenOrder openOrder = null;
+
+        if(account == null)
+        {
+            openOrder = new OpenOrder();
+            openOrder.setSuccess(false);
+            openOrder.setMessage("No API");
+        }
+        else {
+            final String url = "https://bittrex.com/api/v1.1/market/getopenorders";
+            String ordersStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret());
+
+            if (ordersStr == null) {
+                openOrder = new OpenOrder();
+                openOrder.setSuccess(false);
+                openOrder.setMessage("Connection Error");
+            } else {
+                ObjectMapper mapper = new ObjectMapper();
+                openOrder = mapper.readValue(ordersStr, OpenOrder.class);
+                openOrder.setJson(ordersStr);
+//        Log.i("response " , wallet.getSuccess() + wallet.getJson());
+            }
+        }
+        return openOrder;
+    }
+
+
     public Wallet getWallet(Account account) throws IOException {
         Wallet wallet = null;
 
@@ -87,72 +174,6 @@ public class BinanceServices {
             }
         }
         return wallet;
-    }
-
-    public MarketSummary getMarketSummary(String market) throws IOException {
-        final String url = "https://bittrex.com/api/v1.1/public/getmarketsummary?market="+market;
-        String marketSummaryStr = new RESTUtil().callREST(url);
-        MarketSummary marketSummary_= null;
-        if(marketSummaryStr == null) {
-            marketSummary_ = new MarketSummary();
-            marketSummary_.setSuccess(false);
-            marketSummary_.setMessage("Connection Error");
-        }
-        else {
-            ObjectMapper mapper = new ObjectMapper();
-            marketSummary_ = mapper.readValue(marketSummaryStr, MarketSummary.class);
-            marketSummary_.setJson(marketSummaryStr);
-//        Log.i("MarketSummary", marketSummaryStr);
-        }
-        return marketSummary_;
-    }
-
-    public OpenOrder getOpnOrders( Account account) throws IOException {
-        OpenOrder openOrder = null;
-
-        if(account == null)
-        {
-            openOrder = new OpenOrder();
-            openOrder.setSuccess(false);
-            openOrder.setMessage("No API");
-        }
-        else {
-            final String url = "https://bittrex.com/api/v1.1/market/getopenorders";
-            String ordersStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret());
-
-            if (ordersStr == null) {
-                openOrder = new OpenOrder();
-                openOrder.setSuccess(false);
-                openOrder.setMessage("Connection Error");
-            } else {
-                ObjectMapper mapper = new ObjectMapper();
-                openOrder = mapper.readValue(ordersStr, OpenOrder.class);
-                openOrder.setJson(ordersStr);
-//        Log.i("response " , wallet.getSuccess() + wallet.getJson());
-            }
-        }
-        return openOrder;
-    }
-
-
-    public Ticker getTicker(String market) throws IOException {
-        final String url = "https://bittrex.com/api/v1.1/public/getticker?market="+market;
-        Ticker ticker = null;
-        String tickerStr = new RESTUtil().callREST(url);
-        if(tickerStr == null) {
-            ticker = new Ticker();
-            ticker.setSuccess(false);
-            ticker.setMessage("Connection Error");
-        }
-        else
-        {
-            ObjectMapper mapper = new ObjectMapper();
-            ticker = mapper.readValue(tickerStr, Ticker.class);
-            ticker.setJson(tickerStr);
-        }
-//        Log.i("MarketSummary", tickerStr);
-
-        return ticker;
     }
 
 

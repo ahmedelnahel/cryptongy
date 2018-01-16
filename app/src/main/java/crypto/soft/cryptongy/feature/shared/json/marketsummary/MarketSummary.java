@@ -31,6 +31,8 @@ public class MarketSummary {
     @JsonIgnore
     private String json;
 
+
+
     public String getJson() {
         return json;
     }

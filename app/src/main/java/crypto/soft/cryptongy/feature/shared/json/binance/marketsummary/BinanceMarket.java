@@ -21,7 +21,10 @@ public class BinanceMarket {
     private List<Result> result = null;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
-
+    @JsonProperty("code")
+    private Integer code;
+    @JsonProperty("msg")
+    private String msg;
     @JsonProperty("result")
     public List<Result> getResult() {
         return result;
@@ -40,6 +43,25 @@ public class BinanceMarket {
     @JsonAnySetter
     public void setAdditionalProperty(String name, Object value) {
         this.additionalProperties.put(name, value);
+    }
+    @JsonProperty("code")
+    public Integer getCode() {
+        return code;
+    }
+
+    @JsonProperty("code")
+    public void setCode(Integer code) {
+        this.code = code;
+    }
+
+    @JsonProperty("msg")
+    public String getMsg() {
+        return msg;
+    }
+
+    @JsonProperty("msg")
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 
 }

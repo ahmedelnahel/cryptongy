@@ -14,6 +14,20 @@ import crypto.soft.cryptongy.R;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 
 public class Result {
+    public Result() {
+    }
+
+    public Result(crypto.soft.cryptongy.feature.shared.json.binance.marketsummary.Result result) {
+        this.marketName = result.getSymbol();
+        this.high = result.getHighPrice()==null?0.0:Double.valueOf(result.getHighPrice());
+        this.low = result.getLowPrice()==null?0.0:Double.valueOf(result.getLowPrice());
+        this.volume = result.getVolume()==null?0.0:Double.valueOf(result.getVolume());
+        this.last = result.getLastPrice()==null?0.0:Double.valueOf(result.getLastPrice());
+        this.bid = result.getBidPrice()==null?0.0:Double.valueOf(result.getBidPrice());
+        this.ask = result.getAskPrice()==null?0.0:Double.valueOf(result.getAskPrice());
+
+    }
+
     @JsonProperty("MarketName")
     private String marketName;
     @JsonProperty("High")
