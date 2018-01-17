@@ -26,6 +26,7 @@ public class HomePresenter extends MvpBasePresenter<HomeView> implements OnMulti
     private Context context;
     private List<Result> prevResults = new ArrayList<>();
     private boolean isStarted = false;
+    private boolean isBitrix;
 
     public HomePresenter(Context context) {
         this.homeInteractor = new HomeInteractor();
@@ -36,7 +37,17 @@ public class HomePresenter extends MvpBasePresenter<HomeView> implements OnMulti
     public void loadSummaries() {
         if (getView() != null)
             getView().showProgressBar();
+
+        isBitrix=true;
         homeInteractor.loadSummary(context, this);
+    }
+
+    public void loadBinanceSummaries() {
+        if (getView() != null)
+            getView().showProgressBar();
+
+        isBitrix=false;
+        homeInteractor.loadBinanceSummary(context, this);
     }
 
     @Override
@@ -100,22 +111,43 @@ public class HomePresenter extends MvpBasePresenter<HomeView> implements OnMulti
 
         @Override
         public void run() {
-            homeInteractor.loadSummary(context, new OnMultiFinishListner<List<Result>, MarketSummaries>() {
-                @Override
-                public void onComplete(List<Result> results, MarketSummaries summaries) {
-                    if (getView() != null) {
-                        results = setDrawable(results);
-                        getView().setAdapter(results);
-                        getView().onSummaryDataLoad(summaries);
-                        prevResults = results;
+            if(isBitrix){
+                homeInteractor.loadSummary(context, new OnMultiFinishListner<List<Result>, MarketSummaries>() {
+                    @Override
+                    public void onComplete(List<Result> results, MarketSummaries summaries) {
+                        if (getView() != null) {
+                            results = setDrawable(results);
+                            getView().setAdapter(results);
+                            getView().onSummaryDataLoad(summaries);
+                            prevResults = results;
+                        }
                     }
-                }
 
-                @Override
-                public void onFail(String error) {
+                    @Override
+                    public void onFail(String error) {
 
-                }
-            });
+                    }
+                });
+            }
+            else {
+                homeInteractor.loadBinanceSummary(context, new OnMultiFinishListner<List<Result>, MarketSummaries>() {
+                    @Override
+                    public void onComplete(List<Result> results, MarketSummaries summaries) {
+                        if (getView() != null) {
+                            results = setDrawable(results);
+                            getView().setAdapter(results);
+                            getView().onSummaryDataLoad(summaries);
+                            prevResults = results;
+                        }
+                    }
+
+                    @Override
+                    public void onFail(String error) {
+
+                    }
+                });
+            }
+
         }
     }
 }

@@ -55,6 +55,7 @@ dependencies {
     implementation 'com.android.support:design:26.1.0'
     compile 'com.android.support:percent:26.1.0'
     compile 'org.springframework.android:spring-android-rest-template:2.0.0.M3'
+    compile 'com.intuit.sdp:sdp-android:1.0.4'
     compile 'com.fasterxml.jackson.core:jackson-databind:2.9.2'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     implementation 'com.hannesdorfmann.mosby:mvp:2.0.1'

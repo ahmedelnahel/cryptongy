@@ -8,6 +8,7 @@
     <string name="acc_btn_add">Add</string>
     <string name="setting_notification">Notifications</string>
     <string name="setting_vibrate">Vibrate</string>
+    <string name="setting_default_exchange">Default Exchange</string>
     <string name="setting_sound">Sound</string>
     <string name="settings">Settings</string>
     <string name="about_title">Cryptongy version 1.0 @ 2017 CryptoSoft</string>
@@ -41,6 +42,7 @@
 
     <string-array name="coin_array">
         <item>Bittrex</item>
+        <item>Binance</item>
     </string-array>
 
     <string name="donnation_title">Thanks for your donation</string>

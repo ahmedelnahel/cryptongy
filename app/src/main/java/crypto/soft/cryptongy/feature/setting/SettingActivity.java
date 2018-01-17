@@ -9,9 +9,12 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -24,6 +27,7 @@ public class SettingActivity extends MvpActivity<SettingView, SettingPresenter> 
     private Notification notification;
     private LinearLayout lnlInterval;
     private EditText edtInterval;
+    private Spinner spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +35,13 @@ public class SettingActivity extends MvpActivity<SettingView, SettingPresenter> 
         setContentView(R.layout.activity_setting);
         initToolbar();
         findViews();
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.coin_array, R.layout.drop_down_text);
+        adapter.setDropDownViewResource(R.layout.drop_down_text);
+        spinner.setAdapter(adapter);
+
+
+
         presenter.getNotification();
     }
 
@@ -60,6 +71,7 @@ public class SettingActivity extends MvpActivity<SettingView, SettingPresenter> 
         tgbAutomaticSync = findViewById(R.id.tgbAutomaticSync);
         lnlInterval = findViewById(R.id.lnlInterval);
         edtInterval = findViewById(R.id.edtInterval);
+        spinner=findViewById(R.id.settingSpinner);
     }
 
     @Override
@@ -91,6 +103,20 @@ public class SettingActivity extends MvpActivity<SettingView, SettingPresenter> 
                 presenter.updateNotification(notification);
             }
         });
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+            {
+                notification.setDefaultExchange(spinner.getItemAtPosition(position).toString());
+                presenter.updateNotification(notification);
+
+            }
+            public void onNothingSelected(AdapterView<?> parent)
+            {
+
+            }
+        });
+
     }
 
     @Override
@@ -104,6 +130,15 @@ public class SettingActivity extends MvpActivity<SettingView, SettingPresenter> 
         else
             lnlInterval.setVisibility(View.GONE);
         edtInterval.setText(String.valueOf(notification.getSyncInterval()));
+
+        String[] stringArray=getResources().getStringArray(R.array.coin_array);
+        for(int i =0;i<stringArray.length;i++){
+
+            if(stringArray[i].equalsIgnoreCase(notification.getDefaultExchange())){
+                spinner.setSelection(i);
+            }
+        }
+
         setListner();
         intervalTextwatcher();
     }
@@ -125,12 +160,13 @@ public class SettingActivity extends MvpActivity<SettingView, SettingPresenter> 
             public void afterTextChanged(Editable editable) {
                 String s = editable.toString();
                 if (!TextUtils.isEmpty(s)) {
-                    int interval=Integer.parseInt(s);
-                    if (interval>0) {
-                        notification.setSyncInterval(Integer.parseInt(s));
-                        presenter.updateNotification(notification);
-                    }else
-                        edtInterval.setError("Should be greater than 0");
+                    try{
+
+                    }
+                    catch (Exception e){
+
+                    }
+
                 }else
                     edtInterval.setError("Cannot be empty");
             }

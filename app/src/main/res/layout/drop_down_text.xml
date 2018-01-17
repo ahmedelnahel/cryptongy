@@ -3,9 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     fontPath="fonts/calibri.ttf"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="left"
     android:orientation="vertical"
-    android:padding="5dp"
-    tools:ignore="MissingPrefix">
+    android:paddingBottom="@dimen/_8sdp"
+    android:paddingLeft="@dimen/_12sdp"
+    android:paddingRight="@dimen/_12sdp"
+    android:paddingTop="@dimen/_8sdp"
+    android:textSize="@dimen/_12sdp"
+    tools:ignore="MissingPrefix"
+    tools:text="Bittrex">
 
 </TextView>

@@ -14,6 +14,10 @@ public class Notification extends RealmObject {
     private boolean sound;
     private boolean automSync;
     private int syncInterval;
+    private String defaultExchange;
+
+
+
 
     public Notification() {
     }
@@ -55,5 +59,14 @@ public class Notification extends RealmObject {
 
     public void setSyncInterval(int syncInterval) {
         this.syncInterval = syncInterval;
+    }
+
+
+    public String getDefaultExchange() {
+        return defaultExchange;
+    }
+
+    public void setDefaultExchange(String defaultExchange) {
+        this.defaultExchange = defaultExchange;
     }
 }

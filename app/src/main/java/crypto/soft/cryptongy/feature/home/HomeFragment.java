@@ -12,7 +12,6 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,7 +42,6 @@ import crypto.soft.cryptongy.R;
 import crypto.soft.cryptongy.feature.account.CustomDialog;
 import crypto.soft.cryptongy.feature.coinHome.CoinHomeActivity;
 import crypto.soft.cryptongy.feature.main.MainActivity;
-import crypto.soft.cryptongy.feature.order.OrderReceiver;
 import crypto.soft.cryptongy.feature.shared.json.market.MarketSummaries;
 import crypto.soft.cryptongy.feature.shared.json.market.Result;
 import crypto.soft.cryptongy.feature.shared.listner.AdapterItemClickListener;
@@ -109,10 +107,13 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
     private View view;
 
     private boolean isFirst = false;
+    private static String TAG;
+    private static String spinnerValue;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        TAG=getActivity().getClass().getSimpleName();
         if (view == null) {
             view = inflater.inflate(R.layout.fragment_watch_list, container, false);
             new HideKeyboard(getContext()).setupUI(view);
@@ -133,6 +134,18 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
                     inputCoin.setText("");
                 }
             });
+
+            CoinApplication application = (CoinApplication) getActivity().getApplicationContext();
+            spinnerValue=application.getNotification().getDefaultExchange();
+            if(spinnerValue.equalsIgnoreCase(getResources().getStringArray(R.array.coin_array)[0])){
+
+                spinner.setSelection(0);
+            }
+            else {
+                spinner.setSelection(1);
+
+            }
+
 
             inputCoin.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
@@ -162,7 +175,38 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
         }
         setTitle();
 
+
+        spinerListener();
         return view;
+    }
+
+    private void spinerListener() {
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                //if at position zero bitrex and at position 1 binance is called
+                if(spinner.getItemAtPosition(position).toString().equalsIgnoreCase(getResources().getStringArray(R.array.coin_array)[0])){
+                    SharedPreference.saveToPrefs(getContext(), "isCoinAdded", true);
+                    isFirst=true;
+                    spinnerValue=getResources().getStringArray(R.array.coin_array)[0];
+                    presenter.loadSummaries();
+                }
+                else {
+                    SharedPreference.saveToPrefs(getContext(), "isCoinAdded", true);
+                    isFirst=true;
+                    spinnerValue=getResources().getStringArray(R.array.coin_array)[1];
+                    presenter.loadBinanceSummaries();
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     @Override
@@ -170,7 +214,13 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
         super.onViewCreated(view, savedInstanceState);
         if (isFirst) {
             isFirst = false;
-            getPresenter().loadSummaries();
+            if(spinnerValue.equalsIgnoreCase(getResources().getStringArray(R.array.coin_array)[0])){
+
+                getPresenter().loadSummaries();
+            }
+            else {
+                getPresenter().loadBinanceSummaries();
+            }
         }
     }
 
@@ -222,9 +272,21 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
     @Override
     public void onSummaryDataLoad(MarketSummaries marketSummaries) {
         if (marketSummaries.getSuccess()) {
-            ((CoinApplication) getActivity().getApplication()).setUsdt_btc(GlobalUtil.round(marketSummaries.getCoinsMap().get("USDT-BTC").getLast(), 4));
-            ((CoinApplication) getActivity().getApplication()).setbtc_eth(marketSummaries.getCoinsMap().get("BTC-ETH").getLast());
-            price.setText("" + ((CoinApplication) getActivity().getApplication()).getUsdt_btc());
+            if(marketSummaries.getCoinsMap().get("USDT-BTC")!=null){
+
+                ((CoinApplication) getActivity().getApplication()).setUsdt_btc(GlobalUtil.round(marketSummaries.getCoinsMap().get("USDT-BTC").getLast(), 4));
+                price.setText("" + ((CoinApplication) getActivity().getApplication()).getUsdt_btc());
+            }
+            if(marketSummaries.getCoinsMap().get("BTCUSDT")!=null){
+                ((CoinApplication) getActivity().getApplication()).setUsdt_btc(GlobalUtil.round(marketSummaries.getCoinsMap().get("BTCUSDT").getLast(), 4));
+                price.setText("" + ((CoinApplication) getActivity().getApplication()).getUsdt_btc());
+            }
+
+            if(marketSummaries.getCoinsMap().get("BTC-ETH")!=null){
+                ((CoinApplication) getActivity().getApplication()).setbtc_eth(marketSummaries.getCoinsMap().get("BTC-ETH").getLast());
+            }
+
+
             coins.clear();
             coins.addAll(marketSummaries.getResult());
             adapterCoins.notifyDataSetChanged();
@@ -281,7 +343,15 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
             case R.id.imgRefresh:
                 if (coins != null)
                     coins.clear();
-                presenter.loadSummaries();
+
+                if(spinnerValue.equalsIgnoreCase(getResources().getStringArray(R.array.coin_array)[0])){
+
+                    presenter.loadSummaries();
+                }
+                else {
+                    presenter.loadBinanceSummaries();
+                }
+
                 if (adapterCoins != null)
                     adapterCoins.notifyDataSetChanged();
                 break;

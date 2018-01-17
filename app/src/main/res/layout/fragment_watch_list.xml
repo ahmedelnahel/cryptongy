@@ -48,7 +48,7 @@
                             android:id="@+id/type"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginRight="10dp"
+                            android:layout_marginTop="@dimen/_8sdp"
                             android:layout_toLeftOf="@+id/price"
                             android:src="@drawable/ic_dollar" />
 
@@ -147,7 +147,9 @@
                         android:layout_marginRight="5dp"
                         android:layout_weight="1"
                         android:background="@drawable/rect_left_right"
-                        android:padding="10dp">
+                        android:padding="2dp"
+
+                        >
 
                         <Spinner
                             android:id="@+id/spinner"
