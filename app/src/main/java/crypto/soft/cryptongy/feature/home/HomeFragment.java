@@ -300,6 +300,10 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
                 }
 
 
+                if (marketSummaries.getCoinsMap().get("ETHBTC") != null) {
+                    ((CoinApplication) getActivity().getApplication()).setbtc_eth(marketSummaries.getCoinsMap().get("ETHBTC").getLast());
+                }
+
             }
 
             coins.clear();
