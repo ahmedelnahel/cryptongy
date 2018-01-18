@@ -26,8 +26,8 @@ public class HomePresenter extends MvpBasePresenter<HomeView> implements OnMulti
     private Context context;
     private List<Result> prevResults = new ArrayList<>();
     private boolean isStarted = false;
-    private String BITRIX="BITRIX";
-    private String BINANCE="BINACE";
+    private String BITRIX = "BITRIX";
+    private String BINANCE = "BINACE";
     private String exchangeValue;
 
 
@@ -41,7 +41,7 @@ public class HomePresenter extends MvpBasePresenter<HomeView> implements OnMulti
         if (getView() != null)
             getView().showProgressBar();
 
-        exchangeValue=BITRIX;
+        exchangeValue = BITRIX;
         homeInteractor.loadSummary(context, this);
     }
 
@@ -49,7 +49,7 @@ public class HomePresenter extends MvpBasePresenter<HomeView> implements OnMulti
         if (getView() != null)
             getView().showProgressBar();
 
-        exchangeValue=BINANCE;
+        exchangeValue = BINANCE;
         homeInteractor.loadBinanceSummary(context, this);
     }
 
@@ -57,10 +57,10 @@ public class HomePresenter extends MvpBasePresenter<HomeView> implements OnMulti
     public void onComplete(List<Result> results, MarketSummaries marketSummaries) {
         if (getView() != null) {
             results = setDrawable(results);
-            getView().setAdapter(results);
             prevResults = results;
+            getView().setAdapter(results);
             getView().onSummaryDataLoad(marketSummaries);
-            isStarted=true;
+            isStarted = true;
             startTimer();
         }
     }
@@ -103,8 +103,7 @@ public class HomePresenter extends MvpBasePresenter<HomeView> implements OnMulti
                     result.setDrawable(R.drawable.seek_progress_green);
 //                else
 //                    result.setDrawable(R.drawable.seek_progress);
-            }
-            else if(result != null)
+            } else if (result != null)
                 result.setDrawable(R.drawable.seek_progress);
         }
         return list;
@@ -115,7 +114,7 @@ public class HomePresenter extends MvpBasePresenter<HomeView> implements OnMulti
         @Override
         public void run() {
 
-            if(exchangeValue.equalsIgnoreCase(BITRIX)){
+            if (exchangeValue.equalsIgnoreCase(BITRIX)) {
                 homeInteractor.loadSummary(context, new OnMultiFinishListner<List<Result>, MarketSummaries>() {
                     @Override
                     public void onComplete(List<Result> results, MarketSummaries summaries) {
@@ -133,7 +132,7 @@ public class HomePresenter extends MvpBasePresenter<HomeView> implements OnMulti
                     }
                 });
             }
-            if(exchangeValue.equalsIgnoreCase(BINANCE)) {
+            if (exchangeValue.equalsIgnoreCase(BINANCE)) {
                 homeInteractor.loadBinanceSummary(context, new OnMultiFinishListner<List<Result>, MarketSummaries>() {
                     @Override
                     public void onComplete(List<Result> results, MarketSummaries summaries) {

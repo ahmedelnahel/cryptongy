@@ -10,6 +10,10 @@ import android.util.Log;
  */
 
 public class SharedPreference {
+
+    public static String IS_COIN_ADDED_BINANCE="isCoinAddedBinance";
+    public static String MOCK_VALUE_BINANCE="mockValueBinance";
+
     public static void saveToPrefs(Context context, String key, String value) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         final SharedPreferences.Editor editor = prefs.edit();
