@@ -139,7 +139,7 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
 
             CoinApplication application = (CoinApplication) getActivity().getApplicationContext();
             spinnerValue = application.getNotification().getDefaultExchange();
-            if(spinnerValue!=null){
+            if (spinnerValue != null) {
 
                 if (spinnerValue.equalsIgnoreCase(getResources().getStringArray(R.array.coin_array)[0])) {
 
@@ -149,7 +149,6 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
 
                 }
             }
-
 
 
             inputCoin.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -218,15 +217,14 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
         super.onViewCreated(view, savedInstanceState);
         if (isFirst) {
             isFirst = false;
-            if(spinnerValue!=null){
+            if (spinnerValue != null) {
                 if (spinnerValue.equalsIgnoreCase(getResources().getStringArray(R.array.coin_array)[0])) {
 
                     getPresenter().loadSummaries();
                 } else {
                     getPresenter().loadBinanceSummaries();
                 }
-            }
-            else {
+            } else {
                 getPresenter().loadSummaries();
             }
 
@@ -252,7 +250,7 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
 
     @Override
     public void setAdapter(List<Result> results) {
-        results=restoreData(results);
+        results = restoreData(results);
         mock.clear();
         mock.addAll(results);
         if (currencyAdapter == null) {
@@ -266,10 +264,10 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
         }
     }
 
-    private List<Result> restoreData(List<Result> results){
-        for (Result result:mock){
-            for (Result result1:results){
-                if (result != null && result.getMarketName().equalsIgnoreCase(result1.getMarketName())){
+    private List<Result> restoreData(List<Result> results) {
+        for (Result result : mock) {
+            for (Result result1 : results) {
+                if (result != null && result.getMarketName().equalsIgnoreCase(result1.getMarketName())) {
                     result1.setSelected(result.isSelected());
                     break;
                 }
@@ -281,19 +279,29 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
     @Override
     public void onSummaryDataLoad(MarketSummaries marketSummaries) {
         if (marketSummaries.getSuccess()) {
-            if (marketSummaries.getCoinsMap().get("USDT-BTC") != null) {
 
-                ((CoinApplication) getActivity().getApplication()).setUsdt_btc(GlobalUtil.round(marketSummaries.getCoinsMap().get("USDT-BTC").getLast(), 4));
-                price.setText("" + ((CoinApplication) getActivity().getApplication()).getUsdt_btc());
+            if (spinnerValue.equalsIgnoreCase(getResources().getStringArray(R.array.coin_array)[0])) {//Bitrix value comparing
+                if (marketSummaries.getCoinsMap().get("USDT-BTC") != null) {
+
+                    ((CoinApplication) getActivity().getApplication()).setUsdt_btc(GlobalUtil.round(marketSummaries.getCoinsMap().get("USDT-BTC").getLast(), 4));
+                    price.setText("" + ((CoinApplication) getActivity().getApplication()).getUsdt_btc());
+                }
+
+                if (marketSummaries.getCoinsMap().get("BTC-ETH") != null) {
+                    ((CoinApplication) getActivity().getApplication()).setbtc_eth(marketSummaries.getCoinsMap().get("BTC-ETH").getLast());
+                }
+
             }
-            if (marketSummaries.getCoinsMap().get("BTCUSDT") != null) {
-                ((CoinApplication) getActivity().getApplication()).setUsdt_btc(GlobalUtil.round(marketSummaries.getCoinsMap().get("BTCUSDT").getLast(), 4));
-                price.setText("" + ((CoinApplication) getActivity().getApplication()).getUsdt_btc());
+            if (spinnerValue.equalsIgnoreCase(getResources().getStringArray(R.array.coin_array)[1])) {//Binance value comparing
+
+                if (marketSummaries.getCoinsMap().get("BTCUSDT") != null) {
+                    ((CoinApplication) getActivity().getApplication()).setUsdt_btc(GlobalUtil.round(marketSummaries.getCoinsMap().get("BTCUSDT").getLast(), 4));
+                    price.setText("" + ((CoinApplication) getActivity().getApplication()).getUsdt_btc());
+                }
+
+
             }
 
-            if (marketSummaries.getCoinsMap().get("BTC-ETH") != null) {
-                ((CoinApplication) getActivity().getApplication()).setbtc_eth(marketSummaries.getCoinsMap().get("BTC-ETH").getLast());
-            }
             coins.clear();
             coins.addAll(marketSummaries.getResult());
             adapterCoins.notifyDataSetChanged();
