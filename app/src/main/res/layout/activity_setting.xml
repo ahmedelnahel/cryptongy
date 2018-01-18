@@ -51,11 +51,12 @@
                     android:layout_height="1dp"
                     android:layout_marginTop="14dp"
                     android:background="@color/setting_text" />
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="40dp"
-                    android:layout_marginRight="40dp"
+                    android:layout_marginRight="26dp"
                     android:layout_marginTop="18dp"
 
 
@@ -64,18 +65,18 @@
                     <crypto.soft.cryptongy.feature.shared.customView.CalTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:layout_centerVertical="true"
+                        android:layout_weight="1"
                         android:text="@string/setting_default_exchange"
                         android:textColor="@color/setting_text"
                         android:textSize="@dimen/setting_text" />
 
 
                     <Spinner
-                        android:layout_alignParentEnd="true"
                         android:id="@+id/settingSpinner"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
 
                         >
 
@@ -134,6 +135,7 @@
                         android:textOn="" />
 
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -165,23 +167,23 @@
                     android:id="@+id/lnlInterval"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="right"
                     android:layout_marginBottom="18dp"
                     android:layout_marginLeft="40dp"
                     android:layout_marginRight="40dp"
-                    android:orientation="horizontal"
-                    android:layout_gravity="right">
+                    android:orientation="horizontal">
 
                     <crypto.soft.cryptongy.feature.shared.customView.CalEditText
                         android:id="@+id/edtInterval"
                         android:layout_width="110dp"
-                        android:lines="1"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="5dp"
                         android:background="@drawable/rect_fill"
                         android:gravity="center_horizontal"
-                        android:text="30454545"
+                        android:lines="1"
                         android:maxLength="8"
+                        android:text="30454545"
                         android:textSize="@dimen/setting_text" />
 
                     <crypto.soft.cryptongy.feature.shared.customView.CalTextView

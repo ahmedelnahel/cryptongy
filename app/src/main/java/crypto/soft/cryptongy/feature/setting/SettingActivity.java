@@ -36,7 +36,7 @@ public class SettingActivity extends MvpActivity<SettingView, SettingPresenter> 
         initToolbar();
         findViews();
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.coin_array, R.layout.drop_down_text);
+                R.array.coin_array, R.layout.drop_down_text_settings);
         adapter.setDropDownViewResource(R.layout.drop_down_text);
         spinner.setAdapter(adapter);
 
