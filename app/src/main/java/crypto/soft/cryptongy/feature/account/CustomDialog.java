@@ -17,14 +17,13 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import crypto.soft.cryptongy.R;
 import crypto.soft.cryptongy.feature.shared.listner.DialogListner;
-import crypto.soft.cryptongy.feature.trade.conditional.Conditional;
+import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
+import crypto.soft.cryptongy.feature.shared.module.Account;
 import crypto.soft.cryptongy.feature.trade.limit.Limit;
 import io.realm.Realm;
 import io.realm.RealmQuery;
-import crypto.soft.cryptongy.R;
-import crypto.soft.cryptongy.feature.shared.module.Account;
-import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
 
 /**
  * Created by tseringwongelgurung on 11/20/17.
@@ -42,6 +41,8 @@ public class CustomDialog {
         final Spinner spinner = view.findViewById(R.id.spinner);
         final ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,
                 android.R.layout.simple_spinner_item, list);
+
+        adapter.setDropDownViewResource(R.layout.drop_down_text);
         spinner.setAdapter(adapter);
 
         Button btnAdd = view.findViewById(R.id.btnAdd);
