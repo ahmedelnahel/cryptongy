@@ -115,26 +115,26 @@ public class CoinPresenter extends TickerPresenter<CoinView> {
         }
     }
 
-    public Observable getMarketHistory(final String coinName) {
-        return Observable.create(new ObservableOnSubscribe() {
-            @Override
-            public void subscribe(final ObservableEmitter e) throws Exception {
-                coinInteractor.getMarketHistory(coinName, new OnFinishListner<MarketHistory>() {
-                    @Override
-                    public void onComplete(MarketHistory result) {
-                        e.onNext(result);
-                        e.onComplete();
-                    }
-
-                    @Override
-                    public void onFail(String error) {
-                        CustomDialog.showMessagePop(context, error, null);
-                        e.onComplete();
-                    }
-                });
-            }
-        });
-    }
+//    public Observable getMarketHistory(final String coinName) {
+//        return Observable.create(new ObservableOnSubscribe() {
+//            @Override
+//            public void subscribe(final ObservableEmitter e) throws Exception {
+//                coinInteractor.getMarketHistory(coinName, new OnFinishListner<MarketHistory>() {
+//                    @Override
+//                    public void onComplete(MarketHistory result) {
+//                        e.onNext(result);
+//                        e.onComplete();
+//                    }
+//
+//                    @Override
+//                    public void onFail(String error) {
+//                        CustomDialog.showMessagePop(context, error, null);
+//                        e.onComplete();
+//                    }
+//                });
+//            }
+//        });
+//    }
 
     public Observable<MarketSummary> getMarketSummary(final String coinName) {
         return io.reactivex.Observable.create(new ObservableOnSubscribe<MarketSummary>() {

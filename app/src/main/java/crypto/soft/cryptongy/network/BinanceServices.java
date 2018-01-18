@@ -89,11 +89,20 @@ public class BinanceServices {
         else {
             ObjectMapper mapper = new ObjectMapper();
             crypto.soft.cryptongy.feature.shared.json.binance.marketsummary.Result r = mapper.readValue(marketSummaryStr, crypto.soft.cryptongy.feature.shared.json.binance.marketsummary.Result.class);
-            Result mr = new Result(r);
-            List rl = new ArrayList();
-            rl.add(mr);
-            marketSummary_.setResult(rl);
-            marketSummary_.setJson(marketSummaryStr);
+            if (r.getMsg() == null || "".equals(r.getMsg())) {
+                crypto.soft.cryptongy.feature.shared.json.marketsummary.Result mr = new crypto.soft.cryptongy.feature.shared.json.marketsummary.Result(r);
+                List rl = new ArrayList();
+                rl.add(mr);
+                marketSummary_.setResult(rl);
+                marketSummary_.setJson(marketSummaryStr);
+                marketSummary_.setSuccess(true);
+            }
+            else
+            {
+                marketSummary_.setSuccess(false);
+                marketSummary_.setMessage(r.getMsg());
+
+            }
         Log.i("MarketSummary", marketSummaryStr);
         }
         return marketSummary_;
@@ -112,8 +121,17 @@ public class BinanceServices {
 
             ObjectMapper mapper = new ObjectMapper();
             crypto.soft.cryptongy.feature.shared.json.binance.marketsummary.Result r = mapper.readValue(tickerStr, crypto.soft.cryptongy.feature.shared.json.binance.marketsummary.Result.class);
-            ticker.setBinanceResult(r);
-            ticker.setJson(tickerStr);
+            if (r.getMsg() == null || "".equals(r.getMsg())) {
+                ticker.setBinanceResult(r);
+                ticker.setJson(tickerStr);
+                ticker.setSuccess(true);
+            }
+            else
+            {
+                ticker.setSuccess(false);
+                ticker.setMessage(r.getMsg());
+
+            }
         }
         Log.i("MarketSummary", tickerStr);
 

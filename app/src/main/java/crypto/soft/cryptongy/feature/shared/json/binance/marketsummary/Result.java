@@ -35,7 +35,10 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "count"
 })
 public class Result {
-
+    @JsonProperty("code")
+    private Integer code;
+    @JsonProperty("msg")
+    private String msg;
     @JsonProperty("symbol")
     private String symbol;
     @JsonProperty("priceChange")
@@ -289,6 +292,26 @@ public class Result {
     @JsonProperty("count")
     public void setCount(Long count) {
         this.count = count;
+    }
+
+    @JsonProperty("code")
+    public Integer getCode() {
+        return code;
+    }
+
+    @JsonProperty("code")
+    public void setCode(Integer code) {
+        this.code = code;
+    }
+
+    @JsonProperty("msg")
+    public String getMsg() {
+        return msg;
+    }
+
+    @JsonProperty("msg")
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 
     @JsonAnyGetter
