@@ -159,10 +159,10 @@ public class SettingActivity extends MvpActivity<SettingView, SettingPresenter> 
             @Override
             public void afterTextChanged(Editable editable) {
                 String s = editable.toString();
-                if (!TextUtils.isEmpty(s)) {
-
-                }else
+                if (TextUtils.isEmpty(s)) {
                     edtInterval.setError("Cannot be empty");
+                }
+
             }
         });
     }
