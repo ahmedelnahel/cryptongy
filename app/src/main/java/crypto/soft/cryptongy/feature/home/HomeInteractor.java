@@ -144,12 +144,12 @@ public class HomeInteractor {
                             results.add(marketSummaries.getCoinsMap().get("LTCBTC"));
                         if (marketSummaries.getCoinsMap().get("ETHBTC") != null)
                             results.add(marketSummaries.getCoinsMap().get("ETHBTC"));
-                        if (marketSummaries.getCoinsMap().get("VTCBTC") != null)
-                            results.add(marketSummaries.getCoinsMap().get("VTCBTC"));
-                        if (marketSummaries.getCoinsMap().get("SYSBTC") != null)
-                            results.add(marketSummaries.getCoinsMap().get("SYSBTC"));
-                        if (marketSummaries.getCoinsMap().get("XVGBTC") != null)
-                            results.add(marketSummaries.getCoinsMap().get("XVGBTC"));
+                        if (marketSummaries.getCoinsMap().get("APPCBTC") != null)
+                            results.add(marketSummaries.getCoinsMap().get("APPCBTC"));
+                        if (marketSummaries.getCoinsMap().get("TRXBTC") != null)
+                            results.add(marketSummaries.getCoinsMap().get("TRXBTC"));
+                        if (marketSummaries.getCoinsMap().get("ICXBTC") != null)
+                            results.add(marketSummaries.getCoinsMap().get("ICXBTC"));
                         if (results != null && results.size() != 0) {
                             SharedPreference.saveToPrefs(context, IS_COIN_ADDED_BINANCE, false);
                             SharedPreference.saveToPrefs(context, MOCK_VALUE_BINANCE, new Gson().toJson(results));
