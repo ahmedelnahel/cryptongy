@@ -3,19 +3,13 @@ package crypto.soft.cryptongy.feature.coin;
 import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
-
-import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
 import crypto.soft.cryptongy.R;
 import crypto.soft.cryptongy.feature.account.AccountActivity;
 import crypto.soft.cryptongy.feature.account.CustomDialog;
 import crypto.soft.cryptongy.feature.main.MainActivity;
-import crypto.soft.cryptongy.feature.order.OrderInteractor;
-import crypto.soft.cryptongy.feature.order.OrderPresenter;
-import crypto.soft.cryptongy.feature.order.OrderView;
 import crypto.soft.cryptongy.feature.setting.SettingActivity;
 import crypto.soft.cryptongy.feature.shared.json.action.Cancel;
 import crypto.soft.cryptongy.feature.shared.json.markethistory.MarketHistory;
@@ -49,7 +43,7 @@ public class CoinPresenter extends TickerPresenter<CoinView> {
 
     public void getData(final String coinName) {
         CoinApplication application = (CoinApplication) context.getApplicationContext();
-        Account account = application.getReadAccount();
+        Account account = application.getReadAccount(null);
 
         if (account != null) {
             if (getView() != null) {
@@ -346,8 +340,9 @@ public class CoinPresenter extends TickerPresenter<CoinView> {
                 "</script>\n" +
                 "<!-- TradingView Widget END -->\n";
         String htmlPost = "</body></html>";
+        String baseUrl="https://www.tradingview.com/widget/advanced-chart/";
 
-        webView.loadDataWithBaseURL(null,htmlPre+htmlCode+htmlPost, "text/html", "UTF-8", null);
+        webView.loadDataWithBaseURL(baseUrl,htmlPre+htmlCode+htmlPost, "text/html", "UTF-8", null);
         webView.setVisibility(View.VISIBLE);
     }
 }
