@@ -1,5 +1,5 @@
 
-package crypto.soft.cryptongy.feature.shared.json.binance.marketsummary;
+package crypto.soft.cryptongy.feature.shared.json.binance.openorder;
 
 import java.util.HashMap;
 import java.util.List;
@@ -15,22 +15,22 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonPropertyOrder({
     "result"
 })
-public class BinanceMarket {
-
-    @JsonProperty("result")
-    private List<Result> result = null;
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+public class BnopenOrders {
     @JsonProperty("code")
     private Long code;
     @JsonProperty("msg")
     private String msg;
+    @JsonProperty(value = "result",required = false)
+    private List<Result> result = null;
+    @JsonIgnore
+    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+
     @JsonProperty("result")
     public List<Result> getResult() {
         return result;
     }
 
-    @JsonProperty("result")
+    @JsonProperty(value = "result",required = false)
     public void setResult(List<Result> result) {
         this.result = result;
     }
@@ -44,6 +44,7 @@ public class BinanceMarket {
     public void setAdditionalProperty(String name, Object value) {
         this.additionalProperties.put(name, value);
     }
+
     @JsonProperty("code")
     public Long getCode() {
         return code;

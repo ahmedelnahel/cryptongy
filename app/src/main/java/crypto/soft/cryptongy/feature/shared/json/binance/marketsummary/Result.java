@@ -36,7 +36,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 })
 public class Result {
     @JsonProperty("code")
-    private Integer code;
+    private Long code;
     @JsonProperty("msg")
     private String msg;
     @JsonProperty("symbol")
@@ -295,12 +295,12 @@ public class Result {
     }
 
     @JsonProperty("code")
-    public Integer getCode() {
+    public Long getCode() {
         return code;
     }
 
     @JsonProperty("code")
-    public void setCode(Integer code) {
+    public void setCode(Long code) {
         this.code = code;
     }
 

@@ -4,6 +4,8 @@ import android.util.Log;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.springframework.util.StringUtils;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,6 +14,8 @@ import java.util.List;
 import crypto.soft.cryptongy.common.RESTUtil;
 import crypto.soft.cryptongy.feature.shared.json.action.Cancel;
 import crypto.soft.cryptongy.feature.shared.json.binance.marketsummary.BinanceMarket;
+import crypto.soft.cryptongy.feature.shared.json.binance.openorder.BnopenOrders;
+import crypto.soft.cryptongy.feature.shared.json.binance.time.BnTime;
 import crypto.soft.cryptongy.feature.shared.json.limitorder.LimitOrder;
 import crypto.soft.cryptongy.feature.shared.json.market.MarketSummaries;
 import crypto.soft.cryptongy.feature.shared.json.market.Result;
@@ -45,6 +49,7 @@ public class BinanceServices {
             marketSummaries_.setMessage("Connection Error");
         }
         else {
+            if(marketSummariesStr != null && !marketSummariesStr.contains("msg"))
             marketSummariesStr = "{\"result\":" + marketSummariesStr + " }";
             ObjectMapper mapper = new ObjectMapper();
             BinanceMarket binanceMarket = mapper.readValue(marketSummariesStr, BinanceMarket.class);
@@ -138,31 +143,65 @@ public class BinanceServices {
         return ticker;
     }
 
-    public OpenOrder getOpnOrders( Account account) throws IOException {
-        OpenOrder openOrder = null;
-
+    public OpenOrder getOpnOrders( Account account, String coinName) throws IOException {
+        OpenOrder openOrder = new OpenOrder();
         if(account == null)
         {
-            openOrder = new OpenOrder();
             openOrder.setSuccess(false);
             openOrder.setMessage("No API");
         }
         else {
-            final String url = "https://bittrex.com/api/v1.1/market/getopenorders";
-            String ordersStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret());
 
+            final String url = "https://api.binance.com/api/v3/openOrders";
+            HashMap param = null;
+
+                    if(coinName != null && !StringUtils.isEmpty(coinName)) {
+                        param  = new HashMap();
+                        param.put("symbol", coinName);
+                    }
+            String ordersStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret(), param, "HmacSHA256");
+            openOrder = new OpenOrder();
             if (ordersStr == null) {
-                openOrder = new OpenOrder();
                 openOrder.setSuccess(false);
                 openOrder.setMessage("Connection Error");
             } else {
+                if(ordersStr != null && !ordersStr.contains("msg"))
+                ordersStr = "{\"result\":" + ordersStr + " }";
                 ObjectMapper mapper = new ObjectMapper();
-                openOrder = mapper.readValue(ordersStr, OpenOrder.class);
+                BnopenOrders bnopenOrder = mapper.readValue(ordersStr, BnopenOrders.class);
                 openOrder.setJson(ordersStr);
-//        Log.i("response " , wallet.getSuccess() + wallet.getJson());
+                Log.i("response " , openOrder.getSuccess() + openOrder.getJson());
+                if(bnopenOrder != null && StringUtils.isEmpty(bnopenOrder.getMsg()) && bnopenOrder.getResult() != null)
+                {
+                    openOrder.setSuccess(true);
+                    ArrayList<crypto.soft.cryptongy.feature.shared.json.openorder.Result> results = new ArrayList();
+                    for (crypto.soft.cryptongy.feature.shared.json.binance.openorder.Result r : bnopenOrder.getResult()) {
+                        crypto.soft.cryptongy.feature.shared.json.openorder.Result or = new crypto.soft.cryptongy.feature.shared.json.openorder.Result(r);
+                        results.add(or);
+                    }
+                    openOrder.setResult(results);
+                }
+                else
+                {
+                    openOrder.setSuccess(false);
+                    openOrder.setMessage("Error: " + bnopenOrder.getMsg());
+                }
             }
         }
         return openOrder;
+    }
+
+    private BnTime getServerTime() throws IOException {
+        BnTime time = null;
+        String timeurl = "https://api.binance.com/api/v1/time";
+        String timestr = new RESTUtil().callREST(timeurl);
+        if (!StringUtils.isEmpty(timestr))
+        {
+            ObjectMapper mapper = new ObjectMapper();
+            time = mapper.readValue(timestr, BnTime.class);
+
+        }
+        return time;
     }
 
 
@@ -200,33 +239,58 @@ public class BinanceServices {
         return wallet;
     }
 
-
-    public OrderHistory getOrderHistory(Account account) throws IOException {
-        OrderHistory orderHistory = null;
-
+    public OrderHistory getOrderHistory( Account account, String coinName) throws IOException {
+        OrderHistory orderHistory = new OrderHistory();
+        orderHistory.setSuccess(false);
         if(account == null)
         {
-            orderHistory = new OrderHistory();
             orderHistory.setSuccess(false);
             orderHistory.setMessage("No API");
         }
         else {
-            final String url = "https://bittrex.com/api/v1.1/account/getorderhistory";
-            String ordersStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret());
+
+            final String url = "https://api.binance.com/api/v3/allOrders";
+            HashMap param = null;
+
+            if(coinName != null && !StringUtils.isEmpty(coinName)) {
+                param  = new HashMap();
+                param.put("symbol", coinName);
+            }
+            String ordersStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret(), param, "HmacSHA256");
+            orderHistory = new OrderHistory();
             if (ordersStr == null) {
-                orderHistory = new OrderHistory();
                 orderHistory.setSuccess(false);
                 orderHistory.setMessage("Connection Error");
             } else {
+                if(ordersStr != null && !ordersStr.contains("msg"))
+                    ordersStr = "{\"result\":" + ordersStr + " }";
                 ObjectMapper mapper = new ObjectMapper();
-                orderHistory = mapper.readValue(ordersStr, OrderHistory.class);
+                BnopenOrders bnopenOrder = mapper.readValue(ordersStr, BnopenOrders.class);
                 orderHistory.setJson(ordersStr);
+                Log.i("response " ,  orderHistory.getJson());
+                if(bnopenOrder != null && StringUtils.isEmpty(bnopenOrder.getMsg()) && bnopenOrder.getResult() != null)
+                {
+                    orderHistory.setSuccess(true);
+                    ArrayList<crypto.soft.cryptongy.feature.shared.json.orderhistory.Result> results = new ArrayList();
+                    for (crypto.soft.cryptongy.feature.shared.json.binance.openorder.Result r : bnopenOrder.getResult()) {
+                        if ( r.getStatus().equals("FILLED"))
+                        {
+                            crypto.soft.cryptongy.feature.shared.json.orderhistory.Result or = new crypto.soft.cryptongy.feature.shared.json.orderhistory.Result(r);
+                            results.add(or);
+                        }
+                    }
+                    orderHistory.setResult(results);
+                }
+                else
+                {
+                    orderHistory.setSuccess(false);
+                    orderHistory.setMessage("Error: " + bnopenOrder.getMsg());
+                }
             }
         }
-//        Log.i("response " , wallet.getSuccess() + wallet.getJson());
-            return orderHistory;
-
+        return orderHistory;
     }
+
 
 
     public Cancel cancelOrder(String uuid, Account account) throws IOException

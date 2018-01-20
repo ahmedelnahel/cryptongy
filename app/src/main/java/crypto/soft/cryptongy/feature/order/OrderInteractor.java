@@ -13,6 +13,7 @@ import crypto.soft.cryptongy.feature.shared.json.order.Order;
 import crypto.soft.cryptongy.feature.shared.json.orderhistory.OrderHistory;
 import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
 import crypto.soft.cryptongy.feature.shared.module.Account;
+import crypto.soft.cryptongy.network.BinanceServices;
 import crypto.soft.cryptongy.network.BittrexServices;
 
 /**

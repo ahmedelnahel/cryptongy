@@ -31,6 +31,15 @@ import java.util.Map;
         "ConditionTarget"
 })
 public class Result {
+    public Result(crypto.soft.cryptongy.feature.shared.json.binance.openorder.Result r) {
+        this.orderUuid = r.getOrderId().toString();
+        this.exchange = r.getSymbol();
+        this.orderType = r.getType();
+        this.quantity = Double.valueOf(r.getOrigQty());
+        this.limit = Double.valueOf(r.getPrice());
+        this.quantityRemaining = Double.valueOf(r.getOrigQty()) - Double.valueOf(r.getExecutedQty());
+        this.opened = r.getTime().toString();
+    }
 
     @JsonProperty("Uuid")
     private Object uuid;

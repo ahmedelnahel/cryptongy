@@ -278,6 +278,7 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
 
             txtEmpty.setVisibility(View.GONE);
             if ( !wallet.getSuccess() || wallet.getResult() == null) {
+                String msg = wallet.getMessage()!=null?wallet.getMessage():"Connection Error";
                 Toast.makeText(getActivity(), wallet.getMessage(), Toast.LENGTH_SHORT).show();
                 return;
             }

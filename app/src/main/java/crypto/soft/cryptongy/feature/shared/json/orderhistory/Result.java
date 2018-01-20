@@ -29,7 +29,16 @@ import java.util.Map;
         "Closed"
 })
 public class Result {
-
+    public Result(crypto.soft.cryptongy.feature.shared.json.binance.openorder.Result r) {
+        this.orderUuid = r.getOrderId().toString();
+        this.exchange = r.getSymbol();
+        this.orderType = r.getType();
+        this.quantity = Double.valueOf(r.getOrigQty());
+        this.limit = Double.valueOf(r.getPrice());
+        this.quantity = Double.valueOf(r.getOrigQty());
+        this.quantityRemaining = Double.valueOf(r.getOrigQty()) - Double.valueOf(r.getExecutedQty());
+        this.closed = r.getTime().toString();
+    }
     @JsonProperty("OrderUuid")
     private String orderUuid;
     @JsonProperty("Exchange")
