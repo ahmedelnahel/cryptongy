@@ -6,23 +6,20 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.hannesdorfmann.mosby.mvp.MvpActivity;
 
 import crypto.soft.cryptongy.R;
-import crypto.soft.cryptongy.common.Setting;
-import crypto.soft.cryptongy.feature.alert.AlertFragment;
 import crypto.soft.cryptongy.feature.coin.CoinFragment;
 import crypto.soft.cryptongy.feature.order.OrderReceiver;
-import crypto.soft.cryptongy.feature.setting.Notification;
 import crypto.soft.cryptongy.feature.shared.adapter.MainPagerAdaptor;
-import crypto.soft.cryptongy.utils.CoinApplication;
 import crypto.soft.cryptongy.utils.GlobalUtil;
 import crypto.soft.cryptongy.utils.HideKeyboard;
 import crypto.soft.cryptongy.utils.ProgressDialogFactory;
+
+import static crypto.soft.cryptongy.feature.home.HomeFragment.EXCHANGE_VALUE;
 
 public class CoinHomeActivity extends MvpActivity<CoinHomeView, CoinHomePresenter> implements CoinHomeView {
     private ViewPager viewPager;
@@ -82,6 +79,7 @@ public class CoinHomeActivity extends MvpActivity<CoinHomeView, CoinHomePresente
         Bundle bundle = new Bundle();
         String coinName = getIntent().getStringExtra("COIN_NAME");
         bundle.putString("COIN_NAME", coinName);
+        bundle.putString(EXCHANGE_VALUE,getIntent().getStringExtra(EXCHANGE_VALUE));
         coinFragment.setArguments(bundle);
         adapter.addFragment(coinFragment, "Coin");
 //        adapter.addFragment(new AlertFragment(), "Alert");

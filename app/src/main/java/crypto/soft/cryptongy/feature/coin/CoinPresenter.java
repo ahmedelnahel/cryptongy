@@ -35,15 +35,16 @@ public class CoinPresenter extends TickerPresenter<CoinView> {
     private CoinInteractor coinInteractor;
     private Context context;
 
+
     public CoinPresenter(Context context) {
         super(context);
         this.context=context;
         coinInteractor = new CoinInteractor();
     }
 
-    public void getData(final String coinName) {
+    public void getData(final String coinName,final String exchangeValue) {
         CoinApplication application = (CoinApplication) context.getApplicationContext();
-        Account account = application.getReadAccount(null);
+        Account account = application.getReadAccount(exchangeValue);
 
         if (account != null) {
             if (getView() != null) {
@@ -98,7 +99,7 @@ public class CoinPresenter extends TickerPresenter<CoinView> {
                     }
                 }
             };
-            Observable.merge(getMarketSummary(coinName), getOpenOrders(coinName, account), getOrderHistory(coinName, account))
+            Observable.merge(getMarketSummary(coinName,account), getOpenOrders(coinName, account), getOrderHistory(coinName, account))
                     .subscribe(observer);
         } else {
             CustomDialog.showMessagePop(context, context.getString(R.string.noAPI), null);
@@ -130,11 +131,11 @@ public class CoinPresenter extends TickerPresenter<CoinView> {
 //        });
 //    }
 
-    public Observable<MarketSummary> getMarketSummary(final String coinName) {
+    public Observable<MarketSummary> getMarketSummary(final String coinName, final Account account) {
         return io.reactivex.Observable.create(new ObservableOnSubscribe<MarketSummary>() {
             @Override
             public void subscribe(final ObservableEmitter<MarketSummary> e) throws Exception {
-                coinInteractor.getMarketSummary(coinName, new OnFinishListner<MarketSummary>() {
+                coinInteractor.getMarketSummary(coinName,account, new OnFinishListner<MarketSummary>() {
                     @Override
                     public void onComplete(MarketSummary result) {
                         startTicker(coinName);
@@ -160,10 +161,10 @@ public class CoinPresenter extends TickerPresenter<CoinView> {
         }
     }
 
-    public void onClicked(int id, String coinName) {
+    public void onClicked(int id, String coinName,String exchangeValue) {
         switch (id) {
             case R.id.imgSync:
-                getData(coinName);
+                getData(coinName,exchangeValue);
                 break;
             case R.id.imgAccSetting:
                 if (context instanceof MainActivity)

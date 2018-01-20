@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -37,6 +36,8 @@ import crypto.soft.cryptongy.utils.GlobalUtil;
 import crypto.soft.cryptongy.utils.HideKeyboard;
 import crypto.soft.cryptongy.utils.ProgressDialogFactory;
 
+import static crypto.soft.cryptongy.feature.home.HomeFragment.EXCHANGE_VALUE;
+
 /**
  * Created by tseringwongelgurung on 11/25/17.
  */
@@ -49,11 +50,12 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
     private LinearLayout lnlContainer;
     private TextView txtLevel, txtOpenOrder, txtOrderHistory, txtEmpty, txtBtc, txtUsd, txtMarket, txtVtc, txtProfit;
     private ImageView imgSync, imgAccSetting;
-//    private WebView webView;
+    private WebView webView;
     private HorizontalScrollView scrollView;
 
     private boolean isFirst = false;
     private String coinName = "";
+    private String exchangeValue="";
 
     @Nullable
     @Override
@@ -67,6 +69,7 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
         } else
             isFirst = false;
         coinName = getArguments().getString("COIN_NAME", "");
+        exchangeValue = getArguments().getString(EXCHANGE_VALUE, "");
         CoinName.coinName = coinName;
         setTitle();
         // hideTotal();
@@ -91,8 +94,8 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
         setHasOptionsMenu(true);
 //        Log.d("Coin screen", "coinName " + coinName );
         double last = 0;
-        presenter.getData(coinName);
-//        presenter.loadTradingView(webView);
+        presenter.getData(coinName,exchangeValue);
+        presenter.loadTradingView(webView);
 
     }
 
@@ -141,8 +144,8 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
         LowvalueInfo_TXT = view.findViewById(R.id.LowValue_Id);
         VolumeValue_Txt = view.findViewById(R.id.VolumeValue_Id);
         scrollView = view.findViewById(R.id.HorScrollView);
-//        webView = (WebView) view.findViewById(R.id.tradingView);
-//        webView.getSettings().setJavaScriptEnabled(true);
+        webView = (WebView) view.findViewById(R.id.tradingView);
+        webView.getSettings().setJavaScriptEnabled(true);
 
     }
 
@@ -360,7 +363,7 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
     public void onClick(View view) {
         int id = view.getId();
 //        Log.d("Coin screen sync", "coinName  " + coinName );
-        presenter.onClicked(id, coinName);
+        presenter.onClicked(id, coinName,exchangeValue);
     }
 
     @Override
@@ -377,7 +380,7 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
     public void onStart() {
         super.onStart();
         if (!TextUtils.isEmpty(coinName))
-            presenter.startTicker(coinName);
+            presenter.startTicker(coinName,exchangeValue);
     }
 
     @Override

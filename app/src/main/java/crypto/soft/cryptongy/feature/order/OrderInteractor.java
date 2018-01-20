@@ -14,6 +14,7 @@ import crypto.soft.cryptongy.feature.shared.json.orderhistory.OrderHistory;
 import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
 import crypto.soft.cryptongy.feature.shared.module.Account;
 import crypto.soft.cryptongy.network.BittrexServices;
+import crypto.soft.cryptongy.utils.GlobalConstant;
 
 /**
  * Created by tseringwongelgurung on 11/24/17.
@@ -27,7 +28,15 @@ public class OrderInteractor {
             protected OpenOrder doInBackground(Void... voids) {
                 OpenOrder openOrder = null;
                 try {
-                    openOrder = new BittrexServices().getOpnOrders(account);
+                    if(account.getExchange().equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)){
+
+                        openOrder = new BittrexServices().getOpnOrders(account);
+                    }
+//                    if(account.getExchange().equalsIgnoreCase(GlobalConstant.Exchanges.BINANCE)){
+//
+//                        openOrder = new BittrexServices().getOpnOrders(account);
+//                    }
+
                     if (openOrder != null && openOrder.getSuccess()) {
                         if (TextUtils.isEmpty(coinName))
                             return openOrder;
@@ -110,7 +119,16 @@ public class OrderInteractor {
             protected Cancel doInBackground(Void... voids) {
                 try {
 
-                    return new BittrexServices().cancelOrder(uuid, account);
+                    if(account.getExchange().equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)){
+
+                        return new BittrexServices().cancelOrder(uuid, account);
+                    }
+//                    if(account.getExchange().equalsIgnoreCase(GlobalConstant.Exchanges.BINANCE)){
+//
+//                        return new BinanceServices().cancelOrder(uuid, account);
+//                    }
+
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -133,7 +151,19 @@ public class OrderInteractor {
 
     public void getOrders(String orderUuid, Account account,  OnFinishListner< Order> listner) {
         try {
-            Order order = new BittrexServices().getOrder(orderUuid, account);
+
+            Order order=null;
+            if(account.getExchange().equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)){
+
+                 order = new BittrexServices().getOrder(orderUuid, account);
+            }
+//            if(account.getExchange().equalsIgnoreCase(GlobalConstant.Exchanges.BINANCE)){
+//                 order = new BinanceServices().getOrder(orderUuid, account);
+//
+//            }
+//
+
+
             if (order == null || !order.getSuccess())
                 listner.onFail(order.getMessage());
             else if (order.getSuccess().booleanValue())

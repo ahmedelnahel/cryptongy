@@ -37,7 +37,8 @@
             android:layout_height="match_parent"
             android:layout_below="@+id/include"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="gone"
+            >
 
             <crypto.soft.cryptongy.feature.shared.customView.CabTextView
                 android:id="@+id/txtVtc"
@@ -64,12 +65,13 @@
             <include layout="@layout/table_order_history" />
 
             <include layout="@layout/table_market_trade" />
-            <!--<WebView  xmlns:android="http://schemas.android.com/apk/res/android"-->
-                <!--android:id="@+id/tradingView"-->
-                <!--android:layout_width="200pt"-->
-                <!--android:layout_height="300pt"-->
-                <!--android:visibility="gone"-->
+            <WebView  xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/tradingView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 />
+            <!--android:layout_width="200pt"-->
+            <!--android:layout_height="300pt"-->
         </LinearLayout>
 
 

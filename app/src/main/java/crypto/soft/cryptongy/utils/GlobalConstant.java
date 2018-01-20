@@ -20,4 +20,8 @@ public class GlobalConstant {
         public static final String TYPE_ERROR = "Error";
         public static final String TYPE_CLOSED = "Closed";
     }
+    public static class Exchanges{
+        public final  static String BITTREX="Bittrex";
+        public final static String BINANCE="Binance";
+    }
 }
