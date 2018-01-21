@@ -1,5 +1,5 @@
 
-package crypto.soft.cryptongy.feature.shared.json.binance.openorder;
+package crypto.soft.cryptongy.feature.shared.json.binance.order;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,5 +1,5 @@
 
-package crypto.soft.cryptongy.feature.shared.json.binance.openorder;
+package crypto.soft.cryptongy.feature.shared.json.binance.order;
 
 import java.util.HashMap;
 import java.util.List;
@@ -15,7 +15,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonPropertyOrder({
     "result"
 })
-public class BnopenOrders {
+public class BnOrders {
     @JsonProperty("code")
     private Long code;
     @JsonProperty("msg")

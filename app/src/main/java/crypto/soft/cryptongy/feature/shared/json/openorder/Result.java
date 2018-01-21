@@ -31,10 +31,10 @@ import java.util.Map;
         "ConditionTarget"
 })
 public class Result {
-    public Result(crypto.soft.cryptongy.feature.shared.json.binance.openorder.Result r) {
+    public Result(crypto.soft.cryptongy.feature.shared.json.binance.order.Result r) {
         this.orderUuid = r.getOrderId().toString();
         this.exchange = r.getSymbol();
-        this.orderType = r.getType();
+        this.orderType = r.getSide();
         this.quantity = Double.valueOf(r.getOrigQty());
         this.limit = Double.valueOf(r.getPrice());
         this.quantityRemaining = Double.valueOf(r.getOrigQty()) - Double.valueOf(r.getExecutedQty());

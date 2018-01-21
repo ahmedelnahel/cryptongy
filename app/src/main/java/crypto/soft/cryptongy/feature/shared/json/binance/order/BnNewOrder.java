@@ -1,5 +1,5 @@
 
-package crypto.soft.cryptongy.feature.shared.json.binance.cancel;
+package crypto.soft.cryptongy.feature.shared.json.binance.order;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,22 +13,22 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
     "symbol",
-    "origClientOrderId",
     "orderId",
     "clientOrderId",
+    "transactTime",
     "code",
     "msg"
 })
-public class BnCancel {
+public class BnNewOrder {
 
     @JsonProperty("symbol")
     private String symbol;
-    @JsonProperty("origClientOrderId")
-    private String origClientOrderId;
     @JsonProperty("orderId")
     private Long orderId;
     @JsonProperty("clientOrderId")
     private String clientOrderId;
+    @JsonProperty("transactTime")
+    private Long transactTime;
     @JsonProperty("code")
     private Long code;
     @JsonProperty("msg")
@@ -44,16 +44,6 @@ public class BnCancel {
     @JsonProperty("symbol")
     public void setSymbol(String symbol) {
         this.symbol = symbol;
-    }
-
-    @JsonProperty("origClientOrderId")
-    public String getOrigClientOrderId() {
-        return origClientOrderId;
-    }
-
-    @JsonProperty("origClientOrderId")
-    public void setOrigClientOrderId(String origClientOrderId) {
-        this.origClientOrderId = origClientOrderId;
     }
 
     @JsonProperty("orderId")
@@ -74,6 +64,16 @@ public class BnCancel {
     @JsonProperty("clientOrderId")
     public void setClientOrderId(String clientOrderId) {
         this.clientOrderId = clientOrderId;
+    }
+
+    @JsonProperty("transactTime")
+    public Long getTransactTime() {
+        return transactTime;
+    }
+
+    @JsonProperty("transactTime")
+    public void setTransactTime(Long transactTime) {
+        this.transactTime = transactTime;
     }
 
     @JsonProperty("code")

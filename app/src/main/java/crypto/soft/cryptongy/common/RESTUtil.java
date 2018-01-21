@@ -227,7 +227,18 @@ public class RESTUtil {
             {
                 HttpDelete httpDelete = new HttpDelete(serviceURL);
                 httpDelete.addHeader("X-MBX-APIKEY", key);
+                httpDelete.setHeader("Content-Type", "application/x-www-form-urlencoded");
                 HttpResponse httpResponse = httpclient.execute(httpDelete);
+                StringBuffer resultBuffer = getResponse(httpResponse);
+                response = resultBuffer.toString();
+            }
+            else
+            if(method.equals("POST"))
+            {
+                HttpPost httpPost = new HttpPost(serviceURL);
+                httpPost.addHeader("X-MBX-APIKEY", key);
+                httpPost.setHeader("Content-Type", "application/x-www-form-urlencoded");
+                HttpResponse httpResponse = httpclient.execute(httpPost);
                 StringBuffer resultBuffer = getResponse(httpResponse);
                 response = resultBuffer.toString();
             }
