@@ -22,7 +22,7 @@ public class CoinInteractor extends OrderInteractor{
             @Override
             protected MarketSummary doInBackground(Void... voids) {
                 try {
-                    return new BinanceServices().getMarketSummary(coinName);
+                    return new BittrexServices().getMarketSummary(coinName);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
