@@ -13,6 +13,7 @@ import java.util.List;
 
 import crypto.soft.cryptongy.common.RESTUtil;
 import crypto.soft.cryptongy.feature.shared.json.action.Cancel;
+import crypto.soft.cryptongy.feature.shared.json.binance.cancel.BnCancel;
 import crypto.soft.cryptongy.feature.shared.json.binance.marketsummary.BinanceMarket;
 import crypto.soft.cryptongy.feature.shared.json.binance.openorder.BnopenOrders;
 import crypto.soft.cryptongy.feature.shared.json.binance.time.BnTime;
@@ -159,7 +160,7 @@ public class BinanceServices {
                         param  = new HashMap();
                         param.put("symbol", coinName);
                     }
-            String ordersStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret(), param, "HmacSHA256");
+            String ordersStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret(), param, "HmacSHA256", null);
             openOrder = new OpenOrder();
             if (ordersStr == null) {
                 openOrder.setSuccess(false);
@@ -253,39 +254,41 @@ public class BinanceServices {
             HashMap param = null;
 
             if(coinName != null && !StringUtils.isEmpty(coinName)) {
-                param  = new HashMap();
+                param = new HashMap();
                 param.put("symbol", coinName);
-            }
-            String ordersStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret(), param, "HmacSHA256");
-            orderHistory = new OrderHistory();
-            if (ordersStr == null) {
-                orderHistory.setSuccess(false);
-                orderHistory.setMessage("Connection Error");
-            } else {
-                if(ordersStr != null && !ordersStr.contains("msg"))
-                    ordersStr = "{\"result\":" + ordersStr + " }";
-                ObjectMapper mapper = new ObjectMapper();
-                BnopenOrders bnopenOrder = mapper.readValue(ordersStr, BnopenOrders.class);
-                orderHistory.setJson(ordersStr);
-                Log.i("response " ,  orderHistory.getJson());
-                if(bnopenOrder != null && StringUtils.isEmpty(bnopenOrder.getMsg()) && bnopenOrder.getResult() != null)
-                {
-                    orderHistory.setSuccess(true);
-                    ArrayList<crypto.soft.cryptongy.feature.shared.json.orderhistory.Result> results = new ArrayList();
-                    for (crypto.soft.cryptongy.feature.shared.json.binance.openorder.Result r : bnopenOrder.getResult()) {
-                        if ( r.getStatus().equals("FILLED"))
-                        {
-                            crypto.soft.cryptongy.feature.shared.json.orderhistory.Result or = new crypto.soft.cryptongy.feature.shared.json.orderhistory.Result(r);
-                            results.add(or);
-                        }
-                    }
-                    orderHistory.setResult(results);
-                }
-                else
-                {
+
+                String ordersStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret(), param, "HmacSHA256", null);
+                orderHistory = new OrderHistory();
+                if (ordersStr == null) {
                     orderHistory.setSuccess(false);
-                    orderHistory.setMessage("Error: " + bnopenOrder.getMsg());
+                    orderHistory.setMessage("Connection Error");
+                } else {
+                    if (ordersStr != null && !ordersStr.contains("msg"))
+                        ordersStr = "{\"result\":" + ordersStr + " }";
+                    ObjectMapper mapper = new ObjectMapper();
+                    BnopenOrders bnopenOrder = mapper.readValue(ordersStr, BnopenOrders.class);
+                    orderHistory.setJson(ordersStr);
+                    Log.i("response ", orderHistory.getJson());
+                    if (bnopenOrder != null && StringUtils.isEmpty(bnopenOrder.getMsg()) && bnopenOrder.getResult() != null) {
+                        orderHistory.setSuccess(true);
+                        ArrayList<crypto.soft.cryptongy.feature.shared.json.orderhistory.Result> results = new ArrayList();
+                        for (crypto.soft.cryptongy.feature.shared.json.binance.openorder.Result r : bnopenOrder.getResult()) {
+                            if (r.getStatus().equals("FILLED")) {
+                                crypto.soft.cryptongy.feature.shared.json.orderhistory.Result or = new crypto.soft.cryptongy.feature.shared.json.orderhistory.Result(r);
+                                results.add(or);
+                            }
+                        }
+                        orderHistory.setResult(results);
+                    } else {
+                        orderHistory.setSuccess(false);
+                        orderHistory.setMessage("Error: " + bnopenOrder.getMsg());
+                    }
                 }
+            }
+            else
+            {
+                orderHistory.setSuccess(true);
+                orderHistory.setResult(new ArrayList());
             }
         }
         return orderHistory;
@@ -293,19 +296,19 @@ public class BinanceServices {
 
 
 
-    public Cancel cancelOrder(String uuid, Account account) throws IOException
+    public Cancel cancelOrder(String uuid, String coinName,  Account account) throws IOException
     {
-        Cancel cancel = null;
+        Cancel cancel = new Cancel();
         if(account == null) {
-            cancel = new Cancel();
             cancel.setSuccess(false);
             cancel.setMessage("No API");
         }else
         {
-            final String url = "https://bittrex.com/api/v1.1/market/cancel";
+            final String url = "https://api.binance.com/api/v3/order";
             HashMap<String, String> params = new HashMap<String, String>();
-            params.put("uuid", uuid);
-            String cancelStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret(), params);
+            params.put("symbol", coinName);
+            params.put("orderId", uuid);
+            String cancelStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret(), params, "HmacSHA256", "DELETE");
 
             if (cancelStr == null) {
                 cancel = new Cancel();
@@ -313,7 +316,14 @@ public class BinanceServices {
                 cancel.setMessage("Connection Error");
             } else {
                 ObjectMapper mapper = new ObjectMapper();
-                cancel = mapper.readValue(cancelStr, Cancel.class);
+                BnCancel bnCancel = mapper.readValue(cancelStr, BnCancel.class);
+                if (!StringUtils.isEmpty(bnCancel.getMsg()))
+                {
+                    cancel.setSuccess(false);
+                    cancel.setMessage(bnCancel.getMsg());
+                }
+                else
+                    cancel.setSuccess(true);
             }
         }
         return cancel;

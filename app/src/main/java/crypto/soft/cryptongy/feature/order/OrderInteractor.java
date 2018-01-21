@@ -104,7 +104,7 @@ public class OrderInteractor {
         }.execute();
     }
 
-    public void cancleOrder(final String uuid, final Account account, final OnFinishListner<Cancel> listner) {
+    public void cancleOrder(final String uuid, final String coinName, final Account account, final OnFinishListner<Cancel> listner) {
         new AsyncTask<Void, Void, Cancel>() {
 
             @Override

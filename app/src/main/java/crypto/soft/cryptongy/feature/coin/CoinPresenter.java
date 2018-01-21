@@ -225,7 +225,7 @@ public class CoinPresenter extends TickerPresenter<CoinView> {
     public void cancleOrder(final String coinName, String orderUuid, final Account account) {
         if (getView() != null)
             getView().showLoading(context.getString(R.string.cancle_msg));
-        coinInteractor.cancleOrder(orderUuid, account, new OnFinishListner<Cancel>() {
+        coinInteractor.cancleOrder(orderUuid, coinName, account, new OnFinishListner<Cancel>() {
 
             @Override
             public void onComplete(Cancel result) {

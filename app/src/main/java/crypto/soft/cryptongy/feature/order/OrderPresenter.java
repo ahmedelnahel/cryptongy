@@ -165,7 +165,7 @@ public class OrderPresenter extends MvpBasePresenter<OrderView> {
     public void cancleOrder(final String coinName, String orderUuid, final Account account) {
         if (getView() != null)
             getView().showLoading(context.getString(R.string.cancle_msg));
-        interactor.cancleOrder(orderUuid, account, new OnFinishListner<Cancel>() {
+        interactor.cancleOrder(orderUuid, coinName, account, new OnFinishListner<Cancel>() {
 
             @Override
             public void onComplete(Cancel result) {

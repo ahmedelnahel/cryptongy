@@ -10,6 +10,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -196,8 +197,9 @@ public class RESTUtil {
 
 
 
-    public String callRestHttpClient(String baseURL , String key, String secret, Map<String, String> paramters, String algorithm){
+    public String callRestHttpClient(String baseURL , String key, String secret, Map<String, String> paramters, String algorithm, String method){
         String response = null;
+        if (method == null) method = "GET";
         try {
 
             long timestamp = System.currentTimeMillis();
@@ -214,14 +216,22 @@ public class RESTUtil {
 
             Log.i("serviceURL " , ""+ serviceURL + " key " + key + " secret " + secret);
             HttpClient httpclient = new DefaultHttpClient();
-            HttpGet request = new HttpGet(serviceURL);
-//            request.setHeader("Content-Type", "application/x-www-form-urlencoded");
-            request.addHeader("X-MBX-APIKEY", key);
-
-            HttpResponse httpResponse = httpclient.execute(request);
-            StringBuffer resultBuffer = getResponse(httpResponse);
-            response = resultBuffer.toString();
-            Log.i("response " , ""+ response );
+            if(method.equals("GET")) {
+                HttpGet request = new HttpGet(serviceURL);
+                request.addHeader("X-MBX-APIKEY", key);
+                HttpResponse httpResponse = httpclient.execute(request);
+                StringBuffer resultBuffer = getResponse(httpResponse);
+                response = resultBuffer.toString();
+            }
+            else if(method.equals("DELETE"))
+            {
+                HttpDelete httpDelete = new HttpDelete(serviceURL);
+                httpDelete.addHeader("X-MBX-APIKEY", key);
+                HttpResponse httpResponse = httpclient.execute(httpDelete);
+                StringBuffer resultBuffer = getResponse(httpResponse);
+                response = resultBuffer.toString();
+            }
+            Log.i("REST response " , ""+ response );
 
 
         } catch (UnknownHostException | SocketException  e ) {
