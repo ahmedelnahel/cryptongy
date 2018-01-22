@@ -99,7 +99,7 @@ public class CoinPresenter extends TickerPresenter<CoinView> {
                     }
                 }
             };
-            Observable.merge(getMarketSummary(coinName,account), getOpenOrders(coinName, account), getOrderHistory(coinName, account))
+            Observable.merge(getMarketSummary(coinName,exchangeValue), getOpenOrders(coinName, account), getOrderHistory(coinName, account))
                     .subscribe(observer);
         } else {
             CustomDialog.showMessagePop(context, context.getString(R.string.noAPI), null);
@@ -131,11 +131,11 @@ public class CoinPresenter extends TickerPresenter<CoinView> {
 //        });
 //    }
 
-    public Observable<MarketSummary> getMarketSummary(final String coinName, final Account account) {
+    public Observable<MarketSummary> getMarketSummary(final String coinName, final String exchangeValue) {
         return io.reactivex.Observable.create(new ObservableOnSubscribe<MarketSummary>() {
             @Override
             public void subscribe(final ObservableEmitter<MarketSummary> e) throws Exception {
-                coinInteractor.getMarketSummary(coinName,account, new OnFinishListner<MarketSummary>() {
+                coinInteractor.getMarketSummary(coinName,exchangeValue, new OnFinishListner<MarketSummary>() {
                     @Override
                     public void onComplete(MarketSummary result) {
                         startTicker(coinName);

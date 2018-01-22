@@ -108,18 +108,14 @@ public class CoinApplication extends Application {
     }
 
     public Account getWithdrawAccount(String exchangeValue) {
-        setReadAccount(exchangeValue);
-        if (readAccount != null)
-            return readAccount;
-        else if (getTradeAccount() != null)
-            return getTradeAccount();
-        else if (getWithdrawAccount() != null)
-            return getWithdrawAccount();
+        setWithdrawAccount(exchangeValue);
+        if (withdrawAccount != null)
+            return withdrawAccount;
         return null;
     }
 
     public void setWithdrawAccount(String exchangeValue){
-        setReadAccount(getAccountFromReam(exchangeValue,WITHDRAW));
+        setWithdrawAccount(getAccountFromReam(exchangeValue,WITHDRAW));
     }
 
 
