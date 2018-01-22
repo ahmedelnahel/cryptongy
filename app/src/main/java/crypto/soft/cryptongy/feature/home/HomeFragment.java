@@ -111,6 +111,7 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
     private boolean isFirst = false;
     private static String TAG;
     private static String spinnerValue;
+    public static String EXCHANGE_VALUE="EXCHANGE_VALUE";
 
     @Nullable
     @Override
@@ -415,6 +416,7 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
     public void onItemClicked(Result menuItem, int position) {
         Intent intent = new Intent(getContext(), CoinHomeActivity.class);
         intent.putExtra("COIN_NAME", menuItem.getMarketName());
+        intent.putExtra(EXCHANGE_VALUE,spinnerValue);
         startActivity(intent);
     }
 

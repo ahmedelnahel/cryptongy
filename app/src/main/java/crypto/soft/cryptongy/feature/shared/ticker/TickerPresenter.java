@@ -1,6 +1,7 @@
 package crypto.soft.cryptongy.feature.shared.ticker;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
@@ -11,6 +12,7 @@ import crypto.soft.cryptongy.feature.setting.Notification;
 import crypto.soft.cryptongy.feature.shared.json.ticker.Ticker;
 import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
 import crypto.soft.cryptongy.utils.CoinApplication;
+import crypto.soft.cryptongy.utils.GlobalConstant;
 
 /**
  * Created by tseringwongelgurung on 12/18/17.
@@ -20,6 +22,7 @@ public class TickerPresenter<T extends TickerView> extends MvpBasePresenter<T> {
     private static Timer timer;
     protected Context context;
     private String coinName;
+    private String exchangeValue;
     private TickerInteractor tickerInteractor;
 
     public TickerPresenter(Context context) {
@@ -34,6 +37,20 @@ public class TickerPresenter<T extends TickerView> extends MvpBasePresenter<T> {
             int timerInterval = notification.getSyncInterval() * 1000;
             timer = new Timer();
             this.coinName = coinName;
+            this.exchangeValue=exchangeValue;
+            timer.scheduleAtFixedRate(new TickerTimer(), timerInterval,
+                    timerInterval);
+        }
+    }
+
+    public void startTicker(String coinName,String exchangeValue) {
+        stopTimer();
+        Notification notification = ((CoinApplication) context.getApplicationContext()).getNotification();
+        if (notification.isAutomSync()) {
+            int timerInterval = notification.getSyncInterval() * 1000;
+            timer = new Timer();
+            this.coinName = coinName;
+            this.exchangeValue=exchangeValue;
             timer.scheduleAtFixedRate(new TickerTimer(), timerInterval,
                     timerInterval);
         }
@@ -46,9 +63,13 @@ public class TickerPresenter<T extends TickerView> extends MvpBasePresenter<T> {
 
     class TickerTimer extends TimerTask {
 
+
         @Override
         public void run() {
-            tickerInteractor.getTicker(coinName, new OnFinishListner<Ticker>() {
+            if(TextUtils.isEmpty(exchangeValue)){
+                exchangeValue= GlobalConstant.Exchanges.BITTREX;
+            }
+            tickerInteractor.getTicker(coinName,exchangeValue, new OnFinishListner<Ticker>() {
                 @Override
                 public void onComplete(Ticker result) {
                     if (getView() != null)

@@ -53,7 +53,7 @@ public class AccountePresenter extends MvpBasePresenter<AccountView> {
     }
 
     private void showAccountDialog(final Account account) {
-        CustomDialog.showAccountDialog(context, account, getList(), new OnFinishListner<Account>() {
+        CustomDialog.showAccountDialog(context, account, getList(context), new OnFinishListner<Account>() {
             @Override
             public void onComplete(Account result) {
                 if (result.getId() == null)
@@ -106,9 +106,12 @@ public class AccountePresenter extends MvpBasePresenter<AccountView> {
         });
     }
 
-    public List<String> getList() {
+    public List<String> getList(Context context) {
         List<String> list = new ArrayList<>();
-        list.add("Bittrex");
+      String[] coinArray=context.getResources().getStringArray(R.array.coin_array);
+      for(int i=0;i<coinArray.length;i++){
+       list.add(coinArray[i]);
+      }
         return list;
     }
 

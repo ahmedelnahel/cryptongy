@@ -3,19 +3,13 @@ package crypto.soft.cryptongy.feature.coin;
 import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
-
-import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
 import crypto.soft.cryptongy.R;
 import crypto.soft.cryptongy.feature.account.AccountActivity;
 import crypto.soft.cryptongy.feature.account.CustomDialog;
 import crypto.soft.cryptongy.feature.main.MainActivity;
-import crypto.soft.cryptongy.feature.order.OrderInteractor;
-import crypto.soft.cryptongy.feature.order.OrderPresenter;
-import crypto.soft.cryptongy.feature.order.OrderView;
 import crypto.soft.cryptongy.feature.setting.SettingActivity;
 import crypto.soft.cryptongy.feature.shared.json.action.Cancel;
 import crypto.soft.cryptongy.feature.shared.json.markethistory.MarketHistory;
@@ -41,15 +35,16 @@ public class CoinPresenter extends TickerPresenter<CoinView> {
     private CoinInteractor coinInteractor;
     private Context context;
 
+
     public CoinPresenter(Context context) {
         super(context);
         this.context=context;
         coinInteractor = new CoinInteractor();
     }
 
-    public void getData(final String coinName) {
+    public void getData(final String coinName,final String exchangeValue) {
         CoinApplication application = (CoinApplication) context.getApplicationContext();
-        Account account = application.getReadAccount();
+        Account account = application.getReadAccount(exchangeValue);
 
         if (account != null) {
             if (getView() != null) {
@@ -104,7 +99,7 @@ public class CoinPresenter extends TickerPresenter<CoinView> {
                     }
                 }
             };
-            Observable.merge(getMarketSummary(coinName), getOpenOrders(coinName, account), getOrderHistory(coinName, account))
+            Observable.merge(getMarketSummary(coinName,account), getOpenOrders(coinName, account), getOrderHistory(coinName, account))
                     .subscribe(observer);
         } else {
             CustomDialog.showMessagePop(context, context.getString(R.string.noAPI), null);
@@ -136,11 +131,11 @@ public class CoinPresenter extends TickerPresenter<CoinView> {
 //        });
 //    }
 
-    public Observable<MarketSummary> getMarketSummary(final String coinName) {
+    public Observable<MarketSummary> getMarketSummary(final String coinName, final Account account) {
         return io.reactivex.Observable.create(new ObservableOnSubscribe<MarketSummary>() {
             @Override
             public void subscribe(final ObservableEmitter<MarketSummary> e) throws Exception {
-                coinInteractor.getMarketSummary(coinName, new OnFinishListner<MarketSummary>() {
+                coinInteractor.getMarketSummary(coinName,account, new OnFinishListner<MarketSummary>() {
                     @Override
                     public void onComplete(MarketSummary result) {
                         startTicker(coinName);
@@ -166,10 +161,10 @@ public class CoinPresenter extends TickerPresenter<CoinView> {
         }
     }
 
-    public void onClicked(int id, String coinName) {
+    public void onClicked(int id, String coinName,String exchangeValue) {
         switch (id) {
             case R.id.imgSync:
-                getData(coinName);
+                getData(coinName,exchangeValue);
                 break;
             case R.id.imgAccSetting:
                 if (context instanceof MainActivity)
@@ -346,8 +341,9 @@ public class CoinPresenter extends TickerPresenter<CoinView> {
                 "</script>\n" +
                 "<!-- TradingView Widget END -->\n";
         String htmlPost = "</body></html>";
+        String baseUrl="https://www.tradingview.com/widget/advanced-chart/";
 
-        webView.loadDataWithBaseURL(null,htmlPre+htmlCode+htmlPost, "text/html", "UTF-8", null);
+        webView.loadDataWithBaseURL(baseUrl,htmlPre+htmlCode+htmlPost, "text/html", "UTF-8", null);
         webView.setVisibility(View.VISIBLE);
     }
 }

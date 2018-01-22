@@ -6,21 +6,30 @@ import java.io.IOException;
 
 import crypto.soft.cryptongy.feature.shared.json.ticker.Ticker;
 import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
+import crypto.soft.cryptongy.network.BinanceServices;
 import crypto.soft.cryptongy.network.BittrexServices;
+import crypto.soft.cryptongy.utils.GlobalConstant;
 
 /**
  * Created by tseringwongelgurung on 12/18/17.
  */
 
 public class TickerInteractor {
-    public void getTicker(final String coinName, final OnFinishListner<Ticker> listner) {
+    public void getTicker(final String coinName, final String exchangeValue, final OnFinishListner<Ticker> listner) {
 
         new AsyncTask<Void, Void, Ticker>() {
 
             @Override
             protected Ticker doInBackground(Void... voids) {
                 try {
-                    return new BittrexServices().getTicker(coinName);
+                    if(exchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)){
+
+                        return new BittrexServices().getTicker(coinName);
+                    }
+                    if(exchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BINANCE)){
+
+                        return new BinanceServices().getTicker(coinName);
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
