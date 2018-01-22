@@ -14,6 +14,7 @@ import crypto.soft.cryptongy.feature.shared.json.order.Order;
 import crypto.soft.cryptongy.feature.shared.json.orderhistory.OrderHistory;
 import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
 import crypto.soft.cryptongy.feature.shared.module.Account;
+import crypto.soft.cryptongy.network.BinanceServices;
 import crypto.soft.cryptongy.network.BittrexServices;
 import crypto.soft.cryptongy.utils.GlobalConstant;
 
@@ -28,16 +29,16 @@ public class OrderInteractor {
             @Override
             protected OpenOrder doInBackground(Void... voids) {
                 OpenOrder openOrder = null;
-//                try {
+                try {
                     if(account.getExchange().equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)){
 
-                        openOrder = getMockOpnOrders(account,coinName);
-//                        openOrder = new BittrexServices().getOpnOrders(account);
+//                        openOrder = getMockOpnOrders(account,coinName);
+                        openOrder = new BittrexServices().getOpnOrders(account);
                     }
                     if(account.getExchange().equalsIgnoreCase(GlobalConstant.Exchanges.BINANCE)){
 
-                        openOrder = getMockOpnOrders(account,coinName);
-//                        openOrder=new BinanceServices().getOpnOrders(account,coinName);
+//                        openOrder = getMockOpnOrders(account,coinName);
+                        openOrder=new BinanceServices().getOpnOrders(account,coinName);
                     }
 
                     if (openOrder != null && openOrder.getSuccess()) {
@@ -55,9 +56,9 @@ public class OrderInteractor {
                         }
                     }
 
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 return openOrder;
             }
 
@@ -81,16 +82,17 @@ public class OrderInteractor {
             @Override
             protected OrderHistory doInBackground(Void... voids) {
                 OrderHistory orderHistory = null;
-//                try {
+                try {
 
                     if(account.getExchange().equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)){
 
-//                        orderHistory = new BittrexServices().getOrderHistory(account);
-                        orderHistory = getMockOrderHistory(account,coinName);
+                        orderHistory = new BittrexServices().getOrderHistory(account);
+//                        orderHistory = getMockOrderHistory(account,coinName);
                     }
                     if(account.getExchange().equalsIgnoreCase(GlobalConstant.Exchanges.BINANCE)){
 
-                        orderHistory = getMockOrderHistory(account,coinName);
+//                        orderHistory = getMockOrderHistory(account,coinName);
+                        orderHistory=new BinanceServices().getOrderHistory(account,coinName);
                     }
 
 
@@ -110,10 +112,10 @@ public class OrderInteractor {
                             return orderHistory;
                         }
                     }
-//                }
-//                catch (IOException e) {
-//                    e.printStackTrace();
-//                }
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
                 return orderHistory;
             }
 
@@ -188,10 +190,10 @@ public class OrderInteractor {
 
                         return new BittrexServices().cancelOrder(uuid, account);
                     }
-//                    if(account.getExchange().equalsIgnoreCase(GlobalConstant.Exchanges.BINANCE)){
-//
-//                        return new BinanceServices().cancelOrder(uuid, account);
-//                    }
+                    if(account.getExchange().equalsIgnoreCase(GlobalConstant.Exchanges.BINANCE)){
+
+                        return new BinanceServices().cancelOrder(uuid,coinName, account);
+                    }
 
 
                 } catch (IOException e) {
