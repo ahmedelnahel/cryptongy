@@ -29,6 +29,11 @@ import java.util.Map;
         "Closed"
 })
 public class Result {
+    public Result()
+    {
+
+    }
+
     public Result(crypto.soft.cryptongy.feature.shared.json.binance.order.Result r) {
         this.orderUuid = r.getOrderId().toString();
         this.exchange = r.getSymbol();
