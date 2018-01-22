@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.text.TextUtils;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import crypto.soft.cryptongy.feature.shared.json.action.Cancel;
@@ -13,7 +14,6 @@ import crypto.soft.cryptongy.feature.shared.json.order.Order;
 import crypto.soft.cryptongy.feature.shared.json.orderhistory.OrderHistory;
 import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
 import crypto.soft.cryptongy.feature.shared.module.Account;
-import crypto.soft.cryptongy.network.BinanceServices;
 import crypto.soft.cryptongy.network.BittrexServices;
 import crypto.soft.cryptongy.utils.GlobalConstant;
 
@@ -28,14 +28,16 @@ public class OrderInteractor {
             @Override
             protected OpenOrder doInBackground(Void... voids) {
                 OpenOrder openOrder = null;
-                try {
+//                try {
                     if(account.getExchange().equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)){
 
-                        openOrder = new BittrexServices().getOpnOrders(account);
+                        openOrder = getMockOpnOrders(account,coinName);
+//                        openOrder = new BittrexServices().getOpnOrders(account);
                     }
                     if(account.getExchange().equalsIgnoreCase(GlobalConstant.Exchanges.BINANCE)){
 
-                        openOrder = new BinanceServices().getOpnOrders(account,coinName);
+                        openOrder = getMockOpnOrders(account,coinName);
+//                        openOrder=new BinanceServices().getOpnOrders(account,coinName);
                     }
 
                     if (openOrder != null && openOrder.getSuccess()) {
@@ -53,11 +55,12 @@ public class OrderInteractor {
                         }
                     }
 
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
                 return openOrder;
             }
+
 
             @Override
             protected void onPostExecute(OpenOrder openOrder) {
@@ -78,15 +81,16 @@ public class OrderInteractor {
             @Override
             protected OrderHistory doInBackground(Void... voids) {
                 OrderHistory orderHistory = null;
-                try {
+//                try {
 
                     if(account.getExchange().equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)){
 
-                        orderHistory = new BittrexServices().getOrderHistory(account);
+//                        orderHistory = new BittrexServices().getOrderHistory(account);
+                        orderHistory = getMockOrderHistory(account,coinName);
                     }
                     if(account.getExchange().equalsIgnoreCase(GlobalConstant.Exchanges.BINANCE)){
 
-                        orderHistory = new BinanceServices().getOrderHistory(account,coinName);
+                        orderHistory = getMockOrderHistory(account,coinName);
                     }
 
 
@@ -106,9 +110,10 @@ public class OrderInteractor {
                             return orderHistory;
                         }
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+//                }
+//                catch (IOException e) {
+//                    e.printStackTrace();
+//                }
                 return orderHistory;
             }
 
@@ -123,6 +128,53 @@ public class OrderInteractor {
                     listner.onFail(orderHistory.getMessage());
             }
         }.execute();
+    }
+
+    private crypto.soft.cryptongy.feature.shared.json.binance.order.Result getResultMockValue(){
+        crypto.soft.cryptongy.feature.shared.json.binance.order.Result result=new crypto.soft.cryptongy.feature.shared.json.binance.order.Result();
+        result.setSymbol("LTCBTC");
+        result.setOrderId(1L);
+        result.setClientOrderId("myOrder1");
+        result.setPrice("0.1");
+        result.setOrigQty("1.0");
+        result.setExecutedQty("0.0");
+        result.setStatus("NEW");
+        result.setTimeInForce("GTC");
+        result.setType("LIMIT");
+        result.setSide("BUY");
+        result.setStopPrice("0.0");
+        result.setIcebergQty("0.0");
+        result.setTime(1499827319559L);
+        return result;
+
+    }
+    private OrderHistory getMockOrderHistory(Account account, String coinName) {
+
+        OrderHistory orderHistory=new OrderHistory();
+        orderHistory.setSuccess(true);
+        orderHistory.setMessage("mock object");
+
+        ArrayList<crypto.soft.cryptongy.feature.shared.json.orderhistory.Result> resultsarray = new ArrayList();
+        crypto.soft.cryptongy.feature.shared.json.orderhistory.Result result1= new crypto.soft.cryptongy.feature.shared.json.orderhistory.Result(getResultMockValue());
+        resultsarray.add(result1);
+
+        orderHistory.setResult(resultsarray);
+        return orderHistory;
+    }
+
+    private OpenOrder getMockOpnOrders(Account account, String coinName) {
+
+        OpenOrder openOrder=new OpenOrder();
+        openOrder.setSuccess(true);
+        openOrder.setMessage("mock object");
+
+        ArrayList<crypto.soft.cryptongy.feature.shared.json.openorder.Result> resultsArray = new ArrayList();
+        crypto.soft.cryptongy.feature.shared.json.openorder.Result or = new crypto.soft.cryptongy.feature.shared.json.openorder.Result(getResultMockValue());
+        resultsArray.add(or);
+
+
+        openOrder.setResult(resultsArray);
+        return openOrder;
     }
 
     public void cancleOrder(final String uuid, final String coinName, final Account account, final OnFinishListner<Cancel> listner) {
@@ -188,4 +240,8 @@ public class OrderInteractor {
             listner.onFail(e.getMessage());
         }
     }
+
+
+
+
 }
