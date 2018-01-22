@@ -327,7 +327,10 @@ public class CoinPresenter extends TickerPresenter<CoinView> {
                 "<script type=\"text/javascript\" src=\"https://s3.tradingview.com/tv.js\"></script>\n" +
                 "<script type=\"text/javascript\">\n" +
                 "new TradingView.widget({\n" +
-                "  \"autosize\": true,\n" +
+
+                " \"width\": 980,\n"+
+                "\"height\": 610,\n"+
+             //   "  \"autosize\": true,\n" +
                 "  \"symbol\": \"BITTREX:BTCUSDT\",\n" +
                 "  \"interval\": \"D\",\n" +
                 "  \"timezone\": \"Etc/UTC\",\n" +
