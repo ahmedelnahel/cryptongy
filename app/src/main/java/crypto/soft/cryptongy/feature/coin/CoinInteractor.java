@@ -7,7 +7,6 @@ import java.io.IOException;
 import crypto.soft.cryptongy.feature.order.OrderInteractor;
 import crypto.soft.cryptongy.feature.shared.json.marketsummary.MarketSummary;
 import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
-import crypto.soft.cryptongy.feature.shared.module.Account;
 import crypto.soft.cryptongy.network.BinanceServices;
 import crypto.soft.cryptongy.network.BittrexServices;
 import crypto.soft.cryptongy.utils.GlobalConstant;
@@ -17,17 +16,17 @@ import crypto.soft.cryptongy.utils.GlobalConstant;
  */
 
 public class CoinInteractor extends OrderInteractor{
-    public void getMarketSummary(final String coinName, final Account account, final OnFinishListner<MarketSummary> listner) {
+    public void getMarketSummary(final String coinName, final String exchangeValue, final OnFinishListner<MarketSummary> listner) {
         new AsyncTask<Void, Void, MarketSummary>() {
 
             @Override
             protected MarketSummary doInBackground(Void... voids) {
                 try {
 
-                    if(account.getExchange().equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)){
+                    if(exchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)){
                         return new BittrexServices().getMarketSummary(coinName);
                     }
-                    if(account.getExchange().equalsIgnoreCase(GlobalConstant.Exchanges.BINANCE)){
+                    if(exchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BINANCE)){
                         return new BinanceServices().getMarketSummary(coinName);
                     }
 
