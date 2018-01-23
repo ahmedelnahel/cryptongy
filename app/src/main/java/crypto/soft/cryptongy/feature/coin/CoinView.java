@@ -1,6 +1,5 @@
 package crypto.soft.cryptongy.feature.coin;
 
-import crypto.soft.cryptongy.feature.order.OrderView;
 import crypto.soft.cryptongy.feature.shared.json.markethistory.MarketHistory;
 import crypto.soft.cryptongy.feature.shared.json.marketsummary.MarketSummary;
 import crypto.soft.cryptongy.feature.shared.json.openorder.OpenOrder;
@@ -36,4 +35,5 @@ public interface CoinView extends TickerView {
     void showEmptyView();
 
     void hideEmptyView();
+    int  displayWidth();
 }

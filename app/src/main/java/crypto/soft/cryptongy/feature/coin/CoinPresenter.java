@@ -3,6 +3,7 @@ package crypto.soft.cryptongy.feature.coin;
 import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
 
@@ -321,6 +322,9 @@ public class CoinPresenter extends TickerPresenter<CoinView> {
 
     public void loadTradingView(WebView webView)
     {
+        int width=getView().displayWidth();
+        int height=width*2;
+        Log.d("CoinPresenter", "loadTradingView: w/h : "+width+"/"+height);
         String htmlPre = "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"utf-8\"></head>" +
                 "<body style='margin:0; pading:0; background-color: black;'>";
         String htmlCode = "<!-- TradingView Widget BEGIN -->\n" +
@@ -328,8 +332,8 @@ public class CoinPresenter extends TickerPresenter<CoinView> {
                 "<script type=\"text/javascript\">\n" +
                 "new TradingView.widget({\n" +
 
-                " \"width\": 980,\n"+
-                "\"height\": 610,\n"+
+                " \"width\": "+width+",\n"+
+                "\"height\": "+height+",\n"+
              //   "  \"autosize\": true,\n" +
                 "  \"symbol\": \"BITTREX:BTCUSDT\",\n" +
                 "  \"interval\": \"D\",\n" +
