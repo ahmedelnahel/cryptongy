@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -387,5 +388,14 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
     public void onPause() {
         super.onPause();
         presenter.stopTimer();
+    }
+
+    @Override
+    public int  displayWidth(){
+        DisplayMetrics metrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        int width = metrics.widthPixels;
+        int dp = Math.round(width / ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT));
+        return dp;
     }
 }
