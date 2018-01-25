@@ -13,6 +13,7 @@ import java.util.List;
 
 import crypto.soft.cryptongy.common.RESTUtil;
 import crypto.soft.cryptongy.feature.shared.json.action.Cancel;
+import crypto.soft.cryptongy.feature.shared.json.binance.allprices.AllPrice;
 import crypto.soft.cryptongy.feature.shared.json.binance.cancel.BnCancel;
 import crypto.soft.cryptongy.feature.shared.json.binance.marketsummary.BinanceMarket;
 import crypto.soft.cryptongy.feature.shared.json.binance.order.BnOrders;
@@ -80,6 +81,50 @@ public class BinanceServices {
         }
         return marketSummaries_;
     }
+
+
+    public MarketSummaries getAllPrices() throws IOException {
+        final String url = "https://api.binance.com/api/v1/ticker/allPrices";  //"https://www.coinexchange.io/api/v1/getmarkets";
+        String marketSummariesStr = new RESTUtil().callREST(url);
+        MarketSummaries marketSummaries_ = new MarketSummaries();
+        Log.d("Binance MarketSummaries", "response " + marketSummariesStr);
+        if(marketSummariesStr == null || "".equals(marketSummariesStr)) {
+            Log.d("Binance MarketSummaries", "response in error " + marketSummariesStr);
+            marketSummaries_.setSuccess(false);
+            marketSummaries_.setMessage("Connection Error");
+        }
+        else {
+            if(marketSummariesStr != null && !marketSummariesStr.contains("msg"))
+                marketSummariesStr = "{\"result\":" + marketSummariesStr + " }";
+            ObjectMapper mapper = new ObjectMapper();
+            AllPrice allprices = mapper.readValue(marketSummariesStr, AllPrice.class);
+
+            marketSummaries_.setJson(marketSummariesStr);
+            marketSummaries_.setSuccess(true);
+
+
+//            if (allprices.getMsg() == null || "".equals(allprices.getMsg())) {
+//                HashMap<String, Result> coinsMap = new HashMap<>();
+//                ArrayList<Result> results = new ArrayList();
+//                for (crypto.soft.cryptongy.feature.shared.json.binance.marketsummary.Result r : allprices.getResult()) {
+//                    Result mr = new Result(r);
+//                    results.add(mr);
+//                    coinsMap.put(r.getSymbol(), mr);
+//                }
+//
+//                marketSummaries_.setCoinsMap(coinsMap);
+//                marketSummaries_.setResult(results);
+//            }
+//            else
+//            {
+//                marketSummaries_.setSuccess(false);
+//                marketSummaries_.setMessage(binanceMarket.getMsg());
+//
+//            }
+        }
+        return marketSummaries_;
+    }
+
 
     //
 
