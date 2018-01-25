@@ -11,6 +11,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.util.HashMap;
 import java.util.Map;
 
+import crypto.soft.cryptongy.feature.coin.BnSocketOrders;
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
     "success",
@@ -40,6 +42,14 @@ public class Ticker {
      result.setLast(r.getLastPrice()==null?0.0:Double.valueOf(r.getLastPrice()));
      result.setAsk(r.getAskPrice()==null?0.0:Double.valueOf(r.getAskPrice()));
      result.setBid(r.getBidPrice()==null?0.0:Double.valueOf(r.getBidPrice()));
+    }
+
+    public void setBinanceResultWebSocket(BnSocketOrders r)
+    {
+        this.result = new Result();
+        result.setLast(r.getLastPrice()==null?0.0:Double.valueOf(r.getLastPrice()));
+        result.setAsk(r.getAskPrice()==null?0.0:Double.valueOf(r.getAskPrice()));
+        result.setBid(r.getBidPrice()==null?0.0:Double.valueOf(r.getBidPrice()));
     }
     public void setJson(String json) {
         this.json = json;

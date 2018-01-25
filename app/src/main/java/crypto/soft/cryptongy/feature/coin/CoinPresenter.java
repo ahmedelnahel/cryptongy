@@ -18,6 +18,7 @@ import crypto.soft.cryptongy.feature.shared.json.marketsummary.MarketSummary;
 import crypto.soft.cryptongy.feature.shared.json.openorder.OpenOrder;
 import crypto.soft.cryptongy.feature.shared.json.orderhistory.OrderHistory;
 import crypto.soft.cryptongy.feature.shared.json.orderhistory.Result;
+import crypto.soft.cryptongy.feature.shared.json.ticker.Ticker;
 import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
 import crypto.soft.cryptongy.feature.shared.module.Account;
 import crypto.soft.cryptongy.feature.shared.ticker.TickerPresenter;
@@ -136,6 +137,9 @@ public class CoinPresenter extends TickerPresenter<CoinView> {
         return io.reactivex.Observable.create(new ObservableOnSubscribe<MarketSummary>() {
             @Override
             public void subscribe(final ObservableEmitter<MarketSummary> e) throws Exception {
+
+
+
                 coinInteractor.getMarketSummary(coinName,exchangeValue, new OnFinishListner<MarketSummary>() {
                     @Override
                     public void onComplete(MarketSummary result) {
@@ -150,8 +154,15 @@ public class CoinPresenter extends TickerPresenter<CoinView> {
                         e.onComplete();
                     }
                 });
+
+
+
             }
         });
+    }
+
+    private Observer<? super Ticker> getObserver() {
+        return null;
     }
 
     public void onOptionItemClicked(int id) {
