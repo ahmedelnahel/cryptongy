@@ -19,6 +19,15 @@
 
         <include layout="@layout/layout_calculation" />
 
+        <ProgressBar
+            android:visibility="gone"
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:indeterminateTint="@color/colorPrimary"
+
+            />
         <crypto.soft.cryptongy.feature.shared.customView.MspTextView
             android:id="@+id/txtEmpty"
             android:layout_width="match_parent"
@@ -26,6 +35,7 @@
             android:layout_alignParentBottom="true"
             android:layout_below="@+id/include"
             android:gravity="center"
+            android:visibility="gone"
             android:orientation="vertical"
             android:text="No data available"
             android:textColor="@color/colorPrimary"

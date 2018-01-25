@@ -37,8 +37,6 @@ import crypto.soft.cryptongy.feature.shared.json.wallet.Wallet;
 import crypto.soft.cryptongy.feature.shared.module.Account;
 import io.reactivex.subjects.PublishSubject;
 
-import static android.content.ContentValues.TAG;
-
 
 /**
  * Created by noni on 26/10/2017.
@@ -46,7 +44,7 @@ import static android.content.ContentValues.TAG;
  */
 
 public class BinanceServices {
-
+    public static final String TAG = "BinanceServices";
 
     public MarketSummaries getMarketSummaries() throws IOException {
         final String url = "https://api.binance.com/api/v1/ticker/24hr";  //"https://www.coinexchange.io/api/v1/getmarkets";

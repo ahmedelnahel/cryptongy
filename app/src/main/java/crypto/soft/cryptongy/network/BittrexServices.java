@@ -30,6 +30,7 @@ import crypto.soft.cryptongy.feature.shared.module.Account;
 public class BittrexServices {
 
 
+    public  static String TAG="BittrexServices";
     public MarketSummaries getMarketSummaries() throws IOException {
         final String url = "https://bittrex.com/api/v1.1/public/getmarketsummaries";  //"https://www.coinexchange.io/api/v1/getmarkets";
         String marketSummariesStr = new RESTUtil().callREST(url);
@@ -120,6 +121,7 @@ public class BittrexServices {
         }
         else {
             final String url = "https://bittrex.com/api/v1.1/market/getopenorders";
+            Log.d(TAG, "getOpnOrders: " + url);
             String ordersStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret());
 
             if (ordersStr == null) {
@@ -139,6 +141,7 @@ public class BittrexServices {
 
     public Ticker getTicker(String market) throws IOException {
         final String url = "https://bittrex.com/api/v1.1/public/getticker?market="+market;
+        Log.d(TAG, "getTicker: " + url);
         Ticker ticker = null;
         String tickerStr = new RESTUtil().callREST(url);
         if(tickerStr == null) {

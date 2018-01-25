@@ -16,11 +16,11 @@ import android.webkit.WebView;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
-
 
 import crypto.soft.cryptongy.R;
 import crypto.soft.cryptongy.feature.account.CustomDialog;
@@ -37,7 +37,6 @@ import crypto.soft.cryptongy.feature.shared.listner.DialogListner;
 import crypto.soft.cryptongy.utils.CoinApplication;
 import crypto.soft.cryptongy.utils.GlobalUtil;
 import crypto.soft.cryptongy.utils.HideKeyboard;
-import crypto.soft.cryptongy.utils.ProgressDialogFactory;
 
 import static crypto.soft.cryptongy.feature.home.HomeFragment.EXCHANGE_VALUE;
 
@@ -59,7 +58,7 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
     private boolean isFirst = false;
     private String coinName = "";
     private String exchangeValue="";
-
+    private ProgressBar progressBar;
 
 
 
@@ -158,6 +157,8 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
         scrollView = view.findViewById(R.id.HorScrollView);
         webView = (WebView) view.findViewById(R.id.tradingView);
         webView.getSettings().setJavaScriptEnabled(true);
+
+        progressBar=view.findViewById(R.id.progressBar);
 
     }
 
@@ -346,21 +347,24 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
 
     @Override
     public void showLoading(String msg) {
-        ProgressDialogFactory.getInstance(getContext(), msg).show(new DialogListner() {
-            @Override
-            public void onOkClicked() {
-                getActivity().onBackPressed();
-            }
-        });
+        progressBar.setVisibility(View.VISIBLE);
+//        ProgressDialogFactory.getInstance(getContext(), msg).show(new DialogListner() {
+//            @Override
+//            public void onOkClicked() {
+////                getActivity().onBackPressed();
+//            }
+//        });
     }
 
     @Override
     public void hideLoading() {
-        ProgressDialogFactory.dismiss();
+        progressBar.setVisibility(View.GONE);
+//        ProgressDialogFactory.dismiss();
     }
 
     @Override
     public void showEmptyView() {
+
         txtEmpty.setVisibility(View.VISIBLE);
         lnlContainer.setVisibility(View.GONE);
     }
