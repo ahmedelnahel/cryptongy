@@ -7,6 +7,9 @@ import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
 
+import java.util.Arrays;
+import java.util.List;
+
 import crypto.soft.cryptongy.R;
 import crypto.soft.cryptongy.feature.account.AccountActivity;
 import crypto.soft.cryptongy.feature.account.CustomDialog;
@@ -18,11 +21,11 @@ import crypto.soft.cryptongy.feature.shared.json.marketsummary.MarketSummary;
 import crypto.soft.cryptongy.feature.shared.json.openorder.OpenOrder;
 import crypto.soft.cryptongy.feature.shared.json.orderhistory.OrderHistory;
 import crypto.soft.cryptongy.feature.shared.json.orderhistory.Result;
-import crypto.soft.cryptongy.feature.shared.json.ticker.Ticker;
 import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
 import crypto.soft.cryptongy.feature.shared.module.Account;
 import crypto.soft.cryptongy.feature.shared.ticker.TickerPresenter;
 import crypto.soft.cryptongy.utils.CoinApplication;
+import crypto.soft.cryptongy.utils.GlobalConstant;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -329,8 +332,22 @@ public class CoinPresenter extends TickerPresenter<CoinView> {
         }
     }
 
-    public void loadTradingView(WebView webView)
+    public void loadTradingView(WebView webView,String coinName,String exchangeValue)
     {
+
+
+        String modifiedCoinName;
+        if(exchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)){
+            List<String> stringList = Arrays.asList(coinName.split("-"));
+            modifiedCoinName=stringList.get(1)+stringList.get(0);
+
+        }
+        else {
+            modifiedCoinName=coinName;
+        }
+
+
+
         int width=getView().displayWidth();
         int height=width*2;
         Log.d("CoinPresenter", "loadTradingView: w/h : "+width+"/"+height);
@@ -344,7 +361,7 @@ public class CoinPresenter extends TickerPresenter<CoinView> {
                 " \"width\": "+width+",\n"+
                 "\"height\": "+height+",\n"+
              //   "  \"autosize\": true,\n" +
-                "  \"symbol\": \"BITTREX:BTCUSDT\",\n" +
+                "  \"symbol\": \""+exchangeValue.toUpperCase()+":"+modifiedCoinName.toUpperCase()+"\",\n" +
                 "  \"interval\": \"D\",\n" +
                 "  \"timezone\": \"Etc/UTC\",\n" +
                 "  \"theme\": \"Light\",\n" +

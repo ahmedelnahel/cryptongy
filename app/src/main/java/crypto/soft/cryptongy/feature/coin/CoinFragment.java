@@ -107,7 +107,7 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
 //        Log.d("Coin screen", "coinName " + coinName );
         double last = 0;
         presenter.getData(coinName,exchangeValue);
-        presenter.loadTradingView(webView);
+        presenter.loadTradingView(webView,coinName,exchangeValue);
 
     }
 
