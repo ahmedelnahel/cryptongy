@@ -22,7 +22,7 @@ public class ProgressDialogFactory {
         else
             pd = new ProgressDialog(context, R.style.Progress_Holo);
         setMessage(msg);
-        pd.setIndeterminate(false);
+        pd.setIndeterminate(true);
         pd.setCancelable(false);
     }
 
