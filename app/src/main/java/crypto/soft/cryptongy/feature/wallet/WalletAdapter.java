@@ -21,7 +21,6 @@ import crypto.soft.cryptongy.utils.ViewFontHelper;
 public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.MyViewHolder> {
 
     private List<Result> resultList;
-    private BittrexServices bittrexServices = new BittrexServices();
     private Activity activity;
     private OnRecyclerItemClickListener<Result> onRecyclerItemClickListener;
 

@@ -11,6 +11,9 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
+import crypto.soft.cryptongy.feature.shared.json.binance.wallet.Balance;
+import crypto.soft.cryptongy.feature.shared.json.binance.wallet.BnWallet;
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "Currency",
@@ -22,6 +25,15 @@ import java.util.Map;
         "Uuid"
 })
 public class Result {
+    public Result(Balance b) {
+        this.balance = Double.valueOf(b.getFree());
+        this.currency = b.getAsset();
+        this.available = Double.valueOf(b.getFree());
+        this.pending = Double.valueOf(b.getLocked());
+    }
+
+    public Result() {
+    }
 
     @JsonProperty("Currency")
     private String currency;

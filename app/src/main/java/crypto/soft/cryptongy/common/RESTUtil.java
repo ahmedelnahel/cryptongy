@@ -199,6 +199,7 @@ public class RESTUtil {
 
     public String callRestHttpClient(String baseURL , String key, String secret, Map<String, String> paramters, String algorithm, String method){
         String response = null;
+
         if (method == null) method = "GET";
         try {
 

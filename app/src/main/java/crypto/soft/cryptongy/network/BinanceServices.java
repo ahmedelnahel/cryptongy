@@ -23,6 +23,7 @@ import crypto.soft.cryptongy.feature.shared.json.binance.marketsummary.BinanceMa
 import crypto.soft.cryptongy.feature.shared.json.binance.order.BnNewOrder;
 import crypto.soft.cryptongy.feature.shared.json.binance.order.BnOrders;
 import crypto.soft.cryptongy.feature.shared.json.binance.time.BnTime;
+import crypto.soft.cryptongy.feature.shared.json.binance.wallet.BnWallet;
 import crypto.soft.cryptongy.feature.shared.json.limitorder.LimitOrder;
 import crypto.soft.cryptongy.feature.shared.json.market.MarketSummaries;
 import crypto.soft.cryptongy.feature.shared.json.market.Result;
@@ -364,8 +365,9 @@ public class BinanceServices {
 
 
     public Wallet getWallet(Account account) throws IOException {
-        Wallet wallet = null;
+        Wallet wallet = new Wallet();
 
+<<<<<<< HEAD
         if (account == null) {
             wallet = new Wallet();
             wallet.setSuccess(false);
@@ -374,22 +376,38 @@ public class BinanceServices {
             final String url = "https://bittrex.com/api/v1.1/account/getbalances";
             String walletStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret());
 
+=======
+        if(account == null) {
+            wallet.setSuccess(false);
+            wallet.setMessage("Connection Error");
+        }
+        else {
+            final String url = "https://api.binance.com/api/v3/account";
+            String walletStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret(), null, "HmacSHA256", "GET");
+            Log.i("wallet response " , walletStr);
+>>>>>>> 9b89df67e82362023c8a4809ec4e740464e710ce
             if (walletStr == null) {
-                wallet = new Wallet();
                 wallet.setSuccess(false);
                 wallet.setMessage("Connection Error");
             } else {
                 ObjectMapper mapper = new ObjectMapper();
-                wallet = mapper.readValue(walletStr, Wallet.class);
+                BnWallet bnWallet = mapper.readValue(walletStr, BnWallet.class);
                 wallet.setJson(walletStr);
-//        Log.i("response " , wallet.getSuccess() + wallet.getJson());
-                if (wallet.getSuccess()) {
+                if (bnWallet != null && StringUtils.isEmpty(bnWallet.getMsg()) && bnWallet.getBalances() != null) {
+                    wallet.setSuccess(true);
+                    ArrayList<crypto.soft.cryptongy.feature.shared.json.wallet.Result> results = new ArrayList();
                     HashMap<String, crypto.soft.cryptongy.feature.shared.json.wallet.Result> coinsMap = new HashMap<>();
-                    for (crypto.soft.cryptongy.feature.shared.json.wallet.Result r : wallet.getResult()) {
-                        if (r.getBalance() != 0)
+                    for (crypto.soft.cryptongy.feature.shared.json.binance.wallet.Balance b : bnWallet.getBalances()) {
+                        crypto.soft.cryptongy.feature.shared.json.wallet.Result r = new crypto.soft.cryptongy.feature.shared.json.wallet.Result(b);
                             coinsMap.put(r.getCurrency(), r);
+                        results.add(r);
                     }
                     wallet.setCoinsMap(coinsMap);
+                    wallet.setResult(results);
+                }else
+                {
+                    wallet.setSuccess(false);
+                    wallet.setMessage(bnWallet.getMsg());
                 }
             }
         }
@@ -422,7 +440,7 @@ public class BinanceServices {
                     ObjectMapper mapper = new ObjectMapper();
                     BnOrders bnopenOrder = mapper.readValue(ordersStr, BnOrders.class);
                     orderHistory.setJson(ordersStr);
-                    Log.i("response ", orderHistory.getJson());
+                    Log.i("order history response ", orderHistory.getJson());
                     if (bnopenOrder != null && StringUtils.isEmpty(bnopenOrder.getMsg()) && bnopenOrder.getResult() != null) {
                         orderHistory.setSuccess(true);
                         ArrayList<crypto.soft.cryptongy.feature.shared.json.orderhistory.Result> results = new ArrayList();
