@@ -1,6 +1,7 @@
 package crypto.soft.cryptongy.feature.coin;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
@@ -19,6 +20,8 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
+
+import org.java_websocket.client.WebSocketClient;
 
 import crypto.soft.cryptongy.R;
 import crypto.soft.cryptongy.feature.account.CustomDialog;
@@ -58,6 +61,14 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
     private String coinName = "";
     private String exchangeValue="";
 
+    WebSocketClient mWebSocketClient;
+
+
+
+
+
+    Handler handler;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -75,8 +86,95 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
         setTitle();
         // hideTotal();
 
+
+//        try {
+//            connect();
+//        }
+//        catch (Exception e){
+//            e.printStackTrace();
+//        }
+
         return view;
     }
+//    private void connect() throws Exception {
+//        String websocketEndPointUrl;
+//        URI uri;
+//        try {
+//
+//            websocketEndPointUrl= GlobalConstant.getWebSocketUrl();
+//            Log.i(TAG, " WSURL: " + websocketEndPointUrl);
+//
+//            uri = new URI(websocketEndPointUrl);
+//        } catch (URISyntaxException e) {
+//            Log.e(TAG, e.getMessage());
+//            return;
+//        }
+//
+//        mWebSocketClient = new WebSocketClient(uri)
+//        {
+//            @Override
+//            public void onOpen(ServerHandshake serverHandshake) {
+//                Log.i("Websocket", "Opened");
+//            }
+//
+//            @Override
+//            public void onMessage(String s) {
+//                Log.d(TAG, "onMessage: websocket : "+s);
+//
+//
+//                Ticker ticker=new Ticker();
+//                if(s == null || "".equals(s)) {
+//                    ticker.setSuccess(false);
+//                    ticker.setMessage("Connection Error");
+//                }
+//                else
+//                {
+//
+//
+//                    ObjectMapper mapper = new ObjectMapper();
+//                    BnSocketOrders[]  r = null;
+//                    try {
+//                        r = mapper.readValue(s, BnSocketOrders[].class);
+//
+//                        Log.d(TAG, "onMessage: r"+ r[0]);
+//
+//                        Log.d(TAG, "onMessage: "+r);
+//
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+////                    if (r.getMsg() == null || "".equals(r.getMsg())) {
+////                        ticker.setBinanceResult(r);
+////                        ticker.setJson(tickerStr);
+////                        ticker.setSuccess(true);
+////                    }
+////                    else
+////                    {
+////                        ticker.setSuccess(false);
+////                        ticker.setMessage(r.getMsg());
+////
+////                    }
+//                }
+//
+//                //final String message =s;
+//
+//            }
+//
+//            @Override
+//            public void onClose(int i, String s, boolean b) {
+//                Log.i("Websocket", "Closed " + s);
+//            }
+//
+//            @Override
+//            public void onError(Exception e) {
+//                Log.i("Websocket", "Error " + e.getMessage());
+//            }
+//        };
+//
+//
+//
+//        mWebSocketClient.connect();
+//    }
 
     public void hideTotal() {
         txtBtc.setVisibility(View.GONE);
@@ -398,4 +496,6 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
         int dp = Math.round(width / ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT));
         return dp;
     }
+
+
 }

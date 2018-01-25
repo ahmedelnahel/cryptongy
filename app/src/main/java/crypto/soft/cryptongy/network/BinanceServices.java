@@ -4,19 +4,24 @@ import android.util.Log;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.java_websocket.client.WebSocketClient;
+import org.java_websocket.handshake.ServerHandshake;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import crypto.soft.cryptongy.common.RESTUtil;
+import crypto.soft.cryptongy.feature.coin.BnSocketOrders;
 import crypto.soft.cryptongy.feature.shared.json.action.Cancel;
 import crypto.soft.cryptongy.feature.shared.json.binance.cancel.BnCancel;
 import crypto.soft.cryptongy.feature.shared.json.binance.marketsummary.BinanceMarket;
-import crypto.soft.cryptongy.feature.shared.json.binance.order.BnOrders;
 import crypto.soft.cryptongy.feature.shared.json.binance.order.BnNewOrder;
+import crypto.soft.cryptongy.feature.shared.json.binance.order.BnOrders;
 import crypto.soft.cryptongy.feature.shared.json.binance.time.BnTime;
 import crypto.soft.cryptongy.feature.shared.json.limitorder.LimitOrder;
 import crypto.soft.cryptongy.feature.shared.json.market.MarketSummaries;
@@ -28,6 +33,9 @@ import crypto.soft.cryptongy.feature.shared.json.orderhistory.OrderHistory;
 import crypto.soft.cryptongy.feature.shared.json.ticker.Ticker;
 import crypto.soft.cryptongy.feature.shared.json.wallet.Wallet;
 import crypto.soft.cryptongy.feature.shared.module.Account;
+import io.reactivex.subjects.PublishSubject;
+
+import static android.content.ContentValues.TAG;
 
 
 /**
@@ -43,14 +51,13 @@ public class BinanceServices {
         String marketSummariesStr = new RESTUtil().callREST(url);
         MarketSummaries marketSummaries_ = new MarketSummaries();
         Log.d("Binance MarketSummaries", "response " + marketSummariesStr);
-        if(marketSummariesStr == null || "".equals(marketSummariesStr)) {
+        if (marketSummariesStr == null || "".equals(marketSummariesStr)) {
             Log.d("Binance MarketSummaries", "response in error " + marketSummariesStr);
             marketSummaries_.setSuccess(false);
             marketSummaries_.setMessage("Connection Error");
-        }
-        else {
-            if(marketSummariesStr != null && !marketSummariesStr.contains("msg"))
-            marketSummariesStr = "{\"result\":" + marketSummariesStr + " }";
+        } else {
+            if (marketSummariesStr != null && !marketSummariesStr.contains("msg"))
+                marketSummariesStr = "{\"result\":" + marketSummariesStr + " }";
             ObjectMapper mapper = new ObjectMapper();
             BinanceMarket binanceMarket = mapper.readValue(marketSummariesStr, BinanceMarket.class);
 
@@ -69,9 +76,7 @@ public class BinanceServices {
 
                 marketSummaries_.setCoinsMap(coinsMap);
                 marketSummaries_.setResult(results);
-            }
-            else
-            {
+            } else {
                 marketSummaries_.setSuccess(false);
                 marketSummaries_.setMessage(binanceMarket.getMsg());
 
@@ -84,14 +89,13 @@ public class BinanceServices {
 
 
     public MarketSummary getMarketSummary(String market) throws IOException {
-        final String url = "https://api.binance.com/api/v1/ticker/24hr?symbol="+market;
+        final String url = "https://api.binance.com/api/v1/ticker/24hr?symbol=" + market;
         String marketSummaryStr = new RESTUtil().callREST(url);
-        MarketSummary marketSummary_= new MarketSummary();
-        if(marketSummaryStr == null || "".equals(marketSummaryStr)) {
+        MarketSummary marketSummary_ = new MarketSummary();
+        if (marketSummaryStr == null || "".equals(marketSummaryStr)) {
             marketSummary_.setSuccess(false);
             marketSummary_.setMessage("Connection Error");
-        }
-        else {
+        } else {
             ObjectMapper mapper = new ObjectMapper();
             crypto.soft.cryptongy.feature.shared.json.binance.marketsummary.Result r = mapper.readValue(marketSummaryStr, crypto.soft.cryptongy.feature.shared.json.binance.marketsummary.Result.class);
             if (r.getMsg() == null || "".equals(r.getMsg())) {
@@ -101,28 +105,190 @@ public class BinanceServices {
                 marketSummary_.setResult(rl);
                 marketSummary_.setJson(marketSummaryStr);
                 marketSummary_.setSuccess(true);
-            }
-            else
-            {
+            } else {
                 marketSummary_.setSuccess(false);
                 marketSummary_.setMessage(r.getMsg());
 
             }
-        Log.i("MarketSummary", marketSummaryStr);
+            Log.i("MarketSummary", marketSummaryStr);
         }
         return marketSummary_;
     }
 
+
+//    public Ticker getTickerConnectSocket() throws Exception {
+//        String websocketEndPointUrl;
+//        WebSocketClient mWebSocketClient;
+//
+//        URI uri;
+//        try {
+//
+//            websocketEndPointUrl= "wss://stream.binance.com:9443/ws/!ticker@arr";
+//            Log.i(TAG, " WSURL: " + websocketEndPointUrl);
+//
+//            uri = new URI(websocketEndPointUrl);
+//        } catch (URISyntaxException e) {
+//            Log.e(TAG, e.getMessage());
+//            return null;
+//        }
+//
+//        mWebSocketClient = new WebSocketClient(uri)
+//        {
+//            @Override
+//            public void onOpen(ServerHandshake serverHandshake) {
+//                Log.i("Websocket", "Opened");
+//            }
+//
+//            @Override
+//            public void onMessage(String s) {
+//                Log.d(TAG, "onMessage: websocket : "+s);
+//
+//
+//                Ticker ticker=new Ticker();
+//                if(s == null || "".equals(s)) {
+//                    ticker.setSuccess(false);
+//                    ticker.setMessage("Connection Error");
+//                }
+//                else
+//                {
+//
+//
+//                    ObjectMapper mapper = new ObjectMapper();
+//                    BnSocketOrders[]  r = null;
+//                    try {
+//                        r = mapper.readValue(s, BnSocketOrders[].class);
+//
+//                        Log.d(TAG, "onMessage: r"+ r[0].getSymbol());
+//
+//
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+////                    if (r.get() == null || "".equals(r.getMsg())) {
+////                        ticker.setBinanceResult(r[]);
+////                        ticker.setJson(tickerStr);
+////                        ticker.setSuccess(true);
+////                    }
+////                    else
+////                    {
+////                        ticker.setSuccess(false);
+////                        ticker.setMessage(r.getMsg());
+////
+////                    }
+//                }
+//
+//                //final String message =s;
+//
+//            }
+//
+//            @Override
+//            public void onClose(int i, String s, boolean b) {
+//                Log.i("Websocket", "Closed " + s);
+//            }
+//
+//            @Override
+//            public void onError(Exception e) {
+//                Log.i("Websocket", "Error " + e.getMessage());
+//            }
+//        };
+//
+//
+//
+//        mWebSocketClient.connect();
+//    }
+
+
+    URI uri;
+    Ticker ticker;
+
+    public WebSocketClient mWebSocketClient;
+
+    public PublishSubject<WebSocketClient> sourceWebSocketClient = PublishSubject.create();
+    public PublishSubject<Ticker> source = PublishSubject.create();
+
+    public void getTickerConnectSocket(String market) throws Exception {
+        String websocketEndPointUrl;
+
+        ticker = new Ticker();
+
+
+        try {
+
+            websocketEndPointUrl = "wss://stream.binance.com:9443/ws/" + market.trim().toLowerCase() + "@ticker";
+            Log.i(TAG, " WSURL: " + websocketEndPointUrl);
+
+            uri = new URI(websocketEndPointUrl);
+        } catch (URISyntaxException e) {
+            Log.e(TAG, e.getMessage());
+            return ;
+        }
+
+         mWebSocketClient = new WebSocketClient(uri) {
+            @Override
+            public void onOpen(ServerHandshake serverHandshake) {
+                Log.i("Websocket", "Opened");
+            }
+
+            @Override
+            public void onMessage(String s) {
+                Log.d(TAG, "onMessage: websocket : " + s);
+
+                if (s == null || "".equals(s)) {
+                    ticker.setSuccess(false);
+                    ticker.setMessage("Connection Error");
+                } else {
+
+
+                    ObjectMapper mapper = new ObjectMapper();
+                    BnSocketOrders r = null;
+                    try {
+                        r = mapper.readValue(s, BnSocketOrders.class);
+
+                        Log.d(TAG, "onMessage: " + r.getSymbol());
+
+                        ticker.setBinanceResultWebSocket(r);
+                        ticker.setJson(s);
+                        ticker.setSuccess(true);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+
+                }
+
+
+                source.onNext(ticker);
+                sourceWebSocketClient.onNext(mWebSocketClient);
+                //final String message =s;
+
+            }
+
+            @Override
+            public void onClose(int i, String s, boolean b) {
+                Log.i("Websocket", "Closed " + s);
+            }
+
+            @Override
+            public void onError(Exception e) {
+                Log.i("Websocket", "Error " + e.getMessage());
+            }
+        };
+
+
+        mWebSocketClient.connect();
+
+
+    }
+
+
     public Ticker getTicker(String market) throws IOException {
-        final String url = "https://api.binance.com/api/v1/ticker/24hr?symbol="+market;
+        final String url = "https://api.binance.com/api/v1/ticker/24hr?symbol=" + market;
         Ticker ticker = new Ticker();
         String tickerStr = new RESTUtil().callREST(url);
-        if(tickerStr == null || "".equals(tickerStr)) {
+        if (tickerStr == null || "".equals(tickerStr)) {
             ticker.setSuccess(false);
             ticker.setMessage("Connection Error");
-        }
-        else
-        {
+        } else {
 
             ObjectMapper mapper = new ObjectMapper();
             crypto.soft.cryptongy.feature.shared.json.binance.marketsummary.Result r = mapper.readValue(tickerStr, crypto.soft.cryptongy.feature.shared.json.binance.marketsummary.Result.class);
@@ -130,9 +296,7 @@ public class BinanceServices {
                 ticker.setBinanceResult(r);
                 ticker.setJson(tickerStr);
                 ticker.setSuccess(true);
-            }
-            else
-            {
+            } else {
                 ticker.setSuccess(false);
                 ticker.setMessage(r.getMsg());
 
@@ -143,36 +307,33 @@ public class BinanceServices {
         return ticker;
     }
 
-    public OpenOrder getOpnOrders( Account account, String coinName) throws IOException {
+    public OpenOrder getOpnOrders(Account account, String coinName) throws IOException {
         OpenOrder openOrder = new OpenOrder();
-        if(account == null)
-        {
+        if (account == null) {
             openOrder.setSuccess(false);
             openOrder.setMessage("No API");
-        }
-        else {
+        } else {
 
             final String url = "https://api.binance.com/api/v3/openOrders";
             HashMap param = null;
 
-                    if(coinName != null && !StringUtils.isEmpty(coinName)) {
-                        param  = new HashMap();
-                        param.put("symbol", coinName);
-                    }
+            if (coinName != null && !StringUtils.isEmpty(coinName)) {
+                param = new HashMap();
+                param.put("symbol", coinName);
+            }
             String ordersStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret(), param, "HmacSHA256", null);
             openOrder = new OpenOrder();
             if (ordersStr == null) {
                 openOrder.setSuccess(false);
                 openOrder.setMessage("Connection Error");
             } else {
-                if(ordersStr != null && !ordersStr.contains("msg"))
-                ordersStr = "{\"result\":" + ordersStr + " }";
+                if (ordersStr != null && !ordersStr.contains("msg"))
+                    ordersStr = "{\"result\":" + ordersStr + " }";
                 ObjectMapper mapper = new ObjectMapper();
                 BnOrders bnopenOrder = mapper.readValue(ordersStr, BnOrders.class);
                 openOrder.setJson(ordersStr);
-                Log.i("response " , openOrder.getSuccess() + openOrder.getJson());
-                if(bnopenOrder != null && StringUtils.isEmpty(bnopenOrder.getMsg()) && bnopenOrder.getResult() != null)
-                {
+                Log.i("response ", openOrder.getSuccess() + openOrder.getJson());
+                if (bnopenOrder != null && StringUtils.isEmpty(bnopenOrder.getMsg()) && bnopenOrder.getResult() != null) {
                     openOrder.setSuccess(true);
                     ArrayList<crypto.soft.cryptongy.feature.shared.json.openorder.Result> results = new ArrayList();
                     for (crypto.soft.cryptongy.feature.shared.json.binance.order.Result r : bnopenOrder.getResult()) {
@@ -180,9 +341,7 @@ public class BinanceServices {
                         results.add(or);
                     }
                     openOrder.setResult(results);
-                }
-                else
-                {
+                } else {
                     openOrder.setSuccess(false);
                     openOrder.setMessage("Error: " + bnopenOrder.getMsg());
                 }
@@ -195,8 +354,7 @@ public class BinanceServices {
         BnTime time = null;
         String timeurl = "https://api.binance.com/api/v1/time";
         String timestr = new RESTUtil().callREST(timeurl);
-        if (!StringUtils.isEmpty(timestr))
-        {
+        if (!StringUtils.isEmpty(timestr)) {
             ObjectMapper mapper = new ObjectMapper();
             time = mapper.readValue(timestr, BnTime.class);
 
@@ -208,12 +366,11 @@ public class BinanceServices {
     public Wallet getWallet(Account account) throws IOException {
         Wallet wallet = null;
 
-        if(account == null) {
+        if (account == null) {
             wallet = new Wallet();
             wallet.setSuccess(false);
             wallet.setMessage("Connection Error");
-        }
-        else {
+        } else {
             final String url = "https://bittrex.com/api/v1.1/account/getbalances";
             String walletStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret());
 
@@ -239,20 +396,18 @@ public class BinanceServices {
         return wallet;
     }
 
-    public OrderHistory getOrderHistory( Account account, String coinName) throws IOException {
+    public OrderHistory getOrderHistory(Account account, String coinName) throws IOException {
         OrderHistory orderHistory = new OrderHistory();
         orderHistory.setSuccess(false);
-        if(account == null)
-        {
+        if (account == null) {
             orderHistory.setSuccess(false);
             orderHistory.setMessage("No API");
-        }
-        else {
+        } else {
 
             final String url = "https://api.binance.com/api/v3/allOrders";
             HashMap param = null;
 
-            if(coinName != null && !StringUtils.isEmpty(coinName)) {
+            if (coinName != null && !StringUtils.isEmpty(coinName)) {
                 param = new HashMap();
                 param.put("symbol", coinName);
 
@@ -283,9 +438,7 @@ public class BinanceServices {
                         orderHistory.setMessage("Error: " + bnopenOrder.getMsg());
                     }
                 }
-            }
-            else
-            {
+            } else {
                 orderHistory.setSuccess(true);
                 orderHistory.setResult(new ArrayList());
             }
@@ -294,15 +447,12 @@ public class BinanceServices {
     }
 
 
-
-    public Cancel cancelOrder(String uuid, String coinName,  Account account) throws IOException
-    {
+    public Cancel cancelOrder(String uuid, String coinName, Account account) throws IOException {
         Cancel cancel = new Cancel();
-        if(account == null) {
+        if (account == null) {
             cancel.setSuccess(false);
             cancel.setMessage("No API");
-        }else
-        {
+        } else {
             final String url = "https://api.binance.com/api/v3/order";
             HashMap<String, String> params = new HashMap<String, String>();
             params.put("symbol", coinName);
@@ -316,12 +466,10 @@ public class BinanceServices {
             } else {
                 ObjectMapper mapper = new ObjectMapper();
                 BnCancel bnCancel = mapper.readValue(cancelStr, BnCancel.class);
-                if (!StringUtils.isEmpty(bnCancel.getMsg()))
-                {
+                if (!StringUtils.isEmpty(bnCancel.getMsg())) {
                     cancel.setSuccess(false);
                     cancel.setMessage(bnCancel.getMsg());
-                }
-                else
+                } else
                     cancel.setSuccess(true);
             }
         }
@@ -330,7 +478,6 @@ public class BinanceServices {
     }
 
     /**
-     *
      * @param market
      * @param quantity
      * @param rate
@@ -339,14 +486,12 @@ public class BinanceServices {
      * @return
      * @throws IOException
      */
-    public LimitOrder newOrder(String market, String quantity, String rate, String orderType, Account account) throws IOException
-    {
+    public LimitOrder newOrder(String market, String quantity, String rate, String orderType, Account account) throws IOException {
         LimitOrder limitOrder = new LimitOrder();
-        if(account == null) {
+        if (account == null) {
             limitOrder.setSuccess(false);
             limitOrder.setMessage("No API");
-        }
-        else {
+        } else {
             final String url = "https://api.binance.com/api/v3/order";
             HashMap<String, String> params = new HashMap<String, String>();
             params.put("symbol", market);
@@ -363,12 +508,10 @@ public class BinanceServices {
             } else {
                 ObjectMapper mapper = new ObjectMapper();
                 BnNewOrder bnNewOrder = mapper.readValue(buyLimitStr, BnNewOrder.class);
-                if (!StringUtils.isEmpty(bnNewOrder.getMsg()))
-                {
+                if (!StringUtils.isEmpty(bnNewOrder.getMsg())) {
                     limitOrder.setSuccess(false);
                     limitOrder.setMessage(bnNewOrder.getMsg());
-                }
-                else
+                } else
                     limitOrder.setSuccess(true);
             }
         }
@@ -377,14 +520,12 @@ public class BinanceServices {
     }
 
 
-    public Order getOrder(String orderUUID, String market,  Account account) throws IOException
-    {
+    public Order getOrder(String orderUUID, String market, Account account) throws IOException {
         Order order = new Order();
-        if(account == null) {
+        if (account == null) {
             order.setSuccess(false);
             order.setMessage("No API");
-        }
-        else {
+        } else {
             final String url = "https://api.binance.com/api/v3/order";
             HashMap<String, String> params = new HashMap<String, String>();
             params.put("symbol", market);
@@ -398,20 +539,18 @@ public class BinanceServices {
             } else {
                 ObjectMapper mapper = new ObjectMapper();
                 BnOrders bnOrder = mapper.readValue(orderStr, BnOrders.class);
-                if (!StringUtils.isEmpty(bnOrder.getMsg()))
-                {
+                if (!StringUtils.isEmpty(bnOrder.getMsg())) {
                     order.setSuccess(false);
                     order.setMessage(bnOrder.getMsg());
-                }
-                else {
+                } else {
                     order.setSuccess(true);
 
                     for (crypto.soft.cryptongy.feature.shared.json.binance.order.Result r : bnOrder.getResult()) {
 
-                            crypto.soft.cryptongy.feature.shared.json.order.Result or = new crypto.soft.cryptongy.feature.shared.json.order.Result(r);
-                            order.setResult(or);
+                        crypto.soft.cryptongy.feature.shared.json.order.Result or = new crypto.soft.cryptongy.feature.shared.json.order.Result(r);
+                        order.setResult(or);
 
-                        }
+                    }
 
                 }
 
@@ -420,7 +559,6 @@ public class BinanceServices {
         return order;
 
     }
-
 
 
 }

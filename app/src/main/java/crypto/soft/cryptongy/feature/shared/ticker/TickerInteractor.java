@@ -17,6 +17,9 @@ import crypto.soft.cryptongy.utils.GlobalConstant;
 public class TickerInteractor {
     public void getTicker(final String coinName, final String exchangeValue, final OnFinishListner<Ticker> listner) {
 
+      final BinanceServices binanceServices=new BinanceServices();
+      Ticker ticker;
+
         new AsyncTask<Void, Void, Ticker>() {
 
             @Override
@@ -26,11 +29,10 @@ public class TickerInteractor {
 
                         return new BittrexServices().getTicker(coinName);
                     }
-                    if(exchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BINANCE)){
 
-                        return new BinanceServices().getTicker(coinName);
-                    }
                 } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 return null;
@@ -48,4 +50,7 @@ public class TickerInteractor {
             }
         }.execute();
     }
+
+
+
 }

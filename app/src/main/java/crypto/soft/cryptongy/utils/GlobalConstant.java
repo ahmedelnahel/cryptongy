@@ -25,3 +25,6 @@ public class GlobalConstant {
         public final static String BINANCE="Binance";
     }
 }
+
+
+
