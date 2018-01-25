@@ -55,7 +55,7 @@ public class BnSocketOrders {
     @JsonProperty("x")
     private String prevClosePrice;
     @JsonProperty("c")
-    private String lastPrice;
+    private String closePrice;
     @JsonProperty("Q")
     private String lastQty;
     @JsonProperty("b")
@@ -152,13 +152,13 @@ public class BnSocketOrders {
 //    }
 //
 @JsonProperty("c")
-    public String getLastPrice() {
-        return lastPrice;
+    public String getClosePrice() {
+        return closePrice;
     }
 
     @JsonProperty("c")
-    public void setLastPrice(String lastPrice) {
-        this.lastPrice = lastPrice;
+    public void setClosePrice(String closePrice) {
+        this.closePrice = closePrice;
     }
 //
 //    public String getLastQty() {

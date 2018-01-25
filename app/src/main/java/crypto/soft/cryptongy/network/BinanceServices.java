@@ -131,9 +131,6 @@ public class BinanceServices {
     }
 
 
-    //
-
-
     public MarketSummary getMarketSummary(String market) throws IOException {
         final String url = "https://api.binance.com/api/v1/ticker/24hr?symbol=" + market;
         String marketSummaryStr = new RESTUtil().callREST(url);
@@ -161,87 +158,6 @@ public class BinanceServices {
         return marketSummary_;
     }
 
-
-//    public Ticker getTickerConnectSocket() throws Exception {
-//        String websocketEndPointUrl;
-//        WebSocketClient mWebSocketClient;
-//
-//        URI uri;
-//        try {
-//
-//            websocketEndPointUrl= "wss://stream.binance.com:9443/ws/!ticker@arr";
-//            Log.i(TAG, " WSURL: " + websocketEndPointUrl);
-//
-//            uri = new URI(websocketEndPointUrl);
-//        } catch (URISyntaxException e) {
-//            Log.e(TAG, e.getMessage());
-//            return null;
-//        }
-//
-//        mWebSocketClient = new WebSocketClient(uri)
-//        {
-//            @Override
-//            public void onOpen(ServerHandshake serverHandshake) {
-//                Log.i("Websocket", "Opened");
-//            }
-//
-//            @Override
-//            public void onMessage(String s) {
-//                Log.d(TAG, "onMessage: websocket : "+s);
-//
-//
-//                Ticker ticker=new Ticker();
-//                if(s == null || "".equals(s)) {
-//                    ticker.setSuccess(false);
-//                    ticker.setMessage("Connection Error");
-//                }
-//                else
-//                {
-//
-//
-//                    ObjectMapper mapper = new ObjectMapper();
-//                    BnSocketOrders[]  r = null;
-//                    try {
-//                        r = mapper.readValue(s, BnSocketOrders[].class);
-//
-//                        Log.d(TAG, "onMessage: r"+ r[0].getSymbol());
-//
-//
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-////                    if (r.get() == null || "".equals(r.getMsg())) {
-////                        ticker.setBinanceResult(r[]);
-////                        ticker.setJson(tickerStr);
-////                        ticker.setSuccess(true);
-////                    }
-////                    else
-////                    {
-////                        ticker.setSuccess(false);
-////                        ticker.setMessage(r.getMsg());
-////
-////                    }
-//                }
-//
-//                //final String message =s;
-//
-//            }
-//
-//            @Override
-//            public void onClose(int i, String s, boolean b) {
-//                Log.i("Websocket", "Closed " + s);
-//            }
-//
-//            @Override
-//            public void onError(Exception e) {
-//                Log.i("Websocket", "Error " + e.getMessage());
-//            }
-//        };
-//
-//
-//
-//        mWebSocketClient.connect();
-//    }
 
 
     URI uri;
@@ -412,25 +328,14 @@ public class BinanceServices {
     public Wallet getWallet(Account account) throws IOException {
         Wallet wallet = new Wallet();
 
-<<<<<<< HEAD
-        if (account == null) {
-            wallet = new Wallet();
-            wallet.setSuccess(false);
-            wallet.setMessage("Connection Error");
-        } else {
-            final String url = "https://bittrex.com/api/v1.1/account/getbalances";
-            String walletStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret());
-
-=======
         if(account == null) {
             wallet.setSuccess(false);
-            wallet.setMessage("Connection Error");
+            wallet.setMessage("API not found");
         }
         else {
-            final String url = "https://api.binance.com/api/v3/account";
+            String url = "https://api.binance.com/api/v3/account";
             String walletStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret(), null, "HmacSHA256", "GET");
             Log.i("wallet response " , walletStr);
->>>>>>> 9b89df67e82362023c8a4809ec4e740464e710ce
             if (walletStr == null) {
                 wallet.setSuccess(false);
                 wallet.setMessage("Connection Error");

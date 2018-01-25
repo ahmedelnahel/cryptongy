@@ -161,9 +161,7 @@ public class CoinPresenter extends TickerPresenter<CoinView> {
         });
     }
 
-    private Observer<? super Ticker> getObserver() {
-        return null;
-    }
+
 
     public void onOptionItemClicked(int id) {
         switch (id) {
