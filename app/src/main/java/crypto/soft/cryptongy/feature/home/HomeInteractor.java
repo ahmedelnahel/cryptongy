@@ -210,25 +210,12 @@ public class HomeInteractor {
         protected void onPostExecute(MarketSummaries marketSummaries) {
             super.onPostExecute(marketSummaries);
             onBinanceLoadListner.onComplete(results, marketSummaries);
-            if (marketSummaries != null && marketSummaries.getSuccess() && marketSummaries.getResult() != null) {
-//                onBinanceLoadListner.onComplete(results, marketSummaries);
-            } else {
-//                onBinanceLoadListner.onFail("");
-            }
+
         }
     }
 
     public void closeWebSocket() {
         binanceServices.closeWebSocket();
-//        binanceServices.sourceWebSocketClient.subscribe(new Consumer<WebSocketClient>() {
-//            @Override
-//            public void accept(WebSocketClient webSocketClient) throws Exception {
-//
-//                if (webSocketClient != null) {
-//                    webSocketClient.closeConnection(CloseFrame.NORMAL, "its closeing time");
-//                }
-//            }
-//        });
 
     }
 

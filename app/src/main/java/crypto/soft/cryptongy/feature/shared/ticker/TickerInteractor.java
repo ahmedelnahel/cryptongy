@@ -86,17 +86,7 @@ public class TickerInteractor {
         binanceServices.closeWebSocket();
 
     }
-//        binanceServices.sourceWebSocketClient.subscribe(new Consumer<WebSocketClient>() {
-//            @Override
-//            public void accept(WebSocketClient webSocketClient) throws Exception {
-//
-//                if(webSocketClient!=null){
-//                    webSocketClient.closeConnection(CloseFrame.NORMAL,"its closeing time");
-//                }
-//            }
-//        });
-//
-//    }
+
 
 
 

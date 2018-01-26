@@ -47,7 +47,7 @@ public class Ticker {
     public void setBinanceResultWebSocket(BnSocketOrders r)
     {
         this.result = new Result();
-        result.setLast(r.getOpenPrice()==null?0.0:Double.valueOf(r.getOpenPrice()));
+        result.setLast(r.getLastPrice()==null?0.0:Double.valueOf(r.getOpenPrice()));
         result.setAsk(r.getAskPrice()==null?0.0:Double.valueOf(r.getAskPrice()));
         result.setBid(r.getBidPrice()==null?0.0:Double.valueOf(r.getBidPrice()));
     }
