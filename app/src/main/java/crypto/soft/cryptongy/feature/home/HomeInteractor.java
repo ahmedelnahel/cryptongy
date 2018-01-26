@@ -7,9 +7,6 @@ import android.os.AsyncTask;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import org.java_websocket.client.WebSocketClient;
-import org.java_websocket.framing.CloseFrame;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -273,15 +270,16 @@ public class HomeInteractor {
     }
 
     public void closeWebSocket() {
-        binanceServices.sourceWebSocketClient.subscribe(new Consumer<WebSocketClient>() {
-            @Override
-            public void accept(WebSocketClient webSocketClient) throws Exception {
-
-                if (webSocketClient != null) {
-                    webSocketClient.closeConnection(CloseFrame.NORMAL, "its closeing time");
-                }
-            }
-        });
+        binanceServices.closeWebSocket();
+//        binanceServices.sourceWebSocketClient.subscribe(new Consumer<WebSocketClient>() {
+//            @Override
+//            public void accept(WebSocketClient webSocketClient) throws Exception {
+//
+//                if (webSocketClient != null) {
+//                    webSocketClient.closeConnection(CloseFrame.NORMAL, "its closeing time");
+//                }
+//            }
+//        });
 
     }
 
