@@ -23,19 +23,19 @@ import crypto.soft.cryptongy.utils.GlobalConstant;
  */
 
 public class OrderInteractor {
-    public void getOpenOrder(final String coinName, final Account account, final OnFinishListner<OpenOrder> listner) {
+    public void getOpenOrder(final String coinName,final String exchangeValue, final Account account, final OnFinishListner<OpenOrder> listner) {
         new AsyncTask<Void, Void, OpenOrder>() {
 
             @Override
             protected OpenOrder doInBackground(Void... voids) {
                 OpenOrder openOrder = null;
                 try {
-                    if(account.getExchange().equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)){
+                    if(exchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)){
 
 //                        openOrder = getMockOpnOrders(account,coinName);
                         openOrder = new BittrexServices().getOpnOrders(account);
                     }
-                    if(account.getExchange().equalsIgnoreCase(GlobalConstant.Exchanges.BINANCE)){
+                    if(exchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BINANCE)){
 
 //                        openOrder = getMockOpnOrders(account,coinName);
                         openOrder=new BinanceServices().getOpnOrders(account,coinName);

@@ -39,17 +39,20 @@ import io.reactivex.disposables.Disposable;
 public class CoinPresenter extends TickerPresenter<CoinView> {
     private CoinInteractor coinInteractor;
     private Context context;
+    private String exchangeValue;
 
 
     public CoinPresenter(Context context) {
         super(context);
         this.context=context;
         coinInteractor = new CoinInteractor();
+        exchangeValue=GlobalConstant.Exchanges.BITTREX;
     }
 
     public void getData(final String coinName,final String exchangeValue) {
         CoinApplication application = (CoinApplication) context.getApplicationContext();
         Account account = application.getReadAccount(exchangeValue);
+        this.exchangeValue=exchangeValue;
 
         if (account != null) {
             if (getView() != null) {
@@ -104,7 +107,7 @@ public class CoinPresenter extends TickerPresenter<CoinView> {
                     }
                 }
             };
-            Observable.merge(getMarketSummary(coinName,exchangeValue), getOpenOrders(coinName, account), getOrderHistory(coinName, account))
+            Observable.merge(getMarketSummary(coinName,exchangeValue), getOpenOrders(coinName,exchangeValue, account), getOrderHistory(coinName, account))
                     .subscribe(observer);
         } else {
             CustomDialog.showMessagePop(context, context.getString(R.string.noAPI), null);
@@ -209,11 +212,11 @@ public class CoinPresenter extends TickerPresenter<CoinView> {
         });
     }
 
-    public Observable<OpenOrder> getOpenOrders(final String coinName, final Account account) {
+    public Observable<OpenOrder> getOpenOrders(final String coinName, final String exchange, final Account account) {
         return Observable.create(new ObservableOnSubscribe<OpenOrder>() {
             @Override
             public void subscribe(final ObservableEmitter<OpenOrder> e) throws Exception {
-                coinInteractor.getOpenOrder(coinName, account, new OnFinishListner<OpenOrder>() {
+                coinInteractor.getOpenOrder(coinName,exchange, account, new OnFinishListner<OpenOrder>() {
                     @Override
                     public void onComplete(OpenOrder result) {
                         e.onNext(result);
@@ -270,7 +273,7 @@ public class CoinPresenter extends TickerPresenter<CoinView> {
                             }
                         };
 
-                        getOpenOrders(coinName, account).subscribe(observer);
+                        getOpenOrders(coinName,exchangeValue, account).subscribe(observer);
                     } else
                         onFail(result.getMessage());
                 }

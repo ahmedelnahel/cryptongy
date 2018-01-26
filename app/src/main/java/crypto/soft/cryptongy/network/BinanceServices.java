@@ -45,12 +45,23 @@ import io.reactivex.subjects.PublishSubject;
 
 public class BinanceServices {
     public static final String TAG = "BinanceServices";
+    URI uri;
+    Ticker ticker;
+    MarketSummaries marketSummaries_;
+
+    public WebSocketClient mWebSocketClient;
+
+    public PublishSubject<WebSocketClient> sourceWebSocketClient = PublishSubject.create();
+    public PublishSubject<Ticker> sourceTickerWebsocket = PublishSubject.create();
+    public PublishSubject<MarketSummaries> sourceMarketSummariesWebsocket = PublishSubject.create();
+
 
     public MarketSummaries getMarketSummaries() throws IOException {
         final String url = "https://api.binance.com/api/v1/ticker/24hr";  //"https://www.coinexchange.io/api/v1/getmarkets";
+        Log.d(TAG, "getMarketSummaries: "+url);
         String marketSummariesStr = new RESTUtil().callREST(url);
         MarketSummaries marketSummaries_ = new MarketSummaries();
-        Log.d("Binance MarketSummaries", "response " + marketSummariesStr);
+        Log.d(TAG, "response " + marketSummariesStr);
         if (marketSummariesStr == null || "".equals(marketSummariesStr)) {
             Log.d("Binance MarketSummaries", "response in error " + marketSummariesStr);
             marketSummaries_.setSuccess(false);
@@ -84,6 +95,100 @@ public class BinanceServices {
         }
         return marketSummaries_;
     }
+
+    public void getMarketSummariesWebsocket() throws IOException {
+
+        String websocketEndPointUrl;
+        marketSummaries_ = new MarketSummaries();
+
+        try {
+
+            websocketEndPointUrl = "wss://stream.binance.com:9443/ws/!ticker@arr";
+            Log.i(TAG, " WSURL: " + websocketEndPointUrl);
+
+            uri = new URI(websocketEndPointUrl);
+        } catch (URISyntaxException e) {
+            Log.e(TAG, e.getMessage());
+            return ;
+        }
+
+
+        mWebSocketClient = new WebSocketClient(uri) {
+            @Override
+            public void onOpen(ServerHandshake serverHandshake) {
+                Log.i("Websocket", "Opened");
+            }
+
+            @Override
+            public void onMessage(String marketSummariesStr) {
+                Log.d(TAG, "onMessage:websocket : " + marketSummariesStr);
+
+                String originalMarketStr=marketSummariesStr;
+                if (marketSummariesStr == null || "".equals(marketSummariesStr)) {
+                    Log.d("Binance MarketSummaries", "response in error " + marketSummariesStr);
+                    marketSummaries_.setSuccess(false);
+                    marketSummaries_.setMessage("Connection Error");
+                } else {
+                    if (marketSummariesStr != null && !marketSummariesStr.contains("msg"))
+                        marketSummariesStr = "{\"result\":" + marketSummariesStr + " }";
+                    ObjectMapper mapper = new ObjectMapper();
+                    BnSocketOrders[] binanceMarket = null;
+                    try {
+                        binanceMarket = mapper.readValue(originalMarketStr, BnSocketOrders[].class);
+                        Log.d(TAG, "onMessage: " + binanceMarket);
+                    } catch (IOException e) {
+
+
+                    }
+
+                    marketSummaries_.setJson(marketSummariesStr);
+                    marketSummaries_.setSuccess(true);
+
+
+                    if (binanceMarket != null) {
+                        HashMap<String, Result> coinsMap = new HashMap<>();
+                        ArrayList<Result> results = new ArrayList();
+                        for (BnSocketOrders  r : binanceMarket) {
+                            Result mr = new Result(r);
+                            results.add(mr);
+                            coinsMap.put(r.getSymbol(), mr);
+                        }
+
+                        marketSummaries_.setCoinsMap(coinsMap);
+                        marketSummaries_.setResult(results);
+                    } else {
+                        marketSummaries_.setSuccess(false);
+                        marketSummaries_.setMessage("msg");
+
+                    }
+                }
+
+
+                sourceMarketSummariesWebsocket.onNext(marketSummaries_);
+                sourceWebSocketClient.onNext(mWebSocketClient);
+                //final String message =s;
+
+            }
+
+            @Override
+            public void onClose(int i, String s, boolean b) {
+                Log.i("Websocket", "Closed " + s);
+            }
+
+            @Override
+            public void onError(Exception e) {
+                Log.d(TAG, "onError: websocket "+e.getMessage());
+                Log.i("Websocket", "Error " + e.getMessage());
+            }
+        };
+
+
+        mWebSocketClient.connect();
+
+
+    }
+
+
 
 
     public MarketSummaries getAllPrices() throws IOException {
@@ -158,13 +263,7 @@ public class BinanceServices {
 
 
 
-    URI uri;
-    Ticker ticker;
 
-    public WebSocketClient mWebSocketClient;
-
-    public PublishSubject<WebSocketClient> sourceWebSocketClient = PublishSubject.create();
-    public PublishSubject<Ticker> source = PublishSubject.create();
 
     public void getTickerConnectSocket(String market) throws Exception {
         String websocketEndPointUrl;
@@ -217,7 +316,7 @@ public class BinanceServices {
                 }
 
 
-                source.onNext(ticker);
+                sourceTickerWebsocket.onNext(ticker);
                 sourceWebSocketClient.onNext(mWebSocketClient);
                 //final String message =s;
 
@@ -239,6 +338,7 @@ public class BinanceServices {
 
 
     }
+
 
 
     public Ticker getTicker(String market) throws IOException {

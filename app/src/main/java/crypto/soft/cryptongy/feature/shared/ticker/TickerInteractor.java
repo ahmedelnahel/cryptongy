@@ -43,7 +43,7 @@ public class TickerInteractor {
                         try {
                             binanceServices.getTickerConnectSocket(coinName);
 
-                            binanceServices.source.observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<Ticker>() {
+                            binanceServices.sourceTickerWebsocket.observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<Ticker>() {
                                 @Override
                                 public void accept(Ticker ticker) throws Exception {
 

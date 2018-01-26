@@ -135,15 +135,16 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginBottom="@dimen/_10sdp"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
+                    android:paddingBottom="@dimen/_4sdp"
                     android:layout_marginTop="20dp"
                     android:orientation="horizontal">
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="@dimen/_42sdp"
                         android:layout_marginRight="5dp"
                         android:layout_weight="1"
                         android:background="@drawable/rect_left_right"
@@ -163,11 +164,11 @@
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:layout_marginLeft="5dp"
+                        android:layout_height="@dimen/_42sdp"
+                        android:layout_marginLeft="@dimen/_4sdp"
                         android:layout_weight="1"
                         android:background="@drawable/rect_left_right"
-                        android:padding="10dp">
+                        android:padding="@dimen/_2sdp">
 
                         <ImageView
                             android:id="@+id/icon_search"
@@ -306,5 +307,6 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="70dp"
         android:indeterminate="true"
+        android:indeterminateTint="@color/colorPrimary"
         android:visibility="gone" />
 </RelativeLayout>

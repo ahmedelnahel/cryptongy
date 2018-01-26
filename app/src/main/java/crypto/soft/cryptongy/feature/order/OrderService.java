@@ -10,6 +10,7 @@ import crypto.soft.cryptongy.feature.shared.json.order.Order;
 import crypto.soft.cryptongy.feature.shared.json.order.Result;
 import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
 import crypto.soft.cryptongy.utils.CoinApplication;
+import crypto.soft.cryptongy.utils.GlobalConstant;
 import crypto.soft.cryptongy.utils.GlobalUtil;
 
 /**
@@ -39,7 +40,16 @@ public class OrderService extends IntentService {
     }
 
     private void getOpenOrder(final CoinApplication application, final boolean check) {
-        interactor.getOpenOrder("", application.getReadAccount(), new OnFinishListner<OpenOrder>() {
+
+        String exchange= GlobalConstant.Exchanges.BITTREX;
+        if(application!=null){
+            if(application.getReadAccount()!=null){
+                exchange=application.getReadAccount().getExchange();
+            }
+        }
+
+
+        interactor.getOpenOrder("",exchange, application.getReadAccount(), new OnFinishListner<OpenOrder>() {
             @Override
             public void onComplete(OpenOrder result) {
                 if(result != null && result.getSuccess()&& result.getResult()!= null) {

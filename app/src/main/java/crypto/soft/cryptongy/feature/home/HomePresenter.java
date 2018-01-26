@@ -153,4 +153,9 @@ public class HomePresenter extends MvpBasePresenter<HomeView> implements OnMulti
 
         }
     }
+
+
+    public void closeWebSocket(){
+        homeInteractor.closeWebSocket();
+    }
 }

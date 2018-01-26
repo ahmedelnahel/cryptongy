@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -194,6 +195,7 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
                 //if at position zero bitrex and at position 1 binance is called
                 if (spinner.getItemAtPosition(position).toString().equalsIgnoreCase(getResources().getStringArray(R.array.coin_array)[0])) {
                     SharedPreference.saveToPrefs(getContext(), "isCoinAdded", true);
+                    presenter.closeWebSocket();
                     spinnerValue = getResources().getStringArray(R.array.coin_array)[0];
                     presenter.loadSummaries();
                 } else {
@@ -279,44 +281,48 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
 
     @Override
     public void onSummaryDataLoad(MarketSummaries marketSummaries) {
-        if (marketSummaries.getSuccess()) {
 
-            if (spinnerValue.equalsIgnoreCase(getResources().getStringArray(R.array.coin_array)[0])) {//Bitrix value comparing
-                if (marketSummaries.getCoinsMap().get("USDT-BTC") != null) {
+        if(marketSummaries!=null){
+            if (marketSummaries.getSuccess()) {
 
-                    ((CoinApplication) getActivity().getApplication()).setUsdt_btc(GlobalUtil.round(marketSummaries.getCoinsMap().get("USDT-BTC").getLast(), 4));
-                    price.setText("" + ((CoinApplication) getActivity().getApplication()).getUsdt_btc());
+                if (spinnerValue.equalsIgnoreCase(getResources().getStringArray(R.array.coin_array)[0])) {//Bitrix value comparing
+                    if (marketSummaries.getCoinsMap().get("USDT-BTC") != null) {
+
+                        ((CoinApplication) getActivity().getApplication()).setUsdt_btc(GlobalUtil.round(marketSummaries.getCoinsMap().get("USDT-BTC").getLast(), 4));
+                        price.setText("" + ((CoinApplication) getActivity().getApplication()).getUsdt_btc());
+                    }
+
+                    if (marketSummaries.getCoinsMap().get("BTC-ETH") != null) {
+                        ((CoinApplication) getActivity().getApplication()).setbtc_eth(marketSummaries.getCoinsMap().get("BTC-ETH").getLast());
+                    }
+
+                }
+                if (spinnerValue.equalsIgnoreCase(getResources().getStringArray(R.array.coin_array)[1])) {//Binance value comparing
+
+                    if (marketSummaries.getCoinsMap().get("BTCUSDT") != null) {
+                        ((CoinApplication) getActivity().getApplication()).setUsdt_btc(GlobalUtil.round(marketSummaries.getCoinsMap().get("BTCUSDT").getLast(), 4));
+                        price.setText("" + ((CoinApplication) getActivity().getApplication()).getUsdt_btc());
+                    }
+
+
+                    if (marketSummaries.getCoinsMap().get("ETHBTC") != null) {
+                        ((CoinApplication) getActivity().getApplication()).setbtc_eth(marketSummaries.getCoinsMap().get("ETHBTC").getLast());
+                    }
+
                 }
 
-                if (marketSummaries.getCoinsMap().get("BTC-ETH") != null) {
-                    ((CoinApplication) getActivity().getApplication()).setbtc_eth(marketSummaries.getCoinsMap().get("BTC-ETH").getLast());
-                }
-
+                coins.clear();
+                coins.addAll(marketSummaries.getResult());
+                adapterCoins.notifyDataSetChanged();
+                currencyAdapter.notifyDataSetChanged();
+            } else {
+                coins.clear();
+                adapterCoins.notifyDataSetChanged();
+                currencyAdapter.notifyDataSetChanged();
             }
-            if (spinnerValue.equalsIgnoreCase(getResources().getStringArray(R.array.coin_array)[1])) {//Binance value comparing
-
-                if (marketSummaries.getCoinsMap().get("BTCUSDT") != null) {
-                    ((CoinApplication) getActivity().getApplication()).setUsdt_btc(GlobalUtil.round(marketSummaries.getCoinsMap().get("BTCUSDT").getLast(), 4));
-                    price.setText("" + ((CoinApplication) getActivity().getApplication()).getUsdt_btc());
-                }
-
-
-                if (marketSummaries.getCoinsMap().get("ETHBTC") != null) {
-                    ((CoinApplication) getActivity().getApplication()).setbtc_eth(marketSummaries.getCoinsMap().get("ETHBTC").getLast());
-                }
-
-            }
-
-            coins.clear();
-            coins.addAll(marketSummaries.getResult());
-            adapterCoins.notifyDataSetChanged();
-            currencyAdapter.notifyDataSetChanged();
-        } else {
-            coins.clear();
-            adapterCoins.notifyDataSetChanged();
-            currencyAdapter.notifyDataSetChanged();
+            hideProgressBar();
         }
-        hideProgressBar();
+
     }
 
     @Override
@@ -333,11 +339,16 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
     @Override
     public void hideProgressBar() {
         progressBar.setVisibility(View.GONE);
+        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
     }
 
     @Override
     public void showProgressBar() {
         progressBar.setVisibility(View.VISIBLE);
+        getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
     }
 
     @OnClick({R.id.imgAdd, R.id.imgRefresh, R.id.imgDelete, R.id.imgKey})
@@ -520,5 +531,12 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
     public void onStop() {
         super.onStop();
         presenter.stopTimer();
+    }
+
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
     }
 }
