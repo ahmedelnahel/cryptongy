@@ -70,6 +70,7 @@ public class TickerPresenter<T extends TickerView> extends MvpBasePresenter<T> {
 
     public void closeWebSocket() {
         tickerInteractor.closeWebSocket();
+
     }
 
     public void startTicker(String coinName, String exchangeValue) {

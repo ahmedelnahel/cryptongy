@@ -47,6 +47,7 @@ import crypto.soft.cryptongy.feature.shared.json.market.MarketSummaries;
 import crypto.soft.cryptongy.feature.shared.json.market.Result;
 import crypto.soft.cryptongy.feature.shared.listner.AdapterItemClickListener;
 import crypto.soft.cryptongy.utils.CoinApplication;
+import crypto.soft.cryptongy.utils.GlobalConstant;
 import crypto.soft.cryptongy.utils.GlobalUtil;
 import crypto.soft.cryptongy.utils.HideKeyboard;
 import crypto.soft.cryptongy.utils.SharedPreference;
@@ -425,10 +426,22 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
 
     @Override
     public void onItemClicked(Result menuItem, int position) {
+        presenter.closeWebSocket();
         Intent intent = new Intent(getContext(), CoinHomeActivity.class);
         intent.putExtra("COIN_NAME", menuItem.getMarketName());
         intent.putExtra(EXCHANGE_VALUE,spinnerValue);
-        startActivity(intent);
+        startActivityForResult(intent,100);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(spinnerValue.equalsIgnoreCase(GlobalConstant.Exchanges.BINANCE)){
+            presenter.loadBinanceSummaries();
+        }
+        if (spinnerValue.equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)){
+            presenter.loadSummaries();
+        }
     }
 
     @Override

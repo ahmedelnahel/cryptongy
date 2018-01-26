@@ -419,5 +419,6 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
     public void onDestroyView() {
         super.onDestroyView();
         presenter.closeWebSocket();
+
     }
 }

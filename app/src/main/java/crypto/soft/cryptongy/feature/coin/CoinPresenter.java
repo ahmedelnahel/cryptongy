@@ -156,8 +156,15 @@ public class CoinPresenter extends TickerPresenter<CoinView> {
 
                     @Override
                     public void onFail(String error) {
-                        CustomDialog.showMessagePop(context, error, null);
-                        e.onComplete();
+
+                        if(getView()!=null){
+
+                            CustomDialog.showMessagePop(context, error, null);
+                            e.onComplete();
+
+                        }
+
+
                     }
                 });
 
@@ -204,8 +211,11 @@ public class CoinPresenter extends TickerPresenter<CoinView> {
 
                     @Override
                     public void onFail(String error) {
-                        CustomDialog.showMessagePop(context, error, null);
-                        e.onComplete();
+                        if(getView()!=null){
+
+                            CustomDialog.showMessagePop(context, error, null);
+                            e.onComplete();
+                        }
                     }
                 });
             }
@@ -225,8 +235,11 @@ public class CoinPresenter extends TickerPresenter<CoinView> {
 
                     @Override
                     public void onFail(String error) {
-                        CustomDialog.showMessagePop(context, error, null);
-                        e.onComplete();
+                        if(getView()!=null){
+
+                            CustomDialog.showMessagePop(context, error, null);
+                            e.onComplete();
+                        }
                     }
                 });
             }

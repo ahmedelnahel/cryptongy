@@ -151,6 +151,9 @@ public class CustomDialog {
             }
         });
         originalDialog.setCanceledOnTouchOutside(true);
+        if(originalDialog.isShowing()){
+            originalDialog.dismiss();
+        }
         originalDialog.show();
     }
 
