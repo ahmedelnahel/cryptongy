@@ -198,60 +198,9 @@ public class HomeInteractor {
 
                     }
 
-
                 }
 
-//                MarketSummaries marketSummaries12 = new BinanceServices().getMarketSummaries();
-//
-//                if (isFirst) {
-//                    if (marketSummaries != null && marketSummaries.getResult() != null && marketSummaries.getSuccess()) {
-//
-//                        if (marketSummaries.getCoinsMap().get("LTCBTC") != null)
-//                            results.add(marketSummaries.getCoinsMap().get("LTCBTC"));
-//                        if (marketSummaries.getCoinsMap().get("ETHBTC") != null)
-//                            results.add(marketSummaries.getCoinsMap().get("ETHBTC"));
-//                        if (marketSummaries.getCoinsMap().get("APPCBTC") != null)
-//                            results.add(marketSummaries.getCoinsMap().get("APPCBTC"));
-//                        if (marketSummaries.getCoinsMap().get("TRXBTC") != null)
-//                            results.add(marketSummaries.getCoinsMap().get("TRXBTC"));
-//                        if (marketSummaries.getCoinsMap().get("ICXBTC") != null)
-//                            results.add(marketSummaries.getCoinsMap().get("ICXBTC"));
-//                        if (results != null && results.size() != 0) {
-//                            SharedPreference.saveToPrefs(context, IS_COIN_ADDED_BINANCE, false);
-//                            SharedPreference.saveToPrefs(context, MOCK_VALUE_BINANCE, new Gson().toJson(results));
-//                        }
-//                    }
-//
-//                } else {
-//                    if (!SharedPreference.getFromPrefs(context, MOCK_VALUE_BINANCE).equals("")) {
-//                        List<Result> resultsSharedPref = new Gson().fromJson(SharedPreference.getFromPrefs(context, MOCK_VALUE_BINANCE), new TypeToken<List<Result>>() {
-//                        }.getType());
-//                        if (marketSummaries != null && marketSummaries.getResult() != null && marketSummaries.getSuccess()) {
-//                            for (Result r : resultsSharedPref) {
-//                                if (r != null) {
-//                                    Result ms = marketSummaries.getCoinsMap().get(r.getMarketName());
-//                                    if (ms != null) {
-//                                        r.setLast(ms.getLast());
-//                                        r.setVolume(ms.getVolume());
-//                                    }
-//
-//                                }
-//                            }
-//
-//                            if (resultsSharedPref != null) {
-//                                SharedPreference.saveToPrefs(context, MOCK_VALUE_BINANCE, new Gson().toJson(resultsSharedPref));
-//                            }
-//                        } else {
-//                            marketSummaries = new MarketSummaries();
-//                            HashMap<String, Result> temp = new HashMap<>();
-//                            marketSummaries.setCoinsMap(temp);
-//                            marketSummaries.setSuccess(false);
-//                            marketSummaries.setResult(resultsSharedPref);
-//                        }
-//                        this.results.clear();
-//                        this.results.addAll(resultsSharedPref);
-//                    }
-//                }
+
                 return marketSummaries_;
             } catch (IOException e) {
                 e.printStackTrace();

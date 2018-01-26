@@ -131,21 +131,23 @@ public class BinanceServices {
                 } else {
                     if (marketSummariesStr != null && !marketSummariesStr.contains("msg"))
                         marketSummariesStr = "{\"result\":" + marketSummariesStr + " }";
+
+                    marketSummaries_.setSuccess(true);
                     ObjectMapper mapper = new ObjectMapper();
                     BnSocketOrders[] binanceMarket = null;
                     try {
                         binanceMarket = mapper.readValue(originalMarketStr, BnSocketOrders[].class);
                         Log.d(TAG, "onMessage: " + binanceMarket);
                     } catch (IOException e) {
-
+                        marketSummaries_.setSuccess(false);
+                        marketSummaries_.setMessage("System Error");
 
                     }
 
-                    marketSummaries_.setJson(marketSummariesStr);
-                    marketSummaries_.setSuccess(true);
 
-
-                    if (binanceMarket != null) {
+                    if (binanceMarket != null && marketSummaries_.getSuccess()) {
+                        marketSummaries_.setJson(marketSummariesStr);
+                        marketSummaries_.setSuccess(true);
                         HashMap<String, Result> coinsMap = new HashMap<>();
                         ArrayList<Result> results = new ArrayList();
                         for (BnSocketOrders  r : binanceMarket) {
