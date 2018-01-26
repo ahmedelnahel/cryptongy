@@ -174,16 +174,10 @@ public class HomeInteractor {
                             }
 
                         }
-
-
                         onBinanceLoadListner.onComplete(results, marketSummaries_);
-
-
-
 
                     }
                 });
-
 
                 if(marketSummaries_==null){
                     if(!isFirst){
@@ -197,8 +191,6 @@ public class HomeInteractor {
                                 marketSummaries_.setCoinsMap(temp);
                                 marketSummaries_.setSuccess(true);
                                 marketSummaries_.setResult(resultsSharedPref);
-
-
 
                             results.clear();
                             results.addAll(resultsSharedPref);
@@ -275,7 +267,7 @@ public class HomeInteractor {
             if (marketSummaries != null && marketSummaries.getSuccess() && marketSummaries.getResult() != null) {
 //                onBinanceLoadListner.onComplete(results, marketSummaries);
             } else {
-                onBinanceLoadListner.onFail("");
+//                onBinanceLoadListner.onFail("");
             }
         }
     }

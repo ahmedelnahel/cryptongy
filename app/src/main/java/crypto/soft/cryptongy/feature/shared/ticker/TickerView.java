@@ -2,6 +2,7 @@ package crypto.soft.cryptongy.feature.shared.ticker;
 
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.widget.TextView;
 
 import com.hannesdorfmann.mosby.mvp.MvpView;
@@ -22,15 +23,15 @@ public interface TickerView extends MvpView {
         public void setData(Context context, Ticker ticker, TextView txtLast, TextView txtAsk, TextView txtBid) {
             if (ticker != null && ticker.getResult() != null) {
                 crypto.soft.cryptongy.feature.shared.json.ticker.Result result = ticker.getResult();
-//                if(TextUtils.isEmpty(txtLast.getText().toString())){
-//                    txtLast.setText("100");
-//                }
-//                if(TextUtils.isEmpty(txtAsk.getText().toString())){
-//                    txtAsk.setText("100");
-//                }
-//                if(TextUtils.isEmpty(txtBid.getText().toString())){
-//                    txtBid.setText("100");
-//                }
+                if(TextUtils.isEmpty(txtLast.getText().toString())){
+                    txtLast.setText("100");
+                }
+                if(TextUtils.isEmpty(txtAsk.getText().toString())){
+                    txtAsk.setText("100");
+                }
+                if(TextUtils.isEmpty(txtBid.getText().toString())){
+                    txtBid.setText("100");
+                }
 
                 Double dblLast = Double.parseDouble(txtLast.getText().toString());
                 Double dblAsk = Double.parseDouble(txtAsk.getText().toString());
