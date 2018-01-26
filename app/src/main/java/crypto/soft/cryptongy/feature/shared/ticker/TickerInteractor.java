@@ -3,9 +3,6 @@ package crypto.soft.cryptongy.feature.shared.ticker;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import org.java_websocket.client.WebSocketClient;
-import org.java_websocket.framing.CloseFrame;
-
 import java.io.IOException;
 
 import crypto.soft.cryptongy.feature.shared.json.ticker.Ticker;
@@ -85,17 +82,21 @@ public class TickerInteractor {
 
 
     public void closeWebSocket(){
-        binanceServices.sourceWebSocketClient.subscribe(new Consumer<WebSocketClient>() {
-            @Override
-            public void accept(WebSocketClient webSocketClient) throws Exception {
 
-                if(webSocketClient!=null){
-                    webSocketClient.closeConnection(CloseFrame.NORMAL,"its closeing time");
-                }
-            }
-        });
+        binanceServices.closeWebSocket();
 
     }
+//        binanceServices.sourceWebSocketClient.subscribe(new Consumer<WebSocketClient>() {
+//            @Override
+//            public void accept(WebSocketClient webSocketClient) throws Exception {
+//
+//                if(webSocketClient!=null){
+//                    webSocketClient.closeConnection(CloseFrame.NORMAL,"its closeing time");
+//                }
+//            }
+//        });
+//
+//    }
 
 
 

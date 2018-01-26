@@ -5,6 +5,7 @@ import android.util.Log;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.java_websocket.client.WebSocketClient;
+import org.java_websocket.framing.CloseFrame;
 import org.java_websocket.handshake.ServerHandshake;
 import org.springframework.util.StringUtils;
 
@@ -35,6 +36,7 @@ import crypto.soft.cryptongy.feature.shared.json.orderhistory.OrderHistory;
 import crypto.soft.cryptongy.feature.shared.json.ticker.Ticker;
 import crypto.soft.cryptongy.feature.shared.json.wallet.Wallet;
 import crypto.soft.cryptongy.feature.shared.module.Account;
+import io.reactivex.functions.Consumer;
 import io.reactivex.subjects.PublishSubject;
 
 
@@ -628,5 +630,16 @@ public class BinanceServices {
 
     }
 
+    public void closeWebSocket() {
+       sourceWebSocketClient.subscribe(new Consumer<WebSocketClient>() {
+            @Override
+            public void accept(WebSocketClient webSocketClient) throws Exception {
 
+                if (webSocketClient != null) {
+                    webSocketClient.closeConnection(CloseFrame.NORMAL, "its closeing time");
+                }
+            }
+        });
+
+    }
 }
