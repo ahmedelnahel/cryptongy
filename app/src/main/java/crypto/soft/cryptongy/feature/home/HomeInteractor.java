@@ -144,8 +144,6 @@ public class HomeInteractor {
         protected MarketSummaries doInBackground(AssetManager... voids) {
             try {
 
-                final boolean isFirst = SharedPreference.isFirst(context, IS_COIN_ADDED_BINANCE);
-
                 binanceServices.getMarketSummariesWebsocket();
                 binanceServices.sourceMarketSummariesWebsocket.observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<MarketSummaries>() {
 

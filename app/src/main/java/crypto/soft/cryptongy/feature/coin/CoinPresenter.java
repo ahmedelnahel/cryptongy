@@ -352,10 +352,19 @@ public class CoinPresenter extends TickerPresenter<CoinView> {
     {
 
 
-        String modifiedCoinName;
+        String modifiedCoinName="LTCBTC";
         if(exchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)){
             List<String> stringList = Arrays.asList(coinName.split("-"));
-            modifiedCoinName=stringList.get(1)+stringList.get(0);
+
+            if(stringList!=null){
+                if (stringList.size()>0){
+
+                    modifiedCoinName=stringList.get(1)+stringList.get(0);
+                }
+                else {
+                    modifiedCoinName=stringList.get(0);
+                }
+            }
 
         }
         else {
