@@ -18,8 +18,10 @@ import crypto.soft.cryptongy.feature.shared.listner.OnMultiFinishListner;
 import crypto.soft.cryptongy.network.BinanceServices;
 import crypto.soft.cryptongy.network.BittrexServices;
 import crypto.soft.cryptongy.utils.SharedPreference;
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 import static crypto.soft.cryptongy.utils.SharedPreference.IS_COIN_ADDED_BINANCE;
 import static crypto.soft.cryptongy.utils.SharedPreference.MOCK_VALUE_BINANCE;
@@ -131,7 +133,7 @@ public class HomeInteractor {
         OnMultiFinishListner<List<Result>, MarketSummaries> onBinanceLoadListner;
         private Context context;
         MarketSummaries marketSummaries_ = null;
-        boolean isFirst ;
+        boolean isFirst;
 
 
         public AsyncBinanceSummaryLoader(Context context, OnMultiFinishListner<List<Result>, MarketSummaries> onBinanceLoadListner) {
@@ -145,10 +147,16 @@ public class HomeInteractor {
             try {
 
                 binanceServices.getMarketSummariesWebsocket();
-                binanceServices.sourceMarketSummariesWebsocket.observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<MarketSummaries>() {
+
+                binanceServices.sourceMarketSummariesWebsocket.observeOn(AndroidSchedulers.mainThread()).unsubscribeOn(Schedulers.io()).subscribe(new Observer<MarketSummaries>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
 
                     @Override
-                    public void accept(MarketSummaries marketSummaries) throws Exception {
+                    public void onNext(MarketSummaries marketSummaries) {
+
                         marketSummaries_ = marketSummaries;
 
                         if (isFirst) {
@@ -165,7 +173,7 @@ public class HomeInteractor {
                                 if (marketSummaries.getCoinsMap().get("ICXBTC") != null)
                                     resultsbinance.add(marketSummaries.getCoinsMap().get("ICXBTC"));
                                 if (resultsbinance != null && resultsbinance.size() != 0) {
-                                    isFirst=false;
+                                    isFirst = false;
                                     SharedPreference.saveToPrefs(context, IS_COIN_ADDED_BINANCE, false);
                                     SharedPreference.saveToPrefs(context, MOCK_VALUE_BINANCE, new Gson().toJson(resultsbinance));
                                 }
@@ -174,8 +182,12 @@ public class HomeInteractor {
                         } else {
 
 
+                            if (marketSummaries != null) {
+                                if (marketSummaries.getResult() != null) {
+                                }
+                            }
                             if (marketSummaries != null && marketSummaries.getResult() != null && marketSummaries.getSuccess()) {
-                                if(resultsbinance!=null && resultsbinance.size()>0){
+                                if (resultsbinance != null && resultsbinance.size() > 0) {
                                     for (Result r : resultsbinance) {
                                         if (r != null) {
                                             Result ms = marketSummaries.getCoinsMap().get(r.getMarketName());
@@ -190,17 +202,41 @@ public class HomeInteractor {
                                 }
 
 
+                                try {
+                                    SharedPreference.saveToPrefs(context, MOCK_VALUE_BINANCE, new Gson().toJson(resultsbinance));
 
-                                SharedPreference.saveToPrefs(context, MOCK_VALUE_BINANCE, new Gson().toJson(resultsbinance));
+                                } catch (Exception e) {
+
+                                }
                             }
                         }
 
 
                         onBinanceLoadListner.onComplete(resultsbinance, marketSummaries_);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
 
                     }
                 });
-  //task
+
+
+//                binanceServices.sourceMarketSummariesWebsocket.observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<MarketSummaries>() {
+//
+//                    @Override
+//                    public void accept(MarketSummaries marketSummaries) throws Exception {
+//
+//
+//                    }
+//                });
+
+
                 if (marketSummaries_ == null) {
                     if (!isFirst) {
 

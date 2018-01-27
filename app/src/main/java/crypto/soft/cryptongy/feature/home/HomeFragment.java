@@ -550,6 +550,7 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        presenter.closeWebSocket();
 
     }
 }

@@ -33,6 +33,7 @@ public class BittrexServices {
     public  static String TAG="BittrexServices";
     public MarketSummaries getMarketSummaries() throws IOException {
         final String url = "https://bittrex.com/api/v1.1/public/getmarketsummaries";  //"https://www.coinexchange.io/api/v1/getmarkets";
+        Log.d(TAG, "getOpnOrders: "+ url);
         String marketSummariesStr = new RESTUtil().callREST(url);
         MarketSummaries marketSummaries_ = null;
         if(marketSummariesStr == null) {

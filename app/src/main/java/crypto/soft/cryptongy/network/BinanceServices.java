@@ -380,6 +380,7 @@ public class BinanceServices {
         } else {
 
             final String url = "https://api.binance.com/api/v3/openOrders";
+            Log.d(TAG, "getOpnOrders: "+ url);
             HashMap param = null;
 
             if (coinName != null && !StringUtils.isEmpty(coinName)) {
