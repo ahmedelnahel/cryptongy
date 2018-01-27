@@ -202,7 +202,7 @@ public class HomeInteractor {
 
                     }
                 });
-
+  //task
                 if (marketSummaries_ == null) {
                     if (!isFirst) {
 
