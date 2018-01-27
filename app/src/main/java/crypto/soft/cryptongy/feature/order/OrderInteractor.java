@@ -76,7 +76,7 @@ public class OrderInteractor {
         }.execute();
     }
 
-    public void getOrderHistory(final String coinName, final Account account, final OnFinishListner<OrderHistory> listner) {
+    public void getOrderHistory(final String coinName,final String exchangeValue, final Account account, final OnFinishListner<OrderHistory> listner) {
         new AsyncTask<Void, Void, OrderHistory>() {
 
             @Override
@@ -84,12 +84,12 @@ public class OrderInteractor {
                 OrderHistory orderHistory = null;
                 try {
 
-                    if(account.getExchange().equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)){
+                    if(exchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)){
 
                         orderHistory = new BittrexServices().getOrderHistory(account);
 //                        orderHistory = getMockOrderHistory(account,coinName);
                     }
-                    if(account.getExchange().equalsIgnoreCase(GlobalConstant.Exchanges.BINANCE)){
+                    if(exchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BINANCE)){
 
 //                        orderHistory = getMockOrderHistory(account,coinName);
                         orderHistory=new BinanceServices().getOrderHistory(account,coinName);

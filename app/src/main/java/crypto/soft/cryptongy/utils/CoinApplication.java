@@ -56,8 +56,8 @@ public class CoinApplication extends Application {
         setTradeAccount(exchangeValue);
         if (tradeAccount != null)
             return tradeAccount;
-        else if (getWithdrawAccount() != null)
-            return getWithdrawAccount();
+        else if (getWithdrawAccount(exchangeValue) != null)
+            return getWithdrawAccount(exchangeValue);
         return null;
     }
 
@@ -82,13 +82,13 @@ public class CoinApplication extends Application {
     }
 
     public Account getReadAccount(String exchangeValue) {
-        setReadAccount(exchangeValue);
+        readAccount = getAccountFromReam(exchangeValue,READ);
         if (readAccount != null)
             return readAccount;
-        else if (getTradeAccount() != null)
-            return getTradeAccount();
-        else if (getWithdrawAccount() != null)
-            return getWithdrawAccount();
+        else if (getTradeAccount(exchangeValue) != null)
+            return getTradeAccount(exchangeValue);
+        else if (getWithdrawAccount(exchangeValue) != null)
+            return getWithdrawAccount(exchangeValue);
         return null;
     }
 

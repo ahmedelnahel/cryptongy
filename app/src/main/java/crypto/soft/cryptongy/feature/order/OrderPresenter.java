@@ -109,7 +109,7 @@ public class OrderPresenter extends MvpBasePresenter<OrderView> {
                 }
             };
 
-            Observable.merge(getOpenOrders("",account.getExchange(), account), getOrderHistory("", account))
+            Observable.merge(getOpenOrders("",account.getExchange(), account), getOrderHistory("",account.getExchange(), account))
                     .subscribe(observer);
         } else {
             CustomDialog.showMessagePop(context, context.getString(R.string.noAPI), null);
@@ -120,11 +120,11 @@ public class OrderPresenter extends MvpBasePresenter<OrderView> {
         }
     }
 
-    public Observable<OrderHistory> getOrderHistory(final String coinName, final Account account) {
+    public Observable<OrderHistory> getOrderHistory(final String coinName,final String exchangeValue, final Account account) {
         return Observable.create(new ObservableOnSubscribe() {
             @Override
             public void subscribe(final ObservableEmitter e) throws Exception {
-                interactor.getOrderHistory(coinName, account, new OnFinishListner<OrderHistory>() {
+                interactor.getOrderHistory(coinName,exchangeValue, account, new OnFinishListner<OrderHistory>() {
                     @Override
                     public void onComplete(OrderHistory result) {
                         e.onNext(result);
