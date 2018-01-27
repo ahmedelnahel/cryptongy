@@ -36,7 +36,6 @@ import crypto.soft.cryptongy.feature.shared.json.orderhistory.OrderHistory;
 import crypto.soft.cryptongy.feature.shared.json.ticker.Ticker;
 import crypto.soft.cryptongy.feature.shared.json.wallet.Wallet;
 import crypto.soft.cryptongy.feature.shared.module.Account;
-import io.reactivex.functions.Consumer;
 import io.reactivex.subjects.PublishSubject;
 
 
@@ -50,6 +49,7 @@ public class BinanceServices {
     URI uri;
     Ticker ticker;
     MarketSummaries marketSummaries_;
+
 
     public WebSocketClient mWebSocketClient;
 
@@ -118,6 +118,7 @@ public class BinanceServices {
         mWebSocketClient = new WebSocketClient(uri) {
             @Override
             public void onOpen(ServerHandshake serverHandshake) {
+
                 Log.i("Websocket", "Opened");
             }
 
@@ -631,15 +632,21 @@ public class BinanceServices {
     }
 
     public void closeWebSocket() {
-       sourceWebSocketClient.subscribe(new Consumer<WebSocketClient>() {
-            @Override
-            public void accept(WebSocketClient webSocketClient) throws Exception {
 
-                if (webSocketClient != null) {
-                    webSocketClient.closeConnection(CloseFrame.NORMAL, "its closeing time");
-                }
-            }
-        });
+        if (mWebSocketClient != null) {
+            mWebSocketClient.closeConnection(CloseFrame.NORMAL, "its closeing time");
+        }
+
+
+//       sourceWebSocketClient.subscribe(new Consumer<WebSocketClient>() {
+//            @Override
+//            public void accept(WebSocketClient webSocketClient) throws Exception {
+//
+//                if (webSocketClient != null) {
+//                    webSocketClient.closeConnection(CloseFrame.NORMAL, "its closeing time");
+//                }
+//            }
+//        });
 
     }
 }

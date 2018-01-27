@@ -15,6 +15,7 @@ import crypto.soft.cryptongy.feature.shared.json.market.MarketSummaries;
 import crypto.soft.cryptongy.feature.shared.json.market.Result;
 import crypto.soft.cryptongy.feature.shared.listner.OnMultiFinishListner;
 import crypto.soft.cryptongy.utils.CoinApplication;
+import crypto.soft.cryptongy.utils.GlobalConstant;
 
 /**
  * Created by tseringwongelgurung on 11/27/17.
@@ -41,7 +42,7 @@ public class HomePresenter extends MvpBasePresenter<HomeView> implements OnMulti
         if (getView() != null)
             getView().showProgressBar();
 
-        exchangeValue = BITRIX;
+        exchangeValue = GlobalConstant.Exchanges.BITTREX;
         homeInteractor.loadSummary(context, this);
     }
 
@@ -49,7 +50,7 @@ public class HomePresenter extends MvpBasePresenter<HomeView> implements OnMulti
         if (getView() != null)
             getView().showProgressBar();
 
-        exchangeValue = BINANCE;
+        exchangeValue = GlobalConstant.Exchanges.BINANCE;
         homeInteractor.loadBinanceSummary(context, this);
     }
 
@@ -61,7 +62,10 @@ public class HomePresenter extends MvpBasePresenter<HomeView> implements OnMulti
             getView().setAdapter(results);
             getView().onSummaryDataLoad(marketSummaries);
             isStarted = true;
-            startTimer();
+            if(exchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)){
+
+                startTimer();
+            }
         }
     }
 
@@ -114,7 +118,7 @@ public class HomePresenter extends MvpBasePresenter<HomeView> implements OnMulti
         @Override
         public void run() {
 
-            if (exchangeValue.equalsIgnoreCase(BITRIX)) {
+            if (exchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)) {
                 homeInteractor.loadSummary(context, new OnMultiFinishListner<List<Result>, MarketSummaries>() {
                     @Override
                     public void onComplete(List<Result> results, MarketSummaries summaries) {
@@ -132,7 +136,7 @@ public class HomePresenter extends MvpBasePresenter<HomeView> implements OnMulti
                     }
                 });
             }
-            if (exchangeValue.equalsIgnoreCase(BINANCE)) {
+            if (exchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BINANCE)) {
                 homeInteractor.loadBinanceSummary(context, new OnMultiFinishListner<List<Result>, MarketSummaries>() {
                     @Override
                     public void onComplete(List<Result> results, MarketSummaries summaries) {
