@@ -52,7 +52,8 @@ import crypto.soft.cryptongy.utils.GlobalUtil;
 import crypto.soft.cryptongy.utils.HideKeyboard;
 import crypto.soft.cryptongy.utils.SharedPreference;
 
-import static crypto.soft.cryptongy.utils.SharedPreference.MOCK_VALUE_BINANCE;
+import static crypto.soft.cryptongy.utils.SharedPreference.WATCHLIST_BINANCE;
+import static crypto.soft.cryptongy.utils.SharedPreference.WATCHLIST_BITTREX;
 
 /**
  * Created by tseringwongelgurung on 11/27/17.
@@ -195,7 +196,7 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
 
                 //if at position zero bitrex and at position 1 binance is called
                 if (spinner.getItemAtPosition(position).toString().equalsIgnoreCase(getResources().getStringArray(R.array.coin_array)[0])) {
-//                    SharedPreference.saveToPrefs(getContext(), "isCoinAdded", true);
+
                     presenter.closeWebSocket();
                     spinnerValue = getResources().getStringArray(R.array.coin_array)[0];
                     presenter.loadSummaries();
@@ -370,6 +371,7 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
                             return;
                         }
                     }
+
                     mock.add(result);
                     CustomDialog.showMessagePop(getContext(), result.getMarketName() + " Coin is added successfully.", null);
                     result = null;
@@ -424,9 +426,9 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
 
     private void saveMockToSharedPrefrence(List<Result> mock) {
         if (spinnerValue.equalsIgnoreCase(getResources().getStringArray(R.array.coin_array)[0])) {//bitrix check
-            SharedPreference.saveToPrefs(getContext(), "mockValue", new Gson().toJson(mock));
+            SharedPreference.saveToPrefs(getContext(), WATCHLIST_BITTREX, new Gson().toJson(mock));
         } else {
-            SharedPreference.saveToPrefs(getContext(), MOCK_VALUE_BINANCE, new Gson().toJson(mock));
+            SharedPreference.saveToPrefs(getContext(), WATCHLIST_BINANCE, new Gson().toJson(mock));
         }
     }
 

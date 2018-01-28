@@ -78,6 +78,7 @@ public class HomePresenter extends MvpBasePresenter<HomeView> implements OnMulti
         if (timer != null) {
             timer.cancel();
             closeWebSocket();
+            prevResults = null;
         }
     }
 
@@ -86,6 +87,7 @@ public class HomePresenter extends MvpBasePresenter<HomeView> implements OnMulti
         if (timer != null) {
             timer.cancel();
             closeWebSocket();
+            prevResults = null;
         }
         Notification notification = ((CoinApplication) context.getApplicationContext()).getNotification();
         if (notification.isAutomSync()) {
@@ -109,10 +111,7 @@ public class HomePresenter extends MvpBasePresenter<HomeView> implements OnMulti
                     result.setDrawable(R.drawable.seek_progress_red);
                 else if (result.getLast().doubleValue() > prevResults.get(i).getLast().doubleValue())
                     result.setDrawable(R.drawable.seek_progress_green);
-//                else
-//                    result.setDrawable(R.drawable.seek_progress);
-            } else if (result != null)
-                result.setDrawable(R.drawable.seek_progress);
+            }
         }
         return list;
     }

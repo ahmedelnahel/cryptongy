@@ -24,7 +24,9 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 import static crypto.soft.cryptongy.utils.SharedPreference.IS_COIN_ADDED_BINANCE;
-import static crypto.soft.cryptongy.utils.SharedPreference.MOCK_VALUE_BINANCE;
+import static crypto.soft.cryptongy.utils.SharedPreference.IS_COIN_ADDED_BITTREX;
+import static crypto.soft.cryptongy.utils.SharedPreference.WATCHLIST_BINANCE;
+import static crypto.soft.cryptongy.utils.SharedPreference.WATCHLIST_BITTREX;
 
 
 /**
@@ -57,7 +59,7 @@ public class HomeInteractor {
             try {
                 MarketSummaries marketSummaries = new BittrexServices().getMarketSummaries();
 
-                boolean isFirst = SharedPreference.isFirst(context, "isCoinAdded");
+                boolean isFirst = SharedPreference.isFirst(context, IS_COIN_ADDED_BITTREX);
                 if (isFirst) {
                     if (marketSummaries != null && marketSummaries.getResult() != null && marketSummaries.getSuccess()) {
 
@@ -75,13 +77,13 @@ public class HomeInteractor {
 
 
                         if (results != null && results.size() != 0) {
-                            SharedPreference.saveToPrefs(context, "isCoinAdded", false);
-                            SharedPreference.saveToPrefs(context, "mockValue", new Gson().toJson(results));
+                            SharedPreference.saveToPrefs(context, IS_COIN_ADDED_BITTREX, false);
+                            SharedPreference.saveToPrefs(context, WATCHLIST_BITTREX, new Gson().toJson(results));
                         }
                     }
                 } else {
-                    if (!SharedPreference.getFromPrefs(context, "mockValue").equals("")) {
-                        List<Result> results = new Gson().fromJson(SharedPreference.getFromPrefs(context, "mockValue"), new TypeToken<List<Result>>() {
+                    if (!SharedPreference.getFromPrefs(context, WATCHLIST_BITTREX).equals("")) {
+                        List<Result> results = new Gson().fromJson(SharedPreference.getFromPrefs(context, WATCHLIST_BITTREX), new TypeToken<List<Result>>() {
                         }.getType());
                         if (marketSummaries != null && marketSummaries.getResult() != null && marketSummaries.getSuccess()) {
                             for (Result r : results) {
@@ -96,7 +98,7 @@ public class HomeInteractor {
                             }
 
                             if (results != null) {
-                                SharedPreference.saveToPrefs(context, "mockValue", new Gson().toJson(results));
+                                SharedPreference.saveToPrefs(context, WATCHLIST_BITTREX, new Gson().toJson(results));
                             }
                         }
                         this.results.clear();
@@ -176,12 +178,12 @@ public class HomeInteractor {
                                 if (resultsbinance != null && resultsbinance.size() != 0) {
                                     isFirst = false;
                                     SharedPreference.saveToPrefs(context, IS_COIN_ADDED_BINANCE, false);
-                                    SharedPreference.saveToPrefs(context, MOCK_VALUE_BINANCE, new Gson().toJson(resultsbinance));
+                                    SharedPreference.saveToPrefs(context, WATCHLIST_BINANCE, new Gson().toJson(resultsbinance));
                                 }
                             }
                         } else {
-                            if (!SharedPreference.getFromPrefs(context, MOCK_VALUE_BINANCE).equals("")) {
-                                List<Result> results = new Gson().fromJson(SharedPreference.getFromPrefs(context, MOCK_VALUE_BINANCE), new TypeToken<List<Result>>() {
+                            if (!SharedPreference.getFromPrefs(context, WATCHLIST_BINANCE).equals("")) {
+                                List<Result> results = new Gson().fromJson(SharedPreference.getFromPrefs(context, WATCHLIST_BINANCE), new TypeToken<List<Result>>() {
                                 }.getType());
                                 if (marketSummaries != null && marketSummaries.getResult() != null && marketSummaries.getSuccess()) {
                                     for (Result r : results) {
@@ -196,7 +198,7 @@ public class HomeInteractor {
                                     }
 
                                     if (results != null) {
-                                        SharedPreference.saveToPrefs(context, MOCK_VALUE_BINANCE, new Gson().toJson(results));
+                                        SharedPreference.saveToPrefs(context, WATCHLIST_BINANCE, new Gson().toJson(results));
                                     }
                                 }
                                 resultsbinance.clear();
