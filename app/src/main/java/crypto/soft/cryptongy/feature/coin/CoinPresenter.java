@@ -315,17 +315,15 @@ public class CoinPresenter extends TickerPresenter<CoinView> {
             }
 
             if (coinName.isEmpty() || data.getExchange().equals(coinName)) {
-                if (data.getOrderType().toLowerCase().equals("limit_sell") ||
-                        data.getOrderType().toLowerCase().equals("conditional_sell")) {
-                    if (data.getLimit() != null) {
+                if (data.getOrderType().toLowerCase().contains("sell")) {
+                    if (data.getLimit() != null && data.getLimit() != 0) {
                         if (data.getQuantity() != null)
                             sell += data.getPrice();
                         sq += data.getQuantity()-data.getQuantityRemaining();
 
                     }
-                } else if ((data.getOrderType().toLowerCase().equals("limit_buy") ||
-                        data.getOrderType().toLowerCase().equals("conditional_buy"))) {
-                    if (data.getLimit() != null) {
+                } else if ((data.getOrderType().toLowerCase().contains("buy") )) {
+                    if (data.getLimit() != null && data.getLimit() != 0) {
                         if (data.getQuantity() != null)
                             buy += data.getPrice();
                         bq += data.getQuantity()-data.getQuantityRemaining();

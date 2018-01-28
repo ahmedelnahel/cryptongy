@@ -175,13 +175,13 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
     public void setCalculation(double calculation) {
         double priceInDollar = 1.0;
         String syumpol = "";
-        if (!coinName.contains("USDT-")) {
+        if (!coinName.contains("USDT")) {
             priceInDollar = ((CoinApplication) getActivity().getApplication()).getUsdt_btc();
             syumpol = "฿";
 
         }
         double ethinbtc = 1.0;
-        if (coinName.contains("ETH-")) {
+        if (coinName.contains("ETH-") || (coinName.endsWith("ETH")&& !coinName.endsWith("-ETH") )) {
             ethinbtc = ((CoinApplication) getActivity().getApplication()).getbtc_eth();
             syumpol = "Ξ";
         }

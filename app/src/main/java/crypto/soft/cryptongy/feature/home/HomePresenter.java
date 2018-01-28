@@ -28,6 +28,7 @@ public class HomePresenter extends MvpBasePresenter<HomeView> implements OnMulti
     private HomeInteractor homeInteractor;
     private Context context;
     private List<Result> prevResults = new ArrayList<>();
+    private List<Result> binancePrevResults = new ArrayList<>();
     private boolean isStarted = false;
     private String exchangeValue;
 
