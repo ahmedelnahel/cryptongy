@@ -181,6 +181,7 @@ public class BinanceServices {
 
             @Override
             public void onError(Exception e) {
+                e.printStackTrace();
                 Log.d(TAG, "onError: websocket "+e.getMessage());
                 Log.i("Websocket", "Error " + e.getMessage());
             }

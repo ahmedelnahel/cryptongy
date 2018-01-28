@@ -406,6 +406,7 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
     public void onPause() {
         super.onPause();
         presenter.stopTimer();
+        presenter.closeWebSocket();
     }
 
     @Override
@@ -421,7 +422,10 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        presenter.stopTimer();
         presenter.closeWebSocket();
 
     }
+
+
 }

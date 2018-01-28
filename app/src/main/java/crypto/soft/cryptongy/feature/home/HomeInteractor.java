@@ -16,13 +16,16 @@ import crypto.soft.cryptongy.feature.shared.json.market.Result;
 import crypto.soft.cryptongy.feature.shared.listner.OnMultiFinishListner;
 import crypto.soft.cryptongy.network.BinanceServices;
 import crypto.soft.cryptongy.network.BittrexServices;
+import crypto.soft.cryptongy.utils.GlobalConstant;
 import crypto.soft.cryptongy.utils.SharedPreference;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 
 import static crypto.soft.cryptongy.utils.SharedPreference.IS_COIN_ADDED_BINANCE;
-import static crypto.soft.cryptongy.utils.SharedPreference.MOCK_VALUE_BINANCE;
+import static crypto.soft.cryptongy.utils.SharedPreference.IS_COIN_ADDED_BITTREX;
+import static crypto.soft.cryptongy.utils.SharedPreference.WATCHLIST_BINANCE;
+import static crypto.soft.cryptongy.utils.SharedPreference.WATCHLIST_BITTREX;
 
 
 /**
@@ -35,17 +38,17 @@ public class HomeInteractor {
 
 
 
-    public void loadSummary(Context context, OnMultiFinishListner<List<Result>, MarketSummaries> onBitrexLoadListener) {
+    public void loadSummary(Context context, OnMultiFinishListner<List<Result>, MarketSummaries, String> onBitrexLoadListener) {
         new AsyncSummaryLoader(context, onBitrexLoadListener).execute();
     }
 
     class AsyncSummaryLoader extends AsyncTask<AssetManager, Void, MarketSummaries> {
-        OnMultiFinishListner<List<Result>, MarketSummaries> onBitrexLoadListener;
+        OnMultiFinishListner<List<Result>, MarketSummaries, String> onBitrexLoadListener;
         List<Result> results = new ArrayList<>();
         private Context context;
 
 
-        public AsyncSummaryLoader(Context context, OnMultiFinishListner<List<Result>, MarketSummaries> onBitrexLoadListener) {
+        public AsyncSummaryLoader(Context context, OnMultiFinishListner<List<Result>, MarketSummaries, String> onBitrexLoadListener) {
             this.onBitrexLoadListener = onBitrexLoadListener;
             this.context = context;
         }
@@ -55,7 +58,7 @@ public class HomeInteractor {
             try {
                 MarketSummaries marketSummaries = new BittrexServices().getMarketSummaries();
 
-                boolean isFirst = SharedPreference.isFirst(context, "isCoinAdded");
+                boolean isFirst = SharedPreference.isFirst(context, IS_COIN_ADDED_BITTREX);
                 if (isFirst) {
                     if (marketSummaries != null && marketSummaries.getResult() != null && marketSummaries.getSuccess()) {
 
@@ -73,13 +76,13 @@ public class HomeInteractor {
 
 
                         if (results != null && results.size() != 0) {
-                            SharedPreference.saveToPrefs(context, "isCoinAdded", false);
-                            SharedPreference.saveToPrefs(context, "mockValue", new Gson().toJson(results));
+                            SharedPreference.saveToPrefs(context, IS_COIN_ADDED_BITTREX, false);
+                            SharedPreference.saveToPrefs(context, WATCHLIST_BITTREX, new Gson().toJson(results));
                         }
                     }
                 } else {
-                    if (!SharedPreference.getFromPrefs(context, "mockValue").equals("")) {
-                        List<Result> results = new Gson().fromJson(SharedPreference.getFromPrefs(context, "mockValue"), new TypeToken<List<Result>>() {
+                    if (!SharedPreference.getFromPrefs(context, WATCHLIST_BITTREX).equals("")) {
+                        List<Result> results = new Gson().fromJson(SharedPreference.getFromPrefs(context, WATCHLIST_BITTREX), new TypeToken<List<Result>>() {
                         }.getType());
                         if (marketSummaries != null && marketSummaries.getResult() != null && marketSummaries.getSuccess()) {
                             for (Result r : results) {
@@ -94,7 +97,7 @@ public class HomeInteractor {
                             }
 
                             if (results != null) {
-                                SharedPreference.saveToPrefs(context, "mockValue", new Gson().toJson(results));
+                                SharedPreference.saveToPrefs(context, WATCHLIST_BITTREX, new Gson().toJson(results));
                             }
                         }
                         this.results.clear();
@@ -112,7 +115,7 @@ public class HomeInteractor {
         protected void onPostExecute(MarketSummaries marketSummaries) {
             super.onPostExecute(marketSummaries);
             if (marketSummaries != null && marketSummaries.getSuccess() && marketSummaries.getResult() != null) {
-                onBitrexLoadListener.onComplete(results, marketSummaries);
+                onBitrexLoadListener.onComplete(results, marketSummaries, GlobalConstant.Exchanges.BITTREX);
             } else {
                 onBitrexLoadListener.onFail("");
             }
@@ -123,12 +126,12 @@ public class HomeInteractor {
 
     /* Binannce */
 
-    public void loadBinanceSummary(Context context, OnMultiFinishListner<List<Result>, MarketSummaries> onBinanceLoadListner) {
+    public void loadBinanceSummary(Context context, OnMultiFinishListner<List<Result>, MarketSummaries, String> onBinanceLoadListner) {
         new AsyncBinanceSummaryLoader(context, onBinanceLoadListner).execute();
     }
 
     class AsyncBinanceSummaryLoader extends AsyncTask<AssetManager, Void, MarketSummaries> {
-        OnMultiFinishListner<List<Result>, MarketSummaries> onBinanceLoadListner;
+        OnMultiFinishListner<List<Result>, MarketSummaries, String> onBinanceLoadListner;
         private Context context;
         List<Result> resultsbinance = new ArrayList<>();
 
@@ -137,7 +140,7 @@ public class HomeInteractor {
         boolean isFirst;
 
 
-        public AsyncBinanceSummaryLoader(Context context, OnMultiFinishListner<List<Result>, MarketSummaries> onBinanceLoadListner) {
+        public AsyncBinanceSummaryLoader(Context context, OnMultiFinishListner<List<Result>, MarketSummaries, String> onBinanceLoadListner) {
             this.onBinanceLoadListner = onBinanceLoadListner;
             this.context = context;
             isFirst = SharedPreference.isFirst(context, IS_COIN_ADDED_BINANCE);
@@ -171,12 +174,12 @@ public class HomeInteractor {
                                 if (resultsbinance != null && resultsbinance.size() != 0) {
                                     isFirst = false;
                                     SharedPreference.saveToPrefs(context, IS_COIN_ADDED_BINANCE, false);
-                                    SharedPreference.saveToPrefs(context, MOCK_VALUE_BINANCE, new Gson().toJson(resultsbinance));
+                                    SharedPreference.saveToPrefs(context, WATCHLIST_BINANCE, new Gson().toJson(resultsbinance));
                                 }
                             }
                         } else {
-                            if (!SharedPreference.getFromPrefs(context, MOCK_VALUE_BINANCE).equals("")) {
-                                List<Result> results = new Gson().fromJson(SharedPreference.getFromPrefs(context, MOCK_VALUE_BINANCE), new TypeToken<List<Result>>() {
+                            if (!SharedPreference.getFromPrefs(context, WATCHLIST_BINANCE).equals("")) {
+                                List<Result> results = new Gson().fromJson(SharedPreference.getFromPrefs(context, WATCHLIST_BINANCE), new TypeToken<List<Result>>() {
                                 }.getType());
                                 if (marketSummaries != null && marketSummaries.getResult() != null && marketSummaries.getSuccess()) {
                                     for (Result r : results) {
@@ -191,7 +194,7 @@ public class HomeInteractor {
                                     }
 
                                     if (results != null) {
-                                        SharedPreference.saveToPrefs(context, MOCK_VALUE_BINANCE, new Gson().toJson(results));
+                                        SharedPreference.saveToPrefs(context, WATCHLIST_BINANCE, new Gson().toJson(results));
                                     }
                                 }
                                 resultsbinance.clear();
@@ -203,13 +206,12 @@ public class HomeInteractor {
 
 
 
-                        onBinanceLoadListner.onComplete(resultsbinance, marketSummaries);
+                        onBinanceLoadListner.onComplete(resultsbinance, marketSummaries, GlobalConstant.Exchanges.BINANCE);
 
 
 
                     }
                 });
-
 
 
                 return null;

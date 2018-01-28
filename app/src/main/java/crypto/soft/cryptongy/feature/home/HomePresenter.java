@@ -22,15 +22,13 @@ import crypto.soft.cryptongy.utils.GlobalConstant;
  * Created by tseringwongelgurung on 11/27/17.
  */
 
-public class HomePresenter extends MvpBasePresenter<HomeView> implements OnMultiFinishListner<List<Result>, MarketSummaries> {
+public class HomePresenter extends MvpBasePresenter<HomeView> implements OnMultiFinishListner<List<Result>, MarketSummaries, String> {
     public String TAG =getClass().getSimpleName();
     private static Timer timer;
     private HomeInteractor homeInteractor;
     private Context context;
     private List<Result> prevResults = new ArrayList<>();
     private boolean isStarted = false;
-    private String BITRIX = "BITRIX";
-    private String BINANCE = "BINACE";
     private String exchangeValue;
 
 
@@ -57,14 +55,14 @@ public class HomePresenter extends MvpBasePresenter<HomeView> implements OnMulti
     }
 
     @Override
-    public void onComplete(List<Result> results, MarketSummaries marketSummaries) {
+    public void onComplete(List<Result> results, MarketSummaries marketSummaries, String exchange) {
         if (getView() != null) {
             results = setDrawable(results);
             prevResults = results;
             getView().setAdapter(results);
-            getView().onSummaryDataLoad(marketSummaries);
+            getView().onSummaryDataLoad(marketSummaries, exchange);
             isStarted = true;
-            startTimer();
+//            startTimer();
         }
     }
 
@@ -77,13 +75,20 @@ public class HomePresenter extends MvpBasePresenter<HomeView> implements OnMulti
     }
 
     public void stopTimer() {
-        if (timer != null)
+        if (timer != null) {
             timer.cancel();
+            closeWebSocket();
+            prevResults = null;
+        }
     }
 
-    public void startTimer() {
-        if (timer != null)
+    public void startTimer( String exchangeValue) {
+        this.exchangeValue = exchangeValue;
+        if (timer != null) {
             timer.cancel();
+            closeWebSocket();
+            prevResults = null;
+        }
         Notification notification = ((CoinApplication) context.getApplicationContext()).getNotification();
         if (notification.isAutomSync()) {
             Log.d(TAG, "startTimer: synValue "+notification.getSyncInterval());
@@ -106,54 +111,57 @@ public class HomePresenter extends MvpBasePresenter<HomeView> implements OnMulti
                     result.setDrawable(R.drawable.seek_progress_red);
                 else if (result.getLast().doubleValue() > prevResults.get(i).getLast().doubleValue())
                     result.setDrawable(R.drawable.seek_progress_green);
-//                else
-//                    result.setDrawable(R.drawable.seek_progress);
-            } else if (result != null)
-                result.setDrawable(R.drawable.seek_progress);
+            }
         }
         return list;
     }
 
     class TickerTimer extends TimerTask {
-
+        boolean isComplete = true;
         @Override
         public void run() {
 
-            if (exchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)) {
-                homeInteractor.loadSummary(context, new OnMultiFinishListner<List<Result>, MarketSummaries>() {
-                    @Override
-                    public void onComplete(List<Result> results, MarketSummaries summaries) {
-                        if (getView() != null) {
-                            results = setDrawable(results);
-                            getView().setAdapter(results);
-                            getView().onSummaryDataLoad(summaries);
-                            prevResults = results;
+            Notification notification = ((CoinApplication) context.getApplicationContext()).getNotification();
+            if (notification.isAutomSync() && isComplete) {
+                isComplete = false;
+                if (exchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)) {
+                    homeInteractor.loadSummary(context, new OnMultiFinishListner<List<Result>, MarketSummaries, String>() {
+                        @Override
+                        public void onComplete(List<Result> results, MarketSummaries summaries, String exchange) {
+                            if (getView() != null) {
+                                results = setDrawable(results);
+                                getView().setAdapter(results);
+                                getView().onSummaryDataLoad(summaries, exchange);
+                                prevResults = results;
+                                isComplete = true;
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onFail(String error) {
+                        @Override
+                        public void onFail(String error) {
 
-                    }
-                });
-            }
-            if (exchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BINANCE)) {
-                homeInteractor.loadBinanceSummary(context, new OnMultiFinishListner<List<Result>, MarketSummaries>() {
-                    @Override
-                    public void onComplete(List<Result> results, MarketSummaries summaries) {
-                        if (getView() != null) {
-                            results = setDrawable(results);
-                            getView().setAdapter(results);
-                            getView().onSummaryDataLoad(summaries);
-                            prevResults = results;
                         }
-                    }
+                    });
+                }
+                if (exchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BINANCE)) {
+                    homeInteractor.loadBinanceSummary(context, new OnMultiFinishListner<List<Result>, MarketSummaries, String >() {
+                        @Override
+                        public void onComplete(List<Result> results, MarketSummaries summaries, String exchange) {
+                            if (getView() != null) {
+                                results = setDrawable(results);
+                                getView().setAdapter(results);
+                                getView().onSummaryDataLoad(summaries, exchange);
+                                prevResults = results;
+                                isComplete = true;
+                            }
+                        }
 
-                    @Override
-                    public void onFail(String error) {
+                        @Override
+                        public void onFail(String error) {
 
-                    }
-                });
+                        }
+                    });
+                }
             }
 
         }

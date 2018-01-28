@@ -16,7 +16,7 @@ public interface HomeView extends MvpView {
 
     void setAdapter(List<Result> results);
 
-    void onSummaryDataLoad(MarketSummaries marketSummaries);
+    void onSummaryDataLoad(MarketSummaries marketSummaries, String exchangeValue);
 
     void onSummaryLoadFailed();
 

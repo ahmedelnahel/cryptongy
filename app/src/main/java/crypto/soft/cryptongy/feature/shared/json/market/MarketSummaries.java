@@ -31,6 +31,8 @@ public class MarketSummaries {
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     public Boolean getSuccess() {
+        if (success == null)
+            success = new Boolean(false);
         return success;
     }
 
