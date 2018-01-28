@@ -195,16 +195,18 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
 
                 //if at position zero bitrex and at position 1 binance is called
                 if (spinner.getItemAtPosition(position).toString().equalsIgnoreCase(getResources().getStringArray(R.array.coin_array)[0])) {
-                    SharedPreference.saveToPrefs(getContext(), "isCoinAdded", true);
+//                    SharedPreference.saveToPrefs(getContext(), "isCoinAdded", true);
                     presenter.closeWebSocket();
                     spinnerValue = getResources().getStringArray(R.array.coin_array)[0];
                     presenter.loadSummaries();
+                    presenter.startTimer(spinnerValue);
+
                 } else {
 
 
                     spinnerValue = getResources().getStringArray(R.array.coin_array)[1];
                     presenter.loadBinanceSummaries();
-
+                    presenter.startTimer(spinnerValue);
                 }
 
             }
@@ -283,9 +285,9 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
     }
 
     @Override
-    public void onSummaryDataLoad(MarketSummaries marketSummaries) {
+    public void onSummaryDataLoad(MarketSummaries marketSummaries, String exchangeValue) {
 
-        if(marketSummaries!=null){
+        if(marketSummaries!=null && spinnerValue.equalsIgnoreCase(exchangeValue)){
             if (marketSummaries.getSuccess()) {
 
                 if (spinnerValue.equalsIgnoreCase(getResources().getStringArray(R.array.coin_array)[0])) {//Bitrix value comparing
@@ -323,8 +325,9 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
                 adapterCoins.notifyDataSetChanged();
                 currencyAdapter.notifyDataSetChanged();
             }
-            hideProgressBar();
+
         }
+        hideProgressBar();
 
     }
 
@@ -522,13 +525,13 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
     @Override
     public void onStart() {
         super.onStart();
-        presenter.startTimer();
+        presenter.startTimer(spinnerValue);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        presenter.startTimer();
+        presenter.startTimer(spinnerValue);
     }
 
     @Override
