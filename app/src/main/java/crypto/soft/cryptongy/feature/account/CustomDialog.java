@@ -51,6 +51,17 @@ public class CustomDialog {
         final RadioGroup rdgLabel = view.findViewById(R.id.rdgLabel);
 
         if (account.getId() != null) {
+
+            if (account.getExchange() != null) {
+
+                if (account.getExchange().equalsIgnoreCase(context.getResources().getStringArray(R.array.coin_array)[0])) {
+
+                    spinner.setSelection(0);
+                } else {
+                    spinner.setSelection(1);
+
+                }
+            }
             edtApiKey.setText(account.getApiKey());
             edtSecret.setText(account.getSecret());
             int id = R.id.rdbRead;
