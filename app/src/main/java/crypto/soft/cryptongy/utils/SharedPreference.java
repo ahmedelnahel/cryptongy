@@ -13,7 +13,7 @@ public class SharedPreference {
     public static String IS_COIN_ADDED_BITTREX="isCoinAddedBittrex";
     public static String IS_COIN_ADDED_BINANCE="isCoinAddedBinance";
     public static String WATCHLIST_BINANCE="watchlistBinance";
-    public static String WATCHLIST_BITTREX="watchlistBinance";
+    public static String WATCHLIST_BITTREX="watchlistBittrex";
 
     public static void saveToPrefs(Context context, String key, String value) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
