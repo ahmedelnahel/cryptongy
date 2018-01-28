@@ -108,6 +108,9 @@ public class CoinFragment extends MvpFragment<CoinView, CoinPresenter> implement
         presenter.getData(coinName,exchangeValue);
         presenter.loadTradingView(webView,coinName,exchangeValue);
 
+
+
+
     }
 
     @Override

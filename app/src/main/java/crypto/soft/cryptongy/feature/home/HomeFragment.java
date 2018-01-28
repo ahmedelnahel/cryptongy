@@ -224,11 +224,13 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
             if (spinnerValue != null) {
                 if (spinnerValue.equalsIgnoreCase(getResources().getStringArray(R.array.coin_array)[0])) {
 
+                    presenter.closeWebSocket();
                     getPresenter().loadSummaries();
                 } else {
                     getPresenter().loadBinanceSummaries();
                 }
             } else {
+                presenter.closeWebSocket();
                 getPresenter().loadSummaries();
             }
 
@@ -386,6 +388,7 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
 
                 if (spinnerValue.equalsIgnoreCase(getResources().getStringArray(R.array.coin_array)[0])) {
 
+                    presenter.closeWebSocket();
                     presenter.loadSummaries();
                 } else {
                     presenter.loadBinanceSummaries();
@@ -436,6 +439,7 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        presenter.closeWebSocket();
         if(spinnerValue.equalsIgnoreCase(GlobalConstant.Exchanges.BINANCE)){
             presenter.loadBinanceSummaries();
         }

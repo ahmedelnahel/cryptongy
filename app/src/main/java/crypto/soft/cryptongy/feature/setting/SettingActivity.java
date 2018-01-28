@@ -41,7 +41,6 @@ public class SettingActivity extends MvpActivity<SettingView, SettingPresenter> 
         spinner.setAdapter(adapter);
 
 
-
         presenter.getNotification();
     }
 
@@ -71,7 +70,7 @@ public class SettingActivity extends MvpActivity<SettingView, SettingPresenter> 
         tgbAutomaticSync = findViewById(R.id.tgbAutomaticSync);
         lnlInterval = findViewById(R.id.lnlInterval);
         edtInterval = findViewById(R.id.edtInterval);
-        spinner=findViewById(R.id.settingSpinner);
+        spinner = findViewById(R.id.settingSpinner);
     }
 
     @Override
@@ -105,14 +104,13 @@ public class SettingActivity extends MvpActivity<SettingView, SettingPresenter> 
         });
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-            {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 notification.setDefaultExchange(spinner.getItemAtPosition(position).toString());
                 presenter.updateNotification(notification);
 
             }
-            public void onNothingSelected(AdapterView<?> parent)
-            {
+
+            public void onNothingSelected(AdapterView<?> parent) {
 
             }
         });
@@ -131,10 +129,10 @@ public class SettingActivity extends MvpActivity<SettingView, SettingPresenter> 
             lnlInterval.setVisibility(View.GONE);
         edtInterval.setText(String.valueOf(notification.getSyncInterval()));
 
-        String[] stringArray=getResources().getStringArray(R.array.coin_array);
-        for(int i =0;i<stringArray.length;i++){
+        String[] stringArray = getResources().getStringArray(R.array.coin_array);
+        for (int i = 0; i < stringArray.length; i++) {
 
-            if(stringArray[i].equalsIgnoreCase(notification.getDefaultExchange())){
+            if (stringArray[i].equalsIgnoreCase(notification.getDefaultExchange())) {
                 spinner.setSelection(i);
             }
         }
@@ -153,7 +151,11 @@ public class SettingActivity extends MvpActivity<SettingView, SettingPresenter> 
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (!TextUtils.isEmpty(charSequence.toString())){
 
+                    notification.setSyncInterval(Integer.parseInt(charSequence.toString()));
+                    presenter.updateNotification(notification);
+                }
             }
 
             @Override

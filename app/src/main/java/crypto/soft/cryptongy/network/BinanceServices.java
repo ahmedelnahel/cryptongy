@@ -168,7 +168,6 @@ public class BinanceServices {
                     }
                 }
 
-
                 sourceMarketSummariesWebsocket.onNext(marketSummaries_);
                 sourceWebSocketClient.onNext(mWebSocketClient);
                 //final String message =s;
@@ -189,6 +188,7 @@ public class BinanceServices {
 
 
         mWebSocketClient.connect();
+
 
 
     }

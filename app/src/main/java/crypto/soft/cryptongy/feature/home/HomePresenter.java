@@ -1,6 +1,7 @@
 package crypto.soft.cryptongy.feature.home;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
@@ -22,6 +23,7 @@ import crypto.soft.cryptongy.utils.GlobalConstant;
  */
 
 public class HomePresenter extends MvpBasePresenter<HomeView> implements OnMultiFinishListner<List<Result>, MarketSummaries> {
+    public String TAG =getClass().getSimpleName();
     private static Timer timer;
     private HomeInteractor homeInteractor;
     private Context context;
@@ -62,10 +64,7 @@ public class HomePresenter extends MvpBasePresenter<HomeView> implements OnMulti
             getView().setAdapter(results);
             getView().onSummaryDataLoad(marketSummaries);
             isStarted = true;
-            if(exchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)){
-
-                startTimer();
-            }
+            startTimer();
         }
     }
 
@@ -87,6 +86,7 @@ public class HomePresenter extends MvpBasePresenter<HomeView> implements OnMulti
             timer.cancel();
         Notification notification = ((CoinApplication) context.getApplicationContext()).getNotification();
         if (notification.isAutomSync()) {
+            Log.d(TAG, "startTimer: synValue "+notification.getSyncInterval());
             int timerInterval = notification.getSyncInterval() * 1000;
             timer = new Timer();
             timer.scheduleAtFixedRate(new TickerTimer(), timerInterval,
@@ -101,6 +101,7 @@ public class HomePresenter extends MvpBasePresenter<HomeView> implements OnMulti
             if (prevResults == null)
                 result.setDrawable(R.drawable.seek_progress);
             else if (i < prevResults.size() && result != null) {
+                Log.d(TAG, "setDrawable: previous result: "+prevResults.get(i).getLast().doubleValue() +" result last value : "+result.getLast().doubleValue() );
                 if (result.getLast().doubleValue() < prevResults.get(i).getLast().doubleValue())
                     result.setDrawable(R.drawable.seek_progress_red);
                 else if (result.getLast().doubleValue() > prevResults.get(i).getLast().doubleValue())
@@ -159,7 +160,7 @@ public class HomePresenter extends MvpBasePresenter<HomeView> implements OnMulti
     }
 
 
-    public void closeWebSocket(){
+    public void closeWebSocket() {
         homeInteractor.closeWebSocket();
     }
 }

@@ -19,7 +19,7 @@ public class SharedPreference {
         final SharedPreferences.Editor editor = prefs.edit();
         editor.putString(key, value);
         editor.commit();
-        Log.v("ShpUtils saving", "key: " + key + "\n value:" + value);
+        Log.v("ShpUtils saving", "key: " + key + "   value:   " + value);
     }
 
     public static void saveToPrefs(Context context, String key, Boolean value) {
@@ -27,7 +27,7 @@ public class SharedPreference {
         final SharedPreferences.Editor editor = prefs.edit();
         editor.putBoolean(key, value);
         editor.commit();
-        Log.v("ShpUtils saving", "key: " + key + "\n value:" + value);
+        Log.v("ShpUtils saving", "key: " + key + "  value:   " + value);
     }
 
     public static void clearall(Context context) {

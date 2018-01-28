@@ -9,7 +9,6 @@ import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import crypto.soft.cryptongy.feature.shared.json.market.MarketSummaries;
@@ -34,7 +33,7 @@ import static crypto.soft.cryptongy.utils.SharedPreference.MOCK_VALUE_BINANCE;
 public class HomeInteractor {
     public static String TAG = "HomeInteractor";
     BinanceServices binanceServices = new BinanceServices();
-    List<Result> resultsbinance = new ArrayList<>();
+
 
 
     public void loadSummary(Context context, OnMultiFinishListner<List<Result>, MarketSummaries> onBitrexLoadListener) {
@@ -132,7 +131,8 @@ public class HomeInteractor {
     class AsyncBinanceSummaryLoader extends AsyncTask<AssetManager, Void, MarketSummaries> {
         OnMultiFinishListner<List<Result>, MarketSummaries> onBinanceLoadListner;
         private Context context;
-        MarketSummaries marketSummaries_ = null;
+        List<Result> resultsbinance = new ArrayList<>();
+
         boolean isFirst;
 
 
@@ -157,7 +157,7 @@ public class HomeInteractor {
                     @Override
                     public void onNext(MarketSummaries marketSummaries) {
 
-                        marketSummaries_ = marketSummaries;
+                        closeWebSocket();
 
                         if (isFirst) {
                             if (marketSummaries != null && marketSummaries.getResult() != null && marketSummaries.getSuccess()) {
@@ -178,41 +178,96 @@ public class HomeInteractor {
                                     SharedPreference.saveToPrefs(context, MOCK_VALUE_BINANCE, new Gson().toJson(resultsbinance));
                                 }
                             }
-
                         } else {
-
-
-                            if (marketSummaries != null) {
-                                if (marketSummaries.getResult() != null) {
-                                }
-                            }
-                            if (marketSummaries != null && marketSummaries.getResult() != null && marketSummaries.getSuccess()) {
-                                if (resultsbinance != null && resultsbinance.size() > 0) {
-                                    for (Result r : resultsbinance) {
+                            if (!SharedPreference.getFromPrefs(context, MOCK_VALUE_BINANCE).equals("")) {
+                                List<Result> results = new Gson().fromJson(SharedPreference.getFromPrefs(context, MOCK_VALUE_BINANCE), new TypeToken<List<Result>>() {
+                                }.getType());
+                                if (marketSummaries != null && marketSummaries.getResult() != null && marketSummaries.getSuccess()) {
+                                    for (Result r : results) {
                                         if (r != null) {
                                             Result ms = marketSummaries.getCoinsMap().get(r.getMarketName());
                                             if (ms != null) {
+
                                                 r.setLast(ms.getLast());
                                                 r.setVolume(ms.getVolume());
                                             }
-
                                         }
                                     }
 
+                                    if (results != null) {
+                                        SharedPreference.saveToPrefs(context, MOCK_VALUE_BINANCE, new Gson().toJson(results));
+                                    }
                                 }
-
-
-                                try {
-                                    SharedPreference.saveToPrefs(context, MOCK_VALUE_BINANCE, new Gson().toJson(resultsbinance));
-
-                                } catch (Exception e) {
-
-                                }
+                                resultsbinance.clear();
+                                resultsbinance.addAll(results);
                             }
                         }
 
 
-                        onBinanceLoadListner.onComplete(resultsbinance, marketSummaries_);
+
+
+
+                        onBinanceLoadListner.onComplete(resultsbinance, marketSummaries);
+                    //    closeWebSocket();
+
+
+//
+//                        if (isFirst) {
+//                            if (marketSummaries != null && marketSummaries.getResult() != null && marketSummaries.getSuccess()) {
+//
+//                                if (marketSummaries.getCoinsMap().get("LTCBTC") != null)
+//                                    resultsbinance.add(marketSummaries.getCoinsMap().get("LTCBTC"));
+//                                if (marketSummaries.getCoinsMap().get("ETHBTC") != null)
+//                                    resultsbinance.add(marketSummaries.getCoinsMap().get("ETHBTC"));
+//                                if (marketSummaries.getCoinsMap().get("APPCBTC") != null)
+//                                    resultsbinance.add(marketSummaries.getCoinsMap().get("APPCBTC"));
+//                                if (marketSummaries.getCoinsMap().get("TRXBTC") != null)
+//                                    resultsbinance.add(marketSummaries.getCoinsMap().get("TRXBTC"));
+//                                if (marketSummaries.getCoinsMap().get("ICXBTC") != null)
+//                                    resultsbinance.add(marketSummaries.getCoinsMap().get("ICXBTC"));
+//                                if (resultsbinance != null && resultsbinance.size() != 0) {
+//                                    isFirst = false;
+//                                    SharedPreference.saveToPrefs(context, IS_COIN_ADDED_BINANCE, false);
+//                                    SharedPreference.saveToPrefs(context, MOCK_VALUE_BINANCE, new Gson().toJson(resultsbinance));
+//                                }
+//                            }
+//
+//                        } else {
+//
+//
+//                            try {
+//                                if (marketSummaries != null && marketSummaries.getResult() != null && marketSummaries.getSuccess()) {
+//                                    if (resultsbinance != null && resultsbinance.size() > 0) {
+//                                        for (Result r : resultsbinance) {
+//                                            if (r != null) {
+//                                                Result ms = marketSummaries.getCoinsMap().get(r.getMarketName());
+//                                                if (ms != null) {
+//                                                    r.setLast(ms.getLast());
+//                                                    r.setVolume(ms.getVolume());
+//                                                }
+//
+//                                            }
+//                                        }
+//
+//                                    }
+//
+//
+//
+//
+//                                        SharedPreference.saveToPrefs(context, MOCK_VALUE_BINANCE, new Gson().toJson(resultsbinance));
+//
+//
+//                                }
+//                            } catch (Exception e) {
+//                                e.printStackTrace();
+//                            }
+//
+//
+//                        }
+
+//
+//                        onBinanceLoadListner.onComplete(resultsbinance, marketSummaries_);
+//                        closeWebSocket();
                     }
 
                     @Override
@@ -237,41 +292,41 @@ public class HomeInteractor {
 //                });
 
 
-                if (marketSummaries_ == null) {
-                    if (!isFirst) {
+//                if (marketSummaries_ == null) {
+//                    if (!isFirst) {
+//
+//                        if (!SharedPreference.getFromPrefs(context, MOCK_VALUE_BINANCE).equals("")) {
+//                            List<Result> resultsSharedPref = new Gson().fromJson(SharedPreference.getFromPrefs(context, MOCK_VALUE_BINANCE), new TypeToken<List<Result>>() {
+//                            }.getType());
+//
+//                            marketSummaries_ = new MarketSummaries();
+//                            HashMap<String, Result> temp = new HashMap<>();
+//                            marketSummaries_.setCoinsMap(temp);
+//                            marketSummaries_.setSuccess(true);
+//                            marketSummaries_.setResult(resultsSharedPref);
+//
+//                            resultsbinance.clear();
+//                            resultsbinance.addAll(resultsSharedPref);
+//                        }
+//
+//                    }
+//
+//
+//                }
 
-                        if (!SharedPreference.getFromPrefs(context, MOCK_VALUE_BINANCE).equals("")) {
-                            List<Result> resultsSharedPref = new Gson().fromJson(SharedPreference.getFromPrefs(context, MOCK_VALUE_BINANCE), new TypeToken<List<Result>>() {
-                            }.getType());
 
-                            marketSummaries_ = new MarketSummaries();
-                            HashMap<String, Result> temp = new HashMap<>();
-                            marketSummaries_.setCoinsMap(temp);
-                            marketSummaries_.setSuccess(true);
-                            marketSummaries_.setResult(resultsSharedPref);
-
-                            resultsbinance.clear();
-                            resultsbinance.addAll(resultsSharedPref);
-                        }
-
-                    }
-
-
-                }
-
-
-                return marketSummaries_;
+                return null;
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            return marketSummaries_;
+            return null;
         }
 
 
         @Override
         protected void onPostExecute(MarketSummaries marketSummaries) {
             super.onPostExecute(marketSummaries);
-//            onBinanceLoadListner.onComplete(resultsbinance, marketSummaries);
+            onBinanceLoadListner.onComplete(resultsbinance, marketSummaries);
 //            if (marketSummaries != null && marketSummaries.getSuccess() && marketSummaries.getResult() != null) {
 ////                onBinanceLoadListner.onComplete(results, marketSummaries);
 //            } else {

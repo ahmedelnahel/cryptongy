@@ -2,6 +2,7 @@ package crypto.soft.cryptongy.feature.shared.ticker;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
@@ -20,6 +21,7 @@ import crypto.soft.cryptongy.utils.GlobalConstant;
  */
 
 public class TickerPresenter<T extends TickerView> extends MvpBasePresenter<T> {
+    public  String TAG=getClass().getSimpleName();
     private static Timer timer;
     protected Context context;
     private String coinName;
@@ -40,6 +42,7 @@ public class TickerPresenter<T extends TickerView> extends MvpBasePresenter<T> {
         stopTimer();
         Notification notification = ((CoinApplication) context.getApplicationContext()).getNotification();
         if (notification.isAutomSync()) {
+            Log.d(TAG, "startTicker: ");
             int timerInterval = notification.getSyncInterval() * 1000;
             timer = new Timer();
             this.coinName = coinName;

@@ -24,7 +24,7 @@ import static crypto.soft.cryptongy.feature.home.HomeFragment.EXCHANGE_VALUE;
 public class CoinHomeActivity extends MvpActivity<CoinHomeView, CoinHomePresenter> implements CoinHomeView {
     private ViewPager viewPager;
     private TabLayout tabLayout;
-
+    CoinFragment coinFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,7 +75,7 @@ public class CoinHomeActivity extends MvpActivity<CoinHomeView, CoinHomePresente
     @Override
     public void initTab() {
         MainPagerAdaptor adapter = new MainPagerAdaptor(getSupportFragmentManager());
-        CoinFragment coinFragment = new CoinFragment();
+         coinFragment = new CoinFragment();
         Bundle bundle = new Bundle();
         String coinName = getIntent().getStringExtra("COIN_NAME");
         bundle.putString("COIN_NAME", coinName);
@@ -97,5 +97,9 @@ public class CoinHomeActivity extends MvpActivity<CoinHomeView, CoinHomePresente
 //        Log.d("Cryptongy", "alarm stoped");
     }
 
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        coinFragment.getPresenter().closeWebSocket();
+    }
 }
