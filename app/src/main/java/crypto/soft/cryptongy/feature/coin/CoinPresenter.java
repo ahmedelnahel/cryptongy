@@ -107,7 +107,7 @@ public class CoinPresenter extends TickerPresenter<CoinView> {
                     }
                 }
             };
-            Observable.merge(getMarketSummary(coinName,exchangeValue), getOpenOrders(coinName,exchangeValue, account), getOrderHistory(coinName, account))
+            Observable.merge(getMarketSummary(coinName,exchangeValue), getOpenOrders(coinName,exchangeValue, account), getOrderHistory(coinName,exchangeValue, account))
                     .subscribe(observer);
         } else {
             CustomDialog.showMessagePop(context, context.getString(R.string.noAPI), null);
@@ -198,11 +198,11 @@ public class CoinPresenter extends TickerPresenter<CoinView> {
         }
     }
 
-    public Observable<OrderHistory> getOrderHistory(final String coinName, final Account account) {
+    public Observable<OrderHistory> getOrderHistory(final String coinName, final String exchange, final Account account) {
         return Observable.create(new ObservableOnSubscribe() {
             @Override
             public void subscribe(final ObservableEmitter e) throws Exception {
-                coinInteractor.getOrderHistory(coinName, account, new OnFinishListner<OrderHistory>() {
+                coinInteractor.getOrderHistory(coinName,exchange, account, new OnFinishListner<OrderHistory>() {
                     @Override
                     public void onComplete(OrderHistory result) {
                         e.onNext(result);
