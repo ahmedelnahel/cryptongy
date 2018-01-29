@@ -69,6 +69,7 @@ public class BittrexServices {
         }
         else {
             final String url = "https://bittrex.com/api/v1.1/account/getbalances";
+            Log.d(TAG, "getWallet: "+url);
             String walletStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret());
 
             if (walletStr == null) {

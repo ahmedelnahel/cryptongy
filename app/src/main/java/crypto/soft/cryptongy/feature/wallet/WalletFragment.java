@@ -8,15 +8,11 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,12 +25,10 @@ import crypto.soft.cryptongy.R;
 import crypto.soft.cryptongy.feature.account.CustomDialog;
 import crypto.soft.cryptongy.feature.coinHome.CoinHomeActivity;
 import crypto.soft.cryptongy.feature.main.MainActivity;
-import crypto.soft.cryptongy.feature.shared.json.binance.marketsummary.BinanceMarket;
 import crypto.soft.cryptongy.feature.shared.json.market.MarketSummaries;
 import crypto.soft.cryptongy.feature.shared.json.wallet.Result;
 import crypto.soft.cryptongy.feature.shared.json.wallet.Wallet;
 import crypto.soft.cryptongy.feature.shared.module.Account;
-import crypto.soft.cryptongy.network.BinanceServices;
 import crypto.soft.cryptongy.network.BittrexServices;
 import crypto.soft.cryptongy.utils.AlertUtility;
 import crypto.soft.cryptongy.utils.CoinApplication;
@@ -143,7 +137,7 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
         });
 
         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>
-                (getContext(), android.R.layout.simple_spinner_item, new String[]{"Bittrex"}); //selected item will look like a spinner set from XML
+                (getContext(), android.R.layout.simple_spinner_item,getResources().getStringArray(R.array.exchange_value_array_wallet)); //selected item will look like a spinner set from XML
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout
                 .simple_spinner_dropdown_item);
         spCurrency.setAdapter(spinnerArrayAdapter);

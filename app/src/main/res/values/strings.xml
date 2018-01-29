@@ -45,6 +45,13 @@
         <item>Binance</item>
     </string-array>
 
+
+    <string-array name="exchange_value_array_wallet">
+        <item>Bittrex</item>
+        <item>Binance</item>
+        <item>All</item>
+    </string-array>
+
     <string name="donnation_title">Thanks for your donation</string>
     <string name="donnation_Address">Payment</string>
     <string name="donnation_send">Please follow the link: </string>
