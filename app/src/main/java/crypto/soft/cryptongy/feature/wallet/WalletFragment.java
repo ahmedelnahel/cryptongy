@@ -35,6 +35,7 @@ import crypto.soft.cryptongy.network.BinanceServices;
 import crypto.soft.cryptongy.network.BittrexServices;
 import crypto.soft.cryptongy.utils.AlertUtility;
 import crypto.soft.cryptongy.utils.CoinApplication;
+import crypto.soft.cryptongy.utils.GlobalConstant;
 import crypto.soft.cryptongy.utils.GlobalUtil;
 import crypto.soft.cryptongy.utils.HideKeyboard;
 import crypto.soft.cryptongy.utils.ViewFontHelper;
@@ -260,17 +261,23 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
             Wallet wallet = null;
             try {
                 CoinApplication application = (CoinApplication) getActivity().getApplication();
-                Account account = application.getReadAccount(spinnerValue);
+
+                Account account;
                 if(spinnerValue.equalsIgnoreCase(getResources().getStringArray(R.array.exchange_value_array_wallet)[0])){
+                     account = application.getReadAccount(spinnerValue);
                     wallet = bittrexServices.getWallet(account);
                 }
                 if(spinnerValue.equalsIgnoreCase(getResources().getStringArray(R.array.exchange_value_array_wallet)[1])){
+                    account = application.getReadAccount(spinnerValue);
                     wallet = binanceServices.getWallet(account);
                 }
                 if(spinnerValue.equalsIgnoreCase(getResources().getStringArray(R.array.exchange_value_array_wallet)[2])){
                     Wallet wallet1=null;
+                     account = application.getReadAccount(GlobalConstant.Exchanges.BITTREX);
+                    Account account2=application.getReadAccount(GlobalConstant.Exchanges.BINANCE);
+
                     wallet=bittrexServices.getWallet(account);
-                    wallet1=binanceServices.getWallet(account);
+                    wallet1=binanceServices.getWallet(account2);
 
                     HashMap<String, Result> coinsMapBinance = wallet.getCoinsMap();
 
