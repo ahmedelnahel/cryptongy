@@ -260,7 +260,7 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
             Wallet wallet = null;
             try {
                 CoinApplication application = (CoinApplication) getActivity().getApplication();
-                Account account = application.getReadAccount();
+                Account account = application.getReadAccount(spinnerValue);
                 if(spinnerValue.equalsIgnoreCase(getResources().getStringArray(R.array.exchange_value_array_wallet)[0])){
                     wallet = bittrexServices.getWallet(account);
                 }
@@ -273,6 +273,9 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
                     wallet1=binanceServices.getWallet(account);
 
                     HashMap<String, Result> coinsMapBinance = wallet.getCoinsMap();
+
+                    HashMap<String, Result> coinsMapBinance2 = wallet1.getCoinsMap();
+                    coinsMapBinance.putAll(coinsMapBinance2);
                     for (crypto.soft.cryptongy.feature.shared.json.wallet.Result r : wallet1.getResult()) {
                         if (r.getBalance() != 0)
                             coinsMapBinance.put(r.getCurrency(), r);
