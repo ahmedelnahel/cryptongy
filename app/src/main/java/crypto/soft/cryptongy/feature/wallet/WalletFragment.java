@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import crypto.soft.cryptongy.R;
@@ -29,6 +31,7 @@ import crypto.soft.cryptongy.feature.shared.json.market.MarketSummaries;
 import crypto.soft.cryptongy.feature.shared.json.wallet.Result;
 import crypto.soft.cryptongy.feature.shared.json.wallet.Wallet;
 import crypto.soft.cryptongy.feature.shared.module.Account;
+import crypto.soft.cryptongy.network.BinanceServices;
 import crypto.soft.cryptongy.network.BittrexServices;
 import crypto.soft.cryptongy.utils.AlertUtility;
 import crypto.soft.cryptongy.utils.CoinApplication;
@@ -53,6 +56,7 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
     private double BTCSum = 0;
     private NestedScrollView baseView;
     private TextView tvHolding, tvPrice,txtPrice;
+    private String spinnerValue;
 
     public WalletFragment() {
 
@@ -74,10 +78,44 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
         txtProfit.setText("Total");
         ViewFontHelper.setupTextViews(getActivity(), baseView);
 
+        spinnerValue = getResources().getStringArray(R.array.exchange_value_array_wallet)[0];
         getData();
         setTitle();
 
+        spinnerValue();
+
         return view;
+    }
+
+
+
+    private void spinnerValue() {
+        spCurrency.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+
+                if (spCurrency.getItemAtPosition(position).toString().equalsIgnoreCase(getResources().getStringArray(R.array.exchange_value_array_wallet)[0])) {
+                    spinnerValue = getResources().getStringArray(R.array.exchange_value_array_wallet)[0];
+
+                }
+                if (spCurrency.getItemAtPosition(position).toString().equalsIgnoreCase(getResources().getStringArray(R.array.exchange_value_array_wallet)[1]))
+                {
+                    spinnerValue = getResources().getStringArray(R.array.exchange_value_array_wallet)[1];
+
+                }
+                if (spCurrency.getItemAtPosition(position).toString().equalsIgnoreCase(getResources().getStringArray(R.array.exchange_value_array_wallet)[2])){
+                    spinnerValue=getResources().getStringArray(R.array.exchange_value_array_wallet)[2];
+                }
+                getData();
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     void getData() {
@@ -199,6 +237,7 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
 
     private class GetCoinDetails extends AsyncTask<String, Void, Wallet> {
         private BittrexServices bittrexServices = new BittrexServices();
+        private BinanceServices binanceServices=new BinanceServices();
 
         @Override
         protected Wallet doInBackground(String... params) {
@@ -206,14 +245,55 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
             try {
                 CoinApplication application = (CoinApplication) getActivity().getApplication();
                 Account account = application.getReadAccount();
-                wallet = bittrexServices.getWallet(account);
+                if(spinnerValue.equalsIgnoreCase(getResources().getStringArray(R.array.exchange_value_array_wallet)[0])){
+                    wallet = bittrexServices.getWallet(account);
+                }
+                if(spinnerValue.equalsIgnoreCase(getResources().getStringArray(R.array.exchange_value_array_wallet)[1])){
+                    wallet = binanceServices.getWallet(account);
+                }
+                if(spinnerValue.equalsIgnoreCase(getResources().getStringArray(R.array.exchange_value_array_wallet)[2])){
+                    Wallet wallet1=null;
+                    wallet=bittrexServices.getWallet(account);
+                    wallet1=binanceServices.getWallet(account);
+
+                    HashMap<String, Result> coinsMapBinance = wallet.getCoinsMap();
+                    for (crypto.soft.cryptongy.feature.shared.json.wallet.Result r : wallet1.getResult()) {
+                        if (r.getBalance() != 0)
+                            coinsMapBinance.put(r.getCurrency(), r);
+                    }
+
+                    wallet.setCoinsMap(coinsMapBinance);
+
+                }
 
                 if (wallet != null && wallet.getSuccess() && wallet.getResult() != null) {
                     // List<Result> walletResults = wallet.getResult();
 
                     List<Result> filteredWalletResults = new ArrayList<Result>(wallet.getCoinsMap().values());
 
-                    MarketSummaries marketSummaries = bittrexServices.getMarketSummaries();
+                    MarketSummaries marketSummaries=null;
+                    if(spinnerValue.equalsIgnoreCase(getResources().getStringArray(R.array.exchange_value_array_wallet)[0])){
+                        marketSummaries   = bittrexServices.getMarketSummaries();
+                    }
+                    if(spinnerValue.equalsIgnoreCase(getResources().getStringArray(R.array.exchange_value_array_wallet)[1])){
+                         marketSummaries = binanceServices.getMarketSummaries();
+                    }
+                    if(spinnerValue.equalsIgnoreCase(getResources().getStringArray(R.array.exchange_value_array_wallet)[2])){
+                        marketSummaries = bittrexServices.getMarketSummaries();
+                        MarketSummaries marketSummaries2 = binanceServices.getMarketSummaries();
+
+
+                        HashMap<String, crypto.soft.cryptongy.feature.shared.json.market.Result> coinsMap = marketSummaries.getCoinsMap();
+                        for (crypto.soft.cryptongy.feature.shared.json.market.Result r : marketSummaries2.getResult()) {
+                            coinsMap.put(r.getMarketName(), r);
+                        }
+                        marketSummaries.setCoinsMap(coinsMap);
+
+                    }
+
+
+
+
                     if (marketSummaries != null && marketSummaries.getSuccess()) {
 
                         fillCoinPrice(filteredWalletResults, marketSummaries);
@@ -252,7 +332,8 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
                 } else {
                     coinName = "BTC-" + coinName;
                     crypto.soft.cryptongy.feature.shared.json.market.Result marketSummary = marketSummaries.getCoinsMap().get(coinName);
-                    walletResult.setPrice(marketSummary != null ? marketSummary.getLast() : null);
+                    //TODO null changes to zero
+                    walletResult.setPrice(marketSummary != null ? marketSummary.getLast() : 0);
 
                     double balance = walletResult.getBalance();
 
