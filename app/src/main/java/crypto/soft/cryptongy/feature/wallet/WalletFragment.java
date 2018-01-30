@@ -82,11 +82,27 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
         getData();
         setTitle();
 
+        defaultSpinnerValue();
         spinnerValue();
 
         return view;
     }
 
+    private void defaultSpinnerValue() {
+
+        CoinApplication application = (CoinApplication) getActivity().getApplicationContext();
+        spinnerValue = application.getNotification().getDefaultExchange();
+        if (spinnerValue != null) {
+
+            if (spinnerValue.equalsIgnoreCase(getResources().getStringArray(R.array.exchange_value_array_wallet)[0])) {
+
+                spCurrency.setSelection(0);
+            } else {
+                spCurrency.setSelection(1);
+
+            }
+        }
+    }
 
 
     private void spinnerValue() {
