@@ -427,8 +427,12 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
                       String   coinName2 = coinName+"BTC";
                         crypto.soft.cryptongy.feature.shared.json.market.Result marketSummary = marketSummaries.getCoinsMap().get(coinName);
                         crypto.soft.cryptongy.feature.shared.json.market.Result marketSummary2 = marketSummaries.getCoinsMap().get(coinName2);
+
+                        double bitrixPrice=(marketSummary != null ? marketSummary.getLast() : 0);
+
+                        double binaceprice=(marketSummary2 != null ? marketSummary2.getLast() :0);
                         //TODO null changes to zero
-                        walletResult.setPrice(marketSummary != null ? marketSummary.getLast() : marketSummary2 != null ? marketSummary2.getLast() :0);
+                        walletResult.setPrice(bitrixPrice+binaceprice);
 
                         double balance = walletResult.getBalance();
 
