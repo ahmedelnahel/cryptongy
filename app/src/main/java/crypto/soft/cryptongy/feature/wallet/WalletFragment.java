@@ -343,34 +343,103 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
 
         private void fillCoinPrice(List<Result> walletResults, MarketSummaries marketSummaries) {
             BTCSum = 0;
+            double btcsumtemp=0;
             List<crypto.soft.cryptongy.feature.shared.json.market.Result> marketResults = marketSummaries.getResult();
             for (Result walletResult : walletResults) {
                 String coinName = walletResult.getCurrency();
-                if (walletResult.getCurrency().equals("USDT")) {
-                    walletResult.setPrice(1.0);
-                    double bitcoinPrice = ((CoinApplication) getActivity().getApplication()).getUsdt_btc();
-                    double balance = walletResult.getBalance();
-                    BTCSum += (balance / bitcoinPrice);
-                } else if (walletResult.getCurrency().equals("BTC")) {
-                    walletResult.setPrice(1.0);
-                    double balance = walletResult.getBalance();
-                    BTCSum += balance;
-                } else {
-                    coinName = "BTC-" + coinName;
-                    crypto.soft.cryptongy.feature.shared.json.market.Result marketSummary = marketSummaries.getCoinsMap().get(coinName);
-                    //TODO null changes to zero
-                    walletResult.setPrice(marketSummary != null ? marketSummary.getLast() : 0);
 
-                    double balance = walletResult.getBalance();
+                if(spinnerValue.equalsIgnoreCase(getResources().getStringArray(R.array.exchange_value_array_wallet)[0])){
 
-                    double coinbitcoinPrice = walletResult.getPrice();
+                    if (walletResult.getCurrency().equals("USDT")) {
+                        walletResult.setPrice(1.0);
+                        double bitcoinPrice = ((CoinApplication) getActivity().getApplication()).getUsdt_btc();
+                        double balance = walletResult.getBalance();
+                        BTCSum += (balance / bitcoinPrice);
+                    } else if (walletResult.getCurrency().equals("BTC")) {
+                        walletResult.setPrice(1.0);
+                        double balance = walletResult.getBalance();
+                        BTCSum += balance;
+                    } else {
+                        coinName = "BTC-" + coinName;
+                        crypto.soft.cryptongy.feature.shared.json.market.Result marketSummary = marketSummaries.getCoinsMap().get(coinName);
+                        //TODO null changes to zero
+                        walletResult.setPrice(marketSummary != null ? marketSummary.getLast() : 0);
 
-                    double totalBTC = (balance * coinbitcoinPrice);
+                        double balance = walletResult.getBalance();
 
-                    BTCSum += totalBTC;
+                        double coinbitcoinPrice = walletResult.getPrice();
+
+                        double totalBTC = (balance * coinbitcoinPrice);
+
+                        BTCSum += totalBTC;
+
+                    }
+
 
                 }
 
+
+                if(spinnerValue.equalsIgnoreCase(getResources().getStringArray(R.array.exchange_value_array_wallet)[1])){
+
+                    if (walletResult.getCurrency().equals("USDT")) {
+                        walletResult.setPrice(1.0);
+                        double bitcoinPrice = ((CoinApplication) getActivity().getApplication()).getUsdt_btc();
+                        double balance = walletResult.getBalance();
+                        BTCSum += (balance / bitcoinPrice);
+                    } else if (walletResult.getCurrency().equals("BTC")) {
+                        walletResult.setPrice(1.0);
+                        double balance = walletResult.getBalance();
+                        BTCSum += balance;
+                    } else {
+                        coinName = coinName+"BTC";
+                        crypto.soft.cryptongy.feature.shared.json.market.Result marketSummary = marketSummaries.getCoinsMap().get(coinName);
+                        //TODO null changes to zero
+                        walletResult.setPrice(marketSummary != null ? marketSummary.getLast() : 0);
+
+                        double balance = walletResult.getBalance();
+
+                        double coinbitcoinPrice = walletResult.getPrice();
+
+                        double totalBTC = (balance * coinbitcoinPrice);
+
+                        BTCSum += totalBTC;
+
+                    }
+
+                }
+
+
+                if(spinnerValue.equalsIgnoreCase(getResources().getStringArray(R.array.exchange_value_array_wallet)[2])){
+
+
+                    if (walletResult.getCurrency().equals("USDT")) {
+                        walletResult.setPrice(1.0);
+                        double bitcoinPrice = ((CoinApplication) getActivity().getApplication()).getUsdt_btc();
+                        double balance = walletResult.getBalance();
+                        BTCSum += (balance / bitcoinPrice);
+                    } else if (walletResult.getCurrency().equals("BTC")) {
+                        walletResult.setPrice(1.0);
+                        double balance = walletResult.getBalance();
+                        BTCSum += balance;
+                    } else {
+
+                        coinName = "BTC-" + coinName;
+                      String   coinName2 = coinName+"BTC";
+                        crypto.soft.cryptongy.feature.shared.json.market.Result marketSummary = marketSummaries.getCoinsMap().get(coinName);
+                        crypto.soft.cryptongy.feature.shared.json.market.Result marketSummary2 = marketSummaries.getCoinsMap().get(coinName2);
+                        //TODO null changes to zero
+                        walletResult.setPrice(marketSummary != null ? marketSummary.getLast() : marketSummary2 != null ? marketSummary2.getLast() :0);
+
+                        double balance = walletResult.getBalance();
+
+                        double coinbitcoinPrice = walletResult.getPrice();
+
+                        double totalBTC = (balance * coinbitcoinPrice);
+
+                        BTCSum += totalBTC;
+
+                    }
+                }
 
             }
         }
