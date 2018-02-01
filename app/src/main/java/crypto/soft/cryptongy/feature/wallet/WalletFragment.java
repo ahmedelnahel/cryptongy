@@ -495,7 +495,7 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
         if (notification.isAutomSync()) {
             Log.d(TAG, "startTicker: ");
             int timerInterval = notification.getSyncInterval() * 1000;
-            timer = new Timer();
+//            timer = new Timer();
 
             countDownTimer= new CountDownTimer(timerInterval,timerInterval){
 
@@ -534,8 +534,8 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
             countDownTimer.cancel();
         }
 
-        if (timer != null)
-            timer.cancel();
+//        if (timer != null)
+//            timer.cancel();
     }
 
     @Override
