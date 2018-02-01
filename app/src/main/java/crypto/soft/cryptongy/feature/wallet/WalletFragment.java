@@ -506,7 +506,12 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
 
                 @Override
                 public void onFinish() {
-                    new GetCoinDetails().execute();
+                    try {
+
+                        new GetCoinDetails().execute();
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
 
                 }
             }.start();
