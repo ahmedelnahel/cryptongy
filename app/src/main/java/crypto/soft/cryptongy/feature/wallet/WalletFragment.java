@@ -314,18 +314,15 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
 
 //                    coinsMapBinance.putAll(coinsMapBinance2);
 
+                    /* check coin is same then add balance */
                     for (crypto.soft.cryptongy.feature.shared.json.wallet.Result r : walletbinnace.getResult()) {
                         if (r.getBalance() != 0){
-                            if(coinsMapbitrix.get(r)!=null){
-                               r.setBalance(coinsMapbitrix.get(r).getBalance()+r.getBalance());
+                            if(coinsMapbitrix.get(r.getCurrency())!=null){
+                               r.setBalance(coinsMapbitrix.get(r.getCurrency()).getBalance()+r.getBalance());
                             }
                             coinsMapbitrix.put(r.getCurrency(), r);
                         }
                     }
-
-                    wallet.getCoinsMap().clear();
-                    wallet.setCoinsMap(coinsMapbitrix);
-
                 }
 
                 if (wallet != null && wallet.getSuccess() && wallet.getResult() != null) {
@@ -377,7 +374,6 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
 
         private void fillCoinPrice(List<Result> walletResults, MarketSummaries marketSummaries) {
             BTCSum = 0;
-            double btcsumtemp = 0;
             List<crypto.soft.cryptongy.feature.shared.json.market.Result> marketResults = marketSummaries.getResult();
             for (Result walletResult : walletResults) {
                 String coinName = walletResult.getCurrency();
@@ -461,12 +457,11 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
                         String coinName2 = coinName + "BTC";
                         crypto.soft.cryptongy.feature.shared.json.market.Result marketSummary = marketSummaries.getCoinsMap().get(coinName);
                         crypto.soft.cryptongy.feature.shared.json.market.Result marketSummary2 = marketSummaries.getCoinsMap().get(coinName2);
-k
-                        double bitrixPrice = (marketSummary != null ? marketSummary.getLast() : 0);
-
-                        double binaceprice = (marketSummary2 != null ? marketSummary2.getLast() : 0);
+//                        double bitrixPrice = (marketSummary != null ? marketSummary.getLast() : 0);
+//
+//                        double binaceprice = (marketSummary2 != null ? marketSummary2.getLast() : 0);
                         //TODO null changes to zero
-                        walletResult.setPrice(bitrixPrice + binaceprice);
+                        walletResult.setPrice(marketSummary != null ? marketSummary.getLast() : marketSummary2 != null ? marketSummary2.getLast() : 0);
 
                         double balance = walletResult.getBalance();
 
@@ -501,6 +496,7 @@ k
             txtBtc.setText(String.valueOf(GlobalUtil.round(BTCSum, 9)) + "฿");
             double bitcoinPrice = ((CoinApplication) getActivity().getApplication()).getUsdt_btc();
             txtUsd.setText("$" + String.valueOf(GlobalUtil.round(BTCSum * bitcoinPrice, 4)));
+
 
 
             startWalletTimer();
