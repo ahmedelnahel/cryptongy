@@ -70,30 +70,30 @@ public class BittrexServices {
         else {
             final String url = "https://bittrex.com/api/v1.1/account/getbalances";
             Log.d(TAG, "getWallet: "+url);
-          String walletStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret());
-//            String walletStr = " {\n" +
-//                    "\t\"success\" : true,\n" +
-//                    "\t\"message\" : \"\",\n" +
-//                    "\t\"result\" : [{\n" +
-//                    "\t\t\t\"Currency\" : \"DOGE\",\n" +
-//                    "\t\t\t\"Balance\" : 0.00000000,\n" +
-//                    "\t\t\t\"Available\" : 0.00000000,\n" +
-//                    "\t\t\t\"Pending\" : 0.00000000,\n" +
-//                    "\t\t\t\"CryptoAddress\" : \"DLxcEt3AatMyr2NTatzjsfHNoB9NT62HiF\",\n" +
-//                    "\t\t\t\"Requested\" : false,\n" +
-//                    "\t\t\t\"Uuid\" : null\n" +
-//                    "\n" +
-//                    "\t\t}, {\n" +
-//                    "\t\t\t\"Currency\" : \"BTC\",\n" +
-//                    "\t\t\t\"Balance\" : 14.21549076,\n" +
-//                    "\t\t\t\"Available\" : 14.21549076,\n" +
-//                    "\t\t\t\"Pending\" : 0.00000000,\n" +
-//                    "\t\t\t\"CryptoAddress\" : \"1Mrcdr6715hjda34pdXuLqXcju6qgwHA31\",\n" +
-//                    "\t\t\t\"Requested\" : false,\n" +
-//                    "\t\t\t\"Uuid\" : null\n" +
-//                    "\t\t}\n" +
-//                    "\t]\n" +
-//                    "}";
+//          String walletStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret());
+            String walletStr = " {\n" +
+                    "\t\"success\" : true,\n" +
+                    "\t\"message\" : \"\",\n" +
+                    "\t\"result\" : [{\n" +
+                    "\t\t\t\"Currency\" : \"DOGE\",\n" +
+                    "\t\t\t\"Balance\" : 0.00000000,\n" +
+                    "\t\t\t\"Available\" : 0.00000000,\n" +
+                    "\t\t\t\"Pending\" : 0.00000000,\n" +
+                    "\t\t\t\"CryptoAddress\" : \"DLxcEt3AatMyr2NTatzjsfHNoB9NT62HiF\",\n" +
+                    "\t\t\t\"Requested\" : false,\n" +
+                    "\t\t\t\"Uuid\" : null\n" +
+                    "\n" +
+                    "\t\t}, {\n" +
+                    "\t\t\t\"Currency\" : \"BTC\",\n" +
+                    "\t\t\t\"Balance\" : 14.21549076,\n" +
+                    "\t\t\t\"Available\" : 14.21549076,\n" +
+                    "\t\t\t\"Pending\" : 0.00000000,\n" +
+                    "\t\t\t\"CryptoAddress\" : \"1Mrcdr6715hjda34pdXuLqXcju6qgwHA31\",\n" +
+                    "\t\t\t\"Requested\" : false,\n" +
+                    "\t\t\t\"Uuid\" : null\n" +
+                    "\t\t}\n" +
+                    "\t]\n" +
+                    "}";
 
             if (walletStr == null) {
                 wallet = new Wallet();

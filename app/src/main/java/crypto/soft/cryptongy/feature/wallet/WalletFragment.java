@@ -3,11 +3,13 @@ package crypto.soft.cryptongy.feature.wallet;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,11 +24,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Timer;
 
 import crypto.soft.cryptongy.R;
 import crypto.soft.cryptongy.feature.account.CustomDialog;
 import crypto.soft.cryptongy.feature.coinHome.CoinHomeActivity;
 import crypto.soft.cryptongy.feature.main.MainActivity;
+import crypto.soft.cryptongy.feature.setting.Notification;
 import crypto.soft.cryptongy.feature.shared.json.market.MarketSummaries;
 import crypto.soft.cryptongy.feature.shared.json.wallet.Result;
 import crypto.soft.cryptongy.feature.shared.json.wallet.Wallet;
@@ -47,6 +51,9 @@ import crypto.soft.cryptongy.utils.ViewFontHelper;
  * create an instance of this fragment.
  */
 public class WalletFragment extends Fragment implements OnRecyclerItemClickListener<Result>, View.OnClickListener {
+    public String TAG = getClass().getSimpleName();
+    private static Timer timer;
+    private static CountDownTimer countDownTimer;
     private TextView txtLevel, txtBtc, txtUsd, txtEmpty, txtProfit;
     private RecyclerView rvCoinList;
     private WalletAdapter coinAdapter;
@@ -56,7 +63,7 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
     private List<Result> resultList;
     private double BTCSum = 0;
     private NestedScrollView baseView;
-    private TextView tvHolding, tvPrice,txtPrice;
+    private TextView tvHolding, tvPrice, txtPrice;
     private String spinnerValue;
 
     public WalletFragment() {
@@ -116,13 +123,12 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
                     spinnerValue = getResources().getStringArray(R.array.exchange_value_array_wallet)[0];
 
                 }
-                if (spCurrency.getItemAtPosition(position).toString().equalsIgnoreCase(getResources().getStringArray(R.array.exchange_value_array_wallet)[1]))
-                {
+                if (spCurrency.getItemAtPosition(position).toString().equalsIgnoreCase(getResources().getStringArray(R.array.exchange_value_array_wallet)[1])) {
                     spinnerValue = getResources().getStringArray(R.array.exchange_value_array_wallet)[1];
 
                 }
-                if (spCurrency.getItemAtPosition(position).toString().equalsIgnoreCase(getResources().getStringArray(R.array.exchange_value_array_wallet)[2])){
-                    spinnerValue=getResources().getStringArray(R.array.exchange_value_array_wallet)[2];
+                if (spCurrency.getItemAtPosition(position).toString().equalsIgnoreCase(getResources().getStringArray(R.array.exchange_value_array_wallet)[2])) {
+                    spinnerValue = getResources().getStringArray(R.array.exchange_value_array_wallet)[2];
                 }
                 getData();
 
@@ -192,7 +198,7 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
         });
 
         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>
-                (getContext(), android.R.layout.simple_spinner_item,getResources().getStringArray(R.array.exchange_value_array_wallet)); //selected item will look like a spinner set from XML
+                (getContext(), android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.exchange_value_array_wallet)); //selected item will look like a spinner set from XML
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout
                 .simple_spinner_dropdown_item);
         spCurrency.setAdapter(spinnerArrayAdapter);
@@ -254,7 +260,7 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
 
     private class GetCoinDetails extends AsyncTask<String, Void, Wallet> {
         private BittrexServices bittrexServices = new BittrexServices();
-        private BinanceServices binanceServices=new BinanceServices();
+        private BinanceServices binanceServices = new BinanceServices();
 
         @Override
         protected Wallet doInBackground(String... params) {
@@ -263,21 +269,21 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
                 CoinApplication application = (CoinApplication) getActivity().getApplication();
 
                 Account account;
-                if(spinnerValue.equalsIgnoreCase(getResources().getStringArray(R.array.exchange_value_array_wallet)[0])){
-                     account = application.getReadAccount(spinnerValue);
+                if (spinnerValue.equalsIgnoreCase(getResources().getStringArray(R.array.exchange_value_array_wallet)[0])) {
+                    account = application.getReadAccount(spinnerValue);
                     wallet = bittrexServices.getWallet(account);
                 }
-                if(spinnerValue.equalsIgnoreCase(getResources().getStringArray(R.array.exchange_value_array_wallet)[1])){
+                if (spinnerValue.equalsIgnoreCase(getResources().getStringArray(R.array.exchange_value_array_wallet)[1])) {
                     account = application.getReadAccount(spinnerValue);
                     wallet = binanceServices.getWallet(account);
                 }
-                if(spinnerValue.equalsIgnoreCase(getResources().getStringArray(R.array.exchange_value_array_wallet)[2])){
-                    Wallet wallet1=null;
-                     account = application.getReadAccount(GlobalConstant.Exchanges.BITTREX);
-                    Account account2=application.getReadAccount(GlobalConstant.Exchanges.BINANCE);
+                if (spinnerValue.equalsIgnoreCase(getResources().getStringArray(R.array.exchange_value_array_wallet)[2])) {
+                    Wallet wallet1 = null;
+                    account = application.getReadAccount(GlobalConstant.Exchanges.BITTREX);
+                    Account account2 = application.getReadAccount(GlobalConstant.Exchanges.BINANCE);
 
-                    wallet=bittrexServices.getWallet(account);
-                    wallet1=binanceServices.getWallet(account2);
+                    wallet = bittrexServices.getWallet(account);
+                    wallet1 = binanceServices.getWallet(account2);
 
                     HashMap<String, Result> coinsMapBinance = wallet.getCoinsMap();
 
@@ -297,14 +303,14 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
 
                     List<Result> filteredWalletResults = new ArrayList<Result>(wallet.getCoinsMap().values());
 
-                    MarketSummaries marketSummaries=null;
-                    if(spinnerValue.equalsIgnoreCase(getResources().getStringArray(R.array.exchange_value_array_wallet)[0])){
-                        marketSummaries   = bittrexServices.getMarketSummaries();
+                    MarketSummaries marketSummaries = null;
+                    if (spinnerValue.equalsIgnoreCase(getResources().getStringArray(R.array.exchange_value_array_wallet)[0])) {
+                        marketSummaries = bittrexServices.getMarketSummaries();
                     }
-                    if(spinnerValue.equalsIgnoreCase(getResources().getStringArray(R.array.exchange_value_array_wallet)[1])){
-                         marketSummaries = binanceServices.getMarketSummaries();
+                    if (spinnerValue.equalsIgnoreCase(getResources().getStringArray(R.array.exchange_value_array_wallet)[1])) {
+                        marketSummaries = binanceServices.getMarketSummaries();
                     }
-                    if(spinnerValue.equalsIgnoreCase(getResources().getStringArray(R.array.exchange_value_array_wallet)[2])){
+                    if (spinnerValue.equalsIgnoreCase(getResources().getStringArray(R.array.exchange_value_array_wallet)[2])) {
                         marketSummaries = bittrexServices.getMarketSummaries();
                         MarketSummaries marketSummaries2 = binanceServices.getMarketSummaries();
 
@@ -316,8 +322,6 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
                         marketSummaries.setCoinsMap(coinsMap);
 
                     }
-
-
 
 
                     if (marketSummaries != null && marketSummaries.getSuccess()) {
@@ -343,12 +347,12 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
 
         private void fillCoinPrice(List<Result> walletResults, MarketSummaries marketSummaries) {
             BTCSum = 0;
-            double btcsumtemp=0;
+            double btcsumtemp = 0;
             List<crypto.soft.cryptongy.feature.shared.json.market.Result> marketResults = marketSummaries.getResult();
             for (Result walletResult : walletResults) {
                 String coinName = walletResult.getCurrency();
 
-                if(spinnerValue.equalsIgnoreCase(getResources().getStringArray(R.array.exchange_value_array_wallet)[0])){
+                if (spinnerValue.equalsIgnoreCase(getResources().getStringArray(R.array.exchange_value_array_wallet)[0])) {
 
                     if (walletResult.getCurrency().equals("USDT")) {
                         walletResult.setPrice(1.0);
@@ -379,7 +383,7 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
                 }
 
 
-                if(spinnerValue.equalsIgnoreCase(getResources().getStringArray(R.array.exchange_value_array_wallet)[1])){
+                if (spinnerValue.equalsIgnoreCase(getResources().getStringArray(R.array.exchange_value_array_wallet)[1])) {
 
                     if (walletResult.getCurrency().equals("USDT")) {
                         walletResult.setPrice(1.0);
@@ -391,7 +395,7 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
                         double balance = walletResult.getBalance();
                         BTCSum += balance;
                     } else {
-                        coinName = coinName+"BTC";
+                        coinName = coinName + "BTC";
                         crypto.soft.cryptongy.feature.shared.json.market.Result marketSummary = marketSummaries.getCoinsMap().get(coinName);
                         //TODO null changes to zero
                         walletResult.setPrice(marketSummary != null ? marketSummary.getLast() : 0);
@@ -409,7 +413,7 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
                 }
 
 
-                if(spinnerValue.equalsIgnoreCase(getResources().getStringArray(R.array.exchange_value_array_wallet)[2])){
+                if (spinnerValue.equalsIgnoreCase(getResources().getStringArray(R.array.exchange_value_array_wallet)[2])) {
 
 
                     if (walletResult.getCurrency().equals("USDT")) {
@@ -424,15 +428,15 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
                     } else {
 
                         coinName = "BTC-" + coinName;
-                      String   coinName2 = coinName+"BTC";
+                        String coinName2 = coinName + "BTC";
                         crypto.soft.cryptongy.feature.shared.json.market.Result marketSummary = marketSummaries.getCoinsMap().get(coinName);
                         crypto.soft.cryptongy.feature.shared.json.market.Result marketSummary2 = marketSummaries.getCoinsMap().get(coinName2);
 
-                        double bitrixPrice=(marketSummary != null ? marketSummary.getLast() : 0);
+                        double bitrixPrice = (marketSummary != null ? marketSummary.getLast() : 0);
 
-                        double binaceprice=(marketSummary2 != null ? marketSummary2.getLast() :0);
+                        double binaceprice = (marketSummary2 != null ? marketSummary2.getLast() : 0);
                         //TODO null changes to zero
-                        walletResult.setPrice(bitrixPrice+binaceprice);
+                        walletResult.setPrice(bitrixPrice + binaceprice);
 
                         double balance = walletResult.getBalance();
 
@@ -453,8 +457,8 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
             AlertUtility.dismissDialog();
 
             txtEmpty.setVisibility(View.GONE);
-            if ( !wallet.getSuccess() || wallet.getResult() == null) {
-                String msg = wallet.getMessage()!=null?wallet.getMessage():"Connection Error";
+            if (!wallet.getSuccess() || wallet.getResult() == null) {
+                String msg = wallet.getMessage() != null ? wallet.getMessage() : "Connection Error";
                 Toast.makeText(getActivity(), wallet.getMessage(), Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -467,6 +471,9 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
             txtBtc.setText(String.valueOf(GlobalUtil.round(BTCSum, 9)) + "฿");
             double bitcoinPrice = ((CoinApplication) getActivity().getApplication()).getUsdt_btc();
             txtUsd.setText("$" + String.valueOf(GlobalUtil.round(BTCSum * bitcoinPrice, 4)));
+
+
+            startWalletTimer();
         }
 
         @Override
@@ -477,5 +484,74 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
         @Override
         protected void onProgressUpdate(Void... values) {
         }
+
+
+
     }
+
+
+    public void startWalletTimer() {
+        Notification notification = ((CoinApplication) getContext().getApplicationContext()).getNotification();
+        if (notification.isAutomSync()) {
+            Log.d(TAG, "startTicker: ");
+            int timerInterval = notification.getSyncInterval() * 1000;
+            timer = new Timer();
+
+            countDownTimer= new CountDownTimer(timerInterval,timerInterval){
+
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    Log.d(TAG, "onTick: "+millisUntilFinished/1000);
+                }
+
+                @Override
+                public void onFinish() {
+                    new GetCoinDetails().execute();
+
+                }
+            }.start();
+//
+//            timer.scheduleAtFixedRate(new TimerTask() {
+//
+//                @Override
+//                public void run() {
+//                    r
+//
+//                    new GetCoinDetails().execute();
+//                }
+//            }, timerInterval, timerInterval);
+
+        }
+    }
+
+    public void stopTimer() {
+        if(countDownTimer!=null){
+            countDownTimer.cancel();
+        }
+
+        if (timer != null)
+            timer.cancel();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        stopTimer();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        stopTimer();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        startWalletTimer();
+    }
+
+
+
+
 }
