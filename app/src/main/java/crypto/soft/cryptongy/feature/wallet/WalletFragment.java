@@ -217,16 +217,38 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
 
     @Override
     public void onCoinClickListener(Result result) {
+
         String coinName = result.getCurrency();
-        if (coinName.equalsIgnoreCase("usdt"))
-            return;
-        if (coinName.equalsIgnoreCase("btc"))
-            coinName = "usdt-" + coinName;
-        else
-            coinName = "btc-" + coinName;
         Intent intent = new Intent(getContext(), CoinHomeActivity.class);
         intent.putExtra("COIN_NAME", coinName.toUpperCase());
-        startActivity(intent);
+
+
+        if (spinnerValue.equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)) {
+
+
+            if (coinName.equalsIgnoreCase("usdt"))
+                return;
+            if (coinName.equalsIgnoreCase("btc"))
+                coinName = "usdt-" + coinName;
+            else
+                coinName = "btc-" + coinName;
+
+
+            startActivity(intent);
+        }
+        if (spinnerValue.equalsIgnoreCase(GlobalConstant.Exchanges.BINANCE)) {
+            if (coinName.equalsIgnoreCase("usdt"))
+                return;
+            if (coinName.equalsIgnoreCase("btc"))
+                coinName = coinName + "usdt";
+            else
+                coinName = coinName + "btc";
+
+            startActivity(intent);
+
+        }
+
+
     }
 
     @Override
@@ -278,23 +300,31 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
                     wallet = binanceServices.getWallet(account);
                 }
                 if (spinnerValue.equalsIgnoreCase(getResources().getStringArray(R.array.exchange_value_array_wallet)[2])) {
-                    Wallet wallet1 = null;
+                    Wallet walletbinnace = null;
                     account = application.getReadAccount(GlobalConstant.Exchanges.BITTREX);
                     Account account2 = application.getReadAccount(GlobalConstant.Exchanges.BINANCE);
 
                     wallet = bittrexServices.getWallet(account);
-                    wallet1 = binanceServices.getWallet(account2);
+                    walletbinnace = binanceServices.getWallet(account2);
 
-                    HashMap<String, Result> coinsMapBinance = wallet.getCoinsMap();
+//                    wallet.getCoinsMap().putAll(wallet1.getCoinsMap());
 
-                    HashMap<String, Result> coinsMapBinance2 = wallet1.getCoinsMap();
-                    coinsMapBinance.putAll(coinsMapBinance2);
-                    for (crypto.soft.cryptongy.feature.shared.json.wallet.Result r : wallet1.getResult()) {
-                        if (r.getBalance() != 0)
-                            coinsMapBinance.put(r.getCurrency(), r);
+                    HashMap<String, Result> coinsMapbitrix = wallet.getCoinsMap();
+                    HashMap<String, Result> coinsMapBinance = walletbinnace.getCoinsMap();
+
+//                    coinsMapBinance.putAll(coinsMapBinance2);
+
+                    for (crypto.soft.cryptongy.feature.shared.json.wallet.Result r : walletbinnace.getResult()) {
+                        if (r.getBalance() != 0){
+                            if(coinsMapbitrix.get(r)!=null){
+                               r.setBalance(coinsMapbitrix.get(r).getBalance()+r.getBalance());
+                            }
+                            coinsMapbitrix.put(r.getCurrency(), r);
+                        }
                     }
 
-                    wallet.setCoinsMap(coinsMapBinance);
+                    wallet.getCoinsMap().clear();
+                    wallet.setCoinsMap(coinsMapbitrix);
 
                 }
 
@@ -431,7 +461,7 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
                         String coinName2 = coinName + "BTC";
                         crypto.soft.cryptongy.feature.shared.json.market.Result marketSummary = marketSummaries.getCoinsMap().get(coinName);
                         crypto.soft.cryptongy.feature.shared.json.market.Result marketSummary2 = marketSummaries.getCoinsMap().get(coinName2);
-
+k
                         double bitrixPrice = (marketSummary != null ? marketSummary.getLast() : 0);
 
                         double binaceprice = (marketSummary2 != null ? marketSummary2.getLast() : 0);
@@ -486,7 +516,6 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
         }
 
 
-
     }
 
 
@@ -497,11 +526,11 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
             int timerInterval = notification.getSyncInterval() * 1000;
             timer = new Timer();
 
-            countDownTimer= new CountDownTimer(timerInterval,timerInterval){
+            countDownTimer = new CountDownTimer(timerInterval, timerInterval) {
 
                 @Override
                 public void onTick(long millisUntilFinished) {
-                    Log.d(TAG, "onTick: "+millisUntilFinished/1000);
+                    Log.d(TAG, "onTick: " + millisUntilFinished / 1000);
                 }
 
                 @Override
@@ -509,7 +538,7 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
                     try {
 
                         new GetCoinDetails().execute();
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
 
@@ -530,7 +559,7 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
     }
 
     public void stopTimer() {
-        if(countDownTimer!=null){
+        if (countDownTimer != null) {
             countDownTimer.cancel();
         }
 
@@ -555,8 +584,6 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
         super.onResume();
         startWalletTimer();
     }
-
-
 
 
 }
