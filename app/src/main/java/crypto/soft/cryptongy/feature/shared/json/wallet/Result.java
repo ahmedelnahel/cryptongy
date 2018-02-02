@@ -26,10 +26,11 @@ import crypto.soft.cryptongy.feature.shared.json.binance.wallet.BnWallet;
 })
 public class Result {
     public Result(Balance b) {
-        this.balance = Double.valueOf(b.getFree());
+
         this.currency = b.getAsset();
         this.available = Double.valueOf(b.getFree());
         this.pending = Double.valueOf(b.getLocked());
+        this.balance = available!= 0 ? available:pending;
     }
 
     public Result() {

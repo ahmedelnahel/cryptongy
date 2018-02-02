@@ -455,9 +455,12 @@ public class BinanceServices {
                     ArrayList<crypto.soft.cryptongy.feature.shared.json.wallet.Result> results = new ArrayList();
                     HashMap<String, crypto.soft.cryptongy.feature.shared.json.wallet.Result> coinsMap = new HashMap<>();
                     for (crypto.soft.cryptongy.feature.shared.json.binance.wallet.Balance b : bnWallet.getBalances()) {
-                        crypto.soft.cryptongy.feature.shared.json.wallet.Result r = new crypto.soft.cryptongy.feature.shared.json.wallet.Result(b);
+
+                            crypto.soft.cryptongy.feature.shared.json.wallet.Result r = new crypto.soft.cryptongy.feature.shared.json.wallet.Result(b);
+                        if(r.getBalance()!=0.0 ) {
                             coinsMap.put(r.getCurrency(), r);
-                        results.add(r);
+                            results.add(r);
+                        }
                     }
                     wallet.setCoinsMap(coinsMap);
                     wallet.setResult(results);
