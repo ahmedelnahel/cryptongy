@@ -479,8 +479,8 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
                 } else {
                     coinName = coinName + "BTC";
                     crypto.soft.cryptongy.feature.shared.json.market.Result marketSummary = marketSummariesp.getCoinsMap().get(coinName);
-                    //TODO null changes to zero
-                    walletResult.setPrice(marketSummary != null ? marketSummary.getLast() : 0);
+                    double price = walletResult.getPrice();
+                    walletResult.setPrice(marketSummary != null && marketSummary.getLast() !=0 ? marketSummary.getLast() : price);
 
                     double balance = walletResult.getBalance();
 
@@ -514,12 +514,18 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
                     String coinName2 = coinName + "BTC";
                     crypto.soft.cryptongy.feature.shared.json.market.Result marketSummary = marketSummariesp.getCoinsMap().get(coinName1);
                     crypto.soft.cryptongy.feature.shared.json.market.Result marketSummary2 = marketSummariesp.getCoinsMap().get(coinName2);
-                    double bitrixPrice = (marketSummary != null ? marketSummary.getLast() : 0);
-                    double binaceprice = (marketSummary2 != null ? marketSummary2.getLast() : 0);
-//                        Log.d(TAG, " market summary " + coinName1  + " " + coinName2 + " " + bitrixPrice + " " + binaceprice);
+                    double price = walletResult.getPrice();
+                    Log.d(TAG, " market summary " + coinName  + " " + walletResult.getAdditionalProperties().get(EXCHANGE_VALUE) + " " + price );
+                    if(walletResult.getAdditionalProperties().get(EXCHANGE_VALUE)!=null) {
+                        String localExchagevalue = walletResult.getAdditionalProperties().get(EXCHANGE_VALUE).toString();
+                        if(localExchagevalue.equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX))
+                        price = (marketSummary != null && marketSummary.getLast() != 0 ? marketSummary.getLast() : price);
+                        else
+                        price = (marketSummary2 != null && marketSummary2.getLast() != 0 ? marketSummary2.getLast() : price);
+//
 
-                    walletResult.setPrice(bitrixPrice != 0 ? bitrixPrice : binaceprice);
-
+                        walletResult.setPrice(price);
+                    }
                     double balance = walletResult.getBalance();
 
                     double coinbitcoinPrice = walletResult.getPrice();
@@ -606,7 +612,7 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
     @Override
     public void onResume() {
         super.onResume();
-
+        startWalletTimer();
     }
 
     private class GetUpdatedCoinDetails extends AsyncTask<String, Void, Wallet> {
