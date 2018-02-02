@@ -13,7 +13,6 @@ import java.util.List;
 
 import crypto.soft.cryptongy.R;
 import crypto.soft.cryptongy.feature.shared.json.wallet.Result;
-import crypto.soft.cryptongy.network.BittrexServices;
 import crypto.soft.cryptongy.utils.CoinApplication;
 import crypto.soft.cryptongy.utils.GlobalUtil;
 import crypto.soft.cryptongy.utils.ViewFontHelper;
@@ -22,9 +21,9 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.MyViewHold
 
     private List<Result> resultList;
     private Activity activity;
-    private OnRecyclerItemClickListener<Result> onRecyclerItemClickListener;
+    private OnRecyclerItemClickListener<Result,String> onRecyclerItemClickListener;
 
-    public WalletAdapter(List<Result> ResultsList, Activity activity, OnRecyclerItemClickListener<Result> onRecyclerItemClickListener) {
+    public WalletAdapter(List<Result> ResultsList, Activity activity, OnRecyclerItemClickListener<Result,String> onRecyclerItemClickListener) {
         this.resultList = ResultsList;
         this.activity = activity;
         this.onRecyclerItemClickListener = onRecyclerItemClickListener;
@@ -108,7 +107,7 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.MyViewHold
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    onRecyclerItemClickListener.onCoinClickListener(resultList.get(getAdapterPosition()));
+                    onRecyclerItemClickListener.onCoinClickListener(resultList.get(getAdapterPosition()),"");
                 }
             });
             tvHolding = view.findViewById(R.id.tvHolding);
