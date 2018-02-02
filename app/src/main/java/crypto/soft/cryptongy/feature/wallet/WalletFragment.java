@@ -9,6 +9,7 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -236,35 +237,44 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
     @Override
     public void onCoinClickListener(Result result,String exchange) {
 
-        String coinName = result.getCurrency();
-        Intent intent = new Intent(getContext(), CoinHomeActivity.class);
-        intent.putExtra("COIN_NAME", coinName.toUpperCase());
-        intent.putExtra(EXCHANGE_VALUE, spinnerValue);
+        if(result.getAdditionalProperties().get(EXCHANGE_VALUE)!=null){
 
-        if (spinnerValue.equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)) {
+            String localExchagevalue=result.getAdditionalProperties().get(EXCHANGE_VALUE).toString();
+            Log.d(TAG, "onCoinClickListener: "+result.getAdditionalProperties().get(EXCHANGE_VALUE));
 
 
-            if (coinName.equalsIgnoreCase("usdt"))
-                return;
-            if (coinName.equalsIgnoreCase("btc"))
-                coinName = "usdt-" + coinName;
-            else
-                coinName = "btc-" + coinName;
+
+            String coinName = result.getCurrency();
+
+            if (localExchagevalue.equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)) {
 
 
+                if (coinName.equalsIgnoreCase("usdt"))
+                    return;
+                if (coinName.equalsIgnoreCase("btc"))
+                    coinName = "usdt-" + coinName;
+                else
+                    coinName = "btc-" + coinName;
+            }
+            if (localExchagevalue.equalsIgnoreCase(GlobalConstant.Exchanges.BINANCE)) {
+                if (coinName.equalsIgnoreCase("usdt"))
+                    return;
+                if (coinName.equalsIgnoreCase("btc"))
+                    coinName = coinName + "usdt";
+                else
+                    coinName = coinName + "btc";
+            }
+
+            Intent intent = new Intent(getContext(), CoinHomeActivity.class);
+            intent.putExtra("COIN_NAME", coinName.toUpperCase());
+            intent.putExtra(EXCHANGE_VALUE, localExchagevalue);
             startActivity(intent);
-        }
-        if (spinnerValue.equalsIgnoreCase(GlobalConstant.Exchanges.BINANCE)) {
-            if (coinName.equalsIgnoreCase("usdt"))
-                return;
-            if (coinName.equalsIgnoreCase("btc"))
-                coinName = coinName + "usdt";
-            else
-                coinName = coinName + "btc";
 
-            startActivity(intent);
+
+
 
         }
+
 
 
     }

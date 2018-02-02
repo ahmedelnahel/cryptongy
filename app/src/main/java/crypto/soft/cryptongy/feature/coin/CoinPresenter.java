@@ -355,7 +355,7 @@ public class CoinPresenter extends TickerPresenter<CoinView> {
             List<String> stringList = Arrays.asList(coinName.split("-"));
 
             if(stringList!=null){
-                if (stringList.size()>0){
+                if (stringList.size()>1){
 
                     modifiedCoinName=stringList.get(1)+stringList.get(0);
                 }

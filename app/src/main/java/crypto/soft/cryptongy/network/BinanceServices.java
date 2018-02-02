@@ -36,6 +36,8 @@ import crypto.soft.cryptongy.feature.shared.json.orderhistory.OrderHistory;
 import crypto.soft.cryptongy.feature.shared.json.ticker.Ticker;
 import crypto.soft.cryptongy.feature.shared.json.wallet.Wallet;
 import crypto.soft.cryptongy.feature.shared.module.Account;
+import crypto.soft.cryptongy.feature.wallet.WalletFragment;
+import crypto.soft.cryptongy.utils.GlobalConstant;
 import io.reactivex.subjects.PublishSubject;
 
 
@@ -440,8 +442,8 @@ public class BinanceServices {
         else {
             String url = "https://api.binance.com/api/v3/account";
             Log.d(TAG, "getWallet: "+url);
-//            String walletStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret(), null, "HmacSHA256", "GET");
-            String walletStr = "{\"makerCommission\":15,\"takerCommission\":15,\"buyerCommission\":0,\"sellerCommission\":0,\"canTrade\":true,\"canWithdraw\":true,\"canDeposit\":true,\"updateTime\":123456789,\"balances\":[{\"asset\":\"BTC\",\"free\":\"4723846.89208129\",\"locked\":\"0.00000000\"},{\"asset\":\"LTC\",\"free\":\"4763368.68006011\",\"locked\":\"1.00000000\"}]}";
+            String walletStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret(), null, "HmacSHA256", "GET");
+//            String walletStr = "{\"makerCommission\":15,\"takerCommission\":15,\"buyerCommission\":0,\"sellerCommission\":0,\"canTrade\":true,\"canWithdraw\":true,\"canDeposit\":true,\"updateTime\":123456789,\"balances\":[{\"asset\":\"BTC\",\"free\":\"4723846.89208129\",\"locked\":\"0.00000000\"},{\"asset\":\"LTC\",\"free\":\"4763368.68006011\",\"locked\":\"1.00000000\"}]}";
             Log.i("wallet response " , walletStr);
             if (walletStr == null) {
                 wallet.setSuccess(false);
@@ -459,6 +461,7 @@ public class BinanceServices {
                             crypto.soft.cryptongy.feature.shared.json.wallet.Result r = new crypto.soft.cryptongy.feature.shared.json.wallet.Result(b);
                         if(r.getBalance()!=0.0 ) {
                             coinsMap.put(r.getCurrency(), r);
+                            r.setAdditionalProperty(WalletFragment.EXCHANGE_VALUE, GlobalConstant.Exchanges.BINANCE);
                             results.add(r);
                         }
                     }
