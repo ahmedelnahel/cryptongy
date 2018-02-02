@@ -63,6 +63,7 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
     private BinanceServices binanceServices;
     Disposable disposable;
     private static CountDownTimer countDownTimer;
+    private boolean countDownTimerRunning =false;
     private TextView txtLevel, txtBtc, txtUsd, txtEmpty, txtProfit;
     private RecyclerView rvCoinList;
     private WalletAdapter coinAdapter;
@@ -146,6 +147,7 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
                     spinnerValue = getResources().getStringArray(R.array.exchange_value_array_wallet)[2];
                 }
                 closeWebsocket();
+                stopTimer();
                 getData();
 
             }
@@ -525,27 +527,33 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
         Notification notification = ((CoinApplication) getContext().getApplicationContext()).getNotification();
         if (notification.isAutomSync()) {
             Log.d(TAG, "startTicker: ");
-            int timerInterval = notification.getSyncInterval() * 1000;
+            final int timerInterval = notification.getSyncInterval() * 1000;
             timer = new Timer();
 
-            countDownTimer = new CountDownTimer(timerInterval, timerInterval) {
+            if(!countDownTimerRunning){
 
-                @Override
-                public void onTick(long millisUntilFinished) {
-                    Log.d(TAG, "onTick: " + millisUntilFinished / 1000);
-                }
+                countDownTimer = new CountDownTimer(timerInterval, 1000) {
 
-                @Override
-                public void onFinish() {
-                    try {
-
-                       new GetUpdatedCoinDetails().execute();
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    @Override
+                    public void onTick(long millisUntilFinished) {
+                        countDownTimerRunning=true;
                     }
 
-                }
-            }.start();
+                    @Override
+                    public void onFinish() {
+                        try {
+                            countDownTimerRunning=false;
+                            Log.d(TAG, "onFinish: timeriscalled : "+timerInterval/1000);
+
+                            new GetUpdatedCoinDetails().execute();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }.start();
+            }
+
 //
 //            timer.scheduleAtFixedRate(new TimerTask() {
 //
@@ -561,8 +569,10 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
     }
 
     public void stopTimer() {
+        Log.d(TAG, "stopTimer: ");
         if (countDownTimer != null) {
             countDownTimer.cancel();
+            countDownTimerRunning=false;
         }
 
         if (timer != null)
@@ -586,7 +596,7 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
     @Override
     public void onResume() {
         super.onResume();
-        startWalletTimer();
+
     }
 
     private class GetUpdatedCoinDetails extends AsyncTask<String, Void, Wallet> {
@@ -672,6 +682,7 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
         @Override
         protected void onPostExecute(Wallet wallet) {
            postExecute(wallet);
+           startWalletTimer();
 
         }
     }
@@ -696,6 +707,9 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
         txtBtc.setText(String.valueOf(GlobalUtil.round(BTCSum, 9)) + "฿");
         double bitcoinPrice = ((CoinApplication) getActivity().getApplication()).getUsdt_btc();
         txtUsd.setText("$" + String.valueOf(GlobalUtil.round(BTCSum * bitcoinPrice, 4)));
+
+
+
 
     }
 
