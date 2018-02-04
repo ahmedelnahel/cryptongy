@@ -18,6 +18,7 @@ import crypto.soft.cryptongy.feature.shared.json.orderhistory.Result;
 import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
 import crypto.soft.cryptongy.feature.shared.module.Account;
 import crypto.soft.cryptongy.utils.CoinApplication;
+import crypto.soft.cryptongy.utils.GlobalConstant;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -31,6 +32,7 @@ import io.reactivex.disposables.Disposable;
 public class OrderPresenter extends MvpBasePresenter<OrderView> {
     protected OrderInteractor interactor;
     private Context context;
+    private String exchangeValue;
 
     public OrderPresenter(Context context) {
         this.context = context;
@@ -48,7 +50,7 @@ public class OrderPresenter extends MvpBasePresenter<OrderView> {
     public void onClicked(int id) {
         switch (id) {
             case R.id.imgSync:
-                getData();
+                getData(exchangeValue);
                 break;
             case R.id.imgAccSetting:
                 if (context instanceof MainActivity)
@@ -59,9 +61,14 @@ public class OrderPresenter extends MvpBasePresenter<OrderView> {
         }
     }
 
-    public void getData() {
+    public void getData(String exchangeValue) {
+        this.exchangeValue=exchangeValue;
+        if(TextUtils.isEmpty(this.exchangeValue)){
+            this.exchangeValue= GlobalConstant.Exchanges.BITTREX;
+        }
+
         CoinApplication application = (CoinApplication) context.getApplicationContext();
-        Account account = application.getReadAccount();
+        Account account = application.getReadAccount(this.exchangeValue);
         if (account != null) {
             if (getView() != null) {
                 getView().resetView();

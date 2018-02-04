@@ -18,7 +18,9 @@
             android:layout_alignParentTop="true"
             android:background="@color/colorPrimary" />
 
-        <include layout="@layout/layout_calculation" />
+        <include
+
+            layout="@layout/layout_calculation" />
 
         <crypto.soft.cryptongy.feature.shared.customView.MspTextView
             android:id="@+id/txtEmpty"
@@ -38,6 +40,29 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/include"
             android:orientation="vertical">
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_42sdp"
+                android:layout_marginLeft="@dimen/_12sdp"
+                android:layout_marginRight="@dimen/_12sdp"
+                android:layout_weight="1"
+                android:background="@drawable/rect_left_right"
+                android:padding="2dp"
+
+                >
+
+                <Spinner
+                    android:id="@+id/spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true">
+
+                </Spinner>
+
+            </RelativeLayout>
+
 
             <include layout="@layout/table_open_order" />
 

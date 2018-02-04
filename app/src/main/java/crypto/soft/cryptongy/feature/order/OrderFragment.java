@@ -6,8 +6,11 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
@@ -21,6 +24,7 @@ import crypto.soft.cryptongy.feature.shared.json.order.Order;
 import crypto.soft.cryptongy.feature.shared.json.orderhistory.OrderHistory;
 import crypto.soft.cryptongy.feature.shared.listner.DialogListner;
 import crypto.soft.cryptongy.utils.CoinApplication;
+import crypto.soft.cryptongy.utils.GlobalConstant;
 import crypto.soft.cryptongy.utils.GlobalUtil;
 import crypto.soft.cryptongy.utils.HideKeyboard;
 import crypto.soft.cryptongy.utils.ProgressDialogFactory;
@@ -34,6 +38,8 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implem
     private View view;
 
     private TableLayout tblOpenOrders, tblOrderHistory;
+    private Spinner spinner;
+    private String spinnerValue;
 
     private LinearLayout lnlContainer;
     private TextView txtLevel, txtOpenOrder, txtOrderHistory, txtEmpty, txtBtc, txtUsd, txtGap, txtProfit;
@@ -48,13 +54,68 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implem
             view = inflater.inflate(R.layout.fragment_order, container, false);
             new HideKeyboard(getContext()).setupUI(view);
             findViews();
+            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
+                    R.array.coin_array, R.layout.drop_down_text);
+            adapter.setDropDownViewResource(R.layout.drop_down_text);
+            spinner.setAdapter(adapter);
+
+
+            CoinApplication application = (CoinApplication) getActivity().getApplicationContext();
+            spinnerValue = application.getNotification().getDefaultExchange();
+            if (spinnerValue != null) {
+
+                if (spinnerValue.equalsIgnoreCase(getResources().getStringArray(R.array.coin_array)[0])) {
+
+                    spinner.setSelection(0);
+                } else {
+                    spinner.setSelection(1);
+
+                }
+            }
+
             setClickListner();
+            spinerListener();
             isFirst = true;
         } else
             isFirst = false;
         hideTotal();
         setTitle();
         return view;
+    }
+
+    private void spinerListener() {
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                //if at position zero bitrex and at position 1 binance is called
+                if (spinner.getItemAtPosition(position).toString().equalsIgnoreCase(getResources().getStringArray(R.array.coin_array)[0])) {
+
+                    spinnerValue = getResources().getStringArray(R.array.coin_array)[0];
+                    getDataFromPresenter(spinnerValue);
+
+
+                } else {
+                    spinnerValue = getResources().getStringArray(R.array.coin_array)[1];
+                    getDataFromPresenter(spinnerValue);
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+
+    public void getDataFromPresenter(String spinnerValue) {
+        if (TextUtils.isEmpty(spinnerValue)) {
+            spinnerValue = GlobalConstant.Exchanges.BITTREX;
+        }
+        presenter.getData(spinnerValue);
     }
 
     @Override
@@ -67,8 +128,16 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implem
         super.onViewCreated(view, savedInstanceState);
         if (isFirst) {
             isFirst = false;
-            presenter.getData();
+
+            if (spinnerValue.equalsIgnoreCase(getResources().getStringArray(R.array.coin_array)[0])) {
+                getDataFromPresenter(spinnerValue);
+
+            } else {
+                getDataFromPresenter(spinnerValue);
+            }
         }
+
+
     }
 
     @Override
@@ -102,6 +171,9 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implem
 
         txtEmpty = view.findViewById(R.id.txtEmpty);
         lnlContainer = view.findViewById(R.id.lnlContainer);
+
+        spinner = view.findViewById(R.id.spinner);
+
     }
 
     public void hideTotal() {
