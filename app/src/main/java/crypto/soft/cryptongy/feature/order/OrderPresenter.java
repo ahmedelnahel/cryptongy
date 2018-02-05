@@ -2,9 +2,12 @@ package crypto.soft.cryptongy.feature.order;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.text.TextUtils;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
+
+import java.io.IOException;
 
 import crypto.soft.cryptongy.R;
 import crypto.soft.cryptongy.feature.account.AccountActivity;
@@ -12,18 +15,23 @@ import crypto.soft.cryptongy.feature.account.CustomDialog;
 import crypto.soft.cryptongy.feature.main.MainActivity;
 import crypto.soft.cryptongy.feature.setting.SettingActivity;
 import crypto.soft.cryptongy.feature.shared.json.action.Cancel;
+import crypto.soft.cryptongy.feature.shared.json.market.MarketSummaries;
 import crypto.soft.cryptongy.feature.shared.json.openorder.OpenOrder;
 import crypto.soft.cryptongy.feature.shared.json.orderhistory.OrderHistory;
 import crypto.soft.cryptongy.feature.shared.json.orderhistory.Result;
 import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
 import crypto.soft.cryptongy.feature.shared.module.Account;
+import crypto.soft.cryptongy.network.BinanceServices;
+import crypto.soft.cryptongy.network.BittrexServices;
 import crypto.soft.cryptongy.utils.CoinApplication;
 import crypto.soft.cryptongy.utils.GlobalConstant;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 
 /**
  * Created by tseringwongelgurung on 11/23/17.
@@ -33,6 +41,8 @@ public class OrderPresenter extends MvpBasePresenter<OrderView> {
     protected OrderInteractor interactor;
     private Context context;
     private String exchangeValue;
+    private String orderHistoryExchangeValue;
+    Disposable disposable;
 
     public OrderPresenter(Context context) {
         this.context = context;
@@ -129,7 +139,7 @@ public class OrderPresenter extends MvpBasePresenter<OrderView> {
 
 
 
-    public void getOrderHistoryData(String exchangeValue){
+    public void getOrderHistoryData(String exchangeValue,String coinName){
         this.exchangeValue=exchangeValue;
         if(TextUtils.isEmpty(this.exchangeValue)){
             this.exchangeValue= GlobalConstant.Exchanges.BITTREX;
@@ -179,7 +189,7 @@ public class OrderPresenter extends MvpBasePresenter<OrderView> {
                     }
                 }
             };
-            getOrderHistory("",exchangeValue, account).subscribe(observer);
+            getOrderHistory(coinName,exchangeValue, account).subscribe(observer);
         } else {
             CustomDialog.showMessagePop(context, context.getString(R.string.noAPI), null);
             if (getView() != null) {
@@ -325,6 +335,70 @@ public class OrderPresenter extends MvpBasePresenter<OrderView> {
         calculation = sell - buy + currentHolding;
         if (getView() != null) {
             getView().setCalculation(calculation);
+        }
+    }
+
+
+    public void getCoinList(String exchangeValue){
+        this.orderHistoryExchangeValue=exchangeValue;
+
+        new getCoinDetails().execute();
+    }
+
+    private class getCoinDetails extends AsyncTask<String, Void, MarketSummaries>{
+        BittrexServices bittrexServices=new BittrexServices();
+        BinanceServices binanceServices=new BinanceServices();
+        MarketSummaries marketSummaries;
+
+        @Override
+        protected MarketSummaries doInBackground(String... strings) {
+
+            try {
+                if(orderHistoryExchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)){
+
+                    marketSummaries = bittrexServices.getMarketSummaries();
+                }
+
+                if(orderHistoryExchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BINANCE)){
+
+                    binanceServices.getMarketSummariesWebsocket();
+
+                    disposable = binanceServices.sourceMarketSummariesWebsocket.observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<MarketSummaries>() {
+
+                        @Override
+                        public void accept(MarketSummaries consumerMarketSummarries) throws Exception {
+                            if (disposable != null) {
+                                disposable.dispose();
+                            }
+                            binanceServices.closeWebSocket();
+                            marketSummaries = consumerMarketSummarries;
+                            if(marketSummaries!=null && marketSummaries.getSuccess()){
+                                getView().setCoins(marketSummaries);
+                            }
+
+
+                        }
+                    });
+
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return marketSummaries;
+        }
+
+        @Override
+        protected void onPostExecute(MarketSummaries marketSummaries) {
+            if(orderHistoryExchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)){
+
+                if (marketSummaries != null && marketSummaries.getSuccess()) {
+                    getView().setCoins(marketSummaries);
+                }
+            }
+
+
+
         }
     }
 }

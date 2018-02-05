@@ -50,7 +50,6 @@
             <include layout="@layout/table_order_history" />
 
         </LinearLayout>
-
     </RelativeLayout>
 
 </ScrollView>

@@ -3,10 +3,13 @@ package crypto.soft.cryptongy.utils;
 import android.app.Application;
 import android.text.TextUtils;
 
+import java.util.List;
+
 import crypto.soft.cryptongy.R;
 import crypto.soft.cryptongy.feature.alert.broadCastTicker;
 import crypto.soft.cryptongy.feature.order.OrderReceiver;
 import crypto.soft.cryptongy.feature.setting.Notification;
+import crypto.soft.cryptongy.feature.shared.json.market.Result;
 import crypto.soft.cryptongy.feature.shared.json.openorder.OpenOrder;
 import crypto.soft.cryptongy.feature.shared.module.Account;
 import crypto.soft.cryptongy.feature.trade.conditional.ConditionalReceiver;
@@ -29,6 +32,7 @@ public class CoinApplication extends Application {
     private String READ="Read";
     private String TRADE="Trade";
     private String WITHDRAW="Withdraw";
+    private List<Result> coins;
 
     public Notification getSettings() {
         return getNotification();
@@ -39,7 +43,15 @@ public class CoinApplication extends Application {
     }
 
 
-/*  TRADE ACCOUNT GETTER SETTER */
+    public List<Result> getCoins() {
+        return coins;
+    }
+
+    public void setCoins(List<Result> coins) {
+        this.coins = coins;
+    }
+
+    /*  TRADE ACCOUNT GETTER SETTER */
     public Account getTradeAccount() {
         if (tradeAccount != null)
             return tradeAccount;

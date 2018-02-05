@@ -1,5 +1,6 @@
 package crypto.soft.cryptongy.feature.order;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -16,14 +18,18 @@ import android.widget.TextView;
 
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import crypto.soft.cryptongy.R;
 import crypto.soft.cryptongy.feature.account.CustomDialog;
+import crypto.soft.cryptongy.feature.home.CustomArrayAdapter;
+import crypto.soft.cryptongy.feature.shared.json.market.MarketSummaries;
 import crypto.soft.cryptongy.feature.shared.json.openorder.OpenOrder;
 import crypto.soft.cryptongy.feature.shared.json.openorder.Result;
 import crypto.soft.cryptongy.feature.shared.json.order.Order;
 import crypto.soft.cryptongy.feature.shared.json.orderhistory.OrderHistory;
 import crypto.soft.cryptongy.feature.shared.listner.DialogListner;
-import crypto.soft.cryptongy.feature.shared.module.Account;
 import crypto.soft.cryptongy.utils.CoinApplication;
 import crypto.soft.cryptongy.utils.GlobalConstant;
 import crypto.soft.cryptongy.utils.GlobalUtil;
@@ -43,6 +49,10 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implem
     private Spinner spinnerOrderHistory;
     private String spinnerOpenOrderValue;
     private String spinnerOrderHistoryValue;
+    AutoCompleteTextView inputCoin;
+    CustomArrayAdapter adapterCoins;
+    crypto.soft.cryptongy.feature.shared.json.market.Result result;
+    List<crypto.soft.cryptongy.feature.shared.json.market.Result> coins;
 
     private LinearLayout lnlContainer;
     private TextView txtLevel, txtOpenOrder, txtOrderHistory, txtEmpty, txtBtc, txtUsd, txtGap, txtProfit;
@@ -66,6 +76,20 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implem
             spinnerOrderHistory.setAdapter(adapter);
 
 
+            coins=new ArrayList<>();
+            adapterCoins = new CustomArrayAdapter(getContext(), coins);
+
+            inputCoin.setThreshold(1);
+            inputCoin.setAdapter(adapterCoins);
+
+            inputCoin.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    inputCoin.setText("");
+                }
+            });
+
+
 
 
             CoinApplication application = (CoinApplication) getActivity().getApplicationContext();
@@ -76,25 +100,53 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implem
 
                     spinnerOpenOrder.setSelection(0);
                     spinnerOrderHistory.setSelection(0);
+                    spinnerOpenOrderValue=getResources().getStringArray(R.array.coin_array)[0];
+                    spinnerOrderHistoryValue=getResources().getStringArray(R.array.coin_array)[0];
+
+
                 } else {
                     spinnerOpenOrder.setSelection(1);
                     spinnerOrderHistory.setSelection(1);
+                    spinnerOpenOrderValue=getResources().getStringArray(R.array.coin_array)[1];
+                    spinnerOrderHistoryValue=getResources().getStringArray(R.array.coin_array)[1];
 
                 }
+
+
             }else{
                 spinnerOpenOrder.setSelection(0);
                 spinnerOrderHistory.setSelection(0);
                 spinnerOpenOrderValue=getResources().getStringArray(R.array.coin_array)[0];
+                spinnerOrderHistoryValue=getResources().getStringArray(R.array.coin_array)[0];
             }
 
             setClickListner();
             spinerListener();
+            inputCoinListener();
             isFirst = true;
         } else
             isFirst = false;
         hideTotal();
         setTitle();
         return view;
+    }
+
+    private void inputCoinListener() {
+
+        inputCoin.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                result = new crypto.soft.cryptongy.feature.shared.json.market.Result();
+                inputCoin.setText(((crypto.soft.cryptongy.feature.shared.json.market.Result) ((CustomArrayAdapter) adapterView.getAdapter()).getItem(i)).getMarketName());
+                inputCoin.setTextSize(12);
+                Typeface face = Typeface.createFromAsset(getActivity().getAssets(),
+                        "fonts/calibri.ttf");
+                inputCoin.setTypeface(face, Typeface.NORMAL);
+                result = (crypto.soft.cryptongy.feature.shared.json.market.Result) ((CustomArrayAdapter) adapterView.getAdapter()).getItem(i);
+                presenter.getOrderHistoryData(spinnerOrderHistoryValue,inputCoin.getText().toString());
+
+            }
+        });
     }
 
     private void spinerListener() {
@@ -135,12 +187,12 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implem
                 if (spinnerOrderHistory.getItemAtPosition(position).toString().equalsIgnoreCase(getResources().getStringArray(R.array.coin_array)[0])) {
                     spinnerOrderHistoryValue = getResources().getStringArray(R.array.coin_array)[0];
 
+
                 } else {
                     spinnerOrderHistoryValue = getResources().getStringArray(R.array.coin_array)[1];
-                    CoinApplication application = (CoinApplication) getActivity().getApplicationContext();
-                    Account account = application.getReadAccount(spinnerOrderHistoryValue);
                 }
-                presenter.getOrderHistoryData(spinnerOrderHistoryValue);
+                showLoading("Fetching Data Please Wait ..");
+                presenter.getCoinList(spinnerOrderHistoryValue);
 
 
             }
@@ -180,6 +232,7 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implem
             } else {
                 getDataFromPresenter(spinnerOpenOrderValue);
             }
+            presenter.getCoinList(spinnerOrderHistoryValue);
         }
 
 
@@ -219,6 +272,8 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implem
 
         spinnerOpenOrder = view.findViewById(R.id.spinnerOpenOrder);
         spinnerOrderHistory = view.findViewById(R.id.spinnerOrderHistory);
+
+        inputCoin=view.findViewById(R.id.inputCoinOrderhistory);
 
     }
 
@@ -382,5 +437,14 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implem
     public void onClick(View view) {
         int id = view.getId();
         presenter.onClicked(id);
+    }
+
+    @Override
+    public void setCoins(MarketSummaries marketSummaries){
+        hideLoading();
+        coins.clear();
+        coins.addAll(marketSummaries.getResult());
+        adapterCoins.notifyDataSetChanged();
+
     }
 }
