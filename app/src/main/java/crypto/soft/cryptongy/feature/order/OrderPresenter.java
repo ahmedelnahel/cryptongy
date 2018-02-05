@@ -116,7 +116,7 @@ public class OrderPresenter extends MvpBasePresenter<OrderView> {
                 }
             };
 
-            Observable.merge(getOpenOrders("",account.getExchange(), account), getOrderHistory("",account.getExchange(), account))
+            Observable.merge(getOpenOrders("",exchangeValue, account), getOrderHistory("",exchangeValue, account))
                     .subscribe(observer);
         } else {
             CustomDialog.showMessagePop(context, context.getString(R.string.noAPI), null);
@@ -125,6 +125,69 @@ public class OrderPresenter extends MvpBasePresenter<OrderView> {
                 getView().showEmptyView();
             }
         }
+    }
+
+
+
+    public void getOrderHistoryData(String exchangeValue){
+        this.exchangeValue=exchangeValue;
+        if(TextUtils.isEmpty(this.exchangeValue)){
+            this.exchangeValue= GlobalConstant.Exchanges.BITTREX;
+        }
+
+        CoinApplication application = (CoinApplication) context.getApplicationContext();
+        Account account = application.getReadAccount(this.exchangeValue);
+        if (account != null) {
+            if (getView() != null) {
+                getView().resetView();
+                getView().showLoading(context.getString(R.string.fetch_msg));
+                getView().setLevel(account.getLabel());
+            }
+
+            Observer observer = new Observer() {
+                private int count = 2;
+
+                @Override
+                public void onSubscribe(Disposable d) {
+                    count = 2;
+                }
+
+                @Override
+                public void onNext(Object o) {
+                    count--;
+                    if (o instanceof OrderHistory) {
+                        if (getView() != null) {
+                            getView().setOrderHistory((OrderHistory) o);
+                            calculateProfit((OrderHistory) o, 0);
+                        }
+                    }
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                }
+
+                @Override
+                public void onComplete() {
+                    if (getView() != null) {
+                        getView().hideLoading();
+                        if (count == 2) {
+                            getView().showEmptyView();
+                        } else {
+                            getView().hideEmptyView();
+                        }
+                    }
+                }
+            };
+            getOrderHistory("",exchangeValue, account).subscribe(observer);
+        } else {
+            CustomDialog.showMessagePop(context, context.getString(R.string.noAPI), null);
+            if (getView() != null) {
+                getView().setLevel("No API");
+                getView().showEmptyView();
+            }
+        }
+
     }
 
     public Observable<OrderHistory> getOrderHistory(final String coinName,final String exchangeValue, final Account account) {
