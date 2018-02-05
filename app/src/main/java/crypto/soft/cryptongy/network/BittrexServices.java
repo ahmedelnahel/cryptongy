@@ -413,6 +413,7 @@ public class BittrexServices {
         }
         else {
             final String url = "https://bittrex.com/api/v1.1/account/getorder";
+            Log.d(TAG, "getOrder: "+url);
             HashMap<String, String> params = new HashMap<String, String>();
             params.put("uuid", orderUUID);
             String orderStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret(), params);

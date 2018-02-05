@@ -216,7 +216,7 @@ public class OrderInteractor {
         }.execute();
     }
 
-    public void getOrders(String orderUuid, Account account,  OnFinishListner< Order> listner) {
+    public void getOrders(String orderUuid,String market, Account account,  OnFinishListner< Order> listner) {
         try {
 
             Order order=null;
@@ -224,11 +224,12 @@ public class OrderInteractor {
 
                  order = new BittrexServices().getOrder(orderUuid, account);
             }
-//            if(account.getExchange().equalsIgnoreCase(GlobalConstant.Exchanges.BINANCE)){
-//                 order = new BinanceServices().getOrder(orderUuid, account);
-//
-//            }
-//
+
+            if(account.getExchange().equalsIgnoreCase(GlobalConstant.Exchanges.BINANCE)){
+                 order = new BinanceServices().getOrder(orderUuid,market, account);
+
+            }
+
 
 
             if (order == null || !order.getSuccess())

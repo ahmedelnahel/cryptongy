@@ -19,6 +19,7 @@ import crypto.soft.cryptongy.utils.GlobalUtil;
 
 public class OrderService extends IntentService {
     private OrderInteractor interactor = new OrderInteractor();
+    private String exchangeValue;
 
     public OrderService() {
         super("OrderService");
@@ -41,15 +42,15 @@ public class OrderService extends IntentService {
 
     private void getOpenOrder(final CoinApplication application, final boolean check) {
 
-        String exchange= GlobalConstant.Exchanges.BITTREX;
+        exchangeValue= GlobalConstant.Exchanges.BITTREX;
         if(application!=null){
-            if(application.getReadAccount()!=null){
-                exchange=application.getReadAccount().getExchange();
+            if(application.getReadAccount(exchangeValue)!=null){
+//                exchangeValue=application.getReadAccount().getExchange();
             }
         }
 
 
-        interactor.getOpenOrder("",exchange, application.getReadAccount(), new OnFinishListner<OpenOrder>() {
+        interactor.getOpenOrder("",exchangeValue, application.getReadAccount(exchangeValue), new OnFinishListner<OpenOrder>() {
             @Override
             public void onComplete(OpenOrder result) {
                 if(result != null && result.getSuccess()&& result.getResult()!= null) {
@@ -71,7 +72,7 @@ public class OrderService extends IntentService {
         for (int i = 0; i < openOrder.getResult().size(); i++) {
             final crypto.soft.cryptongy.feature.shared.json.openorder.Result data = openOrder.getResult().get(i);
             final int finalI = i;
-            interactor.getOrders(data.getOrderUuid(), application.getReadAccount(),  new OnFinishListner<Order>() {
+            interactor.getOrders(data.getOrderUuid(),data.getExchange(),application.getReadAccount(exchangeValue),  new OnFinishListner<Order>() {
 
                 @Override
                 public void onComplete(Order result) {
