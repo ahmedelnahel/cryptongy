@@ -1,6 +1,5 @@
 package crypto.soft.cryptongy.feature.order;
 
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -138,10 +137,10 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implem
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 result = new crypto.soft.cryptongy.feature.shared.json.market.Result();
                 inputCoin.setText(((crypto.soft.cryptongy.feature.shared.json.market.Result) ((CustomArrayAdapter) adapterView.getAdapter()).getItem(i)).getMarketName());
-                inputCoin.setTextSize(12);
-                Typeface face = Typeface.createFromAsset(getActivity().getAssets(),
-                        "fonts/calibri.ttf");
-                inputCoin.setTypeface(face, Typeface.NORMAL);
+//                inputCoin.setTextSize(12);
+//                Typeface face = Typeface.createFromAsset(getActivity().getAssets(),
+//                        "fonts/calibri.ttf");
+//                inputCoin.setTypeface(face, Typeface.NORMAL);
                 result = (crypto.soft.cryptongy.feature.shared.json.market.Result) ((CustomArrayAdapter) adapterView.getAdapter()).getItem(i);
                 presenter.getOrderHistoryData(spinnerOrderHistoryValue,inputCoin.getText().toString());
 
