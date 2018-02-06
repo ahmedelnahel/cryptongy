@@ -343,7 +343,8 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implem
                         @Override
                         public void onOkClicked() {
                             final CoinApplication application = (CoinApplication) getActivity().getApplicationContext();
-                            presenter.cancleOrder(data.getExchange(), data.getOrderUuid(), application.getReadAccount());
+
+                            presenter.cancleOrder(data.getExchange(), data.getOrderUuid(), application.getReadAccount(spinnerOpenOrderValue));
                         }
                     });
                 }
