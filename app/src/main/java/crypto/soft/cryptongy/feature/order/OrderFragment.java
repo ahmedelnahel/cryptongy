@@ -54,7 +54,7 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implem
     List<crypto.soft.cryptongy.feature.shared.json.market.Result> coins;
 
     private LinearLayout lnlContainer;
-    private TextView txtLevel, txtOpenOrder, txtOrderHistory, txtEmpty, txtBtc, txtUsd, txtGap, txtProfit;
+    private TextView txtLevel, txtOpenOrder, txtOrderHistory, txtEmpty, txtBtc, txtUsd, txtGap, txtProfit, txtNodataFoundOpenOrder, txtNodataFoundOrderHistory;
     private ImageView imgSync, imgAccSetting;
 
     private boolean isFirst = false;
@@ -75,7 +75,7 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implem
             spinnerOrderHistory.setAdapter(adapter);
 
 
-            coins=new ArrayList<>();
+            coins = new ArrayList<>();
             adapterCoins = new CustomArrayAdapter(getContext(), coins);
 
             inputCoin.setThreshold(1);
@@ -89,8 +89,6 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implem
             });
 
 
-
-
             CoinApplication application = (CoinApplication) getActivity().getApplicationContext();
             spinnerOpenOrderValue = application.getNotification().getDefaultExchange();
             if (spinnerOpenOrderValue != null) {
@@ -99,24 +97,24 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implem
 
                     spinnerOpenOrder.setSelection(0);
                     spinnerOrderHistory.setSelection(0);
-                    spinnerOpenOrderValue=getResources().getStringArray(R.array.coin_array)[0];
-                    spinnerOrderHistoryValue=getResources().getStringArray(R.array.coin_array)[0];
+                    spinnerOpenOrderValue = getResources().getStringArray(R.array.coin_array)[0];
+                    spinnerOrderHistoryValue = getResources().getStringArray(R.array.coin_array)[0];
 
 
                 } else {
                     spinnerOpenOrder.setSelection(1);
                     spinnerOrderHistory.setSelection(1);
-                    spinnerOpenOrderValue=getResources().getStringArray(R.array.coin_array)[1];
-                    spinnerOrderHistoryValue=getResources().getStringArray(R.array.coin_array)[1];
+                    spinnerOpenOrderValue = getResources().getStringArray(R.array.coin_array)[1];
+                    spinnerOrderHistoryValue = getResources().getStringArray(R.array.coin_array)[1];
 
                 }
 
 
-            }else{
+            } else {
                 spinnerOpenOrder.setSelection(0);
                 spinnerOrderHistory.setSelection(0);
-                spinnerOpenOrderValue=getResources().getStringArray(R.array.coin_array)[0];
-                spinnerOrderHistoryValue=getResources().getStringArray(R.array.coin_array)[0];
+                spinnerOpenOrderValue = getResources().getStringArray(R.array.coin_array)[0];
+                spinnerOrderHistoryValue = getResources().getStringArray(R.array.coin_array)[0];
             }
 
             setClickListner();
@@ -142,7 +140,7 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implem
 //                        "fonts/calibri.ttf");
 //                inputCoin.setTypeface(face, Typeface.NORMAL);
                 result = (crypto.soft.cryptongy.feature.shared.json.market.Result) ((CustomArrayAdapter) adapterView.getAdapter()).getItem(i);
-                presenter.getOrderHistoryData(spinnerOrderHistoryValue,inputCoin.getText().toString());
+                presenter.getOrderHistoryData(spinnerOrderHistoryValue, inputCoin.getText().toString());
 
             }
         });
@@ -164,6 +162,7 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implem
                 } else {
                     spinnerOpenOrderValue = getResources().getStringArray(R.array.coin_array)[1];
                     getDataFromPresenter(spinnerOpenOrderValue);
+
                 }
 
             }
@@ -173,9 +172,6 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implem
 
             }
         });
-
-
-
 
 
         //spiner order history
@@ -190,6 +186,7 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implem
                 } else {
                     spinnerOrderHistoryValue = getResources().getStringArray(R.array.coin_array)[1];
                 }
+                resetHistoryandCoin();
                 showLoading("Fetching Data Please Wait ..");
                 presenter.getCoinList(spinnerOrderHistoryValue);
 
@@ -201,7 +198,6 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implem
 
             }
         });
-
 
 
     }
@@ -272,7 +268,9 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implem
         spinnerOpenOrder = view.findViewById(R.id.spinnerOpenOrder);
         spinnerOrderHistory = view.findViewById(R.id.spinnerOrderHistory);
 
-        inputCoin=view.findViewById(R.id.inputCoinOrderhistory);
+        inputCoin = view.findViewById(R.id.inputCoinOrderhistory);
+        txtNodataFoundOpenOrder = view.findViewById(R.id.textNoDataFoundOpenOrder);
+        txtNodataFoundOrderHistory = view.findViewById(R.id.textNoDataFoundOrderHistory);
 
     }
 
@@ -305,11 +303,14 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implem
     public void setOpenOrders(OpenOrder openOrders) {
         tblOpenOrders.removeAllViews();
         if (openOrders == null || openOrders.getResult() == null || openOrders.getResult().isEmpty()) {
-            txtOpenOrder.setVisibility(View.GONE);
+//            txtOpenOrder.setVisibility(View.GONE);
+            txtNodataFoundOpenOrder.setVisibility(View.VISIBLE);
             return;
         }
 
-        txtOpenOrder.setVisibility(View.VISIBLE);
+
+        txtNodataFoundOpenOrder.setVisibility(View.GONE);
+//        txtOpenOrder.setVisibility(View.VISIBLE);
         View title = getLayoutInflater().inflate(R.layout.table_open_order_title, null);
         tblOpenOrders.addView(title);
         for (int i = 0; i < openOrders.getResult().size(); i++) {
@@ -359,11 +360,13 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implem
     public void setOrderHistory(OrderHistory orderHistory) {
         tblOrderHistory.removeAllViews();
         if (orderHistory == null || orderHistory.getResult() == null || orderHistory.getResult().isEmpty()) {
-            txtOrderHistory.setVisibility(View.GONE);
+            txtNodataFoundOrderHistory.setVisibility(View.VISIBLE);
+//            txtOrderHistory.setVisibility(View.GONE);
             return;
         }
 
-        txtOrderHistory.setVisibility(View.VISIBLE);
+        txtNodataFoundOrderHistory.setVisibility(View.GONE);
+//        txtOrderHistory.setVisibility(View.VISIBLE);
         View title = getLayoutInflater().inflate(R.layout.table_order_history_title, null);
         tblOrderHistory.addView(title);
         for (int i = 0; i < orderHistory.getResult().size(); i++) {
@@ -439,11 +442,20 @@ public class OrderFragment extends MvpFragment<OrderView, OrderPresenter> implem
     }
 
     @Override
-    public void setCoins(MarketSummaries marketSummaries){
+    public void setCoins(MarketSummaries marketSummaries) {
         hideLoading();
         coins.clear();
         coins.addAll(marketSummaries.getResult());
         adapterCoins.notifyDataSetChanged();
 
+    }
+
+
+    public void resetHistoryandCoin() {
+
+        setOrderHistory(null);
+        coins.clear();
+        adapterCoins.notifyDataSetChanged();
+        inputCoin.setText("");
     }
 }
