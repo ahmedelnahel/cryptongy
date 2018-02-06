@@ -264,7 +264,6 @@ public class OrderPresenter extends MvpBasePresenter<OrderView> {
                                         msg = "Order has been cancled successfully.";
                                     CustomDialog.showMessagePop(context, msg, null);
 
-
                                 }
                             }
 
