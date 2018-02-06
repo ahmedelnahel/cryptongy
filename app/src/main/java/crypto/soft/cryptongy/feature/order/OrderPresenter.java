@@ -29,9 +29,7 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 
 /**
  * Created by tseringwongelgurung on 11/23/17.
@@ -361,24 +359,26 @@ public class OrderPresenter extends MvpBasePresenter<OrderView> {
 
                 if(orderHistoryExchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BINANCE)){
 
-                    binanceServices.getMarketSummariesWebsocket();
+                    marketSummaries = binanceServices.getMarketSummaries();
 
-                    disposable = binanceServices.sourceMarketSummariesWebsocket.observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<MarketSummaries>() {
-
-                        @Override
-                        public void accept(MarketSummaries consumerMarketSummarries) throws Exception {
-                            if (disposable != null) {
-                                disposable.dispose();
-                            }
-                            binanceServices.closeWebSocket();
-                            marketSummaries = consumerMarketSummarries;
-                            if(marketSummaries!=null && marketSummaries.getSuccess()){
-                                getView().setCoins(marketSummaries);
-                            }
-
-
-                        }
-                    });
+//                    binanceServices.getMarketSummariesWebsocket();
+//
+//                    disposable = binanceServices.sourceMarketSummariesWebsocket.observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<MarketSummaries>() {
+//
+//                        @Override
+//                        public void accept(MarketSummaries consumerMarketSummarries) throws Exception {
+//                            if (disposable != null) {
+//                                disposable.dispose();
+//                            }
+//                            binanceServices.closeWebSocket();
+//                            marketSummaries = consumerMarketSummarries;
+//                            if(marketSummaries!=null && marketSummaries.getSuccess()){
+//                                getView().setCoins(marketSummaries);
+//                            }
+//
+//
+//                        }
+//                    });
 
                 }
 
@@ -390,12 +390,12 @@ public class OrderPresenter extends MvpBasePresenter<OrderView> {
 
         @Override
         protected void onPostExecute(MarketSummaries marketSummaries) {
-            if(orderHistoryExchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)){
+//            if(orderHistoryExchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)){
 
                 if (marketSummaries != null && marketSummaries.getSuccess()) {
                     getView().setCoins(marketSummaries);
                 }
-            }
+//            }
 
 
 
