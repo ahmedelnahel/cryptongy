@@ -38,27 +38,19 @@ public class OrderService extends IntentService {
         OpenOrder orderBinance=application.getOpenOrderBinance();
 
 
-
-        if (order == null && orderBinance==null){
-
+        if(order==null){
             getOpenOrder(application, false,exchangeBittrix);
-            getOpenOrder(application,false,exchangeBinance);
-
         }
-        if (order==null && orderBinance!=null){
-            getOpenOrder(application, false,exchangeBittrix);
+        else {
+            checkOrder(order, application,exchangeBittrix);
+        }
+
+        if(orderBinance==null){
+            getOpenOrder(application,false,exchangeBinance);
+        }else {
             checkOrder(order,application,exchangeBinance);
         }
-        if(order!=null && orderBinance==null){
-            checkOrder(order, application,exchangeBittrix);
-            getOpenOrder(application,false,exchangeBinance);
 
-        }
-        if(order!=null && orderBinance!=null){
-            checkOrder(order, application,exchangeBittrix);
-            checkOrder(order,application,exchangeBinance);
-
-        }
 
     }
 
