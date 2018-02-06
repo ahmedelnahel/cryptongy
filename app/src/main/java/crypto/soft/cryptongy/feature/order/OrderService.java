@@ -19,7 +19,9 @@ import crypto.soft.cryptongy.utils.GlobalUtil;
 
 public class OrderService extends IntentService {
     private OrderInteractor interactor = new OrderInteractor();
-    private String exchangeValue;
+    String exchangeBittrix=GlobalConstant.Exchanges.BITTREX;
+    String exchangeBinance=GlobalConstant.Exchanges.BINANCE;
+
 
     public OrderService() {
         super("OrderService");
@@ -33,16 +35,35 @@ public class OrderService extends IntentService {
     private void startService() {
         final CoinApplication application = (CoinApplication) getApplication();
         OpenOrder order = application.getOpenOrder();
-        if (order == null)
-            getOpenOrder(application, false);
-        else
-            checkOrder(order, application);
+        OpenOrder orderBinance=application.getOpenOrderBinance();
+
+
+
+        if (order == null && orderBinance==null){
+
+            getOpenOrder(application, false,exchangeBittrix);
+            getOpenOrder(application,false,exchangeBinance);
+
+        }
+        if (order==null && orderBinance!=null){
+            getOpenOrder(application, false,exchangeBittrix);
+            checkOrder(order,application,exchangeBinance);
+        }
+        if(order!=null && orderBinance==null){
+            checkOrder(order, application,exchangeBittrix);
+            getOpenOrder(application,false,exchangeBinance);
+
+        }
+        if(order!=null && orderBinance!=null){
+            checkOrder(order, application,exchangeBittrix);
+            checkOrder(order,application,exchangeBinance);
+
+        }
 
     }
 
-    private void getOpenOrder(final CoinApplication application, final boolean check) {
+    private void getOpenOrder(final CoinApplication application, final boolean check, final String exchangeValue) {
 
-        exchangeValue= GlobalConstant.Exchanges.BITTREX;
         if(application!=null){
             if(application.getReadAccount(exchangeValue)!=null){
 //                exchangeValue=application.getReadAccount().getExchange();
@@ -54,9 +75,18 @@ public class OrderService extends IntentService {
             @Override
             public void onComplete(OpenOrder result) {
                 if(result != null && result.getSuccess()&& result.getResult()!= null) {
-                    application.setOpenOrder(result);
-                    if (check)
-                        checkOrder(result, application);
+                    if(exchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)){
+                        application.setOpenOrder(result);
+                        if (check)
+                            checkOrder(result, application,exchangeValue);
+                    }
+                    if(exchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BINANCE)){
+
+                        application.setOpenOrderBinance(result);
+                        if(check)
+                            checkOrder(result,application,exchangeValue);
+                    }
+
                 }
             }
 
@@ -67,7 +97,8 @@ public class OrderService extends IntentService {
         });
     }
 
-    private void checkOrder(final OpenOrder openOrder, final CoinApplication application) {
+
+    private void checkOrder(final OpenOrder openOrder, final CoinApplication application,String exchangeValue) {
 
         for (int i = 0; i < openOrder.getResult().size(); i++) {
             final crypto.soft.cryptongy.feature.shared.json.openorder.Result data = openOrder.getResult().get(i);
@@ -100,8 +131,12 @@ public class OrderService extends IntentService {
             });
         }
         if(openOrder.isChange()) {
-            getOpenOrder(application, false);
+            getOpenOrder(application, false,exchangeValue);
             openOrder.setChange(false);
         }
     }
+
+
+
+
 }

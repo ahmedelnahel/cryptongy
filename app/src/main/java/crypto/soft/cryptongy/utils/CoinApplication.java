@@ -29,6 +29,7 @@ public class CoinApplication extends Application {
     private Account withdrawAccount;
     private Notification settings;
     private OpenOrder openOrder;
+    private OpenOrder openOrderBinance;
     private String READ="Read";
     private String TRADE="Trade";
     private String WITHDRAW="Withdraw";
@@ -213,6 +214,14 @@ public class CoinApplication extends Application {
 
     public void setOpenOrder(OpenOrder openOrder) {
         this.openOrder = openOrder;
+    }
+
+    public OpenOrder getOpenOrderBinance() {
+        return openOrderBinance;
+    }
+
+    public void setOpenOrderBinance(OpenOrder openOrderBinance) {
+        this.openOrderBinance = openOrderBinance;
     }
 
     @Override
