@@ -48,7 +48,7 @@ public class TickerPresenter<T extends TickerView> extends MvpBasePresenter<T> {
             this.coinName = coinName;
             this.exchangeValue = exchangeValue;
 
-            if (exchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)) {
+            if (GlobalConstant.Exchanges.BITTREX.equalsIgnoreCase(exchangeValue)) {
                 timer.scheduleAtFixedRate(new TickerTimer(), timerInterval,
                         timerInterval);
             }
