@@ -390,26 +390,26 @@ public class BinanceServices {
                 param = new HashMap();
                 param.put("symbol", coinName);
             }
-            String ordersStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret(), param, "HmacSHA256", null);
-//            String ordersStr = "[\n" +
-//                    "  {\n" +
-//                    "    \"symbol\": \"LTCBTC\",\n" +
-//                    "    \"orderId\": 1,\n" +
-//                    "    \"clientOrderId\": \"myOrder1\",\n" +
-//                    "    \"price\": \"0.1\",\n" +
-//                    "    \"origQty\": \"1.0\",\n" +
-//                    "    \"executedQty\": \"0.0\",\n" +
-//                    "    \"status\": \"NEW\",\n" +
-//                    "    \"timeInForce\": \"GTC\",\n" +
-//                    "    \"type\": \"LIMIT\",\n" +
-//                    "    \"side\": \"BUY\",\n" +
-//                    "    \"stopPrice\": \"0.0\",\n" +
-//                    "    \"icebergQty\": \"0.0\",\n" +
-////                    "    \"time\": 1499827319559,\n" +
-//                    "    \"time\": 1499827319559\n" +
-////                    "    \"isWorking\": trueO\n" +
-//                    "  }\n" +
-//                    "]";
+//            String ordersStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret(), param, "HmacSHA256", null);
+            String ordersStr = "[\n" +
+                    "  {\n" +
+                    "    \"symbol\": \"LTCBTC\",\n" +
+                    "    \"orderId\": 1,\n" +
+                    "    \"clientOrderId\": \"myOrder1\",\n" +
+                    "    \"price\": \"0.1\",\n" +
+                    "    \"origQty\": \"1.0\",\n" +
+                    "    \"executedQty\": \"0.0\",\n" +
+                    "    \"status\": \"NEW\",\n" +
+                    "    \"timeInForce\": \"GTC\",\n" +
+                    "    \"type\": \"LIMIT\",\n" +
+                    "    \"side\": \"BUY\",\n" +
+                    "    \"stopPrice\": \"0.0\",\n" +
+                    "    \"icebergQty\": \"0.0\",\n" +
+//                    "    \"time\": 1499827319559,\n" +
+                    "    \"time\": 1499827319559\n" +
+//                    "    \"isWorking\": trueO\n" +
+                    "  }\n" +
+                    "]";
             openOrder = new OpenOrder();
             if (ordersStr == null) {
                 openOrder.setSuccess(false);
@@ -512,27 +512,27 @@ public class BinanceServices {
                 param = new HashMap();
                 param.put("symbol", coinName);
 
-                String ordersStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret(), param, "HmacSHA256", null);
-//                String ordersStr = "" +
-//                        "" +
-//                        "[\n" +
-//                        "  {\n" +
-//                        "    \"symbol\": \"LTCBTC\",\n" +
-//                        "    \"orderId\": 1,\n" +
-//                        "    \"clientOrderId\": \"myOrder1\",\n" +
-//                        "    \"price\": \"0.1\",\n" +
-//                        "    \"origQty\": \"1.0\",\n" +
-//                        "    \"executedQty\": \"0.0\",\n" +
-//                        "    \"status\": \"NEW\",\n" +
-//                        "    \"timeInForce\": \"GTC\",\n" +
-//                        "    \"type\": \"LIMIT\",\n" +
-//                        "    \"side\": \"BUY\",\n" +
-//                        "    \"stopPrice\": \"0.0\",\n" +
-//                        "    \"icebergQty\": \"0.0\",\n" +
-//                        "    \"time\": 1499827319559,\n" +
-//                        "    \"isWorking\": true\n" +
-//                        "  }\n" +
-//                        "]";
+//                String ordersStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret(), param, "HmacSHA256", null);
+                String ordersStr = "" +
+                        "" +
+                        "[\n" +
+                        "  {\n" +
+                        "    \"symbol\": \"LTCBTC\",\n" +
+                        "    \"orderId\": 1,\n" +
+                        "    \"clientOrderId\": \"myOrder1\",\n" +
+                        "    \"price\": \"0.1\",\n" +
+                        "    \"origQty\": \"1.0\",\n" +
+                        "    \"executedQty\": \"0.0\",\n" +
+                        "    \"status\": \"NEW\",\n" +
+                        "    \"timeInForce\": \"GTC\",\n" +
+                        "    \"type\": \"LIMIT\",\n" +
+                        "    \"side\": \"BUY\",\n" +
+                        "    \"stopPrice\": \"0.0\",\n" +
+                        "    \"icebergQty\": \"0.0\",\n" +
+                        "    \"time\": 1499827319559,\n" +
+                        "    \"isWorking\": true\n" +
+                        "  }\n" +
+                        "]";
                 orderHistory = new OrderHistory();
                 if (ordersStr == null) {
                     orderHistory.setSuccess(false);

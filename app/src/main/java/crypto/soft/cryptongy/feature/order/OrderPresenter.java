@@ -101,7 +101,7 @@ public class OrderPresenter extends MvpBasePresenter<OrderView> {
                         }
                     } else if (o instanceof OrderHistory) {
                         if (getView() != null) {
-                            getView().setOrderHistory((OrderHistory) o);
+//                            getView().setOrderHistory((OrderHistory) o);
                             calculateProfit((OrderHistory) o, 0);
                         }
                     }
