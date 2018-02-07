@@ -18,6 +18,12 @@ import java.util.Map;
         "result"
 })
 public class OpenOrder {
+    public void setOpenOrder( OpenOrder o) {
+        this.success = o.getSuccess();
+        this.result= o.getResult();
+        this.message = o.getMessage();
+        this.json = o.getJson();
+    }
 
     @JsonProperty("success")
     private Boolean success;
