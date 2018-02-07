@@ -61,33 +61,6 @@ public class OrderService extends IntentService {
         }
 
 
-//        interactor.getOpenOrder("",exchangeValue, application.getReadAccount(exchangeValue), new OnFinishListner<OpenOrder>() {
-//            @Override
-//            public void onComplete(OpenOrder result) {
-//                if(result != null && result.getSuccess()&& result.getResult()!= null) {
-//                    if(exchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)){
-//                        application.setOpenOrder(result);
-//                        if (check)
-//                            checkOrder(result, application,exchangeValue);
-//                    }
-//                    if(exchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BINANCE)){
-//
-//                        application.setOpenOrderBinance(result);
-//                        if(check)
-//                            checkOrder(result,application,exchangeValue);
-//                    }
-//
-//                }
-//            }
-//
-//            @Override
-//            public void onFail(String error) {
-//                Log.e("orderService", error);
-//            }
-//        });
-//
-
-
         interactor.getOpenOrder("",exchangeValue, application.getReadAccount(exchangeValue), new OnFinishListner<OpenOrder>() {
             @Override
             public void onComplete(OpenOrder result) {
@@ -156,47 +129,6 @@ public class OrderService extends IntentService {
             openOrder.setChange(false);
         }
     }
-
-//    private void checkOrder(final OpenOrder openOrder, final CoinApplication application, final String exchangeValue) {
-//
-//        for (int i = 0; i < openOrder.getResult().size(); i++) {
-//            final crypto.soft.cryptongy.feature.shared.json.openorder.Result data = openOrder.getResult().get(i);
-//            final int finalI = i;
-//            interactor.getOrders(data.getOrderUuid(),data.getExchange(),application.getReadAccount(exchangeValue),  new OnFinishListner<Order>() {
-//
-//                @Override
-//                public void onComplete(Order result) {
-//
-//                    if(result!=null && result.getSuccess() && result.getResult()!= null) {
-//                        Result order = result.getResult();
-//                         if (result.getResult().getCancelInitiated() && !result.getResult().getIsOpen()) {
-//                            GlobalUtil.showNotification(OrderService.this, "Order status", order.getType() + "(" + String.format("%.8f", order.getQuantity().doubleValue()) +
-//                                    ")" + "of " + order.getExchange() + " is now cancelled.", finalI);
-//                        openOrder.setChange(true);
-//
-//                        } else if (!result.getResult().getIsOpen() && !result.getResult().getCancelInitiated()) {
-//                             GlobalUtil.showNotification(OrderService.this, "Order Status", order.getType() + "(" + String.format("%.8f", order.getQuantity().doubleValue()) +
-//                                     ")" + "of " + order.getExchange() + " is now closed.", finalI);
-//                             openOrder.setChange(true);
-//
-//                         }
-//                    }
-//
-//                }
-//
-//                @Override
-//                public void onFail(String error) {
-//
-//                }
-//            });
-//        }
-//        if(openOrder.isChange()) {
-//            getOpenOrder(application, false,exchangeValue);
-//            openOrder.setChange(false);
-//        }
-//    }
-
-
 
 
 }
