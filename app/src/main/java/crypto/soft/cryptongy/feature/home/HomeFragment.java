@@ -518,6 +518,7 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
                         }
                     });
                 }
+                if(currencyAdapter != null)
                 currencyAdapter.notifyDataSetChanged();
                 break;
         }
