@@ -52,7 +52,7 @@ public class HomePresenter extends MvpBasePresenter<HomeView> implements OnMulti
             getView().showProgressBar();
 
         exchangeValue = GlobalConstant.Exchanges.BINANCE;
-        homeInteractor.loadBinanceSummary(context, this);
+        homeInteractor.loadBinanceSummaryAPI(context, this);
     }
 
     @Override

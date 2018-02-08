@@ -234,6 +234,102 @@ public class HomeInteractor {
         }
     }
 
+
+    public void loadBinanceSummaryAPI(Context context, OnMultiFinishListner<List<Result>, MarketSummaries, String> onBinanceLoadListnerAPI) {
+        new AsyncBinanceSummaryLoaderAPI(context, onBinanceLoadListnerAPI).execute();
+    }
+
+    class AsyncBinanceSummaryLoaderAPI extends AsyncTask<AssetManager, Void, MarketSummaries> {
+        OnMultiFinishListner<List<Result>, MarketSummaries, String> onBinanceLoadListnerAPI;
+        private Context context;
+        List<Result> resultsbinance = new ArrayList<>();
+
+        boolean isFirst;
+
+
+        public AsyncBinanceSummaryLoaderAPI(Context context, OnMultiFinishListner<List<Result>, MarketSummaries, String> onBinanceLoadListnerAPI) {
+            this.onBinanceLoadListnerAPI = onBinanceLoadListnerAPI;
+            this.context = context;
+            isFirst = SharedPreference.isFirst(context, IS_COIN_ADDED_BINANCE);
+        }
+
+        @Override
+        protected MarketSummaries doInBackground(AssetManager... voids) {
+            try {
+
+                MarketSummaries marketSummaries = new BinanceServices().getMarketSummaries();
+
+
+
+                if (isFirst) {
+                            if (marketSummaries != null && marketSummaries.getResult() != null && marketSummaries.getSuccess()) {
+
+                                if (marketSummaries.getCoinsMap().get("LTCBTC") != null)
+                                    resultsbinance.add(marketSummaries.getCoinsMap().get("LTCBTC"));
+                                if (marketSummaries.getCoinsMap().get("ETHBTC") != null)
+                                    resultsbinance.add(marketSummaries.getCoinsMap().get("ETHBTC"));
+                                if (marketSummaries.getCoinsMap().get("APPCBTC") != null)
+                                    resultsbinance.add(marketSummaries.getCoinsMap().get("APPCBTC"));
+                                if (marketSummaries.getCoinsMap().get("TRXBTC") != null)
+                                    resultsbinance.add(marketSummaries.getCoinsMap().get("TRXBTC"));
+                                if (marketSummaries.getCoinsMap().get("ICXBTC") != null)
+                                    resultsbinance.add(marketSummaries.getCoinsMap().get("ICXBTC"));
+                                if (resultsbinance != null && resultsbinance.size() != 0) {
+                                    isFirst = false;
+                                    SharedPreference.saveToPrefs(context, IS_COIN_ADDED_BINANCE, false);
+                                    SharedPreference.saveToPrefs(context, WATCHLIST_BINANCE, new Gson().toJson(resultsbinance));
+                                }
+                            }
+                        } else {
+                            if (!SharedPreference.getFromPrefs(context, WATCHLIST_BINANCE).equals("")) {
+                                List<Result> results = new Gson().fromJson(SharedPreference.getFromPrefs(context, WATCHLIST_BINANCE), new TypeToken<List<Result>>() {
+                                }.getType());
+                                if (marketSummaries != null && marketSummaries.getResult() != null && marketSummaries.getSuccess()) {
+                                    for (Result r : results) {
+                                        if (r != null) {
+                                            Result ms = marketSummaries.getCoinsMap().get(r.getMarketName());
+                                            if (ms != null) {
+
+                                                r.setLast(ms.getLast());
+                                                r.setVolume(ms.getVolume());
+                                            }
+                                        }
+                                    }
+
+                                    if (results != null) {
+                                        SharedPreference.saveToPrefs(context, WATCHLIST_BINANCE, new Gson().toJson(results));
+                                    }
+                                }
+                                resultsbinance.clear();
+                                resultsbinance.addAll(results);
+                            }
+                        }
+
+
+                        return marketSummaries;
+                    } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+            return null;
+
+        }
+
+
+
+        @Override
+        protected void onPostExecute(MarketSummaries marketSummaries) {
+            super.onPostExecute(marketSummaries);
+            if (marketSummaries != null && marketSummaries.getSuccess() && marketSummaries.getResult() != null) {
+                onBinanceLoadListnerAPI.onComplete(resultsbinance, marketSummaries, GlobalConstant.Exchanges.BITTREX);
+            } else {
+                onBinanceLoadListnerAPI.onFail("");
+            }
+        }
+    }
+
+
+
+
     public void closeWebSocket() {
         binanceServices.closeWebSocket();
 
