@@ -13,7 +13,7 @@ public interface TradeView extends TickerView {
     void setTitle();
 
     String getCoin();
-
+    String getExchangeValue();
     void findViews();
 
     void init();

@@ -69,6 +69,7 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
     private HorizontalScrollView scrollView;
     private TextView lastValuInfo_TXT, BidvalueInfo_TXT, Highvalue_Txt, ASKvalu_TXT, LowvalueInfo_TXT, VolumeValue_Txt, HoldingValue_Txt, lastComp_txt;
     private Spinner spinner;
+    private String spinnerValue;
 
     private List<Result> coins;
     private AutoCompleteTextView inputCoin;
@@ -98,6 +99,7 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
             new HideKeyboard(getContext()).setupUI(view);
             findViews();
             init();
+            spinnerValue=GlobalConstant.Exchanges.BITTREX;
             setOnListner();
             setToggleListner();
             setTextWatcher();
@@ -158,6 +160,11 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
     @Override
     public String getCoin() {
         return txtVtc.getText().toString();
+    }
+
+    @Override
+    public String getExchangeValue() {
+        return spinnerValue;
     }
 
     @Override

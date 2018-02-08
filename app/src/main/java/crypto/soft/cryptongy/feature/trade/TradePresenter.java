@@ -15,6 +15,7 @@ import crypto.soft.cryptongy.feature.shared.module.Account;
 import crypto.soft.cryptongy.feature.shared.ticker.TickerPresenter;
 import crypto.soft.cryptongy.feature.trade.limit.Limit;
 import crypto.soft.cryptongy.utils.CoinApplication;
+import crypto.soft.cryptongy.utils.GlobalConstant;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -27,6 +28,7 @@ import io.reactivex.disposables.Disposable;
 
 public class TradePresenter<T extends TradeView> extends TickerPresenter<T> {
     protected TradeInteractor tradeInteractor;
+    private String exchangeValue;
 
     public TradePresenter(Context context) {
         super(context);
@@ -37,10 +39,14 @@ public class TradePresenter<T extends TradeView> extends TickerPresenter<T> {
         switch (id) {
             case R.id.imgSync:
                 String coin = getView().getCoin();
+                if(exchangeValue==null){
+                    exchangeValue=GlobalConstant.Exchanges.BITTREX;
+                }
+
                 if (!TextUtils.isEmpty(coin))
-                    getData(coin);
+                    getDataForTrade(coin,exchangeValue);
                 else
-                    getData();
+                    getDataForTrade(exchangeValue);
                 break;
             case R.id.imgAccSetting:
                 ((MainActivity) context).getPresenter().replaceAccountFragment();
@@ -54,7 +60,7 @@ public class TradePresenter<T extends TradeView> extends TickerPresenter<T> {
 
     public void getData() {
         CoinApplication application = (CoinApplication) context.getApplicationContext();
-        if (application.getTradeAccount() != null) {
+        if (application.getTradeAccount(GlobalConstant.Exchanges.BITTREX) != null) {
             if (getView() != null) {
                 getView().resetView();
                 getView().showLoading(context.getString(R.string.fetch_msg));
@@ -101,14 +107,68 @@ public class TradePresenter<T extends TradeView> extends TickerPresenter<T> {
         }
     }
 
-    public Observable<MarketSummary> getMarketSummary(final String coinName) {
+
+    public void getDataForTrade(String exchangeValue) {
+        this.exchangeValue=exchangeValue;
+        CoinApplication application = (CoinApplication) context.getApplicationContext();
+
+        if(exchangeValue==null){
+            this.exchangeValue=GlobalConstant.Exchanges.BITTREX;
+        }
+        if (application.getTradeAccount(this.exchangeValue) != null) {
+            if (getView() != null) {
+                getView().resetView();
+                getView().showLoading(context.getString(R.string.fetch_msg));
+                getView().setLevel(application.getTradeAccount().getLabel());
+            }
+
+            getCoinsForTrade(this.exchangeValue).subscribe(new Observer() {
+
+                @Override
+                public void onSubscribe(Disposable d) {
+
+                }
+
+                @Override
+                public void onNext(Object o) {
+                    if (o instanceof MarketSummaries)
+                        if (getView() != null)
+                            getView().onSummaryDataLoad((MarketSummaries) o);
+
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    CustomDialog.showMessagePop(context, e.getMessage(), null);
+                    if (getView() != null) {
+                        getView().hideLoading();
+                        getView().showEmptyView();
+                    }
+                }
+
+                @Override
+                public void onComplete() {
+                    if (getView() != null) {
+                        getView().hideLoading();
+                    }
+                }
+            });
+        } else {
+            CustomDialog.showMessagePop(context, context.getString(R.string.noAPI), null);
+            if (getView() != null) {
+                getView().setLevel("No API");
+                getView().showEmptyView();
+            }
+        }
+    }
+    public Observable<MarketSummary> getMarketSummary(final String coinName, final String exchange) {
         return Observable.create(new ObservableOnSubscribe<MarketSummary>() {
             @Override
             public void subscribe(final ObservableEmitter<MarketSummary> e) throws Exception {
-                tradeInteractor.getMarketSummary(coinName, new OnFinishListner<MarketSummary>() {
+                tradeInteractor.getMarketSummary(coinName,exchange, new OnFinishListner<MarketSummary>() {
                     @Override
                     public void onComplete(MarketSummary result) {
-                        startTicker(coinName);
+                        startTicker(coinName,exchange);
                         e.onNext(result);
                         e.onComplete();
                     }
@@ -121,7 +181,6 @@ public class TradePresenter<T extends TradeView> extends TickerPresenter<T> {
             }
         });
     }
-
     public Observable<Wallet> getWallet(final String coinName, final Account account) {
         return Observable.create(new ObservableOnSubscribe<Wallet>() {
             @Override
@@ -162,6 +221,25 @@ public class TradePresenter<T extends TradeView> extends TickerPresenter<T> {
         });
     }
 
+    public Observable<MarketSummaries> getCoinsForTrade(final String exchange) {
+        return Observable.create(new ObservableOnSubscribe<MarketSummaries>() {
+            @Override
+            public void subscribe(final ObservableEmitter<MarketSummaries> e) throws Exception {
+                tradeInteractor.loadSummary(exchange,new OnFinishListner<MarketSummaries>() {
+                    @Override
+                    public void onComplete(MarketSummaries marketSummaries) {
+                        e.onNext(marketSummaries);
+                        e.onComplete();
+                    }
+
+                    @Override
+                    public void onFail(String error) {
+                        e.onError(new Throwable(error));
+                    }
+                });
+            }
+        });
+    }
     public void getData(String marketName) {
         if (getView() != null) {
             getView().showLoading(context.getString(R.string.fetch_msg));
@@ -204,10 +282,55 @@ public class TradePresenter<T extends TradeView> extends TickerPresenter<T> {
         };
         CoinApplication application = (CoinApplication) context.getApplicationContext();
 
-        Observable.concat(getMarketSummary(marketName), getWallet(marketName, application.getTradeAccount()))
+        Observable.concat(getMarketSummary(marketName,exchangeValue), getWallet(marketName, application.getTradeAccount(exchangeValue)))
                 .subscribe(observer);
     }
 
+    public void getDataForTrade(String marketName,String exchangeValue) {
+        if (getView() != null) {
+            getView().showLoading(context.getString(R.string.fetch_msg));
+            getView().resetView();
+        }
+        Observer observer = new Observer() {
+
+            @Override
+            public void onSubscribe(Disposable d) {
+            }
+
+            @Override
+            public void onNext(Object o) {
+                if (o instanceof MarketSummary) {
+                    if (getView() != null)
+                        getView().setMarketSummary((MarketSummary) o);
+                } else if (o instanceof Wallet) {
+                    if (getView() != null)
+                        getView().setHolding((Wallet) o);
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                if (getView() != null) {
+                    getView().hideLoading();
+                    CustomDialog.showMessagePop(context, e.getMessage(), null);
+                    getView().showEmptyView();
+                }
+            }
+
+            @Override
+            public void onComplete() {
+                if (getView() != null) {
+                    getView().hideLoading();
+                    getView().resetAll();
+                    getView().hideEmptyView();
+                }
+            }
+        };
+        CoinApplication application = (CoinApplication) context.getApplicationContext();
+
+        Observable.concat(getMarketSummary(marketName,this.exchangeValue), getWallet(marketName, application.getTradeAccount(this.exchangeValue)))
+                .subscribe(observer);
+    }
     public void buyLimit(Limit limit) {
         tradeInteractor.buyLimit(limit, new OnFinishListner<LimitOrder>() {
             @Override

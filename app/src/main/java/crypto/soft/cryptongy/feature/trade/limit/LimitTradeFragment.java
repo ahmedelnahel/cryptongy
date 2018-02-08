@@ -40,6 +40,7 @@ import crypto.soft.cryptongy.feature.shared.json.ticker.Ticker;
 import crypto.soft.cryptongy.feature.shared.json.wallet.Wallet;
 import crypto.soft.cryptongy.feature.shared.listner.DialogListner;
 import crypto.soft.cryptongy.utils.CoinApplication;
+import crypto.soft.cryptongy.utils.GlobalConstant;
 import crypto.soft.cryptongy.utils.GlobalUtil;
 import crypto.soft.cryptongy.utils.HideKeyboard;
 import crypto.soft.cryptongy.utils.ProgressDialogFactory;
@@ -61,6 +62,7 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
     private HorizontalScrollView scrollView;
     private TextView lastValuInfo_TXT, BidvalueInfo_TXT, Highvalue_Txt, ASKvalu_TXT, LowvalueInfo_TXT, VolumeValue_Txt, HoldingValue_Txt, lastComp_txt;
     private Spinner spinner;
+    private String spinnerValue;
 
     private List<Result> coins;
     private AutoCompleteTextView inputCoin;
@@ -86,12 +88,55 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
             setOnListner();
             setTextWatcher();
             setCoinAdapter();
+            setSpinnerDefaultValue();
+            spinerListener();
             isFirst = true;
         }
         setTitle();
         return view;
     }
 
+    private void setSpinnerDefaultValue() {
+        CoinApplication application = (CoinApplication) getActivity().getApplicationContext();
+        spinnerValue = application.getNotification().getDefaultExchange();
+        if ( spinnerValue!= null) {
+
+            if (spinnerValue.equalsIgnoreCase(getResources().getStringArray(R.array.coin_array)[0])) {
+
+                spinner.setSelection(0);
+                spinnerValue=getResources().getStringArray(R.array.coin_array)[0];
+            } else {
+                spinner.setSelection(1);
+                spinnerValue=getResources().getStringArray(R.array.coin_array)[1];
+
+            }
+        }
+    }
+
+
+    private void spinerListener() {
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                //if at position zero bitrex and at position 1 binance is called
+                if (spinner.getItemAtPosition(position).toString().equalsIgnoreCase(getResources().getStringArray(R.array.coin_array)[0])) {
+                    spinnerValue = getResources().getStringArray(R.array.coin_array)[0];
+                } else {
+                    spinnerValue = getResources().getStringArray(R.array.coin_array)[1];
+//
+                }
+                presenter.getDataForTrade(spinnerValue);
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
     @Override
     public LimitPresenter createPresenter() {
         return new LimitPresenter(getContext());
@@ -102,7 +147,13 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
         super.onViewCreated(view, savedInstanceState);
         if (isFirst) {
             isFirst = false;
-            presenter.getData();
+
+          if(spinnerValue==null){
+              spinnerValue=getResources().getStringArray(R.array.coin_array)[0];
+          }
+
+          presenter.getDataForTrade(spinnerValue);
+           // presenter.getData();
         }
     }
 
@@ -120,6 +171,14 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
     @Override
     public String getCoin() {
         return txtVtc.getText().toString();
+    }
+
+    @Override
+    public String getExchangeValue() {
+        if (spinnerValue==null){
+            spinnerValue= GlobalConstant.Exchanges.BITTREX;
+        }
+        return spinnerValue;
     }
 
     @Override
@@ -191,7 +250,7 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
                 inputCoin.setTypeface(face, Typeface.NORMAL);
                 Result result = (Result) ((CustomArrayAdapter) adapterView.getAdapter()).getItem(i);
                 txtVtc.setText(result.getMarketName());
-                presenter.getData(result.getMarketName());
+                presenter.getDataForTrade(result.getMarketName(),spinnerValue);
             }
         });
 
@@ -532,7 +591,7 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
         super.onStart();
         String coinNam = inputCoin.getText().toString();
         if (!TextUtils.isEmpty(coinNam))
-            presenter.startTicker(coinNam);
+            presenter.startTicker(coinNam,spinnerValue);
     }
 
     @Override

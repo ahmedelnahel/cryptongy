@@ -7,11 +7,11 @@
 
     <RelativeLayout
         android:layout_width="0dp"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/_42sdp"
         android:layout_marginRight="5dp"
         android:layout_weight="1"
         android:background="@drawable/rect_left_right"
-        android:padding="10dp">
+        android:padding="2dp">
 
         <Spinner
             android:id="@+id/spinner"

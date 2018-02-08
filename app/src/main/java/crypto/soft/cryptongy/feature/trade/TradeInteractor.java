@@ -13,21 +13,31 @@ import crypto.soft.cryptongy.feature.shared.json.wallet.Wallet;
 import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
 import crypto.soft.cryptongy.feature.shared.module.Account;
 import crypto.soft.cryptongy.feature.trade.limit.Limit;
+import crypto.soft.cryptongy.network.BinanceServices;
 import crypto.soft.cryptongy.network.BittrexServices;
+import crypto.soft.cryptongy.utils.GlobalConstant;
 
 /**
  * Created by tseringwongelgurung on 11/28/17.
  */
 
 public class TradeInteractor {
-    public void getMarketSummary(final String coinName, final OnFinishListner<MarketSummary> listner) {
+    public void getMarketSummary(final String coinName, final String exchangeValue, final OnFinishListner<MarketSummary> listner) {
 
         new AsyncTask<Void, Void, MarketSummary>() {
 
             @Override
             protected MarketSummary doInBackground(Void... voids) {
                 try {
-                    return new BittrexServices().getMarketSummary(coinName);
+                    if (exchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)) {
+
+                        return new BittrexServices().getMarketSummary(coinName);
+                    }
+                    if (exchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BINANCE)) {
+
+                        return new BinanceServices().getMarketSummary(coinName);
+                    }
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -55,12 +65,34 @@ public class TradeInteractor {
             @Override
             protected Wallet doInBackground(Void... voids) {
                 try {
-                    Wallet wallet = new BittrexServices().getWallet(account);
+
+                    Wallet wallet = null;
+
+                    if (account.getExchange().equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)) {
+                        wallet = new BittrexServices().getWallet(account);
+                    }
+
+                    if (account.getExchange().equalsIgnoreCase(GlobalConstant.Exchanges.BINANCE)) {
+                        wallet = new BinanceServices().getWallet(account);
+                    }
+
+
                     if (wallet != null && wallet.getSuccess()) {
                         Iterator iterator = wallet.getResult().iterator();
-                        String[] ar = coin.split("-");
-                        String base = ar[0];
-                        String coinName = ar[1];
+                        String base="";
+                        String coinName="";
+                        if (account.getExchange().equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)) {
+                            String[] ar = coin.split("-");
+                            base = ar[0];
+                            coinName = ar[1];
+                        }
+                        if (account.getExchange().equalsIgnoreCase(GlobalConstant.Exchanges.BINANCE)) {
+
+                            base = coin.substring(coin.length() - 3, coin.length());
+                            coinName = coin.substring(0, coin.length() - 3);
+                        }
+
+
                         while (iterator.hasNext()) {
                             Result result = (Result) iterator.next();
                             if (!result.getCurrency().equalsIgnoreCase(base) && !result.getCurrency().equalsIgnoreCase(coinName))
@@ -83,7 +115,7 @@ public class TradeInteractor {
 //                    if (wallet.getResult().size() < 2)
 //                        listner.onFail("No coin match found");
 //                    else
-                        listner.onComplete(wallet);
+                    listner.onComplete(wallet);
                 } else
                     listner.onFail(wallet.getMessage());
             }
@@ -97,6 +129,41 @@ public class TradeInteractor {
             protected MarketSummaries doInBackground(Void... voids) {
                 try {
                     return new BittrexServices().getMarketSummaries();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(MarketSummaries summaries) {
+                super.onPostExecute(summaries);
+                if (summaries == null)
+                    listner.onFail("Failed to fetch data");
+                else if (summaries.getSuccess().booleanValue())
+                    listner.onComplete(summaries);
+                else
+                    listner.onFail(summaries.getMessage());
+            }
+        }.execute();
+    }
+
+    public void loadSummary(final String exchange, final OnFinishListner<MarketSummaries> listner) {
+        new AsyncTask<Void, Void, MarketSummaries>() {
+
+            @Override
+            protected MarketSummaries doInBackground(Void... voids) {
+                try {
+                    if (exchange.equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)) {
+
+                        return new BittrexServices().getMarketSummaries();
+                    }
+                    if (exchange.equalsIgnoreCase(GlobalConstant.Exchanges.BINANCE)) {
+
+                        return new BinanceServices().getMarketSummaries();
+
+
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
