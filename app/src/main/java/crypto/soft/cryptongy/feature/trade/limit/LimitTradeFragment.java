@@ -373,7 +373,14 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
     @Override
     public void onSummaryDataLoad(MarketSummaries marketSummaries) {
         if (marketSummaries.getSuccess()) {
-            ((CoinApplication) getActivity().getApplication()).setUsdt_btc(GlobalUtil.round(marketSummaries.getCoinsMap().get("USDT-BTC").getLast(), 4));
+            if(spinnerValue.equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)){
+
+                ((CoinApplication) getActivity().getApplication()).setUsdt_btc(GlobalUtil.round(marketSummaries.getCoinsMap().get("USDT-BTC").getLast(), 4));
+            }
+            else {
+                ((CoinApplication) getActivity().getApplication()).setUsdt_btc(GlobalUtil.round(marketSummaries.getCoinsMap().get("BTCUSDT").getLast(), 4));
+
+            }
             txtBtc.setText("" + ((CoinApplication) getActivity().getApplication()).getUsdt_btc());
             coins.clear();
             coins.addAll(marketSummaries.getResult());
@@ -411,9 +418,28 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
 
     @Override
     public void setHolding(Wallet wallet) {
-        String[] ar = txtVtc.getText().toString().split("-");
+        String cointxtVtc=txtVtc.getText().toString();
+        String base=null;
+
+        if(spinnerValue.equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)){
+
+            String[] ar = txtVtc.getText().toString().split("-");
+            base=ar[0];
+        }
+        else {
+
+
+            if(cointxtVtc.equalsIgnoreCase("BTCUSDT")){
+
+                base = cointxtVtc.substring(cointxtVtc.length() - 4, cointxtVtc.length());
+            }
+            else {
+
+                base = cointxtVtc.substring(cointxtVtc.length() - 3, cointxtVtc.length());
+            }
+        }
         for (crypto.soft.cryptongy.feature.shared.json.wallet.Result result : wallet.getResult()) {
-            if (result.getCurrency().equalsIgnoreCase(ar[0]))
+            if (result.getCurrency().equalsIgnoreCase(base))
                 baseWallet = result;
             else
                 coinWallet = result;

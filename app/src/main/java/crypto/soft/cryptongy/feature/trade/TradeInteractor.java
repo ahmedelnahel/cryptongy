@@ -88,8 +88,16 @@ public class TradeInteractor {
                         }
                         if (account.getExchange().equalsIgnoreCase(GlobalConstant.Exchanges.BINANCE)) {
 
-                            base = coin.substring(coin.length() - 3, coin.length());
-                            coinName = coin.substring(0, coin.length() - 3);
+                            if(coin.equalsIgnoreCase("BTCUSDT")){
+
+                                base = coin.substring(coin.length() - 4, coin.length());
+                                coinName = coin.substring(0, coin.length() - 4);
+                            }
+                            else {
+
+                                base = coin.substring(coin.length() - 3, coin.length());
+                                coinName = coin.substring(0, coin.length() - 3);
+                            }
                         }
 
 
