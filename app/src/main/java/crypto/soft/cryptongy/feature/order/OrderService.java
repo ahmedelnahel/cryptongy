@@ -13,13 +13,13 @@ import crypto.soft.cryptongy.utils.GlobalUtil;
 
 /**
  * Created by tseringwongelgurung on 12/25/17.
+ * updated at thu 8 feb 2018
  */
 
 public class OrderService extends IntentService {
     private OrderInteractor interactor = new OrderInteractor();
     String exchangeBittrix=GlobalConstant.Exchanges.BITTREX;
     String exchangeBinance=GlobalConstant.Exchanges.BINANCE;
-
 
     public OrderService() {
         super("OrderService");
