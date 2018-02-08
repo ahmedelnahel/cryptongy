@@ -28,7 +28,7 @@ public class LimitPresenter extends TradePresenter<LimitView> {
                             @Override
                             public void onOkClicked() {
                                 CoinApplication application = (CoinApplication) context.getApplicationContext();
-                                limit.setAccount(application.getTradeAccount());
+                                limit.setAccount(application.getTradeAccount(getView().getExchangeValue()));
                                 getView().showLoading("Please wait.");
                                 if (getView().isBuy())
                                     buyLimit(limit);
