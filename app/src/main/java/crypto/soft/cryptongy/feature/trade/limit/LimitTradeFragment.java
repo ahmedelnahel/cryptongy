@@ -464,7 +464,7 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
         else
             btnOk.setEnabled(true);
         String coin = txtVtc.getText().toString().split("-")[0];
-        setAgaints(coin + "-" + BigDecimal.valueOf(baseWallet.getAvailable()).toPlainString());
+        setAgaints(base + "-" + BigDecimal.valueOf(baseWallet.getAvailable()).toPlainString());
     }
 
     @Override
