@@ -88,7 +88,7 @@ public class TradeInteractor {
                         }
                         if (account.getExchange().equalsIgnoreCase(GlobalConstant.Exchanges.BINANCE)) {
 
-                            if(coin.equalsIgnoreCase("BTCUSDT")){
+                            if(coin.endsWith("USDT")){
 
                                 base = coin.substring(coin.length() - 4, coin.length());
                                 coinName = coin.substring(0, coin.length() - 4);
