@@ -1,17 +1,26 @@
-<LinearLayout android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_marginBottom="10dp"
-    android:orientation="horizontal"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/_10sdp"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp"
+    android:paddingBottom="@dimen/_4sdp"
+    android:layout_marginTop="20dp"
+    android:orientation="horizontal">
 
     <RelativeLayout
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="@dimen/_42sdp"
         android:layout_marginRight="5dp"
         android:layout_weight="1"
         android:background="@drawable/rect_left_right"
-        android:padding="2dp">
+        android:padding="2dp"
+
+        >
 
         <Spinner
             android:id="@+id/spinner"
@@ -24,13 +33,12 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:layout_width="0dp"
-        android:layout_height="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_42sdp"
+        android:layout_marginLeft="@dimen/_4sdp"
         android:layout_weight="1"
         android:background="@drawable/rect_left_right"
-        android:padding="10dp"
-        android:layout_marginLeft="5dp"
-        tools:ignore="MissingPrefix">
+        android:padding="@dimen/_2sdp">
 
         <ImageView
             android:id="@+id/icon_search"
@@ -47,10 +55,11 @@
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/icon_search"
             android:background="@android:color/white"
-            android:hint="Coin"
+            android:hint="@string/watch_coin"
             android:paddingLeft="10dp"
             android:singleLine="true"
-            android:textStyle="italic" />
+            android:textStyle="italic"
+            tools:ignore="MissingPrefix" />
     </RelativeLayout>
-
 </LinearLayout>
+

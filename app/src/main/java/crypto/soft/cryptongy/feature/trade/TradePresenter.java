@@ -332,7 +332,7 @@ public class TradePresenter<T extends TradeView> extends TickerPresenter<T> {
                 .subscribe(observer);
     }
     public void buyLimit(Limit limit) {
-        tradeInteractor.buyLimit(limit, new OnFinishListner<LimitOrder>() {
+        tradeInteractor.buyLimit(exchangeValue,limit, new OnFinishListner<LimitOrder>() {
             @Override
             public void onComplete(LimitOrder limitOrder) {
                 if (((CoinApplication) context.getApplicationContext()).getOpenOrder() != null)
@@ -354,7 +354,7 @@ public class TradePresenter<T extends TradeView> extends TickerPresenter<T> {
     }
 
     public void sellLimit(Limit limit) {
-        tradeInteractor.sellLimit(limit, new OnFinishListner<LimitOrder>() {
+        tradeInteractor.sellLimit(exchangeValue,limit, new OnFinishListner<LimitOrder>() {
             @Override
             public void onComplete(LimitOrder limitOrder) {
                 if (((CoinApplication) context.getApplicationContext()).getOpenOrder() != null)

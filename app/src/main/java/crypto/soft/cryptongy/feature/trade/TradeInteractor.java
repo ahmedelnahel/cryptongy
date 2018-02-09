@@ -191,13 +191,21 @@ public class TradeInteractor {
         }.execute();
     }
 
-    public void buyLimit(final Limit limit, final OnFinishListner<LimitOrder> listner) {
+    public void buyLimit(final String exchangeValue, final Limit limit, final OnFinishListner<LimitOrder> listner) {
         new AsyncTask<Void, Void, LimitOrder>() {
 
             @Override
             protected LimitOrder doInBackground(Void... voids) {
                 try {
-                    return new BittrexServices().buyLimit(limit.getMarket(), String.valueOf(limit.getQuantity()), String.valueOf(limit.getRate()), limit.getAccount());
+                    if(exchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)){
+
+                        return new BittrexServices().buyLimit(limit.getMarket(), String.valueOf(limit.getQuantity()), String.valueOf(limit.getRate()), limit.getAccount());
+
+                    }
+                    if(exchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BINANCE)){
+
+                    //    return new BinanceServices().buyLimit(limit.getMarket(), String.valueOf(limit.getQuantity()), String.valueOf(limit.getRate()), limit.getAccount());
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -217,13 +225,21 @@ public class TradeInteractor {
         }.execute();
     }
 
-    public void sellLimit(final Limit limit, final OnFinishListner<LimitOrder> listner) {
+    public void sellLimit(final String exchangeValue, final Limit limit, final OnFinishListner<LimitOrder> listner) {
         new AsyncTask<Void, Void, LimitOrder>() {
 
             @Override
             protected LimitOrder doInBackground(Void... voids) {
                 try {
-                    return new BittrexServices().sellLimit(limit.getMarket(), String.valueOf(limit.getQuantity()), String.valueOf(limit.getRate()), limit.getAccount());
+                    if(exchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)){
+
+                        return new BittrexServices().sellLimit(limit.getMarket(), String.valueOf(limit.getQuantity()), String.valueOf(limit.getRate()), limit.getAccount());
+                    }
+                    if(exchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BINANCE)){
+
+                       // return new BinanceServices().sellLimit(limit.getMarket(), String.valueOf(limit.getQuantity()), String.valueOf(limit.getRate()), limit.getAccount());
+
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
