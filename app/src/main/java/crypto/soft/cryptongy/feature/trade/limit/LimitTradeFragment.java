@@ -256,7 +256,7 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
                 inputCoin.setTypeface(face, Typeface.NORMAL);
                 Result result = (Result) ((CustomArrayAdapter) adapterView.getAdapter()).getItem(i);
                 txtVtc.setText(result.getMarketName());
-                presenter.closeWebSocket();
+                stopTimerAndWebsocket();
                 presenter.getDataForTrade(result.getMarketName(),spinnerValue);
             }
         });

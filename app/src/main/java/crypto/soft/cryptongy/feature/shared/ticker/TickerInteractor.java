@@ -11,6 +11,7 @@ import crypto.soft.cryptongy.network.BinanceServices;
 import crypto.soft.cryptongy.network.BittrexServices;
 import crypto.soft.cryptongy.utils.GlobalConstant;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 
 import static android.content.ContentValues.TAG;
@@ -22,6 +23,7 @@ import static android.content.ContentValues.TAG;
 public class TickerInteractor {
 
     final BinanceServices binanceServices=new BinanceServices();
+    Disposable disposable;
 
     public void getTicker(final String coinName, final String exchangeValue, final OnFinishListner<Ticker> listner) {
 
@@ -40,10 +42,12 @@ public class TickerInteractor {
                         try {
                             binanceServices.getTickerConnectSocket(coinName);
 
-                            binanceServices.sourceTickerWebsocket.observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<Ticker>() {
+                      disposable=      binanceServices.sourceTickerWebsocket.observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<Ticker>() {
                                 @Override
                                 public void accept(Ticker ticker) throws Exception {
 
+                                    disposable.dispose();
+                                    closeWebSocket();
                                     Log.d(TAG, "this is ticker  " + ticker);
 
                                   listner.onComplete(ticker);
@@ -82,6 +86,7 @@ public class TickerInteractor {
 
 
     public void closeWebSocket(){
+
 
         binanceServices.closeWebSocket();
 
