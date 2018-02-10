@@ -719,9 +719,10 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
         Collections.sort(wallet.getResult(), new Result.HoldingComparator(false));
         coinAdapter.setResultList(wallet.getResult());
         coinAdapter.notifyDataSetChanged();
-
-        txtBtc.setText(String.valueOf(GlobalUtil.round(BTCSum, 9)) + "฿");
-        double bitcoinPrice = ((CoinApplication) getActivity().getApplication()).getUsdt_btc();
+        double bitcoinPrice = 0;
+                txtBtc.setText(String.valueOf(GlobalUtil.round(BTCSum, 9)) + "฿");
+        if(getActivity() != null)
+         bitcoinPrice = ((CoinApplication) getActivity().getApplication()).getUsdt_btc();
         txtUsd.setText("$" + String.valueOf(GlobalUtil.round(BTCSum * bitcoinPrice, 4)));
 
 

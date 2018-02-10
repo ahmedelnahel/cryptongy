@@ -210,9 +210,9 @@ public class TradeInteractor {
 
                         Log.d(TAG, "doInBackground: buy "+ BigDecimal.valueOf(limit.getRate()).toPlainString());
                         Log.d(TAG, "doInBackground: buy2 "+ limit.getRate());
-                        Log.d(TAG, "doInBackground: buy3 "+ GlobalUtil.formatNumber(limit.getRate(),"#.000000"));
+                        Log.d(TAG, "doInBackground: buy3 "+ GlobalUtil.formatNumber(limit.getRate(),"#.00000000"));
 
-                        return new BinanceServices().newOrder(limit.getMarket(), String.valueOf(limit.getQuantity()),String.valueOf(GlobalUtil.formatNumber(limit.getRate(),"#.000000")),"BUY", limit.getAccount());
+                        return new BinanceServices().newOrder(limit.getMarket(), String.valueOf(limit.getQuantity()),String.valueOf(GlobalUtil.formatNumber(limit.getRate(),"#.00000000")),"BUY", limit.getAccount());
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
