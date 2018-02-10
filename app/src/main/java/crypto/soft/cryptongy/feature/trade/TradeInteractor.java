@@ -3,6 +3,7 @@ package crypto.soft.cryptongy.feature.trade;
 import android.os.AsyncTask;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Iterator;
 
 import crypto.soft.cryptongy.feature.shared.json.limitorder.LimitOrder;
@@ -199,12 +200,12 @@ public class TradeInteractor {
                 try {
                     if(exchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)){
 
-                        return new BittrexServices().buyLimit(limit.getMarket(), String.valueOf(limit.getQuantity()), String.valueOf(limit.getRate()), limit.getAccount());
+                        return new BittrexServices().buyLimit(limit.getMarket(), String.valueOf(limit.getQuantity()),  BigDecimal.valueOf(limit.getRate()).toPlainString(), limit.getAccount());
 
                     }
                     if(exchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BINANCE)){
 
-                        return new BinanceServices().newOrder(limit.getMarket(), String.valueOf(limit.getQuantity()), String.valueOf(limit.getRate()),"BUY", limit.getAccount());
+                        return new BinanceServices().newOrder(limit.getMarket(), String.valueOf(limit.getQuantity()), BigDecimal.valueOf(limit.getRate()).toPlainString(),"BUY", limit.getAccount());
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
