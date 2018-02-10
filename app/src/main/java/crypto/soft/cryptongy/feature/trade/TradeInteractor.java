@@ -1,6 +1,7 @@
 package crypto.soft.cryptongy.feature.trade;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -17,12 +18,14 @@ import crypto.soft.cryptongy.feature.trade.limit.Limit;
 import crypto.soft.cryptongy.network.BinanceServices;
 import crypto.soft.cryptongy.network.BittrexServices;
 import crypto.soft.cryptongy.utils.GlobalConstant;
+import crypto.soft.cryptongy.utils.GlobalUtil;
 
 /**
  * Created by tseringwongelgurung on 11/28/17.
  */
 
 public class TradeInteractor {
+    public String TAG=getClass().getSimpleName().toString();
     public void getMarketSummary(final String coinName, final String exchangeValue, final OnFinishListner<MarketSummary> listner) {
 
         new AsyncTask<Void, Void, MarketSummary>() {
@@ -205,7 +208,11 @@ public class TradeInteractor {
                     }
                     if(exchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BINANCE)){
 
-                        return new BinanceServices().newOrder(limit.getMarket(), String.valueOf(limit.getQuantity()), BigDecimal.valueOf(limit.getRate()).toPlainString(),"BUY", limit.getAccount());
+                        Log.d(TAG, "doInBackground: buy "+ BigDecimal.valueOf(limit.getRate()).toPlainString());
+                        Log.d(TAG, "doInBackground: buy2 "+ limit.getRate());
+                        Log.d(TAG, "doInBackground: buy3 "+ GlobalUtil.formatNumber(limit.getRate(),"#.000000"));
+
+                        return new BinanceServices().newOrder(limit.getMarket(), String.valueOf(limit.getQuantity()),String.valueOf(GlobalUtil.formatNumber(limit.getRate(),"#.000000")),"BUY", limit.getAccount());
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -238,7 +245,7 @@ public class TradeInteractor {
                     }
                     if(exchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BINANCE)){
 
-                        return new BinanceServices().newOrder(limit.getMarket(), String.valueOf(limit.getQuantity()), String.valueOf(limit.getRate()), "SELL",limit.getAccount());
+                        return new BinanceServices().newOrder(limit.getMarket(), String.valueOf(limit.getQuantity()),String.valueOf(GlobalUtil.formatNumber(limit.getRate(),"#.000000")), "SELL",limit.getAccount());
 
                     }
                 } catch (IOException e) {
