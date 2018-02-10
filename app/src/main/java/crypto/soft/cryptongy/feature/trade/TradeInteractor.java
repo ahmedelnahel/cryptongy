@@ -204,7 +204,7 @@ public class TradeInteractor {
                     }
                     if(exchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BINANCE)){
 
-                    //    return new BinanceServices().buyLimit(limit.getMarket(), String.valueOf(limit.getQuantity()), String.valueOf(limit.getRate()), limit.getAccount());
+                        return new BinanceServices().newOrder(limit.getMarket(), String.valueOf(limit.getQuantity()), String.valueOf(limit.getRate()),"BUY", limit.getAccount());
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -237,7 +237,7 @@ public class TradeInteractor {
                     }
                     if(exchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BINANCE)){
 
-                       // return new BinanceServices().sellLimit(limit.getMarket(), String.valueOf(limit.getQuantity()), String.valueOf(limit.getRate()), limit.getAccount());
+                        return new BinanceServices().newOrder(limit.getMarket(), String.valueOf(limit.getQuantity()), String.valueOf(limit.getRate()), "SELL",limit.getAccount());
 
                     }
                 } catch (IOException e) {
