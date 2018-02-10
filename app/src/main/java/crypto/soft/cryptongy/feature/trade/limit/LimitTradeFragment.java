@@ -127,6 +127,12 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
                     spinnerValue = getResources().getStringArray(R.array.coin_array)[1];
 //
                 }
+
+                coins.clear();
+                adapterCoins.notifyDataSetChanged();
+               showEmptyView();
+                inputCoin.setText("");
+                stopTimerAndWebsocket();
                 presenter.getDataForTrade(spinnerValue);
 
             }
@@ -250,6 +256,7 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
                 inputCoin.setTypeface(face, Typeface.NORMAL);
                 Result result = (Result) ((CustomArrayAdapter) adapterView.getAdapter()).getItem(i);
                 txtVtc.setText(result.getMarketName());
+                presenter.closeWebSocket();
                 presenter.getDataForTrade(result.getMarketName(),spinnerValue);
             }
         });
@@ -616,13 +623,31 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
     public void onStart() {
         super.onStart();
         String coinNam = inputCoin.getText().toString();
-        if (!TextUtils.isEmpty(coinNam))
-            presenter.startTicker(coinNam,spinnerValue);
+        CoinApplication coinApplication= (CoinApplication) getActivity().getApplication();
+        boolean isAsyn=coinApplication.getSettings().isAutomSync();
+        if(isAsyn){
+
+            if (!TextUtils.isEmpty(coinNam))
+                presenter.startTicker(coinNam,spinnerValue);
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        presenter.stopTimer();
+        presenter.closeWebSocket();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        presenter.stopTimer();
+        presenter.closeWebSocket();
+    }
+
+    public void stopTimerAndWebsocket(){
+        presenter.closeWebSocket();
         presenter.stopTimer();
     }
 }
