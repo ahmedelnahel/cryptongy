@@ -207,12 +207,12 @@ public class TradeInteractor {
 
                     }
                     if(exchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BINANCE)){
-
                         Log.d(TAG, "doInBackground: buy "+ BigDecimal.valueOf(limit.getRate()).toPlainString());
                         Log.d(TAG, "doInBackground: buy2 "+ limit.getRate());
                         Log.d(TAG, "doInBackground: buy3 "+ GlobalUtil.formatNumber(limit.getRate(),"#.000000"));
 
-                        return new BinanceServices().newOrder(limit.getMarket(), String.valueOf(limit.getQuantity()),String.valueOf(GlobalUtil.formatNumber(limit.getRate(),"#.000000")),"BUY", limit.getAccount());
+                        String limitRate=BigDecimal.valueOf(limit.getRate()).toPlainString();
+                        return new BinanceServices().newOrder(limit.getMarket(), String.valueOf(limit.getQuantity()),limitRate,"BUY", limit.getAccount());
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -244,8 +244,9 @@ public class TradeInteractor {
                         return new BittrexServices().sellLimit(limit.getMarket(), String.valueOf(limit.getQuantity()), String.valueOf(limit.getRate()), limit.getAccount());
                     }
                     if(exchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BINANCE)){
+                        String limitRate=BigDecimal.valueOf(limit.getRate()).toPlainString();
 
-                        return new BinanceServices().newOrder(limit.getMarket(), String.valueOf(limit.getQuantity()),String.valueOf(GlobalUtil.formatNumber(limit.getRate(),"#.000000")), "SELL",limit.getAccount());
+                        return new BinanceServices().newOrder(limit.getMarket(), String.valueOf(limit.getQuantity()),limitRate, "SELL",limit.getAccount());
 
                     }
                 } catch (IOException e) {
