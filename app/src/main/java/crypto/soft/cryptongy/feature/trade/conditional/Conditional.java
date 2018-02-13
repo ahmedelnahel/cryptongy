@@ -27,13 +27,14 @@ public class Conditional extends RealmObject {
     private String orderStatus;
     private boolean isHigh;
     private String error="";
+    private String exchangeValue;
 
     public Conditional() {
     }
 
     public Conditional(boolean isHigh,String orderType, String orderCoin, Double units, Double last, Double against,
                        Double lowCondition, String conditionType, Double lowPrice, String priceType,
-                       String stopLossType, String orderStatus) {
+                       String stopLossType, String orderStatus,String exchangeValue) {
         this.orderType = orderType;
         this.orderCoin = orderCoin;
         this.units = units;
@@ -53,6 +54,7 @@ public class Conditional extends RealmObject {
             this.lowPrice = lowPrice;
             this.priceType = priceType;
         }
+        this.exchangeValue=exchangeValue;
     }
 
     public int getId() {
@@ -197,6 +199,15 @@ public class Conditional extends RealmObject {
 
     public void setError(String error) {
         this.error = error;
+    }
+
+
+    public String getExchangeValue() {
+        return exchangeValue;
+    }
+
+    public void setExchangeValue(String exchangeValue) {
+        this.exchangeValue = exchangeValue;
     }
 }
 //order.type=buy,order.coin=coin,

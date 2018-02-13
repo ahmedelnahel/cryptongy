@@ -11,6 +11,8 @@ import crypto.soft.cryptongy.BuildConfig;
 import crypto.soft.cryptongy.R;
 import crypto.soft.cryptongy.feature.account.CustomDialog;
 import crypto.soft.cryptongy.feature.shared.json.market.MarketSummaries;
+import crypto.soft.cryptongy.feature.shared.json.marketsummary.MarketSummary;
+import crypto.soft.cryptongy.feature.shared.json.wallet.Wallet;
 import crypto.soft.cryptongy.feature.shared.listner.DialogListner;
 import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
 import crypto.soft.cryptongy.feature.trade.TradePresenter;
@@ -129,7 +131,7 @@ public class ConditonalPresenter extends TradePresenter<ConditionalView> {
                 }
             };
 
-            Observable.concat(getCoinsForTrade(this.exchangeValue), getConditionals())
+            Observable.concat(getCoinsForTrade(this.exchangeValue), getConditionals(exchangeValue))
                     .subscribe(observer);
         } else {
             CustomDialog.showMessagePop(context, context.getString(R.string.noAPI), null);
@@ -157,14 +159,14 @@ public class ConditonalPresenter extends TradePresenter<ConditionalView> {
                                     @Override
                                     public void onComplete(Void result) {
                                         CustomDialog.showMessagePop(context, "Created sucessfully.", null);
-                                        fetchConditionals();
+                                        fetchConditionals(getView().getExchangeValue());
                                         if (!GlobalUtil.isServiceRunning(context, ConditionalService.class))
                                             GlobalUtil.startAlarm(ConditionalReceiver.class, context.getResources().getInteger(R.integer.service_interval), context);
                                     }
 
                                     @Override
                                     public void onFail(String error) {
-                                        fetchConditionals();
+                                        fetchConditionals(getView().getExchangeValue());
                                         CustomDialog.showMessagePop(context, error, null);
                                     }
                                 });
@@ -179,11 +181,11 @@ public class ConditonalPresenter extends TradePresenter<ConditionalView> {
         }
     }
 
-    public Observable<List<Conditional>> getConditionals() {
+    public Observable<List<Conditional>> getConditionals(final String exchangeValue) {
         return Observable.create(new ObservableOnSubscribe<List<Conditional>>() {
             @Override
             public void subscribe(final ObservableEmitter<List<Conditional>> e) throws Exception {
-                conditionalInteractor.getConditionals(new OnFinishListner<List<Conditional>>() {
+                conditionalInteractor.getConditionals(exchangeValue,new OnFinishListner<List<Conditional>>() {
                     @Override
                     public void onComplete(List<Conditional> result) {
                         e.onNext(result);
@@ -200,8 +202,8 @@ public class ConditonalPresenter extends TradePresenter<ConditionalView> {
         });
     }
 
-    public void fetchConditionals() {
-        getConditionals().subscribe(new Observer() {
+    public void fetchConditionals(String exchangeValue) {
+        getConditionals(exchangeValue).subscribe(new Observer() {
             @Override
             public void onSubscribe(Disposable d) {
 
@@ -234,7 +236,7 @@ public class ConditonalPresenter extends TradePresenter<ConditionalView> {
         if (getView() != null)
             getView().showLoading("Please wait.");
         conditionalInteractor.deleletConditional(id);
-        fetchConditionals();
+        fetchConditionals(getView().getExchangeValue());
     }
 
     public void sortList(List<Conditional> conditionals, boolean isCoinAscend) {
@@ -263,5 +265,51 @@ public class ConditonalPresenter extends TradePresenter<ConditionalView> {
                 Collections.reverse(conditionals);
             getView().setConditional(conditionals);
         }
+    }
+
+    public void getDataForCondition(String marketName,String exchangeValue) {
+        if (getView() != null) {
+            getView().showLoading(context.getString(R.string.fetch_msg));
+            getView().resetView();
+        }
+        Observer observer = new Observer() {
+
+            @Override
+            public void onSubscribe(Disposable d) {
+            }
+
+            @Override
+            public void onNext(Object o) {
+                if (o instanceof MarketSummary) {
+                    if (getView() != null)
+                        getView().setMarketSummary((MarketSummary) o);
+                } else if (o instanceof Wallet) {
+                    if (getView() != null)
+                        getView().setHolding((Wallet) o);
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                if (getView() != null) {
+                    getView().hideLoading();
+                    CustomDialog.showMessagePop(context, e.getMessage(), null);
+                    getView().showEmptyView();
+                }
+            }
+
+            @Override
+            public void onComplete() {
+                if (getView() != null) {
+                    getView().hideLoading();
+                    getView().resetAll();
+                    getView().hideEmptyView();
+                }
+            }
+        };
+        CoinApplication application = (CoinApplication) context.getApplicationContext();
+
+        Observable.concat(getMarketSummary(marketName,this.exchangeValue), getWallet(marketName, application.getTradeAccount(this.exchangeValue)))
+                .subscribe(observer);
     }
 }

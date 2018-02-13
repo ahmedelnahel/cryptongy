@@ -53,11 +53,11 @@ public class ConditionalInteractor extends TradeInteractor {
         realm.commitTransaction();
     }
 
-    public void getConditionals(OnFinishListner<List<Conditional>> listner) {
+    public void getConditionals(String exchangeValue,OnFinishListner<List<Conditional>> listner) {
         Realm realm = Realm.getDefaultInstance();
 
         realm.beginTransaction();
-        RealmResults<Conditional> conditionalsDb = realm.where(Conditional.class).findAllSorted("orderStatus", Sort.DESCENDING);
+        RealmResults<Conditional> conditionalsDb = realm.where(Conditional.class).equalTo("exchangeValue",exchangeValue).findAllSorted("orderStatus", Sort.DESCENDING);
         List<Conditional> list = new ArrayList<>();
         if (conditionalsDb != null)
             list.addAll(realm.copyFromRealm(conditionalsDb));

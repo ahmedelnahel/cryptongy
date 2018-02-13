@@ -15,6 +15,7 @@ import crypto.soft.cryptongy.feature.shared.json.ticker.Ticker;
 import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
 import crypto.soft.cryptongy.feature.shared.module.Account;
 import crypto.soft.cryptongy.feature.trade.limit.Limit;
+import crypto.soft.cryptongy.network.BinanceServices;
 import crypto.soft.cryptongy.network.BittrexServices;
 import crypto.soft.cryptongy.utils.CoinApplication;
 import crypto.soft.cryptongy.utils.GlobalConstant;
@@ -28,6 +29,9 @@ import io.realm.RealmResults;
 
 public class ConditionalService extends IntentService {
 
+    String exchangeBittrix=GlobalConstant.Exchanges.BITTREX;
+    String exchangeBinance=GlobalConstant.Exchanges.BINANCE;
+
     public ConditionalService() {
         super("ConditionalService");
     }
@@ -38,12 +42,17 @@ public class ConditionalService extends IntentService {
     }
 
     private void startService() {
-        List<Conditional> list = getConditionals();
-        Account account = ((CoinApplication) getApplicationContext()).getTradeAccount();
+
+        List<Conditional> list = getConditionals(exchangeBittrix);
+        List<Conditional> listBinance = getConditionals(exchangeBinance);
+
+        Account account = ((CoinApplication) getApplicationContext()).getTradeAccount(exchangeBittrix);
+        Account accountBinance = ((CoinApplication) getApplicationContext()).getTradeAccount(exchangeBinance);
+
         if (account != null && list != null) {
             for (int i = 0; i < list.size(); i++) {
                 Conditional conditional = list.get(i);
-                Ticker ticker = getTicker(conditional.getOrderCoin());
+                Ticker ticker = getTicker(conditional.getOrderCoin(),exchangeBittrix);
                 if (ticker != null && ticker.getSuccess() && ticker.getResult() != null) {
                     if (conditional.getOrderType().equalsIgnoreCase(GlobalConstant.Conditional.TYPE_BUY)) {
                         checkBuy(conditional, ticker.getResult(), account, i);
@@ -53,26 +62,51 @@ public class ConditionalService extends IntentService {
                 }
             }
         }
+
+
+        if (accountBinance != null && listBinance != null) {
+            for (int i = 0; i < listBinance.size(); i++) {
+                Conditional conditional = listBinance.get(i);
+                Ticker ticker = getTicker(conditional.getOrderCoin(),exchangeBinance);
+                if (ticker != null && ticker.getSuccess() && ticker.getResult() != null) {
+                    if (conditional.getOrderType().equalsIgnoreCase(GlobalConstant.Conditional.TYPE_BUY)) {
+                        checkBuy(conditional, ticker.getResult(), accountBinance, i);
+                    } else {
+                        checkSell(conditional, ticker.getResult(), accountBinance, i);
+                    }
+                }
+            }
+        }
+
+
+
+
     }
 
     public void onDestroy() {
         super.onDestroy();
     }
 
-    public Ticker getTicker(final String marketName) {
+    public Ticker getTicker(final String marketName,String exchangeValue) {
         try {
-            return new BittrexServices().getTicker(marketName);
+            if(exchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)){
+
+                return new BittrexServices().getTicker(marketName);
+            }
+            else {
+                return new BinanceServices().getTicker(marketName);
+            }
         } catch (IOException e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    public List<Conditional> getConditionals() {
+    public List<Conditional> getConditionals(String exchangeValue) {
         Realm realm = Realm.getDefaultInstance();
 
         realm.beginTransaction();
-        RealmResults<Conditional> conditionalsDb = realm.where(Conditional.class).equalTo("orderStatus", GlobalConstant.Conditional.TYPE_OPEN).findAll();
+        RealmResults<Conditional> conditionalsDb = realm.where(Conditional.class).equalTo("orderStatus", GlobalConstant.Conditional.TYPE_OPEN).equalTo("exchangeValue",exchangeValue).findAll();
         List<Conditional> list = new ArrayList<>();
         if (conditionalsDb != null)
             list.addAll(realm.copyFromRealm(conditionalsDb));

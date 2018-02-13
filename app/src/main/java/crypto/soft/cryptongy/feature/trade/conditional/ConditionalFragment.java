@@ -97,6 +97,7 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
         if (view == null) {
             view = inflater.inflate(R.layout.fragment_conditional, container, false);
             new HideKeyboard(getContext()).setupUI(view);
+
             findViews();
             init();
             setOnListner();
@@ -163,7 +164,7 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
                 showEmptyView();
                 inputCoin.setText("");
                 stopTimerAndWebsocket();
-                presenter.getDataForTrade(spinnerValue);
+                presenter.getDataForConditional(spinnerValue);
 
             }
 
@@ -305,7 +306,7 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
                 inputCoin.setTypeface(face, Typeface.NORMAL);
                 Result result = (Result) ((CustomArrayAdapter) adapterView.getAdapter()).getItem(i);
                 txtVtc.setText(result.getMarketName());
-                presenter.getDataForTrade(result.getMarketName(),spinnerValue);
+                presenter.getDataForCondition(result.getMarketName(),getExchangeValue());
             }
         });
 
@@ -444,7 +445,7 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
 
             if(cointxtVtc.equalsIgnoreCase("BTCUSDT")){
 
-                base = cointxtVtc.substring(cointxtVtc.length() - 4, cointxtVtc.length());
+                base = cointxtVtc.substring(0,cointxtVtc.length() - 4 );
             }
             else {
 
@@ -745,7 +746,7 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
         orderStatus = GlobalConstant.Conditional.TYPE_OPEN;
 
         return new Conditional(false, orderType, coin, units, last, against, lowCondition, conditionType,
-                lowPrice, priceType, stopLossType, orderStatus);
+                lowPrice, priceType, stopLossType, orderStatus,spinnerValue);
     }
 
     public Conditional getTrailerStop(String coin, Double units, Double last, Double against, String orderType) {
@@ -772,7 +773,7 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
         orderStatus = GlobalConstant.Conditional.TYPE_OPEN;
 
         return new Conditional(false, orderType, coin, units, last, against, lowCondition, conditionType,
-                lowPrice, priceType, stopLossType, orderStatus);
+                lowPrice, priceType, stopLossType, orderStatus,spinnerValue);
     }
 
     public Conditional getProfit(String coin, Double units, Double last, Double against, String orderType) {
@@ -803,7 +804,7 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
         orderStatus = GlobalConstant.Conditional.TYPE_OPEN;
 
         return new Conditional(true, orderType, coin, units, last, against, highCondition, conditionType,
-                highPrice, priceType, stopLossType, orderStatus);
+                highPrice, priceType, stopLossType, orderStatus,spinnerValue);
     }
 
     @Override
@@ -821,7 +822,7 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
         super.onStart();
         String coinNam = inputCoin.getText().toString();
         if (!TextUtils.isEmpty(coinNam))
-            presenter.startTicker(coinNam);
+            presenter.startTicker(coinNam,getExchangeValue());
     }
 
     @Override
