@@ -16,7 +16,7 @@ import io.realm.Sort;
  */
 
 public class ConditionalInteractor extends TradeInteractor {
-    public void saveConditional(List<Conditional> conditionals, int limit, int sameLimit, OnFinishListner<Void> listner) {
+    public void saveConditional(List<Conditional> conditionals,String exchangeValue, int limit, int sameLimit, OnFinishListner<Void> listner) {
         Realm realm = Realm.getDefaultInstance();
 
         realm.beginTransaction();

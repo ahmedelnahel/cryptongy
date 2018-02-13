@@ -28,16 +28,70 @@ import io.reactivex.disposables.Disposable;
 
 public class ConditonalPresenter extends TradePresenter<ConditionalView> {
     private ConditionalInteractor conditionalInteractor;
+    String exchangeValue=null;
 
     public ConditonalPresenter(Context context) {
         super(context);
         conditionalInteractor = new ConditionalInteractor();
     }
+//
+//    @Override
+//    public void getData() {
+//        CoinApplication application = (CoinApplication) context.getApplicationContext();
+//        if (application.getTradeAccount() != null) {
+//            if (getView() != null) {
+//                getView().showLoading(context.getString(R.string.fetch_msg));
+//                getView().setLevel(application.getTradeAccount().getLabel());
+//                getView().showEmptyView();
+//            }
+//
+//            Observer observer = new Observer() {
+//
+//                @Override
+//                public void onSubscribe(Disposable d) {
+//                }
+//
+//                @Override
+//                public void onNext(Object o) {
+//                    if (getView() != null)
+//                        if (o instanceof MarketSummaries)
+//                            getView().onSummaryDataLoad((MarketSummaries) o);
+//                        else
+//                            getView().setConditional((List<Conditional>) o);
+//                }
+//
+//                @Override
+//                public void onError(Throwable e) {
+//                    if (getView() != null) {
+//                        getView().hideLoading();
+//                        CustomDialog.showMessagePop(context, e.getMessage(), null);
+//                        getView().showEmptyView();
+//                    }
+//                }
+//
+//                @Override
+//                public void onComplete() {
+//                    if (getView() != null)
+//                        getView().hideLoading();
+//                }
+//            };
+//
+//            Observable.concat(getCoinsForTrade(getView().getExchangeValue()), getConditionals())
+//                    .subscribe(observer);
+//        } else {
+//            CustomDialog.showMessagePop(context, context.getString(R.string.noAPI), null);
+//            if (getView() != null) {
+//                getView().setLevel("No API");
+//                getView().showEmptyView();
+//            }
+//        }
+//    }
 
-    @Override
-    public void getData() {
+
+    public void getDataForConditional(String exchangeValue) {
+        this.exchangeValue=exchangeValue;
         CoinApplication application = (CoinApplication) context.getApplicationContext();
-        if (application.getTradeAccount() != null) {
+        if (application.getTradeAccount(exchangeValue) != null) {
             if (getView() != null) {
                 getView().showLoading(context.getString(R.string.fetch_msg));
                 getView().setLevel(application.getTradeAccount().getLabel());
@@ -75,7 +129,7 @@ public class ConditonalPresenter extends TradePresenter<ConditionalView> {
                 }
             };
 
-            Observable.concat(getCoins(), getConditionals())
+            Observable.concat(getCoinsForTrade(this.exchangeValue), getConditionals())
                     .subscribe(observer);
         } else {
             CustomDialog.showMessagePop(context, context.getString(R.string.noAPI), null);
@@ -99,7 +153,7 @@ public class ConditonalPresenter extends TradePresenter<ConditionalView> {
                             public void onOkClicked() {
                                 int limit = BuildConfig.MAX_ORDER;
                                 int sameLimit = BuildConfig.MAX_ORDER_COIN;
-                                conditionalInteractor.saveConditional(conditionals, limit, sameLimit, new OnFinishListner<Void>() {
+                                conditionalInteractor.saveConditional(conditionals,getView().getExchangeValue(), limit, sameLimit, new OnFinishListner<Void>() {
                                     @Override
                                     public void onComplete(Void result) {
                                         CustomDialog.showMessagePop(context, "Created sucessfully.", null);
