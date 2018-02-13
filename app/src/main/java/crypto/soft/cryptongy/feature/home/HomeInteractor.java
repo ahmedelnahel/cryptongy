@@ -320,7 +320,7 @@ public class HomeInteractor {
         protected void onPostExecute(MarketSummaries marketSummaries) {
             super.onPostExecute(marketSummaries);
             if (marketSummaries != null && marketSummaries.getSuccess() && marketSummaries.getResult() != null) {
-                onBinanceLoadListnerAPI.onComplete(resultsbinance, marketSummaries, GlobalConstant.Exchanges.BITTREX);
+                onBinanceLoadListnerAPI.onComplete(resultsbinance, marketSummaries, GlobalConstant.Exchanges.BINANCE);
             } else {
                 onBinanceLoadListnerAPI.onFail("");
             }
