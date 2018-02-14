@@ -391,7 +391,7 @@ public class OrderPresenter extends MvpBasePresenter<OrderView> {
         protected void onPostExecute(MarketSummaries marketSummaries) {
 //            if(orderHistoryExchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)){
 
-                if (marketSummaries != null && marketSummaries.getSuccess()) {
+                if (marketSummaries != null && marketSummaries.getSuccess() && getView() != null) {
                     getView().setCoins(marketSummaries);
                 }
 //            }

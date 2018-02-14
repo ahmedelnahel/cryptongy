@@ -33,11 +33,11 @@ public class TradeInteractor {
             @Override
             protected MarketSummary doInBackground(Void... voids) {
                 try {
-                    if (exchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)) {
+                    if (GlobalConstant.Exchanges.BITTREX.equalsIgnoreCase(exchangeValue)) {
 
                         return new BittrexServices().getMarketSummary(coinName);
                     }
-                    if (exchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BINANCE)) {
+                    else if (GlobalConstant.Exchanges.BINANCE.equalsIgnoreCase(exchangeValue)) {
 
                         return new BinanceServices().getMarketSummary(coinName);
                     }

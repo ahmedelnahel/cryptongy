@@ -54,7 +54,7 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
         initSideMenu();
         setAdapter();
         presenter.onItemClicked(data);
-        GlobalUtil.startAlarm(OrderReceiver.class, 30000, this);
+        GlobalUtil.startAlarm(OrderReceiver.class, 60000, this);
     }
 
     @NonNull

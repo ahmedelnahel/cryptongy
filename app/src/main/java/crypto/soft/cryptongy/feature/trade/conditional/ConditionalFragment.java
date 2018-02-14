@@ -443,7 +443,7 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
         else {
 
 
-            if(cointxtVtc.equalsIgnoreCase("BTCUSDT")){
+            if(cointxtVtc.endsWith("USDT")){
 
                 base = cointxtVtc.substring(0,cointxtVtc.length() - 4 );
             }
