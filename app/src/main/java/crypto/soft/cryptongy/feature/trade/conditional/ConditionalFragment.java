@@ -462,8 +462,8 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
         if (coinWallet == null)
             HoldingValue_Txt.setText("0");
         else
-            HoldingValue_Txt.setText(String.format("%.8f", baseWallet.getAvailable().doubleValue()));
-        if (baseWallet.getBalance() > 0d)
+            HoldingValue_Txt.setText(String.format("%.4f", coinWallet.getBalance().doubleValue()));
+        if (baseWallet.getAvailable() > 0d)
             rdbBuy.setEnabled(true);
         else
             rdbBuy.setEnabled(false);
