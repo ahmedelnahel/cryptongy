@@ -70,9 +70,9 @@
                 android:visibility="gone"
                 android:layout_marginLeft="24dp" />
 
-            <include layout="@layout/table_open_order" />
+            <include layout="@layout/table_open_order_coin" />
 
-            <include layout="@layout/table_order_history" />
+            <include layout="@layout/table_order_history_coin" />
 
             <include layout="@layout/table_market_trade" />
             <WebView  xmlns:android="http://schemas.android.com/apk/res/android"
