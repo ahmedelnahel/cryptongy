@@ -39,11 +39,13 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="@dimen/_42sdp"
                 android:layout_marginRight="5dp"
                 android:layout_weight="1"
                 android:background="@drawable/rect_left_right"
-                android:padding="10dp">
+                android:padding="2dp"
+
+                >
 
                 <Spinner
                     android:id="@+id/spinner"
@@ -57,11 +59,11 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginLeft="5dp"
+                android:layout_height="@dimen/_42sdp"
+                android:layout_marginLeft="@dimen/_4sdp"
                 android:layout_weight="1"
                 android:background="@drawable/rect_left_right"
-                android:padding="10dp">
+                android:padding="@dimen/_2sdp">
 
                 <ImageView
                     android:id="@+id/icon_search"
