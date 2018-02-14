@@ -456,7 +456,7 @@ public class LimitTradeFragment extends MvpFragment<LimitView, LimitPresenter> i
             HoldingValue_Txt.setText("0");
         else
             HoldingValue_Txt.setText(String.format("%.4f", coinWallet.getBalance().doubleValue()));
-        if (baseWallet.getAvailable() > 0d)
+        if (baseWallet != null && baseWallet.getAvailable()!= null && baseWallet.getAvailable() > 0d)
             rdbBuy.setEnabled(true);
         else
             rdbBuy.setEnabled(false);

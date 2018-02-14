@@ -385,11 +385,11 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
     @Override
     public void onSummaryDataLoad(MarketSummaries marketSummaries) {
         if (marketSummaries.getSuccess()) {
-            if(spinnerValue.equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)){
+            if(spinnerValue.equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX )&& marketSummaries.getCoinsMap().get("USDT-BTC")!= null){
 
                 ((CoinApplication) getActivity().getApplication()).setUsdt_btc(GlobalUtil.round(marketSummaries.getCoinsMap().get("USDT-BTC").getLast(), 4));
             }
-            else {
+            else if(marketSummaries.getCoinsMap().get("BTCUSDT") != null){
                 ((CoinApplication) getActivity().getApplication()).setUsdt_btc(GlobalUtil.round(marketSummaries.getCoinsMap().get("BTCUSDT").getLast(), 4));
 
             }
