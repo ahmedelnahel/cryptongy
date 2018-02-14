@@ -4,6 +4,7 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,8 +21,13 @@ import crypto.soft.cryptongy.network.BittrexServices;
 import crypto.soft.cryptongy.utils.CoinApplication;
 import crypto.soft.cryptongy.utils.GlobalConstant;
 import crypto.soft.cryptongy.utils.GlobalUtil;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import io.realm.Realm;
 import io.realm.RealmResults;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * Created by tseringwongelgurung on 12/10/17.
@@ -31,6 +37,8 @@ public class ConditionalService extends IntentService {
 
     String exchangeBittrix=GlobalConstant.Exchanges.BITTREX;
     String exchangeBinance=GlobalConstant.Exchanges.BINANCE;
+    Disposable disposable;
+    Ticker localTicker;
 
     public ConditionalService() {
         super("ConditionalService");
@@ -88,18 +96,42 @@ public class ConditionalService extends IntentService {
     }
 
     public Ticker getTicker(final String marketName,String exchangeValue) {
+
+       localTicker=null;
         try {
             if(exchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)){
 
-                return new BittrexServices().getTicker(marketName);
+                localTicker= new BittrexServices().getTicker(marketName);
             }
             else {
-                return new BinanceServices().getTicker(marketName);
+
+                final BinanceServices binanceServices=new BinanceServices();
+
+                    binanceServices.getTickerConnectSocket(marketName);
+                    disposable=      binanceServices.sourceTickerWebsocket.observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<Ticker>() {
+                        @Override
+                        public void accept(Ticker ticker) throws Exception {
+                            disposable.dispose();
+                            binanceServices.closeWebSocket();
+                            Log.d(TAG, "Condition service ticker  " + ticker);
+
+                            localTicker=ticker;
+
+                        }
+                    });
+
+
+
+
+//                return new BinanceServices().getTicker(marketName);
             }
         } catch (IOException e) {
             e.printStackTrace();
             return null;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        return localTicker;
     }
 
     public List<Conditional> getConditionals(String exchangeValue) {
@@ -236,8 +268,16 @@ public class ConditionalService extends IntentService {
             @Override
             protected LimitOrder doInBackground(Void... voids) {
                 try {
+                    if(conditional.getExchangeValue().equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)){
 
-                    return new BittrexServices().buyLimit(limit.getMarket(), String.valueOf(limit.getQuantity()), String.valueOf(limit.getRate()), limit.getAccount());
+                        return new BittrexServices().buyLimit(limit.getMarket(), String.valueOf(limit.getQuantity()), String.valueOf(limit.getRate()), limit.getAccount());
+                    }
+                    else {
+
+                        return new BinanceServices().newOrder(limit.getMarket(), String.valueOf(limit.getQuantity()), String.valueOf(limit.getRate()),"BUY", limit.getAccount());
+
+                    }
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -274,7 +314,18 @@ public class ConditionalService extends IntentService {
             protected LimitOrder doInBackground(Void... voids) {
                 try {
 
-                    return new BittrexServices().sellLimit(limit.getMarket(), String.valueOf(limit.getQuantity()), String.valueOf(limit.getRate()), limit.getAccount());
+                    if(conditional.getExchangeValue().equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)){
+
+                        return new BittrexServices().sellLimit(limit.getMarket(), String.valueOf(limit.getQuantity()), String.valueOf(limit.getRate()), limit.getAccount());
+                    }
+                    else {
+
+                        return new BinanceServices().newOrder(limit.getMarket(), String.valueOf(limit.getQuantity()), String.valueOf(limit.getRate()),"SELL" ,limit.getAccount());
+
+                    }
+
+
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

@@ -1,25 +1,21 @@
-<LinearLayout
-    android:layout_width="match_parent"
+<LinearLayout android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/_10sdp"
-    android:layout_marginLeft="@dimen/_20sdp"
-    android:layout_marginRight="@dimen/_20sdp"
-    android:layout_marginTop="@dimen/_8sdp"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp"
+    android:paddingBottom="@dimen/_4sdp"
+    android:layout_marginTop="20dp"
     android:orientation="horizontal"
-    android:gravity="center_vertical"
-
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <RelativeLayout
-        android:layout_gravity="center_vertical"
-        android:layout_marginTop="@dimen/_8sdp"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_42sdp"
+        android:layout_marginRight="5dp"
         android:layout_weight="1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="@dimen/_5sdp"
         android:background="@drawable/rect_left_right"
-        android:layout_marginBottom="@dimen/_12sdp"
-        android:paddingBottom="@dimen/_4sdp"
+        android:padding="2dp"
+
         >
 
         <Spinner
@@ -33,107 +29,31 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:layout_gravity="center_vertical"
-        android:paddingTop="@dimen/_4sdp"
-        android:paddingBottom="@dimen/_6sdp"
-        android:paddingRight="@dimen/_4sdp"
-        android:paddingLeft="@dimen/_4sdp"
-
-
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/_38sdp"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_42sdp"
         android:layout_marginLeft="@dimen/_4sdp"
-        android:layout_marginRight="@dimen/_4sdp"
         android:layout_weight="1"
         android:background="@drawable/rect_left_right"
-        >
+        android:padding="@dimen/_2sdp">
 
         <ImageView
             android:id="@+id/icon_search"
-            android:layout_width="@dimen/_24sdp"
-            android:layout_height="@dimen/_24sdp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_centerVertical="true"
-            android:src="@drawable/ic_search"
-            android:visibility="gone" />
+            android:src="@drawable/ic_search" />
 
         <AutoCompleteTextView
-
-            android:textSize="@dimen/_14sdp"
             android:id="@+id/inputCoin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/_4sdp"
-            android:layout_marginRight="@dimen/_4sdp"
             android:layout_toRightOf="@+id/icon_search"
             android:background="@android:color/white"
             android:hint="@string/watch_coin"
-            android:paddingBottom="@dimen/_4sdp"
-            android:paddingLeft="@dimen/_4sdp"
+            android:paddingLeft="10dp"
             android:singleLine="true"
             android:textStyle="italic" />
     </RelativeLayout>
 </LinearLayout>
-<!--<LinearLayout-->
-    <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
-    <!--xmlns:tools="http://schemas.android.com/tools"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_marginBottom="@dimen/_10sdp"-->
-    <!--android:layout_marginLeft="20dp"-->
-    <!--android:layout_marginRight="20dp"-->
-    <!--android:paddingBottom="@dimen/_4sdp"-->
-    <!--android:layout_marginTop="20dp"-->
-    <!--android:orientation="horizontal">-->
-
-    <!--<RelativeLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="@dimen/_42sdp"-->
-        <!--android:layout_marginRight="5dp"-->
-        <!--android:layout_weight="1"-->
-        <!--android:background="@drawable/rect_left_right"-->
-        <!--android:padding="2dp"-->
-
-        <!--&gt;-->
-
-        <!--<Spinner-->
-            <!--android:id="@+id/spinner"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_centerVertical="true">-->
-
-        <!--</Spinner>-->
-
-    <!--</RelativeLayout>-->
-
-    <!--<RelativeLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="@dimen/_42sdp"-->
-        <!--android:layout_marginLeft="@dimen/_4sdp"-->
-        <!--android:layout_weight="1"-->
-        <!--android:background="@drawable/rect_left_right"-->
-        <!--android:padding="@dimen/_2sdp">-->
-
-        <!--<ImageView-->
-            <!--android:id="@+id/icon_search"-->
-            <!--android:layout_width="24dp"-->
-            <!--android:layout_height="24dp"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--android:src="@drawable/ic_search" />-->
-
-        <!--<AutoCompleteTextView-->
-            <!--android:id="@+id/inputCoin"-->
-            <!--fontPath="fonts/myriad_pro_semibold.ttf"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--android:layout_toRightOf="@+id/icon_search"-->
-            <!--android:background="@android:color/white"-->
-            <!--android:hint="@string/watch_coin"-->
-            <!--android:paddingLeft="10dp"-->
-            <!--android:singleLine="true"-->
-            <!--android:textStyle="italic"-->
-            <!--tools:ignore="MissingPrefix" />-->
-    <!--</RelativeLayout>-->
-<!--</LinearLayout>-->
 
