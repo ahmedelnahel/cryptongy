@@ -242,46 +242,46 @@ public class BittrexServices {
         else {
             final String url = "https://bittrex.com/api/v1.1/account/getorderhistory";
             Log.d(TAG, "getOrderHistory: "+url);
-//            String ordersStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret());
-            String ordersStr = "" +
-                    "" +
-                    "" +
-                    "{\n" +
-                    "\t\"success\" : true,\n" +
-                    "\t\"message\" : \"\",\n" +
-                    "\t\"result\" : [{\n" +
-                    "\t\t\t\"OrderUuid\" : \"fd97d393-e9b9-4dd1-9dbf-f288fc72a185\",\n" +
-                    "\t\t\t\"Exchange\" : \"BTC-LTC\",\n" +
-                    "\t\t\t\"TimeStamp\" : \"2014-07-09T04:01:00.667\",\n" +
-                    "\t\t\t\"OrderType\" : \"LIMIT_BUY\",\n" +
-                    "\t\t\t\"Limit\" : 0.00000001,\n" +
-                    "\t\t\t\"Quantity\" : 100000.00000000,\n" +
-                    "\t\t\t\"QuantityRemaining\" : 100000.00000000,\n" +
-                    "\t\t\t\"Commission\" : 0.00000000,\n" +
-                    "\t\t\t\"Price\" : 0.00000000,\n" +
-                    "\t\t\t\"PricePerUnit\" : null,\n" +
-                    "\t\t\t\"IsConditional\" : false,\n" +
-                    "\t\t\t\"Condition\" : null,\n" +
-                    "\t\t\t\"ConditionTarget\" : null,\n" +
-                    "\t\t\t\"ImmediateOrCancel\" : false\n" +
-                    "\t\t}, {\n" +
-                    "\t\t\t\"OrderUuid\" : \"17fd64d1-f4bd-4fb6-adb9-42ec68b8697d\",\n" +
-                    "\t\t\t\"Exchange\" : \"BTC-ZS\",\n" +
-                    "\t\t\t\"TimeStamp\" : \"2014-07-08T20:38:58.317\",\n" +
-                    "\t\t\t\"OrderType\" : \"LIMIT_SELL\",\n" +
-                    "\t\t\t\"Limit\" : 0.00002950,\n" +
-                    "\t\t\t\"Quantity\" : 667.03644955,\n" +
-                    "\t\t\t\"QuantityRemaining\" : 0.00000000,\n" +
-                    "\t\t\t\"Commission\" : 0.00004921,\n" +
-                    "\t\t\t\"Price\" : 0.01968424,\n" +
-                    "\t\t\t\"PricePerUnit\" : 0.00002950,\n" +
-                    "\t\t\t\"IsConditional\" : false,\n" +
-                    "\t\t\t\"Condition\" : null,\n" +
-                    "\t\t\t\"ConditionTarget\" : null,\n" +
-                    "\t\t\t\"ImmediateOrCancel\" : false\n" +
-                    "\t\t}\n" +
-                    "\t]\n" +
-                    "}";
+            String ordersStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret());
+//            String ordersStr = "" +
+//                    "" +
+//                    "" +
+//                    "{\n" +
+//                    "\t\"success\" : true,\n" +
+//                    "\t\"message\" : \"\",\n" +
+//                    "\t\"result\" : [{\n" +
+//                    "\t\t\t\"OrderUuid\" : \"fd97d393-e9b9-4dd1-9dbf-f288fc72a185\",\n" +
+//                    "\t\t\t\"Exchange\" : \"BTC-LTC\",\n" +
+//                    "\t\t\t\"TimeStamp\" : \"2014-07-09T04:01:00.667\",\n" +
+//                    "\t\t\t\"OrderType\" : \"LIMIT_BUY\",\n" +
+//                    "\t\t\t\"Limit\" : 0.00000001,\n" +
+//                    "\t\t\t\"Quantity\" : 100000.00000000,\n" +
+//                    "\t\t\t\"QuantityRemaining\" : 100000.00000000,\n" +
+//                    "\t\t\t\"Commission\" : 0.00000000,\n" +
+//                    "\t\t\t\"Price\" : 0.00000000,\n" +
+//                    "\t\t\t\"PricePerUnit\" : null,\n" +
+//                    "\t\t\t\"IsConditional\" : false,\n" +
+//                    "\t\t\t\"Condition\" : null,\n" +
+//                    "\t\t\t\"ConditionTarget\" : null,\n" +
+//                    "\t\t\t\"ImmediateOrCancel\" : false\n" +
+//                    "\t\t}, {\n" +
+//                    "\t\t\t\"OrderUuid\" : \"17fd64d1-f4bd-4fb6-adb9-42ec68b8697d\",\n" +
+//                    "\t\t\t\"Exchange\" : \"BTC-ZS\",\n" +
+//                    "\t\t\t\"TimeStamp\" : \"2014-07-08T20:38:58.317\",\n" +
+//                    "\t\t\t\"OrderType\" : \"LIMIT_SELL\",\n" +
+//                    "\t\t\t\"Limit\" : 0.00002950,\n" +
+//                    "\t\t\t\"Quantity\" : 667.03644955,\n" +
+//                    "\t\t\t\"QuantityRemaining\" : 0.00000000,\n" +
+//                    "\t\t\t\"Commission\" : 0.00004921,\n" +
+//                    "\t\t\t\"Price\" : 0.01968424,\n" +
+//                    "\t\t\t\"PricePerUnit\" : 0.00002950,\n" +
+//                    "\t\t\t\"IsConditional\" : false,\n" +
+//                    "\t\t\t\"Condition\" : null,\n" +
+//                    "\t\t\t\"ConditionTarget\" : null,\n" +
+//                    "\t\t\t\"ImmediateOrCancel\" : false\n" +
+//                    "\t\t}\n" +
+//                    "\t]\n" +
+//                    "}";
             if (ordersStr == null) {
                 orderHistory = new OrderHistory();
                 orderHistory.setSuccess(false);
