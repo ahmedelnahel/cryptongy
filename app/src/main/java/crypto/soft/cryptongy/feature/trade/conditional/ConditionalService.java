@@ -33,9 +33,9 @@ import io.realm.RealmResults;
 
 public class ConditionalService extends IntentService {
 
-    String TAG=getClass().getSimpleName().toString();
-    String exchangeBittrix=GlobalConstant.Exchanges.BITTREX;
-    String exchangeBinance=GlobalConstant.Exchanges.BINANCE;
+    String TAG = getClass().getSimpleName().toString();
+    String exchangeBittrix = GlobalConstant.Exchanges.BITTREX;
+    String exchangeBinance = GlobalConstant.Exchanges.BINANCE;
     Disposable disposable;
     Ticker localTicker;
     BinanceServices binanceServices;
@@ -51,8 +51,8 @@ public class ConditionalService extends IntentService {
 
     private void startService() {
 
-        binanceServices=new BinanceServices();
-        if(disposable!=null){
+        binanceServices = new BinanceServices();
+        if (disposable != null) {
             disposable.dispose();
         }
         binanceServices.closeWebSocket();
@@ -66,7 +66,7 @@ public class ConditionalService extends IntentService {
         if (account != null && list != null) {
             for (int i = 0; i < list.size(); i++) {
                 Conditional conditional = list.get(i);
-                Ticker ticker = getTicker(conditional.getOrderCoin(),exchangeBittrix);
+                Ticker ticker = getTicker(conditional.getOrderCoin(), exchangeBittrix, conditional, account, i);
                 if (ticker != null && ticker.getSuccess() && ticker.getResult() != null) {
                     if (conditional.getOrderType().equalsIgnoreCase(GlobalConstant.Conditional.TYPE_BUY)) {
                         checkBuy(conditional, ticker.getResult(), account, i);
@@ -81,18 +81,9 @@ public class ConditionalService extends IntentService {
         if (accountBinance != null && listBinance != null) {
             for (int i = 0; i < listBinance.size(); i++) {
                 Conditional conditional = listBinance.get(i);
-                Ticker ticker = getTicker(conditional.getOrderCoin(),exchangeBinance);
-                if (ticker != null && ticker.getSuccess() && ticker.getResult() != null) {
-                    if (conditional.getOrderType().equalsIgnoreCase(GlobalConstant.Conditional.TYPE_BUY)) {
-                        checkBuy(conditional, ticker.getResult(), accountBinance, i);
-                    } else {
-                        checkSell(conditional, ticker.getResult(), accountBinance, i);
-                    }
-                }
+                getTicker(conditional.getOrderCoin(), exchangeBinance, conditional, accountBinance, i);
             }
         }
-
-
 
 
     }
@@ -102,34 +93,36 @@ public class ConditionalService extends IntentService {
 
     }
 
-    public Ticker getTicker(final String marketName,String exchangeValue) {
+    public Ticker getTicker(final String marketName, String exchangeValue, final Conditional conditional, final Account account, final int i) {
 
-       localTicker=null;
+        localTicker = null;
         try {
-            if(exchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)){
+            if (exchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)) {
 
                 Log.d(TAG, " ConditionService getTicker: bitrix ");
-                localTicker= new BittrexServices().getTicker(marketName);
-            }
-            else {
+                localTicker = new BittrexServices().getTicker(marketName);
+            } else
+                {
+                binanceServices.getTickerConnectSocket(marketName);
+                disposable = binanceServices.sourceTickerWebsocket.observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<Ticker>() {
+                    @Override
+                    public void accept(Ticker ticker) throws Exception {
 
-
-
-                    binanceServices.getTickerConnectSocket(marketName);
-                    disposable=      binanceServices.sourceTickerWebsocket.observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<Ticker>() {
-                        @Override
-                        public void accept(Ticker ticker) throws Exception {
-
-                            Log.d(TAG, "ConditionService ticker  " + ticker);
-
-                            localTicker=ticker;
-                            disposable.dispose();
-                            binanceServices.closeWebSocket();
-
+                        disposable.dispose();
+                        binanceServices.closeWebSocket();
+                        Log.d(TAG, "ConditionService ticker  " + ticker);
+                        if (ticker != null && ticker.getSuccess() && ticker.getResult() != null) {
+                            if (conditional.getOrderType().equalsIgnoreCase(GlobalConstant.Conditional.TYPE_BUY)) {
+                                checkBuy(conditional, ticker.getResult(), account, i);
+                            } else {
+                                checkSell(conditional, ticker.getResult(), account, i);
+                            }
                         }
-                    });
+                        localTicker = ticker;
 
 
+                    }
+                });
 
 
 //                return new BinanceServices().getTicker(marketName);
@@ -147,7 +140,7 @@ public class ConditionalService extends IntentService {
         Realm realm = Realm.getDefaultInstance();
 
         realm.beginTransaction();
-        RealmResults<Conditional> conditionalsDb = realm.where(Conditional.class).equalTo("orderStatus", GlobalConstant.Conditional.TYPE_OPEN).equalTo("exchangeValue",exchangeValue).findAll();
+        RealmResults<Conditional> conditionalsDb = realm.where(Conditional.class).equalTo("orderStatus", GlobalConstant.Conditional.TYPE_OPEN).equalTo("exchangeValue", exchangeValue).findAll();
         List<Conditional> list = new ArrayList<>();
         if (conditionalsDb != null)
             list.addAll(realm.copyFromRealm(conditionalsDb));
@@ -168,41 +161,41 @@ public class ConditionalService extends IntentService {
         Double quantity = conditional.getUnits();
         Double rate = 0.0;
 
-            if (conditional.isHigh()) {
-                if (ticker.getLast().doubleValue() >= conditional.getHighCondition().doubleValue() && conditional.getPriceType()!= null) {
-                    switch (conditional.getPriceType()) {
-                        case GlobalConstant.Conditional.TYPE_BID:
-                            rate = ticker.getBid().doubleValue();
-                            break;
-                        case GlobalConstant.Conditional.TYPE_ASK:
-                            rate = ticker.getAsk().doubleValue();
-                            break;
-                        default:
-                            rate = ticker.getLast().doubleValue();
-                            break;
-                    }
+        if (conditional.isHigh()) {
+            if (ticker.getLast().doubleValue() >= conditional.getHighCondition().doubleValue() && conditional.getPriceType() != null) {
+                switch (conditional.getPriceType()) {
+                    case GlobalConstant.Conditional.TYPE_BID:
+                        rate = ticker.getBid().doubleValue();
+                        break;
+                    case GlobalConstant.Conditional.TYPE_ASK:
+                        rate = ticker.getAsk().doubleValue();
+                        break;
+                    default:
+                        rate = ticker.getLast().doubleValue();
+                        break;
+                }
+            } else return;
+        } else {
+            if (conditional.getStopLossType().equalsIgnoreCase(GlobalConstant.Conditional.TYPE_TRAILER)) {
+                double low = conditional.getLast().doubleValue() - ((conditional.getLowCondition().doubleValue() / 100) * conditional.getLast().doubleValue());
+                if (ticker.getLast().doubleValue() <= low)
+                    rate = ticker.getLast().doubleValue() - (ticker.getLast().doubleValue() * (conditional.getLowPrice().doubleValue() / 100));
+                else if (ticker.getLast().doubleValue() > conditional.getLast()) {
+                    conditional.setLast(ticker.getLast());
+                    updateConditional(conditional);
+                    return;
                 } else return;
             } else {
-                if (conditional.getStopLossType().equalsIgnoreCase(GlobalConstant.Conditional.TYPE_TRAILER)) {
-                    double low = conditional.getLast().doubleValue() - ((conditional.getLowCondition().doubleValue() / 100) * conditional.getLast().doubleValue());
-                    if (ticker.getLast().doubleValue() <= low)
-                        rate = ticker.getLast().doubleValue() - (ticker.getLast().doubleValue() * (conditional.getLowPrice().doubleValue() / 100));
-                    else if (ticker.getLast().doubleValue() > conditional.getLast()) {
-                        conditional.setLast(ticker.getLast());
-                        updateConditional(conditional);
-                        return;
-                    } else return;
-                } else {
-                    double low = conditional.getLowCondition().doubleValue();
-                    if (conditional.getConditionType().equalsIgnoreCase(GlobalConstant.Conditional.TYPE_PERCENTAGE))
-                        low = conditional.getLast().doubleValue() - ((low / 100) * conditional.getLast().doubleValue());
+                double low = conditional.getLowCondition().doubleValue();
+                if (conditional.getConditionType().equalsIgnoreCase(GlobalConstant.Conditional.TYPE_PERCENTAGE))
+                    low = conditional.getLast().doubleValue() - ((low / 100) * conditional.getLast().doubleValue());
 
-                    if (ticker.getLast().doubleValue() <= low) {
-                        if (conditional.getPriceType().equalsIgnoreCase(GlobalConstant.Conditional.TYPE_PERCENTAGE))
-                            rate = ticker.getLast().doubleValue() - (ticker.getLast().doubleValue() * (conditional.getLowPrice().doubleValue() / 100));
-                        else
-                            rate = ticker.getLast().doubleValue() - conditional.getLowPrice().doubleValue();
-                    } else return;
+                if (ticker.getLast().doubleValue() <= low) {
+                    if (conditional.getPriceType().equalsIgnoreCase(GlobalConstant.Conditional.TYPE_PERCENTAGE))
+                        rate = ticker.getLast().doubleValue() - (ticker.getLast().doubleValue() * (conditional.getLowPrice().doubleValue() / 100));
+                    else
+                        rate = ticker.getLast().doubleValue() - conditional.getLowPrice().doubleValue();
+                } else return;
 
             }
             Limit limit = new Limit(market, quantity, rate, account);
@@ -277,13 +270,12 @@ public class ConditionalService extends IntentService {
             @Override
             protected LimitOrder doInBackground(Void... voids) {
                 try {
-                    if(conditional.getExchangeValue().equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)){
+                    if (conditional.getExchangeValue().equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)) {
 
                         return new BittrexServices().buyLimit(limit.getMarket(), String.valueOf(limit.getQuantity()), String.valueOf(limit.getRate()), limit.getAccount());
-                    }
-                    else {
+                    } else {
 
-                        return new BinanceServices().newOrder(limit.getMarket(), String.valueOf(limit.getQuantity()), String.valueOf(limit.getRate()),"BUY", limit.getAccount());
+                        return new BinanceServices().newOrder(limit.getMarket(), String.valueOf(limit.getQuantity()), String.valueOf(limit.getRate()), "BUY", limit.getAccount());
 
                     }
 
@@ -323,16 +315,14 @@ public class ConditionalService extends IntentService {
             protected LimitOrder doInBackground(Void... voids) {
                 try {
 
-                    if(conditional.getExchangeValue().equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)){
+                    if (conditional.getExchangeValue().equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)) {
 
                         return new BittrexServices().sellLimit(limit.getMarket(), String.valueOf(limit.getQuantity()), String.valueOf(limit.getRate()), limit.getAccount());
+                    } else {
+
+                        return new BinanceServices().newOrder(limit.getMarket(), String.valueOf(limit.getQuantity()), String.valueOf(limit.getRate()), "SELL", limit.getAccount());
+
                     }
-                    else {
-
-                        return new BinanceServices().newOrder(limit.getMarket(), String.valueOf(limit.getQuantity()), String.valueOf(limit.getRate()),"SELL" ,limit.getAccount());
-
-                    }
-
 
 
                 } catch (IOException e) {
