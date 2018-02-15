@@ -52,6 +52,10 @@ public class ConditionalService extends IntentService {
     private void startService() {
 
         binanceServices=new BinanceServices();
+        if(disposable!=null){
+            disposable.dispose();
+        }
+        binanceServices.closeWebSocket();
 
 
         List<Conditional> list = getConditionals(exchangeBittrix);
@@ -95,6 +99,7 @@ public class ConditionalService extends IntentService {
 
     public void onDestroy() {
         super.onDestroy();
+
     }
 
     public Ticker getTicker(final String marketName,String exchangeValue) {
@@ -114,11 +119,12 @@ public class ConditionalService extends IntentService {
                     disposable=      binanceServices.sourceTickerWebsocket.observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<Ticker>() {
                         @Override
                         public void accept(Ticker ticker) throws Exception {
-                            disposable.dispose();
-                            binanceServices.closeWebSocket();
+
                             Log.d(TAG, "ConditionService ticker  " + ticker);
 
                             localTicker=ticker;
+                            disposable.dispose();
+                            binanceServices.closeWebSocket();
 
                         }
                     });

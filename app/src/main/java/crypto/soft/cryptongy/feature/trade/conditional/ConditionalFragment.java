@@ -836,4 +836,11 @@ public class ConditionalFragment extends MvpFragment<ConditionalView, Conditonal
         presenter.closeWebSocket();
         presenter.stopTimer();
     }
+
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        stopTimerAndWebsocket();
+    }
 }
