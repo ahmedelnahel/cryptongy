@@ -82,6 +82,7 @@ public class ConditionalService extends IntentService {
             for (int i = 0; i < listBinance.size(); i++) {
                 Conditional conditional = listBinance.get(i);
                 Ticker ticker = getTicker(conditional.getOrderCoin(),exchangeBinance);
+                Log.d(TAG, " ConditionService getTicker: binance: " + ticker.getSuccess() + ticker.getResult().getLast());
                 if (ticker != null && ticker.getSuccess() && ticker.getResult() != null) {
                     if (conditional.getOrderType().equalsIgnoreCase(GlobalConstant.Conditional.TYPE_BUY)) {
                         checkBuy(conditional, ticker.getResult(), accountBinance, i);
