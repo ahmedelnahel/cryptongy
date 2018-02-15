@@ -27,18 +27,18 @@ import io.reactivex.functions.Consumer;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
-import static android.content.ContentValues.TAG;
-
 /**
  * Created by tseringwongelgurung on 12/10/17.
  */
 
 public class ConditionalService extends IntentService {
 
+    String TAG=getClass().getSimpleName().toString();
     String exchangeBittrix=GlobalConstant.Exchanges.BITTREX;
     String exchangeBinance=GlobalConstant.Exchanges.BINANCE;
     Disposable disposable;
     Ticker localTicker;
+    BinanceServices binanceServices;
 
     public ConditionalService() {
         super("ConditionalService");
@@ -51,9 +51,11 @@ public class ConditionalService extends IntentService {
 
     private void startService() {
 
+        binanceServices=new BinanceServices();
+
+
         List<Conditional> list = getConditionals(exchangeBittrix);
         List<Conditional> listBinance = getConditionals(exchangeBinance);
-
         Account account = ((CoinApplication) getApplicationContext()).getTradeAccount(exchangeBittrix);
         Account accountBinance = ((CoinApplication) getApplicationContext()).getTradeAccount(exchangeBinance);
 
@@ -101,11 +103,12 @@ public class ConditionalService extends IntentService {
         try {
             if(exchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)){
 
+                Log.d(TAG, " ConditionService getTicker: bitrix ");
                 localTicker= new BittrexServices().getTicker(marketName);
             }
             else {
 
-                final BinanceServices binanceServices=new BinanceServices();
+
 
                     binanceServices.getTickerConnectSocket(marketName);
                     disposable=      binanceServices.sourceTickerWebsocket.observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<Ticker>() {
@@ -113,7 +116,7 @@ public class ConditionalService extends IntentService {
                         public void accept(Ticker ticker) throws Exception {
                             disposable.dispose();
                             binanceServices.closeWebSocket();
-                            Log.d(TAG, "Condition service ticker  " + ticker);
+                            Log.d(TAG, "ConditionService ticker  " + ticker);
 
                             localTicker=ticker;
 
