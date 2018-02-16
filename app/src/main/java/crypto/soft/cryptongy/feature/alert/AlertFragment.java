@@ -50,7 +50,10 @@ import crypto.soft.cryptongy.feature.shared.json.marketsummary.MarketSummary;
 import crypto.soft.cryptongy.feature.shared.json.ticker.Ticker;
 import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
 import crypto.soft.cryptongy.feature.trade.TradeInteractor;
+import crypto.soft.cryptongy.network.BinanceServices;
 import crypto.soft.cryptongy.network.BittrexServices;
+import crypto.soft.cryptongy.utils.CoinApplication;
+import crypto.soft.cryptongy.utils.GlobalConstant;
 
 /**
  * Created by maiAjam on 11/20/2017.
@@ -90,6 +93,7 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
     private TextView lastValuInfo_TXT, BidvalueInfo_TXT, Highvalue_Txt, ASKvalu_TXT, LowvalueInfo_TXT,
             VolumeValue_Txt, HoldingValue_Txt;
     private Spinner spinner;
+    private String spinnerValue;
 
     private List<Result> coins;
     private AutoCompleteTextView inputCoin;
@@ -108,6 +112,8 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
         setTitle();
         findViews();
         setOnClickListner();
+        setSpinnerDefaultValue();
+        spinerListener();
 
         return rootView;
     }
@@ -117,6 +123,72 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
         txtTitle.setText(R.string.alert);
     }
 
+    public String getSpinnerExchangeValue(){
+        if(TextUtils.isEmpty(spinnerValue)){
+            spinnerValue=GlobalConstant.Exchanges.BITTREX;
+        }
+        return spinnerValue;
+    }
+
+
+    private void setSpinnerDefaultValue() {
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
+                R.array.coin_array, R.layout.drop_down_text);
+        adapter.setDropDownViewResource(R.layout.drop_down_text);
+        spinner.setAdapter(adapter);
+
+
+        CoinApplication application = (CoinApplication) getActivity().getApplicationContext();
+        spinnerValue = application.getNotification().getDefaultExchange();
+        if ( spinnerValue!= null) {
+
+            if (spinnerValue.equalsIgnoreCase(getResources().getStringArray(R.array.coin_array)[0])) {
+
+                spinner.setSelection(0);
+                spinnerValue=getResources().getStringArray(R.array.coin_array)[0];
+            } else {
+                spinner.setSelection(1);
+                spinnerValue=getResources().getStringArray(R.array.coin_array)[1];
+
+            }
+        }
+    }
+    private void spinerListener() {
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                //if at position zero bitrex and at position 1 binance is called
+                if (spinner.getItemAtPosition(position).toString().equalsIgnoreCase(getResources().getStringArray(R.array.coin_array)[0])) {
+                    spinnerValue = getResources().getStringArray(R.array.coin_array)[0];
+                } else {
+                    spinnerValue = getResources().getStringArray(R.array.coin_array)[1];
+//
+                }
+                stopTimerAndWebsocket();
+                if(coins!=null){
+
+                    coins.clear();
+                    adapterCoins.notifyDataSetChanged();
+                }
+                stopTimerAndWebsocket();
+                updateTable();
+                getCoins();
+
+               // showEmptyView();
+                inputCoin.setText("");
+
+
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
     private void findViews() {
         progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar_cyclic);
 
@@ -174,17 +246,12 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
 
     private void getCoins() {
         resetView();
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
-                R.array.coin_array, R.layout.drop_down_text);
-        adapter.setDropDownViewResource(R.layout.drop_down_text);
-        spinner.setAdapter(adapter);
-
         TradeInteractor interactor = new TradeInteractor();
         progressBar.setVisibility(View.VISIBLE);
         txtEmpty.setVisibility(View.GONE);
         rllContainer.setVisibility(View.GONE);
 
-        interactor.loadSummary(new OnFinishListner<MarketSummaries>() {
+        interactor.loadSummary(getSpinnerExchangeValue(),new OnFinishListner<MarketSummaries>() {
             @Override
             public void onComplete(MarketSummaries marketSummaries) {
                 coins = new ArrayList<>();
@@ -287,7 +354,7 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
                 if (error)
                     return;
                 presenter.saveData(getContext(), LowValueEn, HighValueEn, exchangeName, coinNmae.getText().toString(),
-                        AlarmFreq, reqCode, ch_higher, ch_lower);
+                        AlarmFreq, reqCode, ch_higher, ch_lower,spinnerValue);
             }
         });
     }
@@ -330,7 +397,7 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
     @Override
     public void updateTable() {
         tblMarketTradeAlert.removeAllViews();
-        List<CoinInfo> coinInfoList = presenter.getCoinInfo();
+        List<CoinInfo> coinInfoList = presenter.getCoinInfo(spinnerValue);
         if (coinInfoList != null && coinInfoList.size() > 0) {
             txtMarket.setVisibility(View.VISIBLE);
             View title = getLayoutInflater().inflate(R.layout.table_alert_title, null);
@@ -418,7 +485,7 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
         super.onStart();
         String coinNam = inputCoin.getText().toString();
         if (!TextUtils.isEmpty(coinNam))
-            presenter.startTicker(coinNam);
+            presenter.startTicker(coinNam,getSpinnerExchangeValue());
     }
 
     @Override
@@ -454,11 +521,20 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
         @Override
         protected String doInBackground(String... params) {
             List<crypto.soft.cryptongy.feature.shared.json.marketsummary.Result> resultList = new ArrayList<>();
-
-            MarketSummary marketSummary;
-            BittrexServices bittrexServices = new BittrexServices();
             try {
+
+                BittrexServices bittrexServices = new BittrexServices();
+            BinanceServices binanceServices=new BinanceServices();
+            MarketSummary marketSummary=null;
+
+            if(spinnerValue.equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)){
                 marketSummary = bittrexServices.getMarketSummary(inputCoin.getText().toString());
+            }
+            if(spinnerValue.equalsIgnoreCase(GlobalConstant.Exchanges.BINANCE)){
+                marketSummary=binanceServices.getMarketSummary(inputCoin.getText().toString());
+            }
+
+
                 if (marketSummary.getSuccess()) {
                     resultList = marketSummary.getResult();
                     crypto.soft.cryptongy.feature.shared.json.marketsummary.Result resultItem = resultList.get(0);
@@ -478,7 +554,7 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
 //                    }
                     return "Success";
                 } else {
-                    Toast.makeText(getContext(), marketSummary.getMessage().toString(), Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getContext(), marketSummary.getMessage().toString(), Toast.LENGTH_LONG).show();
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -507,7 +583,8 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
             LowvalueInfo_TXT.setText(String.valueOf(String.format("%.8f", lowV)));
             lowComp_txt.setText(String.valueOf(String.format("%.8f", lowV)));
             highValueComp_txt.setText(String.valueOf(String.format("%.8f", highV)));
-            Typeface typeFaceCalibri = Typeface.createFromAsset(getContext().getAssets(), "calibri.ttf");
+            Typeface typeFaceCalibri = Typeface.createFromAsset(getContext().getAssets(),
+                    "calibri.ttf");
 
             lastValuInfo_TXT.setTypeface(typeFaceCalibri);
             BidvalueInfo_TXT.setTypeface(typeFaceCalibri);
@@ -523,7 +600,11 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
             VolumeValue_Lab.setTypeface(typeFaceCalibri);
 
             save_b.setTypeface(typeFaceCalibri);
-            presenter.startTicker(inputCoin.getText().toString());
+            presenter.startTicker(inputCoin.getText().toString(),getSpinnerExchangeValue());
         }
+    }
+    public void stopTimerAndWebsocket(){
+        presenter.closeWebSocket();
+        presenter.stopTimer();
     }
 }

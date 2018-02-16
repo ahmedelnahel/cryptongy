@@ -1,30 +1,29 @@
 package crypto.soft.cryptongy.feature.alert;
 
 import android.app.IntentService;
-
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.Service;
 import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import crypto.soft.cryptongy.R;
-import crypto.soft.cryptongy.feature.main.MainActivity;
 import crypto.soft.cryptongy.feature.shared.json.ticker.Ticker;
+import crypto.soft.cryptongy.network.BinanceServices;
 import crypto.soft.cryptongy.network.BittrexServices;
 import crypto.soft.cryptongy.utils.CoinApplication;
 import crypto.soft.cryptongy.utils.GlobalConstant;
 import crypto.soft.cryptongy.utils.GlobalUtil;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -33,6 +32,9 @@ import io.realm.RealmResults;
  */
 
 public class AlertService extends IntentService {
+    String TAG=getClass().getSimpleName().toString();
+    Disposable disposable;
+    boolean met;
 
     public AlertService() {
         super("AlerService");
@@ -58,32 +60,65 @@ public class AlertService extends IntentService {
         realm.commitTransaction();
         realm.close();
         BittrexServices Tickerservices = new BittrexServices();
+        BinanceServices binanceServices=new BinanceServices();
 
-        for (CoinInfo coinInfo : list) {
-            boolean met = false;
+        for (final CoinInfo coinInfo : list) {
+             met = false;
             try {
-                Ticker ticker = Tickerservices.getTicker(coinInfo.getCoinName());
-                if (coinInfo.isHigher()&& ticker!= null && ticker.getResult()!=null && ticker.getSuccess() && ticker.getResult().getLast().doubleValue() >= coinInfo.getHighValue().doubleValue() ) {
-                    showNotification("Alert", coinInfo.CoinName + " is above " + String.format("%.8f", coinInfo.getHighValue().doubleValue()), GlobalUtil.getUniqueID());
-                    met = true;
+                Ticker ticker=null;
+                if(coinInfo.getSpinnerValue().equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)){
+
+                    ticker = Tickerservices.getTicker(coinInfo.getCoinName());
+                    notificationAlert(coinInfo,ticker,met);
+                }
+                if(coinInfo.getSpinnerValue().equalsIgnoreCase(GlobalConstant.Exchanges.BINANCE)){
+
+                    binanceServices.getTickerConnectSocket(coinInfo.getCoinName());
+
+                    disposable = binanceServices.sourceTickerWebsocket.observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<Ticker>() {
+                        @Override
+                        public void accept(Ticker ticker) throws Exception {
+
+
+                            Log.d(TAG, "accept: disposable disposed");
+                            disposable.dispose();
+                            Log.d(TAG, "ConditionService ticker  " + ticker);
+
+                            notificationAlert(coinInfo,ticker,met);
+
+                        }
+
+
+                    });
+//                    ticker=binanceServices.getTicker(coinInfo.getCoinName());
                 }
 
-                if (coinInfo.isLower() && ticker!= null&& ticker.getResult()!=null && ticker.getSuccess() && ticker.getResult().getLast().doubleValue() <= coinInfo.getLowValue().doubleValue() ) {
-                    showNotification("Alert", coinInfo.CoinName + " is below " + String.format("%.8f", coinInfo.getLowValue().doubleValue()), GlobalUtil.getUniqueID());
-                   met = true;
-                }
-
-                if (met && coinInfo.getAlarmFreq() == 1) {
-                    coinInfo.status = "Closed";
-                    update(coinInfo);
-                }
             } catch (IOException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }
 
 
+
+    public void notificationAlert(CoinInfo coinInfo,Ticker ticker,boolean met){
+        if (coinInfo.isHigher()&& ticker!= null && ticker.getResult()!=null && ticker.getSuccess() && ticker.getResult().getLast().doubleValue() >= coinInfo.getHighValue().doubleValue() ) {
+            showNotification("Alert", coinInfo.CoinName + " is above " + String.format("%.8f", coinInfo.getHighValue().doubleValue()), GlobalUtil.getUniqueID());
+            met = true;
+        }
+
+        if (coinInfo.isLower() && ticker!= null&& ticker.getResult()!=null && ticker.getSuccess() && ticker.getResult().getLast().doubleValue() <= coinInfo.getLowValue().doubleValue() ) {
+            showNotification("Alert", coinInfo.CoinName + " is below " + String.format("%.8f", coinInfo.getLowValue().doubleValue()), GlobalUtil.getUniqueID());
+            met = true;
+        }
+
+        if (met && coinInfo.getAlarmFreq() == 1) {
+            coinInfo.status = "Closed";
+            update(coinInfo);
+        }
+    }
     private void update(CoinInfo coinInfo) {
         Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
