@@ -1,8 +1,5 @@
 package crypto.soft.cryptongy.feature.alert;
 
-import android.widget.CheckBox;
-
-import crypto.soft.cryptongy.utils.GlobalConstant;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -18,13 +15,14 @@ public class CoinInfo extends RealmObject {
     int alarmFreq; int reqCode;
     boolean isHigher, isLower;
     String status;
+    String spinnerValue;
 
     public CoinInfo() {
 
     }
 
     public CoinInfo(String coinName,String exchangeName, Double highValue,  Double lowValue,
-                    int alarmFreq, int reqCode, boolean isHigher, boolean isLower,String status) {
+                    int alarmFreq, int reqCode, boolean isHigher, boolean isLower,String status,String spinnerValue) {
         this.lowValue = lowValue;
         HighValue = highValue;
         CoinName = coinName;
@@ -34,6 +32,7 @@ public class CoinInfo extends RealmObject {
         this.isHigher = isHigher;
         this.isLower = isLower;
         this.status=status;
+        this.spinnerValue=spinnerValue;
     }
 
     public int getId() {
@@ -106,5 +105,13 @@ public class CoinInfo extends RealmObject {
 
     public void setLower(boolean lower) {
         isLower = lower;
+    }
+
+    public String getSpinnerValue() {
+        return spinnerValue;
+    }
+
+    public void setSpinnerValue(String spinnerValue) {
+        this.spinnerValue = spinnerValue;
     }
 }

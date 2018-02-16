@@ -50,8 +50,10 @@ import crypto.soft.cryptongy.feature.shared.json.marketsummary.MarketSummary;
 import crypto.soft.cryptongy.feature.shared.json.ticker.Ticker;
 import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
 import crypto.soft.cryptongy.feature.trade.TradeInteractor;
+import crypto.soft.cryptongy.network.BinanceServices;
 import crypto.soft.cryptongy.network.BittrexServices;
 import crypto.soft.cryptongy.utils.CoinApplication;
+import crypto.soft.cryptongy.utils.GlobalConstant;
 
 /**
  * Created by maiAjam on 11/20/2017.
@@ -121,6 +123,13 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
         txtTitle.setText(R.string.alert);
     }
 
+    public String getSpinnerExchangeValue(){
+        if(TextUtils.isEmpty(spinnerValue)){
+            spinnerValue=GlobalConstant.Exchanges.BITTREX;
+        }
+        return spinnerValue;
+    }
+
 
     private void setSpinnerDefaultValue() {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
@@ -158,8 +167,11 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
 //
                 }
                 stopTimerAndWebsocket();
-                coins.clear();
-                adapterCoins.notifyDataSetChanged();
+                if(coins!=null){
+
+                    coins.clear();
+                    adapterCoins.notifyDataSetChanged();
+                }
                 updateTable();
                 getCoins();
                // showEmptyView();
@@ -237,7 +249,7 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
         txtEmpty.setVisibility(View.GONE);
         rllContainer.setVisibility(View.GONE);
 
-        interactor.loadSummary(spinnerValue,new OnFinishListner<MarketSummaries>() {
+        interactor.loadSummary(getSpinnerExchangeValue(),new OnFinishListner<MarketSummaries>() {
             @Override
             public void onComplete(MarketSummaries marketSummaries) {
                 coins = new ArrayList<>();
@@ -340,7 +352,7 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
                 if (error)
                     return;
                 presenter.saveData(getContext(), LowValueEn, HighValueEn, exchangeName, coinNmae.getText().toString(),
-                        AlarmFreq, reqCode, ch_higher, ch_lower);
+                        AlarmFreq, reqCode, ch_higher, ch_lower,spinnerValue);
             }
         });
     }
@@ -383,7 +395,7 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
     @Override
     public void updateTable() {
         tblMarketTradeAlert.removeAllViews();
-        List<CoinInfo> coinInfoList = presenter.getCoinInfo();
+        List<CoinInfo> coinInfoList = presenter.getCoinInfo(spinnerValue);
         if (coinInfoList != null && coinInfoList.size() > 0) {
             txtMarket.setVisibility(View.VISIBLE);
             View title = getLayoutInflater().inflate(R.layout.table_alert_title, null);
@@ -507,11 +519,20 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
         @Override
         protected String doInBackground(String... params) {
             List<crypto.soft.cryptongy.feature.shared.json.marketsummary.Result> resultList = new ArrayList<>();
-
-            MarketSummary marketSummary;
-            BittrexServices bittrexServices = new BittrexServices();
             try {
+
+                BittrexServices bittrexServices = new BittrexServices();
+            BinanceServices binanceServices=new BinanceServices();
+            MarketSummary marketSummary=null;
+
+            if(spinnerValue.equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)){
                 marketSummary = bittrexServices.getMarketSummary(inputCoin.getText().toString());
+            }
+            if(spinnerValue.equalsIgnoreCase(GlobalConstant.Exchanges.BINANCE)){
+                marketSummary=binanceServices.getMarketSummary(inputCoin.getText().toString());
+            }
+
+
                 if (marketSummary.getSuccess()) {
                     resultList = marketSummary.getResult();
                     crypto.soft.cryptongy.feature.shared.json.marketsummary.Result resultItem = resultList.get(0);
@@ -531,7 +552,7 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
 //                    }
                     return "Success";
                 } else {
-                    Toast.makeText(getContext(), marketSummary.getMessage().toString(), Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getContext(), marketSummary.getMessage().toString(), Toast.LENGTH_LONG).show();
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -576,7 +597,7 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
             VolumeValue_Lab.setTypeface(typeFaceCalibri);
 
             save_b.setTypeface(typeFaceCalibri);
-            presenter.startTicker(inputCoin.getText().toString());
+            presenter.startTicker(inputCoin.getText().toString(),spinnerValue);
         }
     }
     public void stopTimerAndWebsocket(){

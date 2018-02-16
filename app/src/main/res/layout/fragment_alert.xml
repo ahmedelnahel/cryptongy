@@ -31,19 +31,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/include"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginBottom="@dimen/_10sdp"
+            android:layout_marginLeft="@dimen/_20sdp"
+            android:layout_marginRight="@dimen/_20sdp"
+            android:layout_marginTop="@dimen/_20sdp"
             android:orientation="horizontal">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_42sdp"
-                android:layout_marginRight="5dp"
+                android:layout_marginRight="@dimen/_5sdp"
                 android:layout_weight="1"
                 android:background="@drawable/rect_left_right"
-                android:padding="2dp"
+                android:padding="@dimen/_2sdp"
 
                 >
 
@@ -67,8 +67,8 @@
 
                 <ImageView
                     android:id="@+id/icon_search"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="@dimen/_24sdp"
+                    android:layout_height="@dimen/_24sdp"
                     android:layout_centerVertical="true"
                     android:src="@drawable/ic_search" />
 
@@ -80,7 +80,7 @@
                     android:layout_toRightOf="@+id/icon_search"
                     android:background="@android:color/white"
                     android:hint="Coin"
-                    android:paddingLeft="10dp"
+                    android:paddingLeft="@dimen/_10sdp"
                     android:singleLine="true"
                     android:textStyle="italic" />
             </RelativeLayout>
@@ -303,6 +303,7 @@
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:minHeight="50dp"
+            android:indeterminateTint="@color/colorPrimary"
             android:minWidth="50dp"
             android:visibility="gone" />
 

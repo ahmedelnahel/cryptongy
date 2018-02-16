@@ -23,9 +23,9 @@ public class AlertPresenter extends TickerPresenter<AlertView> {
     }
 
     public void saveData(Context context, Double LowValueEn, Double HighValueEn, String exchangeName,
-                         String coinName, int alarmFreq, int reqCode, CheckBox ch_higher, CheckBox ch_lower) {
+                         String coinName, int alarmFreq, int reqCode, CheckBox ch_higher, CheckBox ch_lower,String spinnerValue) {
         CoinInfo coinInfo = new CoinInfo(coinName, exchangeName, HighValueEn, LowValueEn, alarmFreq, reqCode,
-                ch_higher.isChecked(), ch_lower.isChecked(), GlobalConstant.Conditional.TYPE_OPEN);
+                ch_higher.isChecked(), ch_lower.isChecked(), GlobalConstant.Conditional.TYPE_OPEN,spinnerValue);
         Realm realm = Realm.getDefaultInstance();
 
             if (getCoinInfo() != null && getCoinInfo().size() < BuildConfig.MAX_ALERT) {
@@ -86,6 +86,12 @@ public class AlertPresenter extends TickerPresenter<AlertView> {
 
     public List<CoinInfo> getCoinInfo() {
         Realm realm = Realm.getDefaultInstance();
-        return realm.where(CoinInfo.class).findAll();
+        List<CoinInfo> coinInfoList= realm.where(CoinInfo.class).findAll();
+        return coinInfoList;
+    }
+    public List<CoinInfo> getCoinInfo(String spinnerValue) {
+        Realm realm = Realm.getDefaultInstance();
+        List<CoinInfo> coinInfoList= realm.where(CoinInfo.class).equalTo("spinnerValue",spinnerValue).findAll();
+        return coinInfoList;
     }
 }
