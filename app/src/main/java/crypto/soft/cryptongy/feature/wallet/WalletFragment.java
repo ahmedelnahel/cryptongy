@@ -540,35 +540,36 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
         }
     }
     public void startWalletTimer() {
-        Notification notification = ((CoinApplication) getContext().getApplicationContext()).getNotification();
-        if (notification.isAutomSync()) {
-            Log.d(TAG, "startTicker: ");
-            final int timerInterval = notification.getSyncInterval() * 1000;
-            timer = new Timer();
+        if (getContext()!= null && getContext().getApplicationContext() != null) {
+            Notification notification = ((CoinApplication) getContext().getApplicationContext()).getNotification();
+            if (notification.isAutomSync()) {
+                Log.d(TAG, "startTicker: ");
+                final int timerInterval = notification.getSyncInterval() * 1000;
+                timer = new Timer();
 
-            if(!countDownTimerRunning){
+                if (!countDownTimerRunning) {
 
-                countDownTimer = new CountDownTimer(timerInterval, 1000) {
+                    countDownTimer = new CountDownTimer(timerInterval, 1000) {
 
-                    @Override
-                    public void onTick(long millisUntilFinished) {
-                        countDownTimerRunning=true;
-                    }
-
-                    @Override
-                    public void onFinish() {
-                        try {
-                            countDownTimerRunning=false;
-                            Log.d(TAG, "onFinish: timeriscalled : "+timerInterval/1000);
-
-                            new GetUpdatedCoinDetails().execute();
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                        @Override
+                        public void onTick(long millisUntilFinished) {
+                            countDownTimerRunning = true;
                         }
 
-                    }
-                }.start();
-            }
+                        @Override
+                        public void onFinish() {
+                            try {
+                                countDownTimerRunning = false;
+                                Log.d(TAG, "onFinish: timeriscalled : " + timerInterval / 1000);
+
+                                new GetUpdatedCoinDetails().execute();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                    }.start();
+                }
 
 //
 //            timer.scheduleAtFixedRate(new TimerTask() {
@@ -581,6 +582,7 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
 //                }
 //            }, timerInterval, timerInterval);
 
+            }
         }
     }
 
