@@ -51,6 +51,7 @@ import crypto.soft.cryptongy.feature.shared.json.ticker.Ticker;
 import crypto.soft.cryptongy.feature.shared.listner.OnFinishListner;
 import crypto.soft.cryptongy.feature.trade.TradeInteractor;
 import crypto.soft.cryptongy.network.BittrexServices;
+import crypto.soft.cryptongy.utils.CoinApplication;
 
 /**
  * Created by maiAjam on 11/20/2017.
@@ -90,6 +91,7 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
     private TextView lastValuInfo_TXT, BidvalueInfo_TXT, Highvalue_Txt, ASKvalu_TXT, LowvalueInfo_TXT,
             VolumeValue_Txt, HoldingValue_Txt;
     private Spinner spinner;
+    private String spinnerValue;
 
     private List<Result> coins;
     private AutoCompleteTextView inputCoin;
@@ -108,6 +110,8 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
         setTitle();
         findViews();
         setOnClickListner();
+        setSpinnerDefaultValue();
+        spinerListener();
 
         return rootView;
     }
@@ -117,6 +121,60 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
         txtTitle.setText(R.string.alert);
     }
 
+
+    private void setSpinnerDefaultValue() {
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
+                R.array.coin_array, R.layout.drop_down_text);
+        adapter.setDropDownViewResource(R.layout.drop_down_text);
+        spinner.setAdapter(adapter);
+
+
+        CoinApplication application = (CoinApplication) getActivity().getApplicationContext();
+        spinnerValue = application.getNotification().getDefaultExchange();
+        if ( spinnerValue!= null) {
+
+            if (spinnerValue.equalsIgnoreCase(getResources().getStringArray(R.array.coin_array)[0])) {
+
+                spinner.setSelection(0);
+                spinnerValue=getResources().getStringArray(R.array.coin_array)[0];
+            } else {
+                spinner.setSelection(1);
+                spinnerValue=getResources().getStringArray(R.array.coin_array)[1];
+
+            }
+        }
+    }
+    private void spinerListener() {
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                //if at position zero bitrex and at position 1 binance is called
+                if (spinner.getItemAtPosition(position).toString().equalsIgnoreCase(getResources().getStringArray(R.array.coin_array)[0])) {
+                    spinnerValue = getResources().getStringArray(R.array.coin_array)[0];
+                } else {
+                    spinnerValue = getResources().getStringArray(R.array.coin_array)[1];
+//
+                }
+                stopTimerAndWebsocket();
+                coins.clear();
+                adapterCoins.notifyDataSetChanged();
+                updateTable();
+                getCoins();
+               // showEmptyView();
+                inputCoin.setText("");
+
+
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
     private void findViews() {
         progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar_cyclic);
 
@@ -174,17 +232,12 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
 
     private void getCoins() {
         resetView();
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
-                R.array.coin_array, R.layout.drop_down_text);
-        adapter.setDropDownViewResource(R.layout.drop_down_text);
-        spinner.setAdapter(adapter);
-
         TradeInteractor interactor = new TradeInteractor();
         progressBar.setVisibility(View.VISIBLE);
         txtEmpty.setVisibility(View.GONE);
         rllContainer.setVisibility(View.GONE);
 
-        interactor.loadSummary(new OnFinishListner<MarketSummaries>() {
+        interactor.loadSummary(spinnerValue,new OnFinishListner<MarketSummaries>() {
             @Override
             public void onComplete(MarketSummaries marketSummaries) {
                 coins = new ArrayList<>();
@@ -525,5 +578,9 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
             save_b.setTypeface(typeFaceCalibri);
             presenter.startTicker(inputCoin.getText().toString());
         }
+    }
+    public void stopTimerAndWebsocket(){
+        presenter.closeWebSocket();
+        presenter.stopTimer();
     }
 }
