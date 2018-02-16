@@ -104,12 +104,14 @@ public class ConditionalService extends IntentService {
             } else
                 {
                 binanceServices.getTickerConnectSocket(marketName);
+
                 disposable = binanceServices.sourceTickerWebsocket.observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<Ticker>() {
                     @Override
                     public void accept(Ticker ticker) throws Exception {
 
+
+                        Log.d(TAG, "accept: disposable disposed");
                         disposable.dispose();
-                        binanceServices.closeWebSocket();
                         Log.d(TAG, "ConditionService ticker  " + ticker);
                         if (ticker != null && ticker.getSuccess() && ticker.getResult() != null) {
                             if (conditional.getOrderType().equalsIgnoreCase(GlobalConstant.Conditional.TYPE_BUY)) {
@@ -122,7 +124,10 @@ public class ConditionalService extends IntentService {
 
 
                     }
+
+
                 });
+
 
 
 //                return new BinanceServices().getTicker(marketName);
