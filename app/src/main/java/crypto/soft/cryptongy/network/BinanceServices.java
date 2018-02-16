@@ -323,8 +323,10 @@ public class BinanceServices {
                 }
 
 
+
                 sourceTickerWebsocket.onNext(ticker);
                 sourceWebSocketClient.onNext(mWebSocketClient);
+                closeConnection(CloseFrame.NORMAL,"Interercloseconnection");
                 //final String message =s;
 
             }
@@ -681,21 +683,22 @@ public class BinanceServices {
     }
 
     public void closeWebSocket() {
+//
+//
+//        if (mWebSocketClient != null) {
+//            mWebSocketClient.closeConnection(CloseFrame.NORMAL, "its closeing time");
+//        }
 
-        if (mWebSocketClient != null) {
-            mWebSocketClient.closeConnection(CloseFrame.NORMAL, "its closeing time");
+        if(mWebSocketClient!=null){
+
+
+            while(mWebSocketClient.isOpen()){
+                mWebSocketClient.closeConnection(CloseFrame.NORMAL, "its closeing time");
+
+            }
         }
 
 
-//       sourceWebSocketClient.subscribe(new Consumer<WebSocketClient>() {
-//            @Override
-//            public void accept(WebSocketClient webSocketClient) throws Exception {
-//
-//                if (webSocketClient != null) {
-//                    webSocketClient.closeConnection(CloseFrame.NORMAL, "its closeing time");
-//                }
-//            }
-//        });
 
     }
 }
