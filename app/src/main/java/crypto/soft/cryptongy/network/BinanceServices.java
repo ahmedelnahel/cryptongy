@@ -352,6 +352,7 @@ public class BinanceServices {
 
     public Ticker getTicker(String market) throws IOException {
         final String url = "https://api.binance.com/api/v1/ticker/24hr?symbol=" + market;
+        Log.d(TAG, "getTicker: "+url);
         Ticker ticker = new Ticker();
         String tickerStr = new RESTUtil().callREST(url);
         if (tickerStr == null || "".equals(tickerStr)) {

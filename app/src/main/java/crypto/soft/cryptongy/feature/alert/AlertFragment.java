@@ -172,8 +172,10 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
                     coins.clear();
                     adapterCoins.notifyDataSetChanged();
                 }
+                stopTimerAndWebsocket();
                 updateTable();
                 getCoins();
+
                // showEmptyView();
                 inputCoin.setText("");
 
@@ -483,7 +485,7 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
         super.onStart();
         String coinNam = inputCoin.getText().toString();
         if (!TextUtils.isEmpty(coinNam))
-            presenter.startTicker(coinNam);
+            presenter.startTicker(coinNam,getSpinnerExchangeValue());
     }
 
     @Override
@@ -581,7 +583,8 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
             LowvalueInfo_TXT.setText(String.valueOf(String.format("%.8f", lowV)));
             lowComp_txt.setText(String.valueOf(String.format("%.8f", lowV)));
             highValueComp_txt.setText(String.valueOf(String.format("%.8f", highV)));
-            Typeface typeFaceCalibri = Typeface.createFromAsset(getContext().getAssets(), "calibri.ttf");
+            Typeface typeFaceCalibri = Typeface.createFromAsset(getContext().getAssets(),
+                    "calibri.ttf");
 
             lastValuInfo_TXT.setTypeface(typeFaceCalibri);
             BidvalueInfo_TXT.setTypeface(typeFaceCalibri);
@@ -597,7 +600,7 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
             VolumeValue_Lab.setTypeface(typeFaceCalibri);
 
             save_b.setTypeface(typeFaceCalibri);
-            presenter.startTicker(inputCoin.getText().toString(),spinnerValue);
+            presenter.startTicker(inputCoin.getText().toString(),getSpinnerExchangeValue());
         }
     }
     public void stopTimerAndWebsocket(){
