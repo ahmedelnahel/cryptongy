@@ -39,6 +39,7 @@
     <string name="noAPI">No api key available</string>
     <string name="wallet">Wallet</string>
     <string name="home">Watch List</string>
+    <string name="arbitage">Aribitage</string>
 
     <string-array name="coin_array">
         <item>Bittrex</item>

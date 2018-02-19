@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableRow xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="15dp"
+    android:paddingBottom="15dp"
+    android:paddingLeft="7dp"
+    android:paddingRight="7dp"
+    android:background="@color/colorPrimary"
+    android:orientation="horizontal">
+
+    <crypto.soft.cryptongy.feature.shared.customView.MspTextView
+        android:id="@+id/txtTitleCoin"
+        android:gravity="center"
+        android:text="Coin"
+        android:layout_width="match_parent"
+        android:paddingRight="5dp"
+        android:drawablePadding="5dp"
+        android:textColor="@color/order_tbl_title"
+        android:drawableRight="@android:drawable/arrow_down_float"
+        android:textSize="@dimen/order_tbl_condition" />
+
+    <crypto.soft.cryptongy.feature.shared.customView.MspTextView
+        android:id="@+id/txtTitlePrice1"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:text="Price"
+        android:paddingRight="5dp"
+        android:drawablePadding="5dp"
+        android:textColor="@color/order_tbl_title"
+        android:drawableRight="@android:drawable/arrow_down_float"
+        android:textSize="@dimen/order_tbl_condition" />
+
+    <crypto.soft.cryptongy.feature.shared.customView.MspTextView
+        android:id="@+id/txtTitlePrice2"
+        android:gravity="center"
+        android:text="Price"
+        android:layout_width="match_parent"
+        android:paddingRight="5dp"
+        android:drawablePadding="5dp"
+        android:textColor="@color/order_tbl_title"
+        android:drawableRight="@android:drawable/arrow_down_float"
+        android:textSize="@dimen/order_tbl_condition" />
+
+
+    <crypto.soft.cryptongy.feature.shared.customView.MspTextView
+        android:id="@+id/txtTitlePercentage"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:text="Percent"
+        android:paddingRight="5dp"
+        android:layout_marginEnd="@dimen/_4sdp"
+        android:drawablePadding="5dp"
+        android:drawableRight="@android:drawable/arrow_down_float"
+        android:textColor="@color/order_tbl_title"
+        android:textSize="@dimen/order_tbl_condition" />
+
+</TableRow>

@@ -11,6 +11,7 @@ import crypto.soft.cryptongy.R;
 import crypto.soft.cryptongy.feature.aboutUs.AboutUsActivity;
 import crypto.soft.cryptongy.feature.account.AccountFragment;
 import crypto.soft.cryptongy.feature.alert.AlertFragment;
+import crypto.soft.cryptongy.feature.arbitage.ArbitageFragment;
 import crypto.soft.cryptongy.feature.donate.DonateActivity;
 import crypto.soft.cryptongy.feature.home.HomeFragment;
 import crypto.soft.cryptongy.feature.order.OrderFragment;
@@ -67,7 +68,7 @@ public class MainPresenter extends MvpBasePresenter<MainView> {
                 context.startActivity(new Intent(context, AboutUsActivity.class));
                 break;
             case "Arbitage":
-                context.startActivity(new Intent(context, AboutUsActivity.class));
+                replaceFragment(new ArbitageFragment());
                 break;
             case "Exit":
                 ((AppCompatActivity)context).finish();
