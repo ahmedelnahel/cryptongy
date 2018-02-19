@@ -127,6 +127,7 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
         menuItems.add(new MenuItem(R.drawable.ic_account, "Accounts", false));
         menuItems.add(new MenuItem(R.drawable.ic_bitcoin, "Donate", false));
         menuItems.add(new MenuItem(R.drawable.ic_about, "About Us", false));
+        menuItems.add(new MenuItem(R.drawable.market_data_icon, "Arbitage", false));
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         listMenu.setLayoutManager(linearLayoutManager);
         listMenu.setHasFixedSize(true);
@@ -181,6 +182,10 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
             menuItems.add(new MenuItem(R.drawable.ic_about_a, "About Us", true));
         else
             menuItems.add(new MenuItem(R.drawable.ic_about, "About Us", false));
+        if (menu.equalsIgnoreCase("Arbitage"))
+            menuItems.add(new MenuItem(R.drawable.market_data_icon, "Arbitage", true));
+        else
+            menuItems.add(new MenuItem(R.drawable.market_data_icon, "Arbitage", false));
         menuItemAdapter.notifyDataSetChanged();
     }
 

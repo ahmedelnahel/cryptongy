@@ -66,6 +66,9 @@ public class MainPresenter extends MvpBasePresenter<MainView> {
             case "About Us":
                 context.startActivity(new Intent(context, AboutUsActivity.class));
                 break;
+            case "Arbitage":
+                context.startActivity(new Intent(context, AboutUsActivity.class));
+                break;
             case "Exit":
                 ((AppCompatActivity)context).finish();
                 break;
