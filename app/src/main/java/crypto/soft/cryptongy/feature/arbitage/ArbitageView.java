@@ -4,9 +4,6 @@ import com.hannesdorfmann.mosby.mvp.MvpView;
 
 import java.util.List;
 
-import crypto.soft.cryptongy.feature.shared.json.market.MarketSummaries;
-import crypto.soft.cryptongy.feature.shared.json.market.Result;
-
 /**
  * Created by tseringwongelgurung on 11/27/17.
  */
@@ -14,18 +11,12 @@ import crypto.soft.cryptongy.feature.shared.json.market.Result;
 public interface ArbitageView extends MvpView {
     void initRecycler();
 
-    void setAdapter(List<Result> results);
-
-    void onSummaryDataLoad(MarketSummaries marketSummaries, String exchangeValue);
-
-    void onSummaryLoadFailed();
-
-    void setLevel(String s);
+    void setAdapter(List<AribitaryTableResult> results);
 
     void hideProgressBar();
-
     void showProgressBar();
     void setCoinInTable(List<AribitaryTableResult> marketSummaries);
     void setList(List<AribitaryTableResult> marketSummaries);
+
 
 }
