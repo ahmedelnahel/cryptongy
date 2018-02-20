@@ -138,9 +138,6 @@ public class ArbitagePresenter extends MvpBasePresenter<ArbitageView> implements
                         }
                     }
                 }
-
-
-
                 return newResultList;
             }
         })
@@ -149,9 +146,15 @@ public class ArbitagePresenter extends MvpBasePresenter<ArbitageView> implements
         .subscribe(new Consumer<List<Result>>() {
                        @Override
                        public void accept(List<Result> resultList) throws Exception {
+
+
                            if(getView()!=null && resultList!=null && resultList.size()>0 ){
                                getView().setCoinInTable(resultList);
                            }
+                           else {
+                               getView().setCoinInTable(results);
+                           }
+
                        }
                    }
 

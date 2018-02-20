@@ -646,7 +646,13 @@ public class ArbitageFragment extends MvpFragment<ArbitageView, ArbitagePresente
 
 
         if(resultList!=null && resultList.size()>0){
-            for (int i = 0; i < 10; i++) {
+
+            int co=10;
+            if(resultList.size()<10){
+                co=resultList.size();
+            }
+
+            for (int i = 0; i < co; i++) {
 
 
                 Result result=resultList.get(i);
