@@ -25,5 +25,7 @@ public interface ArbitageView extends MvpView {
     void hideProgressBar();
 
     void showProgressBar();
-    void setCoinInTable(List<Result> marketSummaries);
+    void setCoinInTable(List<AribitaryTableResult> marketSummaries);
+    void setList(List<AribitaryTableResult> marketSummaries);
+
 }

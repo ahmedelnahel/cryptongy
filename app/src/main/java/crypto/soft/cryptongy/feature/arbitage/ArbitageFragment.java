@@ -110,6 +110,7 @@ public class ArbitageFragment extends MvpFragment<ArbitageView, ArbitagePresente
     private boolean isPrice1Ascend = true;
     private boolean isPrice2Ascend = true;
     private boolean isPercentageAscend = true;
+    private List<AribitaryTableResult> aribitaryTableResultList;
 
     @Nullable
     @Override
@@ -128,6 +129,7 @@ public class ArbitageFragment extends MvpFragment<ArbitageView, ArbitagePresente
             spinner2.setAdapter(adapter);
 
             mock=new ArrayList<>();
+            aribitaryTableResultList=new ArrayList<>();
 
 
             search.addTextChangedListener(new TextWatcher() {
@@ -138,7 +140,7 @@ public class ArbitageFragment extends MvpFragment<ArbitageView, ArbitagePresente
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    presenter.filter(s.toString(),mock);
+                    presenter.filter(s.toString(),aribitaryTableResultList);
                 }
 
                 @Override
@@ -232,7 +234,8 @@ public class ArbitageFragment extends MvpFragment<ArbitageView, ArbitagePresente
         if (isFirst) {
             isFirst = false;
          //   presenter.closeWebSocket();
-           getPresenter().loadSummaries();
+          // getPresenter().loadSummaries();
+           getPresenter().getArbitageTableResult();
 
 //            getPresenter().loadBinanceSummaries();
 
@@ -296,7 +299,7 @@ public class ArbitageFragment extends MvpFragment<ArbitageView, ArbitagePresente
                 mock.addAll(marketSummaries.getResult());
 
                 List<Result> resultList=new ArrayList<>(marketSummaries.getResult().subList(0,10));
-               setCoinInTable(resultList);
+
 
                 if (spinnerValue1.equalsIgnoreCase(getResources().getStringArray(R.array.coin_array)[0])) {//Bitrix value comparing
                     if (marketSummaries.getCoinsMap().get("USDT-BTC") != null) {
@@ -366,66 +369,13 @@ public class ArbitageFragment extends MvpFragment<ArbitageView, ArbitagePresente
     @OnClick({ R.id.imgRefresh})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-//            case R.id.imgAdd:
-//                if (mock == null)
-//                    return;
-//                if (result != null) {
-//                    for (Result data : mock) {
-//                        if (data.getMarketName().equalsIgnoreCase(result.getMarketName())) {
-//                            CustomDialog.showMessagePop(getContext(), result.getMarketName() + " has been already added.", null);
-//                            return;
-//                        }
-//                    }
 //
-//                    mock.add(result);
-//                    CustomDialog.showMessagePop(getContext(), result.getMarketName() + " Coin is added successfully.", null);
-//                    result = null;
-//                } else {
-//                    inputCoin.requestFocus();
-//                    CustomDialog.showMessagePop(getContext(), "Please select a coin first.", null);
-//                }
-//                inputCoin.setText("");
-//
-//
-//                //    SharedPreference.saveToPrefs(getContext(), "mockValue", new Gson().toJson(mock));
-//                saveMockToSharedPrefrence(mock);
-//
-//                currencyAdapter.notifyDataSetChanged();
-//                break;
             case R.id.imgRefresh:
-                if (coins != null)
-                    coins.clear();
-
                 if (spinnerValue1.equalsIgnoreCase(getResources().getStringArray(R.array.coin_array)[0])) {
-
-                    presenter.closeWebSocket();
-                    presenter.loadSummaries();
-                } else {
-                    presenter.loadBinanceSummaries();
-                }
-
-                if (adapterCoins != null)
-                    adapterCoins.notifyDataSetChanged();
+                    presenter.getArbitageTableResult();
                 break;
-//            case R.id.imgDelete:
-//                if (mock == null)
-//                    return;
-//                Iterator iterator = mock.iterator();
-//                while (iterator.hasNext()) {
-//                    Result result = (Result) iterator.next();
-//                    if (result.isSelected())
-//                        iterator.remove();
-//                    currencyAdapter.notifyDataSetChanged();
 //
-//                    saveMockToSharedPrefrence(mock);
-//                    //  SharedPreference.saveToPrefs(getContext(), "mockValue", new Gson().toJson(mock));
-//
-//                }
-//                CustomDialog.showMessagePop(getContext(), "Coins is deleted successfully.", null);
-//                break;
-//            case R.id.imgKey:
-//                ((MainActivity) getActivity()).getPresenter().replaceAccountFragment();
-//                break;
+        }
         }
     }
 
@@ -571,7 +521,13 @@ public class ArbitageFragment extends MvpFragment<ArbitageView, ArbitagePresente
 
 
     @Override
-    public void setCoinInTable(final List<Result> resultList) {
+    public void setList(List<AribitaryTableResult> list){
+        aribitaryTableResultList=list;
+        setCoinInTable(aribitaryTableResultList);
+    }
+
+    @Override
+    public void setCoinInTable(final List<AribitaryTableResult> resultList) {
 
 
 
@@ -647,15 +603,14 @@ public class ArbitageFragment extends MvpFragment<ArbitageView, ArbitagePresente
 
         if(resultList!=null && resultList.size()>0){
 
-            int co=10;
-            if(resultList.size()<10){
-                co=resultList.size();
-            }
+
+            int co=resultList.size();
+
 
             for (int i = 0; i < co; i++) {
 
 
-                Result result=resultList.get(i);
+                AribitaryTableResult result=resultList.get(i);
 
                 //   final Conditional conditional = conditionals.get(i);
 
@@ -664,10 +619,10 @@ public class ArbitageFragment extends MvpFragment<ArbitageView, ArbitagePresente
 
                 ArbitageTableHolder holder = new ArbitageTableHolder(sub);
 
-                holder.txtTitleCoin.setText(result.getMarketName());
-                holder.txtTitlePrice1.setText(String.valueOf(BigDecimal.valueOf(result.getLast())));
-                holder.txtTitlePrice2.setText(String.valueOf(BigDecimal.valueOf(result.getBid())));
-                holder.txtTitlePercentage.setText(getPercentage(result.getLast(),result.getBid())+ "$");
+                holder.txtTitleCoin.setText(result.getCoinName());
+                holder.txtTitlePrice1.setText(String.valueOf(BigDecimal.valueOf(Double.valueOf(result.getPrice1()))));
+                holder.txtTitlePrice2.setText(String.valueOf(BigDecimal.valueOf(Double.valueOf(result.getPrice2()))));
+                holder.txtTitlePercentage.setText(result.getPercentage()+ "$");
 //
 //            Double conditionPrice = conditional.getLowCondition();
 //            String conditionType = conditional.getConditionType();
@@ -701,7 +656,7 @@ public class ArbitageFragment extends MvpFragment<ArbitageView, ArbitagePresente
 //                }
 //            });
 
-                if (i < 10 - 1) {
+                if (i < co- 1) {
                     View line = getLayoutInflater().inflate(R.layout.table_line, null);
                     tblArbitage.addView(line);
                 }
@@ -715,28 +670,4 @@ public class ArbitageFragment extends MvpFragment<ArbitageView, ArbitagePresente
     }
 
 
-    public String getPercentage(double d,double d2){
-
-        String tempString;
-        if(d==0 || d2==0){
-            return "";
-        }
-        else {
-            if(d>d2){
-                tempString=String.valueOf(((d-d2)*100)/d2);
-
-            }
-            else {
-                tempString=String.valueOf(((d2-d)*100)/d);
-            }
-
-            if(tempString.length()>4){
-                tempString=tempString.substring(0,4);
-            }
-
-
-            return tempString;
-        }
-
-    }
 }

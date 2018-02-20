@@ -18,10 +18,14 @@ import crypto.soft.cryptongy.feature.setting.Notification;
 import crypto.soft.cryptongy.feature.shared.json.market.MarketSummaries;
 import crypto.soft.cryptongy.feature.shared.json.market.Result;
 import crypto.soft.cryptongy.feature.shared.listner.OnMultiFinishListner;
+import crypto.soft.cryptongy.network.BinanceServices;
+import crypto.soft.cryptongy.network.BittrexServices;
 import crypto.soft.cryptongy.utils.CoinApplication;
 import crypto.soft.cryptongy.utils.GlobalConstant;
 import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
@@ -30,9 +34,9 @@ import io.reactivex.schedulers.Schedulers;
  */
 
 public class ArbitagePresenter extends MvpBasePresenter<ArbitageView> implements OnMultiFinishListner<List<Result>, MarketSummaries, String> {
-    public String TAG =getClass().getSimpleName();
+    public String TAG = getClass().getSimpleName();
     private static Timer timer;
-    private ArbitageInteractor homeInteractor;
+    private ArbitageInteractor arbitageInteractor;
     private Context context;
     private List<Result> prevResults = new ArrayList<>();
     private List<Result> binancePrevResults = new ArrayList<>();
@@ -41,7 +45,7 @@ public class ArbitagePresenter extends MvpBasePresenter<ArbitageView> implements
 
 
     public ArbitagePresenter(Context context) {
-        this.homeInteractor = new ArbitageInteractor();
+        this.arbitageInteractor = new ArbitageInteractor();
         this.context = context;
         isStarted = false;
     }
@@ -51,7 +55,7 @@ public class ArbitagePresenter extends MvpBasePresenter<ArbitageView> implements
             getView().showProgressBar();
 
         exchangeValue = GlobalConstant.Exchanges.BITTREX;
-        homeInteractor.loadSummary(context, this);
+        arbitageInteractor.loadSummary(context, this);
     }
 
     public void loadBinanceSummaries() {
@@ -59,7 +63,7 @@ public class ArbitagePresenter extends MvpBasePresenter<ArbitageView> implements
             getView().showProgressBar();
 
         exchangeValue = GlobalConstant.Exchanges.BINANCE;
-        homeInteractor.loadBinanceSummaryAPI(context, this);
+        arbitageInteractor.loadBinanceSummaryAPI(context, this);
     }
 
     @Override
@@ -90,7 +94,7 @@ public class ArbitagePresenter extends MvpBasePresenter<ArbitageView> implements
         }
     }
 
-    public void startTimer( String exchangeValue) {
+    public void startTimer(String exchangeValue) {
         this.exchangeValue = exchangeValue;
         if (timer != null) {
             timer.cancel();
@@ -99,7 +103,7 @@ public class ArbitagePresenter extends MvpBasePresenter<ArbitageView> implements
         }
         Notification notification = ((CoinApplication) context.getApplicationContext()).getNotification();
         if (notification.isAutomSync()) {
-            Log.d(TAG, "startTimer: synValue "+notification.getSyncInterval());
+            Log.d(TAG, "startTimer: synValue " + notification.getSyncInterval());
             int timerInterval = notification.getSyncInterval() * 1000;
             timer = new Timer();
             timer.scheduleAtFixedRate(new TickerTimer(), timerInterval,
@@ -114,7 +118,7 @@ public class ArbitagePresenter extends MvpBasePresenter<ArbitageView> implements
             if (prevResults == null)
                 result.setDrawable(R.drawable.seek_progress);
             else if (i < prevResults.size() && result != null) {
-                Log.d(TAG, "setDrawable: previous result: "+prevResults.get(i).getLast().doubleValue() +" result last value : "+result.getLast().doubleValue() );
+                Log.d(TAG, "setDrawable: previous result: " + prevResults.get(i).getLast().doubleValue() + " result last value : " + result.getLast().doubleValue());
                 if (result.getLast().doubleValue() < prevResults.get(i).getLast().doubleValue())
                     result.setDrawable(R.drawable.seek_progress_red);
                 else if (result.getLast().doubleValue() > prevResults.get(i).getLast().doubleValue())
@@ -124,16 +128,16 @@ public class ArbitagePresenter extends MvpBasePresenter<ArbitageView> implements
         return list;
     }
 
-    public void filter(final String txtSearch,final List<Result> results) {
+    public void filter(final String txtSearch, final List<AribitaryTableResult> results) {
 
-        Observable.fromCallable(new Callable<List<Result>>() {
+        Observable.fromCallable(new Callable<List<AribitaryTableResult>>() {
             @Override
-            public List<Result> call() throws Exception {
+            public List<AribitaryTableResult> call() throws Exception {
 
-                List<Result> newResultList=new ArrayList<>();
-                if(txtSearch.length()>0){
-                    for(Result result:results){
-                        if(result.getMarketName().contains(txtSearch.toUpperCase())){
+                List<AribitaryTableResult> newResultList = new ArrayList<>();
+                if (txtSearch.length() > 0) {
+                    for (AribitaryTableResult result : results) {
+                        if (result.getCoinName().contains(txtSearch.toUpperCase())) {
                             newResultList.add(result);
                         }
                     }
@@ -141,33 +145,104 @@ public class ArbitagePresenter extends MvpBasePresenter<ArbitageView> implements
                 return newResultList;
             }
         })
-        .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(new Consumer<List<Result>>() {
-                       @Override
-                       public void accept(List<Result> resultList) throws Exception {
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<List<AribitaryTableResult>>() {
+                               @Override
+                               public void accept(List<AribitaryTableResult> resultList) throws Exception {
 
 
-                           if(getView()!=null && resultList!=null && resultList.size()>0 ){
-                               getView().setCoinInTable(resultList);
+                                   if (getView() != null && resultList != null && resultList.size() > 0) {
+                                       getView().setCoinInTable(resultList);
+                                   } else {
+                                       getView().setCoinInTable(results);
+                                   }
+
+                               }
                            }
-                           else {
-                               getView().setCoinInTable(results);
-                           }
-
-                       }
-                   }
 
 
-        )
+                )
         ;
+
+
+    }
+
+    public Observable<MarketSummaries> getBitrixMarket(){
+        final BittrexServices bittrexServices = new BittrexServices();
+       Observable<MarketSummaries> marketSummariesObservable= Observable.defer(new Callable<ObservableSource<MarketSummaries>>() {
+            @Override
+            public ObservableSource<MarketSummaries> call() throws Exception {
+                return Observable.just(bittrexServices.getMarketSummaries());
+            }
+        });
+       return marketSummariesObservable;
+    }
+
+    public Observable<MarketSummaries> getBinanceMarket(){
+
+        final BinanceServices binanceServices = new BinanceServices();
+        Observable<MarketSummaries> marketSummariesObservable= Observable.defer(new Callable<ObservableSource<MarketSummaries>>() {
+            @Override
+            public ObservableSource<MarketSummaries> call() throws Exception {
+                return Observable.just(binanceServices.getMarketSummaries());
+            }
+        });
+        return marketSummariesObservable;
+    }
+
+
+    public void getArbitageTableResult() {
+
+        if (getView() != null)
+            getView().showProgressBar();
+
+
+        Observable.zip(getBitrixMarket(), getBinanceMarket(), new BiFunction<MarketSummaries, MarketSummaries,    List<AribitaryTableResult>>() {
+            @Override
+            public    List<AribitaryTableResult> apply(MarketSummaries marketSummaries, MarketSummaries marketSummaries2) throws Exception {
+
+                List<AribitaryTableResult> aribitaryTableResultArrayList=new ArrayList<>();
+
+                for(Result result: marketSummaries.getResult()){
+                    String coin=result.getMarketName().split("-")[0];
+                    String base=result.getMarketName().split("-")[1];
+
+                    if(marketSummaries2.getCoinsMap().get(base.toUpperCase()+coin.toUpperCase())!=null){
+                        Result tempResult=marketSummaries2.getCoinsMap().get(base.toUpperCase()+coin.toUpperCase());
+
+                        aribitaryTableResultArrayList.add(new AribitaryTableResult(base,String.valueOf(result.getLast()),String.valueOf(tempResult.getLast()),getPercentage(result.getLast(),tempResult.getLast())));
+
+                    }
+
+                }
+
+
+                return aribitaryTableResultArrayList;
+            }
+        }).subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(new Consumer<   List<AribitaryTableResult>>() {
+            @Override
+            public void accept(   List<AribitaryTableResult> aribitaryTableResult) throws Exception {
+                Log.d(TAG, "accept: "+aribitaryTableResult);
+                Log.d(TAG, "accept: "+aribitaryTableResult.size());
+                if (getView() != null)
+                    getView().hideProgressBar();
+
+                getView().setList(aribitaryTableResult);
+
+            }
+        });
 
 
 
     }
 
+
     class TickerTimer extends TimerTask {
         boolean isComplete = true;
+
         @Override
         public void run() {
 
@@ -175,7 +250,7 @@ public class ArbitagePresenter extends MvpBasePresenter<ArbitageView> implements
             if (notification.isAutomSync() && isComplete) {
                 isComplete = false;
                 if (exchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)) {
-                    homeInteractor.loadSummary(context, new OnMultiFinishListner<List<Result>, MarketSummaries, String>() {
+                    arbitageInteractor.loadSummary(context, new OnMultiFinishListner<List<Result>, MarketSummaries, String>() {
                         @Override
                         public void onComplete(List<Result> results, MarketSummaries summaries, String exchange) {
                             if (getView() != null) {
@@ -194,7 +269,7 @@ public class ArbitagePresenter extends MvpBasePresenter<ArbitageView> implements
                     });
                 }
                 if (exchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BINANCE)) {
-                    homeInteractor.loadBinanceSummary(context, new OnMultiFinishListner<List<Result>, MarketSummaries, String >() {
+                    arbitageInteractor.loadBinanceSummary(context, new OnMultiFinishListner<List<Result>, MarketSummaries, String>() {
                         @Override
                         public void onComplete(List<Result> results, MarketSummaries summaries, String exchange) {
                             if (getView() != null) {
@@ -218,22 +293,41 @@ public class ArbitagePresenter extends MvpBasePresenter<ArbitageView> implements
     }
 
 
-    public void sortList(final List<Result> resultList, boolean isAscend,int type) {
+    public void sortList(final List<AribitaryTableResult> resultList, boolean isAscend, int type) {
 
-        if(type==0){
-            Collections.sort(resultList, new Comparator<Result>() {
+        if (type == 0) {
+            Collections.sort(resultList, new Comparator<AribitaryTableResult>() {
                 @Override
-                public int compare(Result t1, Result t2) {
-                    return t1.getMarketName().compareTo(t2.getMarketName());
+                public int compare(AribitaryTableResult t1, AribitaryTableResult t2) {
+                    return t1.getCoinName().compareTo(t2.getCoinName());
                 }
             });
         }
 
-        if(type==1){
-            Collections.sort(resultList, new Comparator<Result>() {
+        if (type == 1) {
+            Collections.sort(resultList, new Comparator<AribitaryTableResult>() {
                 @Override
-                public int compare(Result t1, Result t2) {
-                    return t1.getLast().compareTo(t2.getLast());
+                public int compare(AribitaryTableResult t1, AribitaryTableResult t2) {
+                    return t1.getPrice1().compareTo(t2.getPrice1());
+                }
+            });
+        }
+
+
+        if (type == 2) {
+            Collections.sort(resultList, new Comparator<AribitaryTableResult>() {
+                @Override
+                public int compare(AribitaryTableResult t1, AribitaryTableResult t2) {
+                    return t1.getPrice2().compareTo(t2.getPrice2());
+                }
+            });
+        }
+
+        if (type == 3) {
+            Collections.sort(resultList, new Comparator<AribitaryTableResult>() {
+                @Override
+                public int compare(AribitaryTableResult t1, AribitaryTableResult t2) {
+                    return t1.getPercentage().compareTo(t2.getPercentage());
                 }
             });
         }
@@ -248,7 +342,31 @@ public class ArbitagePresenter extends MvpBasePresenter<ArbitageView> implements
     }
 
 
+    public String getPercentage(double d, double d2) {
+
+        String tempString;
+        if (d == 0 || d2 == 0) {
+            return "";
+        } else {
+            if (d > d2) {
+                tempString = String.valueOf(((d - d2) * 100) / d2);
+
+            } else {
+                tempString = String.valueOf(((d2 - d) * 100) / d);
+            }
+
+            if (tempString.length() > 4) {
+                tempString = tempString.substring(0, 4);
+            }
+
+
+            return tempString;
+        }
+
+    }
+
+
     public void closeWebSocket() {
-        homeInteractor.closeWebSocket();
+        arbitageInteractor.closeWebSocket();
     }
 }
