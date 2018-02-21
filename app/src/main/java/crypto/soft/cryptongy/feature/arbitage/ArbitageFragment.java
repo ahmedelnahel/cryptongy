@@ -10,7 +10,6 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -37,17 +36,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import crypto.soft.cryptongy.R;
-import crypto.soft.cryptongy.feature.shared.json.market.Result;
-import crypto.soft.cryptongy.feature.shared.listner.AdapterItemClickListener;
 import crypto.soft.cryptongy.utils.CoinApplication;
 import crypto.soft.cryptongy.utils.GlobalConstant;
 import crypto.soft.cryptongy.utils.HideKeyboard;
 
 /**
- * Created by tseringwongelgurung on 11/27/17.
+ * Created by vishalguptahmh on 02/20/18.
  */
-
-public class ArbitageFragment extends MvpFragment<ArbitageView, ArbitagePresenter> implements ArbitageView, AdapterItemClickListener {
+public class ArbitageFragment extends MvpFragment<ArbitageView, ArbitagePresenter> implements ArbitageView {
 
     @BindView(R.id.type)
     ImageView type;
@@ -107,11 +103,6 @@ public class ArbitageFragment extends MvpFragment<ArbitageView, ArbitagePresente
     private static String TAG;
     private static String spinnerValue1;
     private static String spinnerValue2;
-
-    private boolean isCoinAscend = true;
-    private boolean isPrice1Ascend = true;
-    private boolean isPrice2Ascend = true;
-    private boolean isPercentageAscend = true;
     private List<AribitaryTableResult> aribitaryTableResultList;
 
     long delay = 1000;
@@ -362,139 +353,18 @@ public class ArbitageFragment extends MvpFragment<ArbitageView, ArbitagePresente
         setCoinInTable(aribitaryTableResultList);
     }
 
-    public ArbitageAdapter getAdapter() {
-        if (arbitageAdapter == null) {
-            arbitageAdapter = new ArbitageAdapter(aribitaryTableResultList);
-        }
-        return arbitageAdapter;
-    }
 
     @Override
     public void setCoinInTable(final List<AribitaryTableResult> resultList) {
 
         arbitageAdapter.aribitaryTableResultList.clear();
         arbitageAdapter.aribitaryTableResultList.addAll(resultList);
-        cardView.setVisibility(View.VISIBLE);
         arbitageAdapter.notifyDataSetChanged();
+        cardView.setVisibility(View.VISIBLE);
         hideProgressBar();
 
-
-        //
-//        tblArbitage.removeAllViews();
-//
-//        View title = getLayoutInflater().inflate(R.layout.table_arbitage_title, null);
-//        TextView txtTitleCoin = title.findViewById(R.id.txtTitleCoin);
-//        TextView txtTitlePrice1 = title.findViewById(R.id.txtTitlePrice1);
-//        TextView txtTitlePrice2 = title.findViewById(R.id.txtTitlePrice2);
-//        TextView txtTitlePercent = title.findViewById(R.id.txtTitlePercentage);
-//
-//        if (isCoinAscend)
-//            txtTitleCoin.setCompoundDrawablesWithIntrinsicBounds(0, 0, android.R.drawable.arrow_down_float, 0);
-//        else
-//            txtTitleCoin.setCompoundDrawablesWithIntrinsicBounds(0, 0, android.R.drawable.arrow_up_float, 0);
-//
-//        if (isPrice1Ascend)
-//            txtTitlePrice1.setCompoundDrawablesWithIntrinsicBounds(0, 0, android.R.drawable.arrow_down_float, 0);
-//        else
-//            txtTitlePrice1.setCompoundDrawablesWithIntrinsicBounds(0, 0, android.R.drawable.arrow_up_float, 0);
-//
-//
-//        if (isPrice2Ascend)
-//            txtTitlePrice2.setCompoundDrawablesWithIntrinsicBounds(0, 0, android.R.drawable.arrow_down_float, 0);
-//        else
-//            txtTitlePrice2.setCompoundDrawablesWithIntrinsicBounds(0, 0, android.R.drawable.arrow_up_float, 0);
-//
-//
-//        if (isPercentageAscend)
-//            txtTitlePercent.setCompoundDrawablesWithIntrinsicBounds(0, 0, android.R.drawable.arrow_down_float, 0);
-//        else
-//            txtTitlePercent.setCompoundDrawablesWithIntrinsicBounds(0, 0, android.R.drawable.arrow_up_float, 0);
-//
-//
-//        txtTitleCoin.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                isCoinAscend = !isCoinAscend;
-//                showProgressBar();
-//                presenter.sortList(resultList, isCoinAscend, 0);
-//            }
-//        });
-//
-//        txtTitlePrice1.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                isPrice1Ascend = !isPrice1Ascend;
-//                showProgressBar();
-//                presenter.sortList(resultList, isPrice1Ascend, 1);
-//
-//            }
-//        });
-//        txtTitlePrice2.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                isPrice2Ascend = !isPrice2Ascend;
-//                showProgressBar();
-//                presenter.sortList(resultList, isPrice2Ascend, 1);
-//            }
-//        });
-//        txtTitlePercent.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                isPercentageAscend = !isPercentageAscend;
-//                showProgressBar();
-//                presenter.sortList(resultList, isPercentageAscend, 1);
-//            }
-//        });
-//
-//        tblArbitage.addView(title);
-
-
-//
-//        if (resultList != null && resultList.size() > 0) {
-//
-//
-//            int co = resultList.size();
-//
-//
-//            if (co > 10) {
-//                co = 10;
-//            }
-//
-//            for (int i = 0; i < co; i++) {
-//                AribitaryTableResult result = resultList.get(i);
-//                View sub = getLayoutInflater().inflate(R.layout.table_arbitary_sub, null);
-//
-//                ArbitageTableHolder holder = new ArbitageTableHolder(sub);
-//
-//                holder.txtTitleCoin.setText(result.getCoinName());
-//                holder.txtTitlePrice1.setText(String.valueOf(BigDecimal.valueOf(Double.valueOf(result.getPrice1()))));
-//                holder.txtTitlePrice2.setText(String.valueOf(BigDecimal.valueOf(Double.valueOf(result.getPrice2()))));
-//                holder.txtTitlePercentage.setText(result.getPercentage() + "%");
-//
-//                tblArbitage.addView(sub);
-//
-//                if (i < co - 1) {
-//                    View line = getLayoutInflater().inflate(R.layout.table_line, null);
-//                    tblArbitage.addView(line);
-//                }
-//
-//
-//            }
-//        }
-
-
     }
 
-
-    @Override
-    public void onItemClicked(Result menuItem, int position) {
-
-    }
-
-    @Override
-    public void onItemLongClicked(Result menuItem, int position) {
-
-    }
 
     @Override
     public void setAdapter(List<AribitaryTableResult> results) {
@@ -503,11 +373,7 @@ public class ArbitageFragment extends MvpFragment<ArbitageView, ArbitagePresente
         if (arbitageAdapter == null) {
             arbitageAdapter = new ArbitageAdapter(aribitaryTableResultList);
             recyclerView.setAdapter(arbitageAdapter);
-            arbitageAdapter.setAdapterItemClickListener(this);
-        } else {
-            String txtSearch = search.getText().toString();
-            if (!TextUtils.isEmpty(txtSearch))
-                arbitageAdapter.getFilter().filter(txtSearch);
+          //  arbitageAdapter.setAdapterItemClickListener(this);
         }
     }
 
@@ -527,7 +393,7 @@ public class ArbitageFragment extends MvpFragment<ArbitageView, ArbitagePresente
         switch (view.getId()) {
 
             case R.id.relcoin:
-                showProgressBar();
+               progressBar.setVisibility(View.VISIBLE);
                 Log.d(TAG, "onSortView: coin " + isCoinSorted);
                 isCoinSorted = !isCoinSorted;
                 imgCoin.setImageResource(isCoinSorted ? R.drawable.ic_down : R.drawable.ic_up);
@@ -535,20 +401,21 @@ public class ArbitageFragment extends MvpFragment<ArbitageView, ArbitagePresente
                 break;
             case R.id.relPrice1:
                 Log.d(TAG, "onSortView: price1" + isPrice1Sorted);
-
+                progressBar.setVisibility(View.VISIBLE);
                 isPrice1Sorted = !isPrice1Sorted;
                 img_Price1.setImageResource(isPrice1Sorted ? R.drawable.ic_down : R.drawable.ic_up);
                 presenter.sortList(aribitaryTableResultList, isPrice1Sorted, 0);
                 break;
             case R.id.relPrice2:
                 Log.d(TAG, "onSortView: price2" + isPrice2Sorted);
-
+                progressBar.setVisibility(View.VISIBLE);
                 isPrice2Sorted = !isPrice2Sorted;
                 img_Price2.setImageResource(isPrice2Sorted ? R.drawable.ic_down : R.drawable.ic_up);
                 presenter.sortList(aribitaryTableResultList, isPrice2Sorted, 0);
                 break;
             case R.id.relPercent:
                 Log.d(TAG, "onSortView: percent" + isPercentsorted);
+                progressBar.setVisibility(View.VISIBLE);
                 isPercentsorted = !isPercentsorted;
                 img_Percent.setImageResource(isPercentsorted ? R.drawable.ic_down : R.drawable.ic_up);
                 presenter.sortList(aribitaryTableResultList, isPercentsorted, 0);

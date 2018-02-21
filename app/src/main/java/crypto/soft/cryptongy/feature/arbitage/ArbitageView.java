@@ -5,9 +5,8 @@ import com.hannesdorfmann.mosby.mvp.MvpView;
 import java.util.List;
 
 /**
- * Created by tseringwongelgurung on 11/27/17.
+ * Created by vishalguptahmh on 02/20/18.
  */
-
 public interface ArbitageView extends MvpView {
     void initRecycler();
 

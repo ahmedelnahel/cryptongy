@@ -1,7 +1,7 @@
 package crypto.soft.cryptongy.feature.arbitage;
 
 /**
- * Created by aapple on 19/02/18.
+ * Created by vishalguptahmh on 02/20/18.
  */
 
 public class AribitaryTableResult {

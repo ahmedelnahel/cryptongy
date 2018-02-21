@@ -5,13 +5,11 @@ import android.util.Log;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
-import org.reactivestreams.Subscription;
-
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Timer;
 import java.util.concurrent.Callable;
 
 import crypto.soft.cryptongy.feature.shared.json.market.MarketSummaries;
@@ -27,26 +25,19 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 /**
- * Created by tseringwongelgurung on 11/27/17.
+ * Created by vishalguptahmh on 02/20/18.
  */
 
 public class ArbitagePresenter extends MvpBasePresenter<ArbitageView> {
     public String TAG = getClass().getSimpleName();
-    private static Timer timer;
     private Context context;
-    private List<Result> prevResults = new ArrayList<>();
-    private List<Result> binancePrevResults = new ArrayList<>();
     private boolean isStarted = false;
-    private String exchangeValue;
-    Subscription subscription;
 
 
     public ArbitagePresenter(Context context) {
         this.context = context;
         isStarted = false;
     }
-
-
 
 
 
@@ -117,13 +108,8 @@ public class ArbitagePresenter extends MvpBasePresenter<ArbitageView> {
 
     public void getArbitageTableResult(final String exchangeValue) {
 
-        Log.d(TAG, "getArbitageTableResult: ");
-
         if (getView() != null)
             getView().showProgressBar();
-
-
-
 
        Observable.zip(getBitrixMarket(), getBinanceMarket(), new BiFunction<MarketSummaries, MarketSummaries, List<AribitaryTableResult>>() {
             @Override
@@ -131,7 +117,6 @@ public class ArbitagePresenter extends MvpBasePresenter<ArbitageView> {
 
                 List<AribitaryTableResult> aribitaryTableResultArrayList = new ArrayList<>();
 
-                Log.d(TAG, "apply: zipcalled ");
 
                 for (Result result : marketSummaries.getResult()) {
                     String coin = result.getMarketName().split("-")[0];
@@ -141,10 +126,10 @@ public class ArbitagePresenter extends MvpBasePresenter<ArbitageView> {
                         Result tempResult = marketSummaries2.getCoinsMap().get(base.toUpperCase() + coin.toUpperCase());
                         if (exchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)) {
 
-                            aribitaryTableResultArrayList.add(new AribitaryTableResult(result.getMarketName(), String.valueOf(result.getLast()), String.valueOf(tempResult.getLast()), getPercentage(result.getLast(), tempResult.getLast())+"%"));
+                            aribitaryTableResultArrayList.add(new AribitaryTableResult(result.getMarketName(), String.valueOf(BigDecimal.valueOf(result.getLast())), String.valueOf(BigDecimal.valueOf(tempResult.getLast())), getPercentage(result.getLast(), tempResult.getLast())+"%"));
                         }
                         else {
-                            aribitaryTableResultArrayList.add(new AribitaryTableResult(tempResult.getMarketName(), String.valueOf(result.getLast()), String.valueOf(tempResult.getLast()), getPercentage(result.getLast(), tempResult.getLast())+"%"));
+                            aribitaryTableResultArrayList.add(new AribitaryTableResult(tempResult.getMarketName(), String.valueOf(BigDecimal.valueOf(result.getLast())),  String.valueOf(BigDecimal.valueOf(tempResult.getLast())), getPercentage(result.getLast(), tempResult.getLast())+"%"));
 
                         }
 
@@ -164,8 +149,6 @@ public class ArbitagePresenter extends MvpBasePresenter<ArbitageView> {
                     @Override
                     public void accept(List<AribitaryTableResult> aribitaryTableResult) throws Exception {
 
-
-                        Log.d(TAG, "accept: " + aribitaryTableResult);
                         Log.d(TAG, "accept: " + aribitaryTableResult.size());
                         if (getView() != null)
                         {
