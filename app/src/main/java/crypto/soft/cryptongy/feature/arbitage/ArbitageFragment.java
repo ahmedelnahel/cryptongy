@@ -2,6 +2,7 @@ package crypto.soft.cryptongy.feature.arbitage;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.CardView;
@@ -35,6 +36,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import crypto.soft.cryptongy.R;
+import crypto.soft.cryptongy.feature.setting.Notification;
 import crypto.soft.cryptongy.utils.CoinApplication;
 import crypto.soft.cryptongy.utils.GlobalConstant;
 import crypto.soft.cryptongy.utils.HideKeyboard;
@@ -110,6 +112,8 @@ public class ArbitageFragment extends MvpFragment<ArbitageView, ArbitagePresente
     Handler handler = new Handler();
 
     ArbitageAdapter arbitageAdapter;
+    private static CountDownTimer countDownTimer;
+    private boolean countDownTimerRunning =false;
 
 
     @Nullable
@@ -250,6 +254,7 @@ public class ArbitageFragment extends MvpFragment<ArbitageView, ArbitagePresente
 
             if (isspinnerListner) {
 
+                stopTimer();
                 getArbitageTableResult();
             }
             isspinnerListner = true;
@@ -315,33 +320,36 @@ public class ArbitageFragment extends MvpFragment<ArbitageView, ArbitagePresente
     @Override
     public void onResume() {
         super.onResume();
+        startArbitageTimer();
         // presenter.startTimer(spinnerValue1);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        //  presenter.stopTimer();
+        stopTimer();
+
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        //  presenter.stopTimer();
+        stopTimer();
 
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        //presenter.stopTimer();
+        stopTimer();
+
     }
 
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        // presenter.closeWebSocket();
+        stopTimer();
 
     }
 
@@ -349,6 +357,7 @@ public class ArbitageFragment extends MvpFragment<ArbitageView, ArbitagePresente
     @Override
     public void setList(List<AribitaryTableResult> list) {
         aribitaryTableResultList = list;
+        startArbitageTimer();
         setCoinInTable(aribitaryTableResultList);
     }
 
@@ -427,4 +436,63 @@ public class ArbitageFragment extends MvpFragment<ArbitageView, ArbitagePresente
     public void getArbitageTableResult() {
         presenter.getArbitageTableResult(spinnerValue1);
     }
+
+
+
+
+    public void startArbitageTimer() {
+        if (getContext()!= null && getContext().getApplicationContext() != null) {
+            Notification notification = ((CoinApplication) getContext().getApplicationContext()).getNotification();
+            if (notification.isAutomSync()) {
+                Log.d(TAG, "startTicker: ");
+                final int timerInterval = notification.getSyncInterval() * 1000;
+
+
+                if (!countDownTimerRunning) {
+
+                    countDownTimer = new CountDownTimer(timerInterval, 1000) {
+
+                        @Override
+                        public void onTick(long millisUntilFinished) {
+                            countDownTimerRunning = true;
+                        }
+
+                        @Override
+                        public void onFinish() {
+                            try {
+                                countDownTimerRunning = false;
+                                Log.d(TAG, "onFinish: timeriscalled : " + timerInterval / 1000);
+
+                               presenter.getArbitageTableResult(spinnerValue1);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                    }.start();
+                }
+
+//
+//            timer.scheduleAtFixedRate(new TimerTask() {
+//
+//                @Override
+//                public void run() {
+//                    r
+//
+//                    new GetCoinDetails().execute();
+//                }
+//            }, timerInterval, timerInterval);
+
+            }
+        }
+    }
+    public void stopTimer() {
+        Log.d(TAG, "stopTimer: ");
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+            countDownTimerRunning=false;
+        }
+
+    }
+
 }
