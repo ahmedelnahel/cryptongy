@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/orderSub"
+    android:layout_marginBottom="10dp"
+    android:background="@drawable/rect"
     android:orientation="horizontal"
+    android:layout_marginStart="@dimen/_10sdp"
+    android:layout_marginEnd="@dimen/_10sdp"
     android:paddingBottom="7dp"
     android:paddingLeft="7dp"
     android:paddingRight="5dp"
@@ -15,9 +19,10 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:padding="@dimen/order_tbl_sub_pad"
+        android:padding="@dimen/_14sdp"
         android:textColor="@color/order_tbl_sub"
-        android:textSize="@dimen/order_tbl_sub" />
+        android:textSize="@dimen/_10sdp"
+        tools:text="BTC-LTC" />
 
     <crypto.soft.cryptongy.feature.shared.customView.CalTextView
         android:id="@+id/txtTitlePrice1"
@@ -25,29 +30,32 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:padding="@dimen/order_tbl_sub_pad"
+        android:padding="@dimen/_14sdp"
         android:textColor="@color/order_tbl_sub"
-        android:textSize="@dimen/order_tbl_sub" />
+        android:textSize="@dimen/_10sdp"
+        tools:text="BTC-LTC" />
 
     <crypto.soft.cryptongy.feature.shared.customView.CalTextView
         android:id="@+id/txtTitlePrice2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:textSize="@dimen/_10sdp"
         android:gravity="center"
-        android:padding="@dimen/order_tbl_sub_pad"
-        android:textColor="@color/order_tbl_sub"
-        android:textSize="@dimen/order_tbl_sub" />
+        android:padding="@dimen/_14sdp"
+        tools:text="BTC-LTC"
+        android:textColor="@color/order_tbl_sub" />
 
     <crypto.soft.cryptongy.feature.shared.customView.CalTextView
         android:id="@+id/txtTitlePercentage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        tools:text="BTC-LTC"
         android:gravity="center"
-        android:padding="@dimen/order_tbl_sub_pad"
+        android:padding="@dimen/_14sdp"
         android:textColor="@color/order_tbl_sub"
-        android:textSize="@dimen/order_tbl_sub" />
+        android:textSize="@dimen/_10sdp" />
 
 
 </LinearLayout>

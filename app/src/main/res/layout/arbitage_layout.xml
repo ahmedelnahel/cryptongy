@@ -43,20 +43,22 @@
                 android:orientation="vertical">
 
                 <RelativeLayout
+                    android:layout_marginLeft="@dimen/_20sdp"
+                    android:layout_marginRight="@dimen/_20sdp"
+                    android:background="@drawable/rect_fill"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/_8sdp"
                     android:padding="@dimen/_2sdp">
 
                     <ImageView
+                        android:layout_centerHorizontal="true"
                         android:id="@+id/imgRefresh"
                         android:layout_width="@dimen/_24sdp"
                         android:layout_height="@dimen/_24sdp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginEnd="@dimen/_16sdp"
                         android:layout_weight="1"
                         android:src="@drawable/ic_refresh"
-                        android:tint="@color/acc_btn_color" />
+                        />
                 </RelativeLayout>
 
 
@@ -219,8 +221,162 @@
                 </LinearLayout>
 
 
+                <LinearLayout
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_4sdp"
+                    android:layout_marginBottom="@dimen/_8sdp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <RelativeLayout
+                        android:gravity="center_horizontal"
+                        android:id="@+id/relcoin"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_40sdp"
+                        android:paddingLeft="@dimen/_4sdp"
+                        android:layout_marginLeft="@dimen/_4sdp"
+                        android:layout_weight="1"
+                        android:background="@drawable/rect"
+
+                        >
+
+                        <ImageView
+                            android:id="@+id/img_coin"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:src="@drawable/ic_down" />
+
+                        <TextView
+                            fontPath="fonts/calibri.ttf"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_toRightOf="@+id/img_coin"
+                            android:text="coin"
+                            android:textSize="@dimen/_8sdp"
+                            android:textStyle="bold" />
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:paddingLeft="@dimen/_4sdp"
+                        android:id="@+id/relPrice1"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_marginLeft="@dimen/_4sdp"
+                        android:layout_weight="1"
+                        android:background="@drawable/rect"
+
+
+                        >
+
+                        <ImageView
+
+                            android:id="@+id/img_Price1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:src="@drawable/ic_down" />
+
+                        <TextView
+                            fontPath="fonts/calibri.ttf"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_toRightOf="@+id/img_Price1"
+
+                            android:text="Price"
+                            android:textSize="@dimen/_8sdp"
+                            android:textStyle="bold" />
+                    </RelativeLayout>
+                    <RelativeLayout
+
+                        android:background="@drawable/rect"
+                        android:paddingLeft="@dimen/_4sdp"
+                        android:id="@+id/relPrice2"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_marginLeft="@dimen/_4sdp"
+                        android:layout_weight="1"
+
+
+                        >
+
+                        <ImageView
+
+                            android:id="@+id/img_Price2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:src="@drawable/ic_down" />
+
+                        <TextView
+                            fontPath="fonts/calibri.ttf"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_toRightOf="@+id/img_Price2"
+
+                            android:text="Price"
+                            android:textSize="@dimen/_8sdp"
+                            android:textStyle="bold" />
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:layout_marginRight="@dimen/_4sdp"
+                        android:id="@+id/relPercent"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_marginLeft="@dimen/_4sdp"
+                        android:layout_weight="1"
+                        android:background="@drawable/rect"
+                        >
+
+                        <ImageView
+                            android:id="@+id/img_Percent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:src="@drawable/ic_down" />
+
+                        <TextView
+                            fontPath="fonts/calibri.ttf"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_toRightOf="@+id/img_Percent"
+                            android:text="Percent"
+                            android:textSize="@dimen/_8sdp"
+                            android:textStyle="bold" />
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+
+                    <TableLayout
+                        android:id="@+id/tblArbitage"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:stretchColumns="*"
+                        android:visibility="gone" />
+
+
+
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/arbitageRecyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                    </android.support.v7.widget.RecyclerView>
+                </LinearLayout>
                 <android.support.v7.widget.CardView
-                    android:visibility="gone"
+
                     android:id="@+id/crvArbitage"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -228,160 +384,7 @@
                     app:cardCornerRadius="@dimen/_5sdp"
                     app:cardUseCompatPadding="true">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
 
-
-                        <TableLayout
-                            android:id="@+id/tblArbitage"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:stretchColumns="*"
-                            android:visibility="gone" />
-
-                        <LinearLayout
-                            android:layout_marginTop="@dimen/_4sdp"
-                            android:layout_marginBottom="@dimen/_4sdp"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <RelativeLayout
-                                android:gravity="center_horizontal"
-                                android:id="@+id/relcoin"
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/_20sdp"
-                                android:paddingLeft="@dimen/_4sdp"
-                                android:layout_marginLeft="@dimen/_4sdp"
-                                android:layout_weight="1"
-                                android:background="@color/colorPrimary"
-
-                                >
-
-                                <ImageView
-                                    android:tint="@android:color/white"
-                                    android:id="@+id/img_coin"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_centerVertical="true"
-                                    android:src="@drawable/ic_down" />
-
-                                <TextView
-                                    android:textColor="@color/order_tbl_title"
-                                    fontPath="fonts/calibri.ttf"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_centerVertical="true"
-                                    android:layout_toRightOf="@+id/img_coin"
-                                    android:text="coin"
-                                    android:textSize="@dimen/_8sdp"
-                                    android:textStyle="bold" />
-                            </RelativeLayout>
-                            <RelativeLayout
-                                android:paddingLeft="@dimen/_4sdp"
-                                android:id="@+id/relPrice1"
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/_20sdp"
-                                android:layout_marginLeft="@dimen/_4sdp"
-                                android:layout_weight="1"
-                                android:background="@color/colorPrimary"
-
-
-                                >
-
-                                <ImageView
-                                    android:tint="@android:color/white"
-                                    android:id="@+id/img_Price1"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_centerVertical="true"
-                                    android:src="@drawable/ic_down" />
-
-                                <TextView
-                                    fontPath="fonts/calibri.ttf"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_centerVertical="true"
-                                    android:layout_toRightOf="@+id/img_Price1"
-                                    android:textColor="@android:color/white"
-                                    android:text="Price"
-                                    android:textSize="@dimen/_8sdp"
-                                    android:textStyle="bold" />
-                            </RelativeLayout>
-                            <RelativeLayout
-
-                                android:paddingLeft="@dimen/_4sdp"
-                                android:id="@+id/relPrice2"
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/_20sdp"
-                                android:layout_marginLeft="@dimen/_4sdp"
-                                android:layout_weight="1"
-                                android:background="@color/colorPrimary"
-
-                                >
-
-                                <ImageView
-                                    android:tint="@android:color/white"
-                                    android:id="@+id/img_Price2"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_centerVertical="true"
-                                    android:src="@drawable/ic_down" />
-
-                                <TextView
-                                    fontPath="fonts/calibri.ttf"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_centerVertical="true"
-                                    android:layout_toRightOf="@+id/img_Price2"
-                                    android:textColor="@android:color/white"
-                                    android:text="Price"
-                                    android:textSize="@dimen/_8sdp"
-                                    android:textStyle="bold" />
-                            </RelativeLayout>
-                            <RelativeLayout
-                                android:layout_marginRight="@dimen/_4sdp"
-                                android:id="@+id/relPercent"
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/_20sdp"
-                                android:layout_marginLeft="@dimen/_4sdp"
-                                android:layout_weight="1"
-                                android:background="@color/colorPrimary"
-
-                                >
-
-                                <ImageView
-                                    android:tint="@android:color/white"
-                                    android:id="@+id/img_Percent"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_centerVertical="true"
-                                    android:src="@drawable/ic_down" />
-
-                                <TextView
-                                    android:textColor="@android:color/white"
-                                    fontPath="fonts/calibri.ttf"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_centerVertical="true"
-                                    android:layout_toRightOf="@+id/img_Percent"
-                                    android:text="Percent"
-                                    android:textSize="@dimen/_8sdp"
-                                    android:textStyle="bold" />
-                            </RelativeLayout>
-
-                        </LinearLayout>
-
-
-                        <android.support.v7.widget.RecyclerView
-                            android:id="@+id/arbitageRecyclerView"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                        </android.support.v7.widget.RecyclerView>
-                    </LinearLayout>
 
 
                 </android.support.v7.widget.CardView>

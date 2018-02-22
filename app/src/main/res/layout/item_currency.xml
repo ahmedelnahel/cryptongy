@@ -23,7 +23,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
 
-            android:padding="13.5dp">
+            android:padding="13.5dp"
+
+            >
 
             <TextView
                 android:id="@+id/coin"

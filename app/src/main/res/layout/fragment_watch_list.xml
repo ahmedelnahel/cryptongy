@@ -238,7 +238,8 @@
                         android:layout_height="50dp"
                         android:layout_marginLeft="5dp"
                         android:layout_weight="1"
-                        android:background="@drawable/rect">
+                        android:background="@drawable/rect"
+                        >
 
                         <ImageView
                             android:id="@+id/img_pr"
