@@ -392,26 +392,26 @@ public class BinanceServices {
                 param = new HashMap();
                 param.put("symbol", coinName);
             }
-//            String ordersStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret(), param, "HmacSHA256", null);
-            String ordersStr = "[\n" +
-                    "  {\n" +
-                    "    \"symbol\": \"LTCBTC\",\n" +
-                    "    \"orderId\": 1,\n" +
-                    "    \"clientOrderId\": \"myOrder1\",\n" +
-                    "    \"price\": \"0.1\",\n" +
-                    "    \"origQty\": \"1.0\",\n" +
-                    "    \"executedQty\": \"0.0\",\n" +
-                    "    \"status\": \"NEW\",\n" +
-                    "    \"timeInForce\": \"GTC\",\n" +
-                    "    \"type\": \"LIMIT\",\n" +
-                    "    \"side\": \"BUY\",\n" +
-                    "    \"stopPrice\": \"0.0\",\n" +
-                    "    \"icebergQty\": \"0.0\",\n" +
-//                    "    \"time\": 1499827319559,\n" +
-                    "    \"time\": 1499827319559\n" +
-//                    "    \"isWorking\": trueO\n" +
-                    "  }\n" +
-                    "]";
+            String ordersStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret(), param, "HmacSHA256", null);
+//            String ordersStr = "[\n" +
+//                    "  {\n" +
+//                    "    \"symbol\": \"LTCBTC\",\n" +
+//                    "    \"orderId\": 1,\n" +
+//                    "    \"clientOrderId\": \"myOrder1\",\n" +
+//                    "    \"price\": \"0.1\",\n" +
+//                    "    \"origQty\": \"1.0\",\n" +
+//                    "    \"executedQty\": \"0.0\",\n" +
+//                    "    \"status\": \"NEW\",\n" +
+//                    "    \"timeInForce\": \"GTC\",\n" +
+//                    "    \"type\": \"LIMIT\",\n" +
+//                    "    \"side\": \"BUY\",\n" +
+//                    "    \"stopPrice\": \"0.0\",\n" +
+//                    "    \"icebergQty\": \"0.0\",\n" +
+////                    "    \"time\": 1499827319559,\n" +
+//                    "    \"time\": 1499827319559\n" +
+////                    "    \"isWorking\": trueO\n" +
+//                    "  }\n" +
+//                    "]";
             openOrder = new OpenOrder();
             if (ordersStr == null) {
                 openOrder.setSuccess(false);
@@ -463,8 +463,8 @@ public class BinanceServices {
         else {
             String url = "https://api.binance.com/api/v3/account";
             Log.d(TAG, "getWallet: "+url);
-//            String walletStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret(), null, "HmacSHA256", "GET");
-            String walletStr = "{\"makerCommission\":15,\"takerCommission\":15,\"buyerCommission\":0,\"sellerCommission\":0,\"canTrade\":true,\"canWithdraw\":true,\"canDeposit\":true,\"updateTime\":123456789,\"balances\":[{\"asset\":\"BTC\",\"free\":\"4723846.89208129\",\"locked\":\"0.00000000\"},{\"asset\":\"LTC\",\"free\":\"4763368.68006011\",\"locked\":\"1.00000000\"}]}";
+            String walletStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret(), null, "HmacSHA256", "GET");
+//            String walletStr = "{\"makerCommission\":15,\"takerCommission\":15,\"buyerCommission\":0,\"sellerCommission\":0,\"canTrade\":true,\"canWithdraw\":true,\"canDeposit\":true,\"updateTime\":123456789,\"balances\":[{\"asset\":\"BTC\",\"free\":\"4723846.89208129\",\"locked\":\"0.00000000\"},{\"asset\":\"LTC\",\"free\":\"4763368.68006011\",\"locked\":\"1.00000000\"}]}";
             Log.i("wallet response " , walletStr);
             if (walletStr == null) {
                 wallet.setSuccess(false);
@@ -514,27 +514,27 @@ public class BinanceServices {
                 param = new HashMap();
                 param.put("symbol", coinName);
 
-//                String ordersStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret(), param, "HmacSHA256", null);
-                String ordersStr = "" +
-                        "" +
-                        "[\n" +
-                        "  {\n" +
-                        "    \"symbol\": \"LTCBTC\",\n" +
-                        "    \"orderId\": 1,\n" +
-                        "    \"clientOrderId\": \"myOrder1\",\n" +
-                        "    \"price\": \"0.1\",\n" +
-                        "    \"origQty\": \"1.0\",\n" +
-                        "    \"executedQty\": \"0.0\",\n" +
-                        "    \"status\": \"NEW\",\n" +
-                        "    \"timeInForce\": \"GTC\",\n" +
-                        "    \"type\": \"LIMIT\",\n" +
-                        "    \"side\": \"BUY\",\n" +
-                        "    \"stopPrice\": \"0.0\",\n" +
-                        "    \"icebergQty\": \"0.0\",\n" +
-                        "    \"time\": 1499827319559,\n" +
-                        "    \"isWorking\": true\n" +
-                        "  }\n" +
-                        "]";
+                String ordersStr = new RESTUtil().callRestHttpClient(url, account.getApiKey(), account.getSecret(), param, "HmacSHA256", null);
+//                String ordersStr = "" +
+//                        "" +
+//                        "[\n" +
+//                        "  {\n" +
+//                        "    \"symbol\": \"LTCBTC\",\n" +
+//                        "    \"orderId\": 1,\n" +
+//                        "    \"clientOrderId\": \"myOrder1\",\n" +
+//                        "    \"price\": \"0.1\",\n" +
+//                        "    \"origQty\": \"1.0\",\n" +
+//                        "    \"executedQty\": \"0.0\",\n" +
+//                        "    \"status\": \"NEW\",\n" +
+//                        "    \"timeInForce\": \"GTC\",\n" +
+//                        "    \"type\": \"LIMIT\",\n" +
+//                        "    \"side\": \"BUY\",\n" +
+//                        "    \"stopPrice\": \"0.0\",\n" +
+//                        "    \"icebergQty\": \"0.0\",\n" +
+//                        "    \"time\": 1499827319559,\n" +
+//                        "    \"isWorking\": true\n" +
+//                        "  }\n" +
+//                        "]";
                 orderHistory = new OrderHistory();
                 if (ordersStr == null) {
                     orderHistory.setSuccess(false);
