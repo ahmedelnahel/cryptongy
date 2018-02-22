@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,6 +20,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -57,8 +57,8 @@ public class ArbitageFragment extends MvpFragment<ArbitageView, ArbitagePresente
     @BindView(R.id.icon_search)
     ImageView iconSearch;
 
-    @BindView(R.id.crvArbitage)
-    CardView cardView;
+    @BindView(R.id.llArbitageContainer)
+    LinearLayout cardView;
     @BindView(R.id.arbitageRecyclerView)
     RecyclerView recyclerView;
     @BindView(R.id.imgRefresh)

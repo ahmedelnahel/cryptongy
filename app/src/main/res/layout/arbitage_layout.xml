@@ -222,7 +222,9 @@
 
 
                 <LinearLayout
-                    android:layout_marginStart="@dimen/_10sdp"
+                    android:visibility="gone"
+                    android:id="@+id/llArbitageContainer"
+                    android:layout_marginStart="@dimen/_6sdp"
                     android:layout_marginEnd="@dimen/_10sdp"
                     android:layout_marginTop="@dimen/_4sdp"
                     android:layout_marginBottom="@dimen/_8sdp"
@@ -235,7 +237,6 @@
                         android:id="@+id/relcoin"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_40sdp"
-                        android:paddingLeft="@dimen/_4sdp"
                         android:layout_marginLeft="@dimen/_4sdp"
                         android:layout_weight="1"
                         android:background="@drawable/rect"
@@ -323,7 +324,6 @@
                             android:textStyle="bold" />
                     </RelativeLayout>
                     <RelativeLayout
-                        android:layout_marginRight="@dimen/_4sdp"
                         android:id="@+id/relPercent"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_40sdp"
@@ -375,19 +375,6 @@
 
                     </android.support.v7.widget.RecyclerView>
                 </LinearLayout>
-                <android.support.v7.widget.CardView
-
-                    android:id="@+id/crvArbitage"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:animateLayoutChanges="true"
-                    app:cardCornerRadius="@dimen/_5sdp"
-                    app:cardUseCompatPadding="true">
-
-
-
-
-                </android.support.v7.widget.CardView>
 
             </LinearLayout>
 
