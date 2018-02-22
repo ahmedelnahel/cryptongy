@@ -162,6 +162,13 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuIt
                                 menuItems.get(i).setResourceId(R.drawable.ic_about);
                             }
                             break;
+                        case "Arbitrage":
+                            if (menuItems.get(i).isSelected) {
+                                menuItems.get(i).setResourceId(R.drawable.market_data_icon1);
+                            } else {
+                                menuItems.get(i).setResourceId(R.drawable.market_data_icon_white);
+                            }
+                            break;
                     }
                 }
                 notifyDataSetChanged();

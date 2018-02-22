@@ -67,7 +67,7 @@ public class MainPresenter extends MvpBasePresenter<MainView> {
             case "About Us":
                 context.startActivity(new Intent(context, AboutUsActivity.class));
                 break;
-            case "Arbitage":
+            case "Arbitrage":
                 replaceFragment(new ArbitageFragment());
                 break;
             case "Exit":

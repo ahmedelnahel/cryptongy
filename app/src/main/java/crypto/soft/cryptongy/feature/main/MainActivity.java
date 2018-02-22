@@ -116,6 +116,7 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
             menuItems.add(new MenuItem(R.drawable.ic_home_a, "Home", true));
         } else
             menuItems.add(new MenuItem(R.drawable.ic_house, "Home", false));
+
         menuItems.add(new MenuItem(R.drawable.ic_wallet, "Wallet", false));
         menuItems.add(new MenuItem(R.drawable.ic_orders, "Orders", false));
         menuItems.add(new MenuItem(R.drawable.ic_trade, "Trade", false));
@@ -127,7 +128,14 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
         menuItems.add(new MenuItem(R.drawable.ic_account, "Accounts", false));
         menuItems.add(new MenuItem(R.drawable.ic_bitcoin, "Donate", false));
         menuItems.add(new MenuItem(R.drawable.ic_about, "About Us", false));
-        menuItems.add(new MenuItem(R.drawable.market_data_icon, "Arbitage", false));
+
+
+        if (data.equalsIgnoreCase("Arbitrage")) {
+            menuItems.add(new MenuItem(R.drawable.market_data_icon1, "Arbitrage", true));
+        } else
+            menuItems.add(new MenuItem(R.drawable.market_data_icon_white, "Arbitrage", false));
+
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         listMenu.setLayoutManager(linearLayoutManager);
         listMenu.setHasFixedSize(true);
@@ -178,17 +186,20 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
             menuItems.add(new MenuItem(R.drawable.ic_bitcoin_a, "Donate", true));
         else
             menuItems.add(new MenuItem(R.drawable.ic_bitcoin, "Donate", false));
+
         if (menu.equalsIgnoreCase("About Us"))
             menuItems.add(new MenuItem(R.drawable.ic_about_a, "About Us", true));
         else
             menuItems.add(new MenuItem(R.drawable.ic_about, "About Us", false));
-        if (menu.equalsIgnoreCase("Arbitage"))
-            menuItems.add(new MenuItem(R.drawable.market_data_icon, "Arbitage", true));
+
+
+        if (menu.equalsIgnoreCase("Arbitrage"))
+            menuItems.add(new MenuItem(R.drawable.market_data_icon1, "Arbitrage", true));
         else
-            menuItems.add(new MenuItem(R.drawable.market_data_icon, "Arbitage", false));
+            menuItems.add(new MenuItem(R.drawable.market_data_icon_white, "Arbitrage", false));
+
         menuItemAdapter.notifyDataSetChanged();
     }
-
 
 
     @Override
@@ -197,11 +208,11 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
 
         if (count > 0) {
             super.onBackPressed();
-            String string=getFragTitle();
+            String string = getFragTitle();
             if (string.equalsIgnoreCase("conditional trade"))
-                string="Conditional";
+                string = "Conditional";
             else if (string.equalsIgnoreCase("Watch List"))
-                string="Home";
+                string = "Home";
             notifyMenu(string);
             drawerLayout.closeDrawer(Gravity.LEFT);
         } else {
