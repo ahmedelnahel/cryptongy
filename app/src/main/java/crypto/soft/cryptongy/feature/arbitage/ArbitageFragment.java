@@ -472,17 +472,6 @@ public class ArbitageFragment extends MvpFragment<ArbitageView, ArbitagePresente
                     }.start();
                 }
 
-//
-//            timer.scheduleAtFixedRate(new TimerTask() {
-//
-//                @Override
-//                public void run() {
-//                    r
-//
-//                    new GetCoinDetails().execute();
-//                }
-//            }, timerInterval, timerInterval);
-
             }
         }
     }
