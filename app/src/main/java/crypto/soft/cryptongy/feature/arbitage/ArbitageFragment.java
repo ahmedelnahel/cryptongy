@@ -283,7 +283,7 @@ public class ArbitageFragment extends MvpFragment<ArbitageView, ArbitagePresente
 
     public void setTitle() {
         TextView txtTitle = getActivity().findViewById(R.id.txtTitle);
-        txtTitle.setText(" ");
+        txtTitle.setText("Arbitrage");
     }
 
     @Override
@@ -305,6 +305,7 @@ public class ArbitageFragment extends MvpFragment<ArbitageView, ArbitagePresente
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.imgRefresh:
+                stopTimer();
                 presenter.getArbitageTableResult(spinnerValue1);
                 break;
         }

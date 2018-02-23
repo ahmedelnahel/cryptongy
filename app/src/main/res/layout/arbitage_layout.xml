@@ -20,51 +20,24 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_80sdp"
+                android:layout_height="@dimen/account_bg"
                 android:layout_alignParentTop="true"
                 android:background="@color/colorPrimary" />
 
-            <RelativeLayout
-                android:id="@+id/toolBar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true">
-
-
-            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/toolBar"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:orientation="vertical">
 
                 <RelativeLayout
-                    android:layout_marginLeft="@dimen/_20sdp"
-                    android:layout_marginRight="@dimen/_20sdp"
-                    android:background="@drawable/rect_fill"
+                    android:id="@+id/toolBar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/_8sdp"
-                    android:padding="@dimen/_2sdp">
-
-                    <ImageView
-                        android:layout_centerHorizontal="true"
-                        android:id="@+id/imgRefresh"
-                        android:layout_width="@dimen/_24sdp"
-                        android:layout_height="@dimen/_24sdp"
-                        android:layout_weight="1"
-                        android:src="@drawable/ic_refresh"
-                        />
-                </RelativeLayout>
-
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true">
 
                     <RelativeLayout
                         android:id="@+id/center"
@@ -72,58 +45,155 @@
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true">
 
-                        <TextView
-                            fontPath="fonts/calibri.ttf"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/_16sdp"
-                            android:text="Arbitrage"
-                            android:textColor="@android:color/white"
-                            android:textSize="@dimen/_16sdp"
-                            android:textStyle="bold" />
-
-
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
                             android:layout_centerInParent="true"
-                            android:layout_marginEnd="@dimen/_16sdp"
                             android:orientation="horizontal">
-
-                            <TextView
-                                fontPath="fonts/calibri.ttf"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/watch_btc"
-                                android:textColor="@android:color/white"
-                                android:textSize="@dimen/_16sdp"
-                                android:textStyle="bold" />
 
                             <ImageView
                                 android:id="@+id/type"
-                                android:layout_width="@dimen/_20sdp"
-                                android:layout_height="@dimen/_20sdp"
-                                android:layout_gravity="center_vertical"
-                                android:layout_marginTop="@dimen/_2sdp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_8sdp"
                                 android:layout_toLeftOf="@+id/price"
                                 android:src="@drawable/ic_dollar" />
 
-                            <TextView
-                                android:id="@+id/price"
-                                fontPath="fonts/calibri.ttf"
+                            <RelativeLayout
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentLeft="true"
-                                android:layout_alignParentStart="true"
-                                android:layout_alignParentTop="true"
-                                android:text="7050"
-                                android:textColor="@android:color/white"
-                                android:textSize="@dimen/_16sdp"
-                                android:textStyle="bold" />
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:id="@+id/price"
+                                    fontPath="fonts/calibri.ttf"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentLeft="true"
+                                    android:layout_alignParentStart="true"
+                                    android:layout_alignParentTop="true"
+                                    android:text="7050"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="35dp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    fontPath="fonts/calibri.ttf"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignRight="@+id/price"
+                                    android:layout_below="@id/price"
+                                    android:text="@string/watch_btc"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="20dp"
+                                    android:textStyle="bold" />
+                            </RelativeLayout>
                         </LinearLayout>
 
                     </RelativeLayout>
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:background="@drawable/rect_fill"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
+
+                    <ImageView
+
+                        android:id="@+id/imgRefresh"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:src="@drawable/ic_refresh" />
+
+                </LinearLayout>
+
+                <!--<RelativeLayout-->
+                    <!--android:layout_marginLeft="@dimen/_20sdp"-->
+                    <!--android:layout_marginRight="@dimen/_20sdp"-->
+                    <!--android:background="@drawable/rect_fill"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginBottom="@dimen/_8sdp"-->
+                    <!--android:padding="@dimen/_2sdp">-->
+
+                    <!--<ImageView-->
+                        <!--android:layout_centerHorizontal="true"-->
+                        <!--android:id="@+id/imgRefresh"-->
+                        <!--android:layout_width="@dimen/_24sdp"-->
+                        <!--android:layout_height="@dimen/_24sdp"-->
+                        <!--android:layout_weight="1"-->
+                        <!--android:src="@drawable/ic_refresh"-->
+                        <!--/>-->
+                <!--</RelativeLayout>-->
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <!--<RelativeLayout-->
+                        <!--android:id="@+id/center"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_centerInParent="true">-->
+
+                        <!--<TextView-->
+                            <!--fontPath="fonts/calibri.ttf"-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_marginStart="@dimen/_16sdp"-->
+                            <!--android:text=""-->
+                            <!--android:textColor="@android:color/white"-->
+                            <!--android:textSize="@dimen/_16sdp"-->
+                            <!--android:textStyle="bold" />-->
+
+
+                        <!--<LinearLayout-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_alignParentEnd="true"-->
+                            <!--android:layout_centerInParent="true"-->
+                            <!--android:layout_marginEnd="@dimen/_16sdp"-->
+                            <!--android:orientation="horizontal">-->
+
+                            <!--<TextView-->
+                                <!--fontPath="fonts/calibri.ttf"-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:text="@string/watch_btc"-->
+                                <!--android:textColor="@android:color/white"-->
+                                <!--android:textSize="@dimen/_16sdp"-->
+                                <!--android:textStyle="bold" />-->
+
+                            <!--<ImageView-->
+                                <!--android:id="@+id/type"-->
+                                <!--android:layout_width="@dimen/_20sdp"-->
+                                <!--android:layout_height="@dimen/_20sdp"-->
+                                <!--android:layout_gravity="center_vertical"-->
+                                <!--android:layout_marginTop="@dimen/_2sdp"-->
+                                <!--android:layout_toLeftOf="@+id/price"-->
+                                <!--android:src="@drawable/ic_dollar" />-->
+
+                            <!--<TextView-->
+                                <!--android:id="@+id/price"-->
+                                <!--fontPath="fonts/calibri.ttf"-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_alignParentLeft="true"-->
+                                <!--android:layout_alignParentStart="true"-->
+                                <!--android:layout_alignParentTop="true"-->
+                                <!--android:text="7050"-->
+                                <!--android:textColor="@android:color/white"-->
+                                <!--android:textSize="@dimen/_16sdp"-->
+                                <!--android:textStyle="bold" />-->
+                        <!--</LinearLayout>-->
+
+                    <!--</RelativeLayout>-->
 
                 </RelativeLayout>
 
