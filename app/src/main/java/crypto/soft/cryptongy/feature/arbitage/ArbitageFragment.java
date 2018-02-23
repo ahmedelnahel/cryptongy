@@ -412,21 +412,21 @@ public class ArbitageFragment extends MvpFragment<ArbitageView, ArbitagePresente
                 progressBar.setVisibility(View.VISIBLE);
                 isPrice1Sorted = !isPrice1Sorted;
                 img_Price1.setImageResource(isPrice1Sorted ? R.drawable.ic_down : R.drawable.ic_up);
-                presenter.sortList(aribitaryTableResultList, isPrice1Sorted, 0);
+                presenter.sortList(aribitaryTableResultList, isPrice1Sorted, 1);
                 break;
             case R.id.relPrice2:
                 Log.d(TAG, "onSortView: price2" + isPrice2Sorted);
                 progressBar.setVisibility(View.VISIBLE);
                 isPrice2Sorted = !isPrice2Sorted;
                 img_Price2.setImageResource(isPrice2Sorted ? R.drawable.ic_down : R.drawable.ic_up);
-                presenter.sortList(aribitaryTableResultList, isPrice2Sorted, 0);
+                presenter.sortList(aribitaryTableResultList, isPrice2Sorted, 2);
                 break;
             case R.id.relPercent:
                 Log.d(TAG, "onSortView: percent" + isPercentsorted);
                 progressBar.setVisibility(View.VISIBLE);
                 isPercentsorted = !isPercentsorted;
                 img_Percent.setImageResource(isPercentsorted ? R.drawable.ic_down : R.drawable.ic_up);
-                presenter.sortList(aribitaryTableResultList, isPercentsorted, 0);
+                presenter.sortList(aribitaryTableResultList, isPercentsorted, 3);
                 break;
 
 
