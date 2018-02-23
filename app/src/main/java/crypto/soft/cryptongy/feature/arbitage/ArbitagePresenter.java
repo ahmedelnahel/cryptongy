@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
 
 import crypto.soft.cryptongy.feature.shared.json.market.MarketSummaries;
 import crypto.soft.cryptongy.feature.shared.json.market.Result;
@@ -93,22 +94,7 @@ public class ArbitagePresenter extends MvpBasePresenter<ArbitageView> {
                 return Observable.just(bittrexServices.getMarketSummaries());
             }
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
-        return marketSummariesObservable;
-    }
-
-    public Observable<MarketSummaries> getBinanceMarketWebSocket(){
-
-        final BinanceServices binanceServices = new BinanceServices();
-        Observable<MarketSummaries> marketSummariesObservable=Observable.defer(new Callable<ObservableSource<? extends MarketSummaries>>() {
-            @Override
-            public ObservableSource<? extends MarketSummaries> call() throws Exception {
-                Log.d(TAG, "call: BinanceMarketSummaries");
-                return binanceServices.getMarketSummariesWebsocket();
-            }
-        });
-
-        Log.d(TAG, "getBinanceMarket: "+marketSummariesObservable);
-        return marketSummariesObservable;
+        return marketSummariesObservable.delay(2000, TimeUnit.MILLISECONDS);
     }
 
     public Observable<MarketSummaries> getBinanceMarket() {
@@ -123,6 +109,20 @@ public class ArbitagePresenter extends MvpBasePresenter<ArbitageView> {
         return marketSummariesObservable;
     }
 
+
+    public Observable<MarketSummaries> getBinanceMarketWebSocket(){
+        final BinanceServices binanceServices = new BinanceServices();
+        Observable<MarketSummaries> marketSummariesObservable=Observable.defer(new Callable<ObservableSource<MarketSummaries>>() {
+            @Override
+            public ObservableSource<MarketSummaries> call() throws Exception {
+                Log.d(TAG, "call: BinanceMarketSummaries");
+                return binanceServices.getMarketSummariesWebsocket();
+            }
+        });
+
+        Log.d(TAG, "getBinanceMarket: "+marketSummariesObservable);
+        return marketSummariesObservable;
+    }
 
     public void getArbitageTableResult(final String exchangeValue) {
 
@@ -174,6 +174,7 @@ public class ArbitagePresenter extends MvpBasePresenter<ArbitageView> {
                         if (getView() != null)
                         {
                             getView().hideProgressBar();
+                            getView().startArbitageTimer();
                             getView().setList(aribitaryTableResult);
 
                         }
@@ -188,16 +189,19 @@ public class ArbitagePresenter extends MvpBasePresenter<ArbitageView> {
     }
 
 
-
     public void getArbitageTableResultWebSocket(final String exchangeValue) {
 
-        Observable.zip(getBitrixMarket(), getBinanceMarketWebSocket(), new BiFunction<MarketSummaries, MarketSummaries, List<AribitaryTableResult>>() {
+        Observable.zip(getBitrixMarket(),getBinanceMarketWebSocket() , new BiFunction<MarketSummaries, MarketSummaries, List<AribitaryTableResult>>() {
             @Override
             public List<AribitaryTableResult> apply(MarketSummaries marketSummaries, MarketSummaries marketSummaries2) throws Exception {
 
                 List<AribitaryTableResult> aribitaryTableResultArrayList = new ArrayList<>();
+                Log.d(TAG, "apply: bittrixcomes "+marketSummaries);
+                Log.d(TAG, "apply: binnacecomes" +marketSummaries2);
 
                 if(marketSummaries!=null && marketSummaries2!=null && marketSummaries2.getCoinsMap()!=null){
+                    Log.d(TAG, "apply: marketSummaries coin .size "+marketSummaries.getCoinsMap().size());
+                    Log.d(TAG, "apply: marketSummaries2 coin.size" +marketSummaries2.getCoinsMap().size());
 
                     for (Result result : marketSummaries.getResult()) {
                         String coin = result.getMarketName().split("-")[0];
@@ -248,7 +252,6 @@ public class ArbitagePresenter extends MvpBasePresenter<ArbitageView> {
 
 
     }
-
 
 
     public void sortList(final List<AribitaryTableResult> resultList, final boolean isAscend, final int type) {

@@ -357,7 +357,6 @@ public class ArbitageFragment extends MvpFragment<ArbitageView, ArbitagePresente
     @Override
     public void setList(List<AribitaryTableResult> list) {
         aribitaryTableResultList = list;
-        startArbitageTimer();
         setCoinInTable(aribitaryTableResultList);
     }
 

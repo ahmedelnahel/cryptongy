@@ -38,6 +38,7 @@ import crypto.soft.cryptongy.feature.shared.json.wallet.Wallet;
 import crypto.soft.cryptongy.feature.shared.module.Account;
 import crypto.soft.cryptongy.feature.wallet.WalletFragment;
 import crypto.soft.cryptongy.utils.GlobalConstant;
+import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
 
 
@@ -99,7 +100,7 @@ public class BinanceServices {
         return marketSummaries_;
     }
 
-    public io.reactivex.Observable<MarketSummaries> getMarketSummariesWebsocket() throws IOException {
+    public Observable<MarketSummaries> getMarketSummariesWebsocket() throws IOException {
 
         String websocketEndPointUrl;
         marketSummaries_ = new MarketSummaries();
