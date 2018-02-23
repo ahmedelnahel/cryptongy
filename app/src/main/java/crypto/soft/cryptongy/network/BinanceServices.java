@@ -99,7 +99,7 @@ public class BinanceServices {
         return marketSummaries_;
     }
 
-    public void getMarketSummariesWebsocket() throws IOException {
+    public io.reactivex.Observable<MarketSummaries> getMarketSummariesWebsocket() throws IOException {
 
         String websocketEndPointUrl;
         marketSummaries_ = new MarketSummaries();
@@ -112,7 +112,7 @@ public class BinanceServices {
             uri = new URI(websocketEndPointUrl);
         } catch (URISyntaxException e) {
             Log.e(TAG, e.getMessage());
-            return ;
+
         }
 
 
@@ -171,6 +171,7 @@ public class BinanceServices {
 
                 sourceMarketSummariesWebsocket.onNext(marketSummaries_);
                 sourceWebSocketClient.onNext(mWebSocketClient);
+                mWebSocketClient.closeConnection(CloseFrame.NORMAL, "its closeing time");
                 //final String message =s;
 
             }
@@ -191,6 +192,7 @@ public class BinanceServices {
 
         mWebSocketClient.connect();
 
+        return io.reactivex.Observable.just(marketSummaries_);
 
 
     }

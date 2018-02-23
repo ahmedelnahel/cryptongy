@@ -441,6 +441,7 @@ public class ArbitageFragment extends MvpFragment<ArbitageView, ArbitagePresente
 
 
     public void startArbitageTimer() {
+        stopTimer();
         if (getContext()!= null && getContext().getApplicationContext() != null) {
             Notification notification = ((CoinApplication) getContext().getApplicationContext()).getNotification();
             if (notification.isAutomSync()) {
@@ -463,7 +464,7 @@ public class ArbitageFragment extends MvpFragment<ArbitageView, ArbitagePresente
                                 countDownTimerRunning = false;
                                 Log.d(TAG, "onFinish: timeriscalled : " + timerInterval / 1000);
 
-                               presenter.getArbitageTableResult(spinnerValue1);
+                               presenter.getArbitageTableResultWebSocket(spinnerValue1);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
