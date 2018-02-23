@@ -173,9 +173,10 @@ public class ArbitagePresenter extends MvpBasePresenter<ArbitageView> {
                         Log.d(TAG, "accept: " + aribitaryTableResult.size());
                         if (getView() != null)
                         {
-                            getView().hideProgressBar();
+                            //getView().hideProgressBar();
                             getView().startArbitageTimer();
                             getView().setList(aribitaryTableResult);
+                            sortList(aribitaryTableResult,true,3);
 
                         }
 
@@ -239,7 +240,7 @@ public class ArbitagePresenter extends MvpBasePresenter<ArbitageView> {
                         if(aribitaryTableResult.size()>10){
                             if (getView() != null)
                             {
-                                getView().setList(aribitaryTableResult);
+                                sortList(aribitaryTableResult,true,3);
 
                             }
                         }
