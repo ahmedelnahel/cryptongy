@@ -306,7 +306,7 @@ public class ArbitageFragment extends MvpFragment<ArbitageView, ArbitagePresente
         switch (view.getId()) {
             case R.id.imgRefresh:
                 stopTimer();
-                presenter.getArbitageTableResult(spinnerValue1);
+                presenter.getArbitageTableResult(spinnerValue1,spinnerValue2);
                 break;
         }
     }
@@ -434,7 +434,7 @@ public class ArbitageFragment extends MvpFragment<ArbitageView, ArbitagePresente
     }
 
     public void getArbitageTableResult() {
-        presenter.getArbitageTableResult(spinnerValue1);
+        presenter.getArbitageTableResult(spinnerValue1,spinnerValue2);
     }
 
 
@@ -464,7 +464,7 @@ public class ArbitageFragment extends MvpFragment<ArbitageView, ArbitagePresente
                                 countDownTimerRunning = false;
                                 Log.d(TAG, "onFinish: timeriscalled : " + timerInterval / 1000);
 
-                               presenter.getArbitageTableResultWebSocket(spinnerValue1);
+                            //   presenter.getArbitageTableResultWebSocket(spinnerValue1);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }

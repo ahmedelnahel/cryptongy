@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
+import javax.microedition.khronos.opengles.GL;
+
 import crypto.soft.cryptongy.feature.shared.json.market.MarketSummaries;
 import crypto.soft.cryptongy.feature.shared.json.market.Result;
 import crypto.soft.cryptongy.network.BinanceServices;
@@ -125,12 +127,13 @@ public class ArbitagePresenter extends MvpBasePresenter<ArbitageView> {
         return marketSummariesObservable;
     }
 
-    public void getArbitageTableResult(final String exchangeValue) {
+    public void getArbitageTableResult(final String exchangeValue,final String exchangeValue2) {
 
+        Log.d(TAG, "getArbitageTableResult: "+exchangeValue+"   "+exchangeValue2);
         if (getView() != null)
             getView().showProgressBar();
 
-       Observable.zip(getBitrixMarket(), getBinanceMarket(), new BiFunction<MarketSummaries, MarketSummaries, List<AribitaryTableResult>>() {
+       Observable.zip(getMarketValuesObservable(exchangeValue), getMarketValuesObservable(exchangeValue2), new BiFunction<MarketSummaries, MarketSummaries, List<AribitaryTableResult>>() {
             @Override
             public List<AribitaryTableResult> apply(MarketSummaries marketSummaries, MarketSummaries marketSummaries2) throws Exception {
 
@@ -138,9 +141,24 @@ public class ArbitagePresenter extends MvpBasePresenter<ArbitageView> {
 
                 if(marketSummaries!=null && marketSummaries2!=null && marketSummaries2.getCoinsMap()!=null){
 
+                    String base=null;
+                    String coin=null;
                     for (Result result : marketSummaries.getResult()) {
-                        String coin = result.getMarketName().split("-")[0];
-                        String base = result.getMarketName().split("-")[1];
+                        if(exchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)){
+
+                             coin = result.getMarketName().split("-")[0];
+                             base = result.getMarketName().split("-")[1];
+                        }
+                        if(exchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BINANCE)){
+                            if(exchangeValue.equalsIgnoreCase("BTCUSDT")){
+
+                                base = exchangeValue.substring(exchangeValue.length() - 4, exchangeValue.length());
+                            }
+                            else {
+
+                                base = exchangeValue.substring(exchangeValue.length() - 3, exchangeValue.length());
+                            }
+                        }
 
                         if (marketSummaries2.getCoinsMap().get(base.toUpperCase() + coin.toUpperCase()) != null) {
                             Result tempResult = marketSummaries2.getCoinsMap().get(base.toUpperCase() + coin.toUpperCase());
@@ -342,6 +360,19 @@ public class ArbitagePresenter extends MvpBasePresenter<ArbitageView> {
             return tempString;
         }
 
+    }
+
+
+    public Observable<MarketSummaries> getMarketValuesObservable(String exchange){
+        if(exchange.equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)){
+            return getBitrixMarket();
+        }
+        if(exchange.equalsIgnoreCase(GlobalConstant.Exchanges.BINANCE)){
+            return getBinanceMarket();
+        }
+        else {
+            return Observable.just(null);
+        }
     }
 
 }
