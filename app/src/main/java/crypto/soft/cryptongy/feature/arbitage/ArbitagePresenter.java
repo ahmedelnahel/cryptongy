@@ -36,6 +36,7 @@ public class ArbitagePresenter extends MvpBasePresenter<ArbitageView> {
     private boolean isStarted = false;
     Disposable disposable;
     boolean isbittrexCalled=false;
+    int sortType=3;
 
 
     public ArbitagePresenter(Context context) {
@@ -176,7 +177,7 @@ public class ArbitagePresenter extends MvpBasePresenter<ArbitageView> {
                             //getView().hideProgressBar();
                             getView().startArbitageTimer();
                             getView().setList(aribitaryTableResult);
-                            sortList(aribitaryTableResult,false,3);
+                            sortList(aribitaryTableResult,false,sortType);
 
                         }
 
@@ -240,7 +241,7 @@ public class ArbitagePresenter extends MvpBasePresenter<ArbitageView> {
                         if(aribitaryTableResult.size()>10){
                             if (getView() != null)
                             {
-                                sortList(aribitaryTableResult,false,3);
+                                sortList(aribitaryTableResult,false,sortType);
 
                             }
                         }
@@ -258,6 +259,7 @@ public class ArbitagePresenter extends MvpBasePresenter<ArbitageView> {
     public void sortList(final List<AribitaryTableResult> resultList, final boolean isAscend, final int type) {
 
 
+        sortType=type;
        Observable.fromCallable(new Callable<List<AribitaryTableResult>>() {
            @Override
            public List<AribitaryTableResult> call() throws Exception {
