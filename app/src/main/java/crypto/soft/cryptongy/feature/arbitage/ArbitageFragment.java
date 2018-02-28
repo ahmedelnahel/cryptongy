@@ -315,7 +315,7 @@ public class ArbitageFragment extends MvpFragment<ArbitageView, ArbitagePresente
     @Override
     public void onStart() {
         super.onStart();
-        /// presenter.startTimer(spinnerValue1);
+      // presenter.startTimer(spinnerValue1);
     }
 
     @Override
@@ -464,7 +464,7 @@ public class ArbitageFragment extends MvpFragment<ArbitageView, ArbitagePresente
                                 countDownTimerRunning = false;
                                 Log.d(TAG, "onFinish: timeriscalled : " + timerInterval / 1000);
 
-                            //   presenter.getArbitageTableResultWebSocket(spinnerValue1);
+                             presenter.getArbitageTableResultWebSocket(spinnerValue1,spinnerValue2);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }

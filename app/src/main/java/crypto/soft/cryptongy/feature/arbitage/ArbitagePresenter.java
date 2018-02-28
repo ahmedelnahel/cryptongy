@@ -133,7 +133,7 @@ public class ArbitagePresenter extends MvpBasePresenter<ArbitageView> {
         if (getView() != null)
             getView().showProgressBar();
 
-       Observable.zip(getMarketValuesObservable(exchangeValue), getMarketValuesObservable(exchangeValue2), new BiFunction<MarketSummaries, MarketSummaries, List<AribitaryTableResult>>() {
+       Observable.zip(getMarketValuesObservable(exchangeValue,false), getMarketValuesObservable(exchangeValue2,false), new BiFunction<MarketSummaries, MarketSummaries, List<AribitaryTableResult>>() {
             @Override
             public List<AribitaryTableResult> apply(MarketSummaries marketSummaries, MarketSummaries marketSummaries2) throws Exception {
 
@@ -141,39 +141,7 @@ public class ArbitagePresenter extends MvpBasePresenter<ArbitageView> {
 
                 if(marketSummaries!=null && marketSummaries2!=null && marketSummaries2.getCoinsMap()!=null){
 
-                    String base=null;
-                    String coin=null;
-                    for (Result result : marketSummaries.getResult()) {
-                        if(exchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)){
-
-                             coin = result.getMarketName().split("-")[0];
-                             base = result.getMarketName().split("-")[1];
-                        }
-                        if(exchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BINANCE)){
-                            if(exchangeValue.equalsIgnoreCase("BTCUSDT")){
-
-                                base = exchangeValue.substring(exchangeValue.length() - 4, exchangeValue.length());
-                            }
-                            else {
-
-                                base = exchangeValue.substring(exchangeValue.length() - 3, exchangeValue.length());
-                            }
-                        }
-
-                        if (marketSummaries2.getCoinsMap().get(base.toUpperCase() + coin.toUpperCase()) != null) {
-                            Result tempResult = marketSummaries2.getCoinsMap().get(base.toUpperCase() + coin.toUpperCase());
-                            if (exchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)) {
-
-                                aribitaryTableResultArrayList.add(new AribitaryTableResult(result.getMarketName(), String.valueOf(BigDecimal.valueOf(result.getLast())), String.valueOf(BigDecimal.valueOf(tempResult.getLast())), getPercentage(result.getLast(), tempResult.getLast())+"%"));
-                            }
-                            else {
-                                aribitaryTableResultArrayList.add(new AribitaryTableResult(tempResult.getMarketName(), String.valueOf(BigDecimal.valueOf(result.getLast())),  String.valueOf(BigDecimal.valueOf(tempResult.getLast())), getPercentage(result.getLast(), tempResult.getLast())+"%"));
-
-                            }
-
-                        }
-
-                    }
+                    aribitaryTableResultArrayList=getList(marketSummaries,marketSummaries2,exchangeValue,exchangeValue2);
 
                 }
 
@@ -209,39 +177,18 @@ public class ArbitagePresenter extends MvpBasePresenter<ArbitageView> {
     }
 
 
-    public void getArbitageTableResultWebSocket(final String exchangeValue) {
+    public void getArbitageTableResultWebSocket(final String exchangeValue,final String exchangeValue2) {
 
-        Observable.zip(getBitrixMarket(),getBinanceMarketWebSocket() , new BiFunction<MarketSummaries, MarketSummaries, List<AribitaryTableResult>>() {
+        Observable.zip(getMarketValuesObservable(exchangeValue,false),getMarketValuesObservable(exchangeValue2,true) , new BiFunction<MarketSummaries, MarketSummaries, List<AribitaryTableResult>>() {
             @Override
             public List<AribitaryTableResult> apply(MarketSummaries marketSummaries, MarketSummaries marketSummaries2) throws Exception {
 
                 List<AribitaryTableResult> aribitaryTableResultArrayList = new ArrayList<>();
-                Log.d(TAG, "apply: bittrixcomes "+marketSummaries);
-                Log.d(TAG, "apply: binnacecomes" +marketSummaries2);
+                Log.d(TAG, "applywebsocket: bittrixcomes "+marketSummaries);
+                Log.d(TAG, "applywebsocket: binnacecomes" +marketSummaries2);
 
-                if(marketSummaries!=null && marketSummaries2!=null && marketSummaries2.getCoinsMap()!=null){
-                    Log.d(TAG, "apply: marketSummaries coin .size "+marketSummaries.getCoinsMap().size());
-                    Log.d(TAG, "apply: marketSummaries2 coin.size" +marketSummaries2.getCoinsMap().size());
-
-                    for (Result result : marketSummaries.getResult()) {
-                        String coin = result.getMarketName().split("-")[0];
-                        String base = result.getMarketName().split("-")[1];
-
-                        if (marketSummaries2.getCoinsMap().get(base.toUpperCase() + coin.toUpperCase()) != null) {
-                            Result tempResult = marketSummaries2.getCoinsMap().get(base.toUpperCase() + coin.toUpperCase());
-                            if (exchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)) {
-
-                                aribitaryTableResultArrayList.add(new AribitaryTableResult(result.getMarketName(), String.valueOf(BigDecimal.valueOf(result.getLast())), String.valueOf(BigDecimal.valueOf(tempResult.getLast())), getPercentage(result.getLast(), tempResult.getLast())+"%"));
-                            }
-                            else {
-                                aribitaryTableResultArrayList.add(new AribitaryTableResult(tempResult.getMarketName(), String.valueOf(BigDecimal.valueOf(result.getLast())),  String.valueOf(BigDecimal.valueOf(tempResult.getLast())), getPercentage(result.getLast(), tempResult.getLast())+"%"));
-
-                            }
-
-                        }
-
-                    }
-
+                if(marketSummaries!=null && marketSummaries2!=null && marketSummaries.getCoinsMap()!=null && marketSummaries2.getCoinsMap()!=null){
+                    aribitaryTableResultArrayList=getList(marketSummaries,marketSummaries2,exchangeValue,exchangeValue2);
                 }
 
 
@@ -274,6 +221,44 @@ public class ArbitagePresenter extends MvpBasePresenter<ArbitageView> {
     }
 
 
+    public List<AribitaryTableResult> getList(MarketSummaries marketSummaries,MarketSummaries marketSummaries2,String exchangeValue,String exchangeValue2){
+
+        Log.d(TAG, "getList: marketsummaries : "+marketSummaries.getCoinsMap().size()+" marketsummaries2 : "+marketSummaries2.getCoinsMap().size());
+        List<AribitaryTableResult> aribitaryTableResultArrayList = new ArrayList<>();
+
+        String base=null;
+        String coin=null;
+        for (Result result : marketSummaries.getResult()) {
+
+
+            if(exchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX) && exchangeValue2.equalsIgnoreCase(GlobalConstant.Exchanges.BINANCE)){
+                coin = result.getMarketName().split("-")[0];
+                base = result.getMarketName().split("-")[1];
+                if (marketSummaries2.getCoinsMap().get(base.toUpperCase() + coin.toUpperCase()) != null) {
+                    Result tempResult = marketSummaries2.getCoinsMap().get(base.toUpperCase() + coin.toUpperCase());
+                    aribitaryTableResultArrayList.add(new AribitaryTableResult(result.getMarketName(), String.valueOf(BigDecimal.valueOf(result.getLast())), String.valueOf(BigDecimal.valueOf(tempResult.getLast())), getPercentage(result.getLast(), tempResult.getLast())+"%"));
+                }
+            }
+
+
+            if(exchangeValue.equalsIgnoreCase(GlobalConstant.Exchanges.BINANCE) && exchangeValue2.equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)){
+                if(exchangeValue.equalsIgnoreCase("BTCUSDT")){
+                    base = result.getMarketName().substring(result.getMarketName().length() - 4, result.getMarketName().length());
+                    coin = result.getMarketName().substring(0,result.getMarketName().length() - 4);
+                }
+                else {
+                    coin = result.getMarketName().substring(result.getMarketName().length() - 3, result.getMarketName().length());
+                    base = result.getMarketName().substring(0,result.getMarketName().length() - 3);
+                }
+                if (marketSummaries2.getCoinsMap().get(coin.toUpperCase() +"-"+ base.toUpperCase()) != null) {
+                    Result tempResult = marketSummaries2.getCoinsMap().get(coin.toUpperCase() +"-"+ base.toUpperCase());
+                    aribitaryTableResultArrayList.add(new AribitaryTableResult(result.getMarketName(), String.valueOf(BigDecimal.valueOf(result.getLast())),  String.valueOf(BigDecimal.valueOf(tempResult.getLast())), getPercentage(result.getLast(), tempResult.getLast())+"%"));
+                }
+            }
+
+        }
+        return aribitaryTableResultArrayList;
+    }
     public void sortList(final List<AribitaryTableResult> resultList, final boolean isAscend, final int type) {
 
 
@@ -363,12 +348,19 @@ public class ArbitagePresenter extends MvpBasePresenter<ArbitageView> {
     }
 
 
-    public Observable<MarketSummaries> getMarketValuesObservable(String exchange){
+    public Observable<MarketSummaries> getMarketValuesObservable(String exchange,boolean websocket){
         if(exchange.equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)){
             return getBitrixMarket();
         }
         if(exchange.equalsIgnoreCase(GlobalConstant.Exchanges.BINANCE)){
-            return getBinanceMarket();
+            if(websocket==true){
+
+                return getBinanceMarketWebSocket();
+            }
+            else {
+
+                return getBinanceMarket();
+            }
         }
         else {
             return Observable.just(null);
