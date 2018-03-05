@@ -95,7 +95,7 @@ public class ArbitageFragment extends MvpFragment<ArbitageView, ArbitagePresente
     boolean isCoinSorted = true;
     boolean isPrice1Sorted = true;
     boolean isPrice2Sorted = true;
-    boolean isPercentsorted = true;
+    boolean isPercentsorted = false;
 
     private View view;
     boolean isspinnerListner = false;

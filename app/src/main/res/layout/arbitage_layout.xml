@@ -407,7 +407,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
-                            android:src="@drawable/ic_down" />
+                            android:src="@drawable/ic_up" />
 
                         <TextView
                             fontPath="fonts/calibri.ttf"
