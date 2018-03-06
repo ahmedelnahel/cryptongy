@@ -186,6 +186,8 @@
                             android:layout_toRightOf="@+id/icon_search"
                             android:background="@android:color/white"
                             android:hint="@string/watch_coin"
+                            android:inputType="textFilter|textNoSuggestions|textVisiblePassword"
+                            android:privateImeOptions="nm"
                             android:paddingLeft="@dimen/_10sdp"
                             android:singleLine="true"
                             android:textStyle="italic" />

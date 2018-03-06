@@ -194,6 +194,14 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
+                inputCoin.setText("");
+                coins.clear();
+                adapterCoins.filteredResults.clear();
+                adapterCoins.results.clear();
+                adapterCoins.notifyDataSetChanged();
+                inputCoin.clearListSelection();
+
+
                 //if at position zero bitrex and at position 1 binance is called
                 if (spinner.getItemAtPosition(position).toString().equalsIgnoreCase(getResources().getStringArray(R.array.coin_array)[0])) {
 
@@ -288,7 +296,7 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
     @Override
     public void onSummaryDataLoad(MarketSummaries marketSummaries, String exchangeValue) {
 
-        if(marketSummaries!=null && spinnerValue.equalsIgnoreCase(exchangeValue)){
+        if (marketSummaries != null && spinnerValue.equalsIgnoreCase(exchangeValue)) {
             if (marketSummaries.getSuccess()) {
 
                 if (spinnerValue.equalsIgnoreCase(getResources().getStringArray(R.array.coin_array)[0])) {//Bitrix value comparing
@@ -445,10 +453,10 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         presenter.closeWebSocket();
-        if(spinnerValue.equalsIgnoreCase(GlobalConstant.Exchanges.BINANCE)){
+        if (spinnerValue.equalsIgnoreCase(GlobalConstant.Exchanges.BINANCE)) {
             presenter.loadBinanceSummaries();
         }
-        if (spinnerValue.equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)){
+        if (spinnerValue.equalsIgnoreCase(GlobalConstant.Exchanges.BITTREX)) {
             presenter.loadSummaries();
         }
     }
@@ -518,8 +526,8 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
                         }
                     });
                 }
-                if(currencyAdapter != null)
-                currencyAdapter.notifyDataSetChanged();
+                if (currencyAdapter != null)
+                    currencyAdapter.notifyDataSetChanged();
                 break;
         }
     }
