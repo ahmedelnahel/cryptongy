@@ -30,6 +30,8 @@ import android.widget.TextView;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -357,7 +359,18 @@ public class ArbitageFragment extends MvpFragment<ArbitageView, ArbitagePresente
 
     @Override
     public void setList(List<AribitaryTableResult> list) {
-        aribitaryTableResultList = list;
+
+
+        Collections.sort(list, new Comparator<AribitaryTableResult>() {
+            @Override
+            public int compare(AribitaryTableResult t1, AribitaryTableResult t2) {
+                return t1.getPercentage().compareTo(t2.getPercentage());
+            }
+        });
+
+        Collections.reverse(list);
+        swapItems(list);
+//        aribitaryTableResultList = list;
         //setCoinInTable(aribitaryTableResultList);
     }
 
@@ -365,9 +378,12 @@ public class ArbitageFragment extends MvpFragment<ArbitageView, ArbitagePresente
     @Override
     public void setCoinInTable(final List<AribitaryTableResult> resultList) {
 
-        arbitageAdapter.aribitaryTableResultList.clear();
-        arbitageAdapter.aribitaryTableResultList.addAll(resultList);
+
         arbitageAdapter.notifyDataSetChanged();
+     //   swapItems(resultList);
+//        arbitageAdapter.aribitaryTableResultList.clear();
+//        arbitageAdapter.aribitaryTableResultList.addAll(resultList);
+//        arbitageAdapter.notifyDataSetChanged();
         cardView.setVisibility(View.VISIBLE);
         hideProgressBar();
 
@@ -483,6 +499,13 @@ public class ArbitageFragment extends MvpFragment<ArbitageView, ArbitagePresente
             countDownTimerRunning=false;
         }
 
+    }
+
+
+    public void swapItems(List<AribitaryTableResult> list){
+        aribitaryTableResultList.clear();
+        aribitaryTableResultList.addAll(list);
+        arbitageAdapter.notifyDataSetChanged();
     }
 
 }

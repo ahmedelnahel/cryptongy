@@ -164,7 +164,7 @@ public class ArbitagePresenter extends MvpBasePresenter<ArbitageView> {
                             //getView().hideProgressBar();
                             getView().startArbitageTimer();
                             getView().setList(aribitaryTableResult);
-                            sortList(aribitaryTableResult,false,sortType);
+                           // sortList(aribitaryTableResult,false,sortType);
 
                         }
 
