@@ -370,6 +370,8 @@ public class ArbitageFragment extends MvpFragment<ArbitageView, ArbitagePresente
 
         Collections.reverse(list);
         swapItems(list);
+        cardView.setVisibility(View.VISIBLE);
+        hideProgressBar();
 //        aribitaryTableResultList = list;
         //setCoinInTable(aribitaryTableResultList);
     }
