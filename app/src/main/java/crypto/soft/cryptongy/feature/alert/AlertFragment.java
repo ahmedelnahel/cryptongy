@@ -109,8 +109,10 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_alert, container, false);
 
+
         setTitle();
         findViews();
+        setAdapterCoins();
         setOnClickListner();
         setSpinnerDefaultValue();
         spinerListener();
@@ -614,4 +616,13 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
         presenter.closeWebSocket();
         presenter.stopTimer();
     }
+
+    public void setAdapterCoins(){
+        coins=new ArrayList<>();
+        adapterCoins = new CustomArrayAdapter(getContext(), coins);
+        inputCoin.setThreshold(1);
+        inputCoin.setAdapter(adapterCoins);
+    }
+
+
 }
