@@ -159,6 +159,13 @@ public class AlertFragment extends MvpFragment<AlertView, AlertPresenter> implem
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
+                inputCoin.setText("");
+                coins.clear();
+                adapterCoins.filteredResults.clear();
+                adapterCoins.results.clear();
+                adapterCoins.notifyDataSetChanged();
+                inputCoin.clearListSelection();
+
                 //if at position zero bitrex and at position 1 binance is called
                 if (spinner.getItemAtPosition(position).toString().equalsIgnoreCase(getResources().getStringArray(R.array.coin_array)[0])) {
                     spinnerValue = getResources().getStringArray(R.array.coin_array)[0];
