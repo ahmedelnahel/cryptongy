@@ -74,9 +74,9 @@ public class ArbitagePresenter extends MvpBasePresenter<ArbitageView> {
 
 
                                    if (getView() != null && resultList != null && resultList.size() > 0) {
-                                       getView().setCoinInTable(resultList);
+                                       getView().setList(resultList);
                                    } else {
-                                       getView().setCoinInTable(results);
+                                       getView().setList(results);
                                    }
 
                                }

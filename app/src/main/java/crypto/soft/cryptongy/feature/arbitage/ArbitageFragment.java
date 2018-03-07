@@ -146,7 +146,6 @@ public class ArbitageFragment extends MvpFragment<ArbitageView, ArbitagePresente
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-
                     handler.removeCallbacks(input_finish_checker);
                 }
 
