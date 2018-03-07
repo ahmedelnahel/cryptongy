@@ -107,6 +107,8 @@ public class ArbitageFragment extends MvpFragment<ArbitageView, ArbitagePresente
     private static String spinnerValue1;
     private static String spinnerValue2;
     private List<AribitaryTableResult> aribitaryTableResultList;
+    private List<AribitaryTableResult> tempAribitaryTableResultList;
+
 
     long delay = 1000;
     long last_text_edit = 0;
@@ -134,6 +136,7 @@ public class ArbitageFragment extends MvpFragment<ArbitageView, ArbitagePresente
             spinner2.setAdapter(adapter);
             spinerListener();
             aribitaryTableResultList = new ArrayList<>();
+            tempAribitaryTableResultList=new ArrayList<>();
 
             initRecycler();
             setAdapter(aribitaryTableResultList);
@@ -186,13 +189,16 @@ public class ArbitageFragment extends MvpFragment<ArbitageView, ArbitagePresente
         public void run() {
             if (System.currentTimeMillis() > (last_text_edit + delay - 500)) {
                 Log.d(TAG, "run: " + strToSearch);
+                aribitaryTableResultList.clear();
+                aribitaryTableResultList.addAll(tempAribitaryTableResultList);
+
                 if (strToSearch.length() > 0) {
 
                     showProgressBar();
                    stopTimer();
                     presenter.filter(strToSearch, aribitaryTableResultList);
                 } else {
-                    stopTimer();
+                    setCoinInTable(aribitaryTableResultList);
                     presenter.getArbitageTableResult(spinnerValue1,spinnerValue2);
                 }
             }
@@ -509,7 +515,15 @@ public class ArbitageFragment extends MvpFragment<ArbitageView, ArbitagePresente
     public void swapItems(List<AribitaryTableResult> list){
         aribitaryTableResultList.clear();
         aribitaryTableResultList.addAll(list);
+        tempAribitaryTableResultList.clear();
+        tempAribitaryTableResultList.addAll(list);
         arbitageAdapter.notifyDataSetChanged();
     }
 
+    public void setfilterList(List<AribitaryTableResult> list){
+        aribitaryTableResultList.clear();
+        aribitaryTableResultList.addAll(list);
+        arbitageAdapter.notifyDataSetChanged();
+        hideProgressBar();
+    }
 }

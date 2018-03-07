@@ -17,6 +17,6 @@ public interface ArbitageView extends MvpView {
     void setCoinInTable(List<AribitaryTableResult> marketSummaries);
     void setList(List<AribitaryTableResult> marketSummaries);
     void startArbitageTimer();
-
+    void setfilterList(List<AribitaryTableResult> list);
 
 }

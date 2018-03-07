@@ -74,9 +74,9 @@ public class ArbitagePresenter extends MvpBasePresenter<ArbitageView> {
 
 
                                    if (getView() != null && resultList != null && resultList.size() > 0) {
-                                       getView().setList(resultList);
+                                       getView().setfilterList(resultList);
                                    } else {
-                                       getView().setList(results);
+                                       getView().setfilterList(results);
                                    }
 
                                }
