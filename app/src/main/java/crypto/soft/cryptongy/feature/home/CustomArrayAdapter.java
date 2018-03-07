@@ -25,8 +25,8 @@ import crypto.soft.cryptongy.feature.shared.listner.AdapterItemClickListener;
 
 public class CustomArrayAdapter extends BaseAdapter implements Filterable {
     Context context;
-    List<Result> results = new ArrayList<>();
-    List<Result> filteredResults = new ArrayList<>();
+   public List<Result> results = new ArrayList<>();
+    public  List<Result> filteredResults = new ArrayList<>();
 
     public CustomArrayAdapter(Context context, List<Result> results) {
         this.context = context;
