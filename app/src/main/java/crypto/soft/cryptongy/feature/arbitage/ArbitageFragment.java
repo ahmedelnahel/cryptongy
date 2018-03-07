@@ -482,7 +482,7 @@ public class ArbitageFragment extends MvpFragment<ArbitageView, ArbitagePresente
                                 countDownTimerRunning = false;
                                 Log.d(TAG, "onFinish: timeriscalled : " + timerInterval / 1000);
 
-                             presenter.getArbitageTableResultWebSocket(spinnerValue1,spinnerValue2);
+                             presenter.getArbitageTableResultWebSocket(spinnerValue1,spinnerValue2,aribitaryTableResultList);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }

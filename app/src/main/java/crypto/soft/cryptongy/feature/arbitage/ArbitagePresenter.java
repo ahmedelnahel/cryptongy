@@ -178,7 +178,7 @@ public class ArbitagePresenter extends MvpBasePresenter<ArbitageView> {
     }
 
 
-    public void getArbitageTableResultWebSocket(final String exchangeValue,final String exchangeValue2) {
+    public void getArbitageTableResultWebSocket(final String exchangeValue, final String exchangeValue2, final List<AribitaryTableResult> aribitaryTableResultArrayListDashboard) {
 
         Observable.zip(getMarketValuesObservable(exchangeValue,false),getMarketValuesObservable(exchangeValue2,true) , new BiFunction<MarketSummaries, MarketSummaries, List<AribitaryTableResult>>() {
             @Override
@@ -192,8 +192,10 @@ public class ArbitagePresenter extends MvpBasePresenter<ArbitageView> {
                     aribitaryTableResultArrayList=getList(marketSummaries,marketSummaries2,exchangeValue,exchangeValue2);
                 }
 
+                aribitaryTableResultArrayListDashboard.clear();
+                aribitaryTableResultArrayListDashboard.addAll(aribitaryTableResultArrayList);
 
-                return aribitaryTableResultArrayList;
+                return aribitaryTableResultArrayListDashboard;
             }
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -207,7 +209,7 @@ public class ArbitagePresenter extends MvpBasePresenter<ArbitageView> {
                         if(aribitaryTableResult.size()>10){
                             if (getView() != null)
                             {
-                                sortList(aribitaryTableResult,isAscend,sortType);
+                                sortList(aribitaryTableResultArrayListDashboard,isAscend,sortType);
 
                             }
                         }

@@ -124,16 +124,20 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
             menuItems.add(new MenuItem(R.drawable.ic_portfolio_a, "Conditional", true));
         } else
             menuItems.add(new MenuItem(R.drawable.ic_portfolio, "Conditional", false));
-        menuItems.add(new MenuItem(R.drawable.ic_alert, "Alert", false));
-        menuItems.add(new MenuItem(R.drawable.ic_account, "Accounts", false));
-        menuItems.add(new MenuItem(R.drawable.ic_bitcoin, "Donate", false));
-        menuItems.add(new MenuItem(R.drawable.ic_about, "About Us", false));
 
 
         if (data.equalsIgnoreCase("Arbitrage")) {
             menuItems.add(new MenuItem(R.drawable.market_data_icon1, "Arbitrage", true));
         } else
             menuItems.add(new MenuItem(R.drawable.market_data_icon_white, "Arbitrage", false));
+
+
+
+        menuItems.add(new MenuItem(R.drawable.ic_alert, "Alert", false));
+        menuItems.add(new MenuItem(R.drawable.ic_account, "Accounts", false));
+        menuItems.add(new MenuItem(R.drawable.ic_bitcoin, "Donate", false));
+        menuItems.add(new MenuItem(R.drawable.ic_about, "About Us", false));
+
 
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -174,6 +178,16 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
             menuItems.add(new MenuItem(R.drawable.ic_portfolio_a, "Conditional", true));
         else
             menuItems.add(new MenuItem(R.drawable.ic_portfolio, "Conditional", false));
+
+
+
+        if (menu.equalsIgnoreCase("Arbitrage"))
+            menuItems.add(new MenuItem(R.drawable.market_data_icon1, "Arbitrage", true));
+        else
+            menuItems.add(new MenuItem(R.drawable.market_data_icon_white, "Arbitrage", false));
+
+
+
         if (menu.equalsIgnoreCase("Alert"))
             menuItems.add(new MenuItem(R.drawable.ic_alert_a, "Alert", true));
         else
@@ -193,10 +207,7 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
             menuItems.add(new MenuItem(R.drawable.ic_about, "About Us", false));
 
 
-        if (menu.equalsIgnoreCase("Arbitrage"))
-            menuItems.add(new MenuItem(R.drawable.market_data_icon1, "Arbitrage", true));
-        else
-            menuItems.add(new MenuItem(R.drawable.market_data_icon_white, "Arbitrage", false));
+
 
         menuItemAdapter.notifyDataSetChanged();
     }
