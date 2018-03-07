@@ -188,9 +188,12 @@ public class ArbitageFragment extends MvpFragment<ArbitageView, ArbitagePresente
                 Log.d(TAG, "run: " + strToSearch);
                 if (strToSearch.length() > 0) {
 
+                    showProgressBar();
+                   stopTimer();
                     presenter.filter(strToSearch, aribitaryTableResultList);
                 } else {
-                    setCoinInTable(aribitaryTableResultList);
+                    stopTimer();
+                    presenter.getArbitageTableResult(spinnerValue1,spinnerValue2);
                 }
             }
         }
