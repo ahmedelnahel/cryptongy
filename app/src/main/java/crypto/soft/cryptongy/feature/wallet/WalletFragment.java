@@ -709,26 +709,26 @@ public class WalletFragment extends Fragment implements OnRecyclerItemClickListe
 
 
     public void postExecute(Wallet wallet){
+if(wallet !=null   ) {
+    txtEmpty.setVisibility(View.GONE);
+    if (!wallet.getSuccess() || wallet.getResult() == null) {
+        String msg = wallet.getMessage() != null ? wallet.getMessage() : "Connection Error";
+        Toast.makeText(getActivity(), wallet.getMessage(), Toast.LENGTH_SHORT).show();
+        return;
+    }
+    resultList = new ArrayList<>();
+    resultList.addAll(wallet.getResult());
+    Collections.sort(wallet.getResult(), new Result.HoldingComparator(false));
+    coinAdapter.setResultList(wallet.getResult());
+    coinAdapter.notifyDataSetChanged();
+    double bitcoinPrice = 0;
+    txtBtc.setText(String.valueOf(GlobalUtil.round(BTCSum, 9)) + "฿");
+    if (getActivity() != null)
+        bitcoinPrice = ((CoinApplication) getActivity().getApplication()).getUsdt_btc();
+    txtUsd.setText("$" + String.valueOf(GlobalUtil.round(BTCSum * bitcoinPrice, 4)));
 
-        txtEmpty.setVisibility(View.GONE);
-        if (!wallet.getSuccess() || wallet.getResult() == null) {
-            String msg = wallet.getMessage() != null ? wallet.getMessage() : "Connection Error";
-            Toast.makeText(getActivity(), wallet.getMessage(), Toast.LENGTH_SHORT).show();
-            return;
-        }
-        resultList = new ArrayList<>();
-        resultList.addAll(wallet.getResult());
-        Collections.sort(wallet.getResult(), new Result.HoldingComparator(false));
-        coinAdapter.setResultList(wallet.getResult());
-        coinAdapter.notifyDataSetChanged();
-        double bitcoinPrice = 0;
-                txtBtc.setText(String.valueOf(GlobalUtil.round(BTCSum, 9)) + "฿");
-        if(getActivity() != null)
-         bitcoinPrice = ((CoinApplication) getActivity().getApplication()).getUsdt_btc();
-        txtUsd.setText("$" + String.valueOf(GlobalUtil.round(BTCSum * bitcoinPrice, 4)));
 
-
-
+}
 
     }
 

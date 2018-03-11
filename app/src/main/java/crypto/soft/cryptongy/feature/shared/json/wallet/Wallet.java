@@ -29,7 +29,7 @@ public class Wallet {
     }
 
     @JsonProperty("success")
-    private Boolean success;
+    private Boolean success = new Boolean(false);
     @JsonProperty("message")
     private String message;
     @JsonProperty("result")
