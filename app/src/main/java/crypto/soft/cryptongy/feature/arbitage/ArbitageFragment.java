@@ -199,7 +199,7 @@ public class ArbitageFragment extends MvpFragment<ArbitageView, ArbitagePresente
                     presenter.filter(strToSearch, aribitaryTableResultList);
                 } else {
                     setCoinInTable(aribitaryTableResultList);
-                    presenter.getArbitageTableResult(spinnerValue1,spinnerValue2);
+                    startArbitageTimer();
                 }
             }
         }
